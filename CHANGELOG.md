@@ -85,9 +85,3 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - QR code display toggle.
 
 ---
-
-[1.2.2]: ../../compare/v1.2.1...v1.2.2
-[1.2.1]: ../../compare/v1.2.0...v1.2.1
-[1.2.0]: ../../compare/v1.1.0...v1.2.0
-[1.1.0]: ../../compare/v1.0.0...v1.1.0
-[1.0.0]: ../../releases/tag/v1.0.0

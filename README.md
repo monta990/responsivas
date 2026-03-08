@@ -188,6 +188,9 @@ See [LICENSE](LICENSE) for full terms.
 
 ---
 
+## Author
+
+**monta990** — [Sontechs](https://sontechs.com)
 
 # Responsivas — Plugin para GLPI
 
@@ -381,9 +384,4 @@ Consulta [LICENSE](LICENSE) para los términos completos.
 
 ## Autor
 
-**Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
-
-
-## Author
-
-**Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
+**monta990** — [Sontechs](https://sontechs.com)
