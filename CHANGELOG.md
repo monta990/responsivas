@@ -6,6 +6,19 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.3] — 2026-03-07
+
+### Added
+- **Plugin icon for GLPI Marketplace** — added `logo.png` (128×128 px) at the plugin root. GLPI reads the icon from this location to display it in Setup → Plugins and the Marketplace browser.
+
+### Changed
+- `responsivas.xml` updated to reference version `1.2.3` and the correct GitHub release download URL.
+- **README consolidated** — merged `README.md` (English) and `README.es.md` (Spanish) into a single `README.md` file (English first, Spanish below). `README.es.md` removed.
+- **File structure section added to README** — reflects actual plugin layout including `front/`, `inc/`, `locales/`, and root files.
+- **`misc/` directory removed** — placeholder screenshots folder and its contents are no longer included in the package.
+
+---
+
 ## [1.2.2] — 2025-03-08
 
 ### Added
@@ -85,3 +98,10 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - QR code display toggle.
 
 ---
+
+[1.2.3]: ../../compare/v1.2.2...v1.2.3
+[1.2.2]: ../../compare/v1.2.1...v1.2.2
+[1.2.1]: ../../compare/v1.2.0...v1.2.1
+[1.2.0]: ../../compare/v1.1.0...v1.2.0
+[1.1.0]: ../../compare/v1.0.0...v1.1.0
+[1.0.0]: ../../releases/tag/v1.0.0

@@ -3,7 +3,7 @@
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.2-orange)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.3-orange)](CHANGELOG.md)
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -51,6 +51,43 @@
    ```
 3. Go to **Setup → Plugins**
 4. Click **Install** next to Responsivas, then click **Enable**
+
+---
+
+## File Structure
+
+```
+responsivas/
+├── front/
+│   ├── computer.php          # Computer tab endpoint
+│   ├── config.form.php       # Plugin configuration UI
+│   ├── phone.php             # Phone tab endpoint
+│   ├── printer.php           # Printer tab endpoint
+│   ├── resource.send.php     # Send documents action
+│   ├── send_mail.php         # Email send endpoint
+│   └── send_test_mail.php    # Test email endpoint
+├── inc/
+│   ├── config.class.php      # Configuration form and storage
+│   ├── generator.class.php   # PDF generation orchestrator
+│   ├── helpers.php           # Template renderer, editor, variable hints
+│   ├── paths.class.php       # Plugin path helpers
+│   ├── pdf.class.php         # TCPDF wrapper
+│   ├── pdfbuilder.class.php  # Per-asset PDF builders + template validation
+│   └── user.class.php        # User tab integration
+├── locales/
+│   ├── responsivas.pot       # Translation template (166 strings)
+│   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
+│   ├── en_US.po / en_US.mo  # English
+│   ├── fr_FR.po / fr_FR.mo  # French
+│   └── de_DE.po / de_DE.mo  # German
+├── CHANGELOG.md
+├── hook.php                  # Install / uninstall hooks
+├── LICENSE
+├── logo.png                  # Plugin icon (128×128) — read by GLPI Marketplace
+├── README.md
+├── responsivas.xml           # GLPI catalog metadata
+└── setup.php                 # Plugin registration and schema migration
+```
 
 ---
 
@@ -137,10 +174,6 @@ Each asset type has its own set of template fields:
 
 The plugin will generate one PDF per asset type (one for all computers, one for all printers, one per phone) and send them all as email attachments to the user's registered email address.
 
-### Downloading a document directly
-
-From the user's **Responsivas** tab, you can also download each PDF directly without sending an email, using the download buttons next to each asset type.
-
 ---
 
 ## Permissions
@@ -163,9 +196,6 @@ The target user has no default email set in GLPI. Go to **Administration → Use
 
 **"GLPI mail server not configured"**
 Email notifications must be enabled. Go to **Setup → Notifications → Email followups configuration** and enable notifications.
-
-**Test email button does nothing**
-Make sure GLPI email notifications are enabled and you have a default email address configured in your own GLPI profile.
 
 ---
 
@@ -190,14 +220,17 @@ See [LICENSE](LICENSE) for full terms.
 
 ## Author
 
-**monta990** — [Sontechs](https://sontechs.com)
+**Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
+
+---
+---
 
 # Responsivas — Plugin para GLPI
 
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.2-orange)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/Versión-1.2.3-orange)](CHANGELOG.md)
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -245,6 +278,43 @@ See [LICENSE](LICENSE) for full terms.
    ```
 3. Ve a **Configuración → Plugins**
 4. Haz clic en **Instalar** junto a Responsivas y luego en **Activar**
+
+---
+
+## Estructura de archivos
+
+```
+responsivas/
+├── front/
+│   ├── computer.php          # Endpoint de pestaña de computadoras
+│   ├── config.form.php       # Interfaz de configuración del plugin
+│   ├── phone.php             # Endpoint de pestaña de teléfonos
+│   ├── printer.php           # Endpoint de pestaña de impresoras
+│   ├── resource.send.php     # Acción de envío de documentos
+│   ├── send_mail.php         # Endpoint de envío de correo
+│   └── send_test_mail.php    # Endpoint de correo de prueba
+├── inc/
+│   ├── config.class.php      # Formulario y almacenamiento de configuración
+│   ├── generator.class.php   # Orquestador de generación de PDFs
+│   ├── helpers.php           # Renderizador de plantillas, editor, hints de variables
+│   ├── paths.class.php       # Helpers de rutas del plugin
+│   ├── pdf.class.php         # Wrapper de TCPDF
+│   ├── pdfbuilder.class.php  # Constructores de PDF por activo + validación de plantillas
+│   └── user.class.php        # Integración de pestaña en usuario
+├── locales/
+│   ├── responsivas.pot       # Plantilla de traducciones (166 cadenas)
+│   ├── es_MX.po / es_MX.mo  # Español (México)
+│   ├── en_US.po / en_US.mo  # Inglés
+│   ├── fr_FR.po / fr_FR.mo  # Francés
+│   └── de_DE.po / de_DE.mo  # Alemán
+├── CHANGELOG.md
+├── hook.php                  # Hooks de instalación / desinstalación
+├── LICENSE
+├── logo.png                  # Ícono del plugin (128×128) — leído por el Marketplace de GLPI
+├── README.md
+├── responsivas.xml           # Metadatos del catálogo de GLPI
+└── setup.php                 # Registro del plugin y migración de schema
+```
 
 ---
 
@@ -331,10 +401,6 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 
 El plugin genera un PDF por tipo de activo (uno para todas las computadoras, uno para todas las impresoras, uno por teléfono) y los envía como archivos adjuntos al correo registrado del usuario en GLPI.
 
-### Descargar un documento directamente
-
-Desde la pestaña **Responsivas** del usuario también puedes descargar cada PDF directamente sin enviar correo, usando los botones de descarga junto a cada tipo de activo.
-
 ---
 
 ## Permisos requeridos
@@ -357,9 +423,6 @@ El usuario destino no tiene correo predeterminado en GLPI. Ve a **Administració
 
 **"Servidor de correo de GLPI no configurado"**
 Las notificaciones por correo deben estar activadas. Ve a **Configuración → Notificaciones → Configuración de correos** y activa las notificaciones.
-
-**El botón de correo de prueba no hace nada**
-Verifica que las notificaciones de correo de GLPI estén activadas y que tengas una dirección de correo predeterminada en tu propio perfil de GLPI.
 
 ---
 
@@ -384,4 +447,4 @@ Consulta [LICENSE](LICENSE) para los términos completos.
 
 ## Autor
 
-**monta990** — [Sontechs](https://sontechs.com)
+**Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
