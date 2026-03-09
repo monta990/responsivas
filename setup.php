@@ -32,7 +32,7 @@ function plugin_init_responsivas() {
 function plugin_version_responsivas() {
    return [
       'name'          => 'Responsivas',
-      'version'       => '1.2.3',
+      'version'       => '1.2.4',
       'author'        => 'Edwin Elias Alvarez',
       'license'       => 'GPLv2+',
       'homepage'      => 'https://sontechs.com',
@@ -55,7 +55,7 @@ function plugin_responsivas_check() {
    // PHP mínimo 8.1
    if (version_compare(PHP_VERSION, '8.1', '<')) {
       echo '<div class="alert alert-danger">'
-         . sprintf(__('Responsivas requiere PHP 8.1 o superior. Versión actual: %s'), PHP_VERSION)
+         . sprintf(__('Responsivas requiere PHP 8.1 o superior. Versión actual: %s', 'responsivas'), PHP_VERSION)
          . '</div>';
       return false;
    }
@@ -63,7 +63,7 @@ function plugin_responsivas_check() {
    // TCPDF debe estar disponible (lo incluye GLPI en vendor)
    if (!class_exists('TCPDF') && !file_exists(GLPI_ROOT . '/vendor/tecnickcom/tcpdf/tcpdf.php')) {
       echo '<div class="alert alert-danger">'
-         . __('Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI.')
+         . __('Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI.', 'responsivas')
          . '</div>';
       return false;
    }
@@ -172,7 +172,7 @@ function plugin_responsivas_install() {
    $logo_path = PluginResponsivasPaths::logoPath();
 
    // Logo base incluido en el plugin
-   $default_logo = __DIR__ . '/pics/logo.png';
+   $default_logo = __DIR__ . '/logo.png';
 
    // Crear directorio files del plugin
    if (!is_dir($files_dir)) {
@@ -180,7 +180,7 @@ function plugin_responsivas_install() {
 
          if (class_exists('Session')) {
             Session::addMessageAfterRedirect(
-               __('No se pudo crear el directorio de archivos del plugin Responsivas. Verifique permisos.'),
+               __('No se pudo crear el directorio de archivos del plugin Responsivas. Verifique permisos.', 'responsivas'),
                false,
                ERROR
             );

@@ -28,7 +28,7 @@ function e(string $value): string {
 function fechaATexto($fecha, ?string $timezone = null): string {
 
    if (empty($fecha) || $fecha === '0000-00-00') {
-      return __('N/D');
+      return __('N/D', 'responsivas');
    }
 
    try {
@@ -46,7 +46,7 @@ function fechaATexto($fecha, ?string $timezone = null): string {
       $locale = $_SESSION['glpilanguage'] ?? $CFG_GLPI['language'];
 
       if (!class_exists('IntlDateFormatter')) {
-         return __('N/D');
+         return __('N/D', 'responsivas');
       }
 
       $fmt = new IntlDateFormatter(
@@ -60,7 +60,7 @@ function fechaATexto($fecha, ?string $timezone = null): string {
       return $fmt->format($dt);
 
    } catch (Throwable) {
-      return __('N/D');
+      return __('N/D', 'responsivas');
    }
 }
 
@@ -204,18 +204,28 @@ function responsivasTemplateEditor(string $label, string $name, string $value, s
  * ============================ */
 function responsivasVariableHints(array $vars): void
 {
-   echo "<div class='alert alert-info d-flex align-items-start mb-3' role='alert'>";
-   echo "<i class='ti ti-tags me-2 fs-5 mt-1'></i>";
-   echo "<div style='font-size:0.85rem;'>";
-   echo "<strong>" . __('Etiquetas disponibles', 'responsivas') . ":</strong> "
-      . "<span class='text-muted'>" . __('Usa **texto** para negrita', 'responsivas') . "</span><br>";
+   echo '<div class="alert alert-info d-flex align-items-start mb-3" role="alert">';
+   echo '<i class="ti ti-tags me-2 fs-5 mt-1"></i>';
+   echo '<div style="font-size:0.85rem;">';
+   echo '<strong>' . __('Etiquetas disponibles', 'responsivas') . ':</strong> '
+      . '<span class="text-muted">' . __('Usa **texto** para negrita', 'responsivas') . '</span><br>';
    $first = true;
    foreach ($vars as $tag => $desc) {
       $tag_safe  = htmlspecialchars($tag,  ENT_QUOTES, 'UTF-8');
       $desc_safe = htmlspecialchars($desc, ENT_QUOTES, 'UTF-8');
-      if (!$first) echo "<br>";
-      echo "<code class='me-1'>{$tag_safe}</code> &mdash; {$desc_safe}";
+      if (!$first) {
+         echo '<br>';
+      }
+      // data-resp-var evita todo escapado de comillas en el onclick
+      echo '<code'
+         . ' class="me-1"'
+         . ' style="cursor:pointer;"'
+         . ' title="' . $desc_safe . '"'
+         . ' data-resp-var="' . $tag_safe . '"'
+         . ' onclick="responsivasInsertVar(this.dataset.respVar)">'
+         . $tag_safe
+         . '</code> &mdash; ' . $desc_safe;
       $first = false;
    }
-   echo "</div></div>";
+   echo '</div></div>';
 }

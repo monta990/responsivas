@@ -6,6 +6,31 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.4] — 2026-03-08
+
+### Fixed
+- **Badge spacing in mobile dropdown** — tab name now returns a plain `Responsivas <badge>` string instead of a wrapping `<span>` element. The mobile dropdown in GLPI renders raw HTML differently from the desktop sidebar, causing "Responsivas3" without space. The fix is consistent with how GLPI core renders tab counts.
+- **`setup.php` default logo path** — corrected `pics/logo.png` → `logo.png` (at plugin root). On fresh installs the logo was never copied to GLPI's files directory because the source path did not exist.
+- **`pluginDir()` no longer throws** — `PluginResponsivasPaths::pluginDir()` now falls back to `dirname(__DIR__)` instead of throwing `RuntimeException` when the plugin is not found in `GLPI_PLUGINS_DIRECTORIES`, preventing unhandled exceptions from reaching users.
+- **CRLF line endings** — `front/resource.send.php` and `front/config.form.php` had Windows CRLF line terminators; converted to LF for consistency with the rest of the plugin and Linux servers.
+- **Missing `'responsivas'` i18n domain** — all `__()` and `_n()` calls across every PHP file now include the plugin domain. Affected files: `setup.php`, `inc/config.class.php`, `inc/pdfbuilder.class.php`, `inc/helpers.php`, `inc/pdf.class.php`, `inc/user.class.php`, `front/computer.php`, `front/printer.php`, `front/phone.php`, `front/send_mail.php`. Without the domain, strings fell through to GLPI's built-in locale and were not translatable via the plugin's own `.po` files.
+
+### Changed
+- **`getCounts()` GLPI-compliant queries** — replaced direct `$DB->query()` SQL with 3 `$DB->request()` calls as required by GLPI's query policy (`Executing direct queries is not allowed`). The per-request cache remains in place.
+- **PDF button loading feedback** — clicking a Computadoras / Impresoras / Teléfonos button now immediately replaces the button icon with a spinner and disables the button for ~5 seconds, providing visual feedback while the PDF is generated in the new tab. Spinner is implemented via a `data-resp-pdf-btn` attribute and a JS event listener, avoiding PHP string escaping issues.
+- **Syntax error in `user.class.php`** — the previous spinner implementation embedded a JS `onclick` attribute inside a double-quoted PHP string with conflicting escape sequences, causing a fatal parse error on the user tab. Fixed by moving the JS blocks to PHP/HTML interleaving (`?>...<?php`) which eliminates all string escaping issues.
+- **Syntax error in `helpers.php`** — the clickable variable tags implementation had `"` inside a double-quoted PHP echo string without proper escaping, causing a fatal parse error on the configuration page. Fixed by switching all `echo` calls to single-quoted strings and using `?>...<?php` for the inline JS block.
+- **Removed debug mode banner** — the `if (glpi_use_mode & 2)` block in `config.class.php` that displayed a GLPI debug warning is removed. GLPI already shows its own debug indicator globally; the plugin-level duplicate was redundant and added unnecessary strings to the locale files.
+
+### Added
+- **Clickable variable tags in configuration** — all `{variable}` tags in every template hints panel are now clickable buttons. Clicking a tag while a textarea is focused inserts it at the cursor position. If no textarea is focused, the tag is copied to the clipboard. Consistent with the behavior in the Email Signatures plugin.
+
+### Locales
+- Added 2 new translatable strings: `'Abrir ficha del activo en GLPI'` and `'No tienes permiso para generar responsivas de este usuario.'`.
+- Total: **167 strings** across es_MX, en_US, fr_FR, de_DE.
+
+---
+
 ## [1.2.3] — 2026-03-07
 
 ### Added
@@ -99,6 +124,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.2.4]: ../../compare/v1.2.3...v1.2.4
 [1.2.3]: ../../compare/v1.2.2...v1.2.3
 [1.2.2]: ../../compare/v1.2.1...v1.2.2
 [1.2.1]: ../../compare/v1.2.0...v1.2.1

@@ -26,7 +26,8 @@ class PluginResponsivasPaths
             return $path;
          }
       }
-      throw new RuntimeException('No se encontró el directorio del plugin responsivas en GLPI_PLUGINS_DIRECTORIES.');
+      // Fallback seguro: directorio del archivo actual
+      return dirname(__DIR__);
    }
 
    /**

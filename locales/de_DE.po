@@ -84,10 +84,6 @@ msgstr "N/V"
 msgid "Etiquetas disponibles"
 msgstr "Verfügbare Tags"
 
-#: inc/helpers.php
-msgid "Usa **texto** para negrita"
-msgstr "Verwende **Text** für Fettschrift"
-
 #: inc/user.class.php
 msgid "Generador de responsivas"
 msgstr "Generator für Verantwortungsdokumente"
@@ -195,14 +191,6 @@ msgstr "Allgemein"
 #: inc/config.class.php
 msgid "Correo"
 msgstr "E-Mail"
-
-#: inc/config.class.php
-msgid "GLPI en modo depuración."
-msgstr "GLPI im Debug-Modus."
-
-#: inc/config.class.php
-msgid "Esto podría provocar comportamientos inesperados."
-msgstr "Dies könnte zu unerwartetem Verhalten führen."
 
 #: inc/config.class.php
 msgid "Zona horaria para los PDFs"
@@ -379,6 +367,10 @@ msgstr "Firmenname (in Allgemein konfiguriert)"
 #: inc/config.class.php
 msgid "Fecha del día en formato dd/mm/aaaa"
 msgstr "Heutiges Datum im Format TT/MM/JJJJ"
+
+#: inc/config.class.php
+msgid "Usa **texto** para negrita"
+msgstr "Verwende **Text** für Fettschrift"
 
 #: inc/config.class.php
 msgid "Asunto del correo"
@@ -579,6 +571,14 @@ msgstr "Zustand"
 #: inc/config.class.php
 msgid "Guardar"
 msgstr "Speichern"
+
+#: inc/pdf.class.php
+msgid "Abrir ficha del activo en GLPI"
+msgstr "Asset-Datensatz in GLPI öffnen"
+
+#: front/computer.php
+msgid "No tienes permiso para generar responsivas de este usuario."
+msgstr "Sie haben keine Berechtigung, Verantwortungsdokumente für diesen Benutzer zu erstellen."
 
 #: front/send_mail.php
 msgid "Acceso denegado."

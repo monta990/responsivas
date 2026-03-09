@@ -1,9 +1,13 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Responsivas logo" width="96">
+</p>
+
 # Responsivas — GLPI Plugin
 
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.3-orange)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.4-orange)](CHANGELOG.md)
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -125,6 +129,8 @@ Each asset type has its own set of template fields:
 
 **Bold text in templates:** Use `**text**` syntax (like Markdown). HTML tags are not supported because GLPI sanitizes them.
 
+**Clickable variable tags:** All `{variable}` tags displayed in the hints panel are clickable. Click while a template field is focused to insert the tag at the cursor position. If no field is focused, the tag is copied to the clipboard.
+
 **Available template variables:**
 
 | Variable | Description |
@@ -225,12 +231,16 @@ See [LICENSE](LICENSE) for full terms.
 ---
 ---
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Logo Responsivas" width="96">
+</p>
+
 # Responsivas — Plugin para GLPI
 
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.3-orange)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/Versión-1.2.4-orange)](CHANGELOG.md)
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -351,6 +361,8 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 | Tamaño de fuente | Tamaño de letra del cuerpo del PDF |
 
 **Negritas en las plantillas:** Usa la sintaxis `**texto**` (como Markdown). Las etiquetas HTML no funcionan porque GLPI las sanitiza automáticamente.
+
+**Etiquetas de variable clicleables:** Todas las etiquetas `{variable}` del panel de hints son clicleables. Haz clic mientras un campo de plantilla está activo para insertar la etiqueta en la posición del cursor. Si ningún campo está activo, la etiqueta se copia al portapapeles.
 
 **Variables disponibles en las plantillas:**
 

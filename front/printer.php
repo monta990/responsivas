@@ -14,7 +14,7 @@ require_once __DIR__ . '/../inc/pdfbuilder.class.php';
 Session::checkLoginUser();
 
 if (!Session::haveRight('user', READ)) {
-   responsivasErrorAndBack(__('No tienes permiso para generar responsivas de este usuario.'));
+   responsivasErrorAndBack(__('No tienes permiso para generar responsivas de este usuario.', 'responsivas'));
 }
 
 /* ============================
@@ -22,7 +22,7 @@ if (!Session::haveRight('user', READ)) {
  * ============================ */
 $user_id = (int)($_GET['users_id'] ?? $_GET['id'] ?? 0);
 if ($user_id <= 0) {
-   responsivasErrorAndBack(__('Usuario inválido.'));
+   responsivasErrorAndBack(__('Usuario inválido.', 'responsivas'));
 }
 
 /* ============================

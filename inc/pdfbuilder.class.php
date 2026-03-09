@@ -117,7 +117,7 @@ HTML;
 
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.'));
+         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
       }
 
       $computers = [];
@@ -127,12 +127,12 @@ HTML;
          $computers[]  = $comp;
       }
       if (empty($computers)) {
-         throw new RuntimeException(__('El usuario no tiene equipos asignados.'));
+         throw new RuntimeException(__('El usuario no tiene equipos asignados.', 'responsivas'));
       }
 
       $entity = new Entity();
       if (!$entity->getFromDB(Session::getActiveEntity())) {
-         throw new RuntimeException(__('No se pudo obtener la entidad.'));
+         throw new RuntimeException(__('No se pudo obtener la entidad.', 'responsivas'));
       }
 
       $location = e(implode(', ', array_filter([
@@ -328,17 +328,17 @@ HTML;
 
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.'));
+         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
       }
 
       $printers = (new Printer())->find(['users_id' => $user_id, 'is_deleted' => 0]);
       if (empty($printers)) {
-         throw new RuntimeException(__('El usuario no tiene equipos asignados.'));
+         throw new RuntimeException(__('El usuario no tiene equipos asignados.', 'responsivas'));
       }
 
       $entity = new Entity();
       if (!$entity->getFromDB(Session::getActiveEntity())) {
-         throw new RuntimeException(__('No se pudo obtener la entidad.'));
+         throw new RuntimeException(__('No se pudo obtener la entidad.', 'responsivas'));
       }
 
       $location = e(implode(', ', array_filter([
@@ -474,12 +474,12 @@ HTML;
 
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.'));
+         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
       }
 
       $cellphone_type_id = (int)($config['cellphone_type_id'] ?? 0);
       if ($cellphone_type_id <= 0) {
-         throw new RuntimeException(__('No está configurado el tipo de teléfono para comodatos en el plugin.'));
+         throw new RuntimeException(__('No está configurado el tipo de teléfono para comodatos en el plugin.', 'responsivas'));
       }
 
       $phones = (new Phone())->find([
@@ -488,12 +488,12 @@ HTML;
          'phonetypes_id' => $cellphone_type_id,
       ]);
       if (empty($phones)) {
-         throw new RuntimeException(__('El usuario no tiene teléfonos del tipo configurado asignados.'));
+         throw new RuntimeException(__('El usuario no tiene teléfonos del tipo configurado asignados.', 'responsivas'));
       }
 
       $entity = new Entity();
       if (!$entity->getFromDB(Session::getActiveEntity())) {
-         throw new RuntimeException(__('No se pudo obtener la entidad.'));
+         throw new RuntimeException(__('No se pudo obtener la entidad.', 'responsivas'));
       }
 
       $address  = e($entity->fields['address']  ?? '');
@@ -513,10 +513,10 @@ HTML;
       $representante_id = (int)($config['representante'] ?? 0);
 
       if ($testigo1_id <= 0 || $testigo2_id <= 0) {
-         throw new RuntimeException(__('Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin.'));
+         throw new RuntimeException(__('Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin.', 'responsivas'));
       }
       if ($representante_id <= 0) {
-         throw new RuntimeException(__('Debe configurar representante legal en la configuración del plugin.'));
+         throw new RuntimeException(__('Debe configurar representante legal en la configuración del plugin.', 'responsivas'));
       }
 
       $testigo1_nombre      = nombreUsuario($testigo1_id);
@@ -524,10 +524,10 @@ HTML;
       $representante_nombre = nombreUsuario($representante_id);
 
       if (!$testigo1_nombre || !$testigo2_nombre) {
-         throw new RuntimeException(__('Uno o ambos testigos configurados no son válidos o están inactivos.'));
+         throw new RuntimeException(__('Uno o ambos testigos configurados no son válidos o están inactivos.', 'responsivas'));
       }
       if (!$representante_nombre) {
-         throw new RuntimeException(__('El representante legal no es válido o está inactivo.'));
+         throw new RuntimeException(__('El representante legal no es válido o está inactivo.', 'responsivas'));
       }
 
       $show_employee = (int)($config['show_employee_number'] ?? 1);
@@ -550,7 +550,7 @@ HTML;
             $nombre_activo = trim($phone['name'] ?? '');
             $identificador = $nombre_activo !== '' ? $nombre_activo . ($nombre_tel !== '' ? " ({$nombre_tel})" : '') : ($nombre_tel ?: 'IMEI: ' . ($phone['serial'] ?? 'N/D'));
             throw new RuntimeException(sprintf(
-               __('El teléfono "%s" no tiene precio de compra. Agrégalo en Gestión → Información administrativa y financiera → Precio de compra.'),
+               __('El teléfono "%s" no tiene precio de compra. Agrégalo en Gestión → Información administrativa y financiera → Precio de compra.', 'responsivas'),
                $identificador
             ));
          }

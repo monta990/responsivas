@@ -40,7 +40,7 @@ $redirect_user = static function (int $uid) use ($CFG_GLPI): void {
 };
 
 if ($user_id <= 0) {
-   Session::addMessageAfterRedirect(__('Usuario inválido.'), false, ERROR);
+   Session::addMessageAfterRedirect(__('Usuario inválido.', 'responsivas'), false, ERROR);
    Html::redirect($CFG_GLPI['root_doc'] . '/front/user.php');
    exit;
 }
@@ -50,7 +50,7 @@ if ($user_id <= 0) {
  * ============================ */
 $user = new User();
 if (!$user->getFromDB($user_id)) {
-   Session::addMessageAfterRedirect(__('Usuario no encontrado.'), false, ERROR);
+   Session::addMessageAfterRedirect(__('Usuario no encontrado.', 'responsivas'), false, ERROR);
    $redirect_user($user_id);
    exit;
 }

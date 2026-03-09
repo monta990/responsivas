@@ -16,12 +16,12 @@ function responsivasRibbonSubHeader(string $icon, string $title): void {
     echo "<div class='ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1'>
             <i class='fs-2x ti {$icon}' aria-hidden='true'></i>
           </div>";
-    echo "<h3 class='card-subtitle ms-5 mb-0'>" . __($title) . "</h3>";
+    echo "<h3 class='card-subtitle ms-5 mb-0'>" . __($title, 'responsivas') . "</h3>";
     echo "</div>";
 }
 
 Html::header(
-   __('Responsivas'),
+   __('Responsivas', 'responsivas'),
    $_SERVER['PHP_SELF'],
    'config',
    'plugins',
@@ -52,7 +52,7 @@ if (isset($_POST['delete_logo'])) {
 
     if (is_file($logoPath) && !@unlink($logoPath)) {
         Session::addMessageAfterRedirect(
-            __('No se pudo eliminar el logo.'),
+            __('No se pudo eliminar el logo.', 'responsivas'),
             false,
             ERROR
         );
@@ -61,7 +61,7 @@ if (isset($_POST['delete_logo'])) {
     }
 
     Session::addMessageAfterRedirect(
-        __('Logo eliminado correctamente.'),
+        __('Logo eliminado correctamente.', 'responsivas'),
         false,
         INFO
     );
@@ -117,7 +117,7 @@ if (isset($_POST['update'])) {
     
     if ($values['cellphone_type_id'] === 0) {
        Session::addMessageAfterRedirect(
-          __('Debes seleccionar un tipo de teléfono válido.'),
+          __('Debes seleccionar un tipo de teléfono válido.', 'responsivas'),
           false,
           WARNING
        );
@@ -142,7 +142,7 @@ if (isset($_POST['update'])) {
         if ($size > $maxSize) {
 
             Session::addMessageAfterRedirect(
-                __('El archivo excede el tamaño máximo permitido (500 KB).'),
+                __('El archivo excede el tamaño máximo permitido (500 KB).', 'responsivas'),
                 false,
                 ERROR
             );
@@ -150,7 +150,7 @@ if (isset($_POST['update'])) {
         } elseif (!in_array($mime, $allowedMime)) {
 
             Session::addMessageAfterRedirect(
-                __('Formato no permitido. Solo PNG o JPG.'),
+                __('Formato no permitido. Solo PNG o JPG.', 'responsivas'),
                 false,
                 ERROR
             );
@@ -167,7 +167,7 @@ if (isset($_POST['update'])) {
                     imagepng($img, $logoPath);
                     imagedestroy($img);
                 } else {
-                    Session::addMessageAfterRedirect(__('Error al procesar imagen JPG'), false, ERROR);
+                    Session::addMessageAfterRedirect(__('Error al procesar imagen JPG', 'responsivas'), false, ERROR);
                 }
             } else {
                 move_uploaded_file($tmpFile, $logoPath);
@@ -176,7 +176,7 @@ if (isset($_POST['update'])) {
             chmod($logoPath, 0644);
 
             Session::addMessageAfterRedirect(
-                __('Logo actualizado correctamente.'),
+                __('Logo actualizado correctamente.', 'responsivas'),
                 false,
                 INFO
             );
@@ -190,7 +190,7 @@ if (isset($_POST['update'])) {
     // =============================
     if (!$logo_uploaded) {
         Session::addMessageAfterRedirect(
-            __('Configuración guardada correctamente.'),
+            __('Configuración guardada correctamente.', 'responsivas'),
             false,
             INFO
         );
@@ -363,7 +363,7 @@ echo "<div class='ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1'>
       </div>";
 
 echo "<h4 class='card-title ms-5 mb-0'>" .
-      __('Configuración del plugin Responsivas') .
+      __('Configuración del plugin Responsivas', 'responsivas') .
      "</h4>";
 echo "</div>";
 
@@ -433,18 +433,6 @@ echo "
 /* =====================================================
  * VALIDA SI DEBUG ESTA ACTIVO
  * ===================================================== */
-if (Session::haveRight('config', UPDATE)
-    && !empty($_SESSION['glpi_use_mode'])
-    && ($_SESSION['glpi_use_mode'] & 2)
-) {
-    echo "<div class='alert alert-warning d-flex align-items-start mb-4'>";
-    echo "<i class='ti ti-alert-triangle me-2 mt-1 text-warning' aria-hidden='true'></i>";
-    echo "<div>";
-    echo "<strong>" . __('GLPI en modo depuración.') . "</strong><br>";
-    echo __('Esto podría provocar comportamientos inesperados.');
-    echo "</div></div>";
-}
-
 if (empty($config['cellphone_type_id'])) {
    echo "
    <div class='alert alert-warning d-flex align-items-start mb-4'>
@@ -475,7 +463,7 @@ echo "<div class='mb-4'>";
 // Label
 echo "<label class='form-label fw-bold d-flex align-items-center mb-2'>
         <i class='ti ti-world me-2'></i>
-        <span>" . __('Zona horaria para los PDFs') . "</span>
+        <span>" . __('Zona horaria para los PDFs', 'responsivas') . "</span>
       </label>";
 
 // Wrapper con icono
@@ -502,9 +490,9 @@ echo "</div>"; // fin input-group
 // Ayuda debajo
 echo "<div class='form-text'>";
 echo sprintf(
-   __('Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al instalar el complemento se toma de manera predeterminada la del servidor en ese momento, más información en: %s'),
+   __('Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al instalar el complemento se toma de manera predeterminada la del servidor en ese momento, más información en: %s', 'responsivas'),
    "<a href='https://www.php.net/manual/timezones.php' target='_blank' rel='noopener noreferrer'>"
-   . __('Lista de zonas horarias de PHP')
+   . __('Lista de zonas horarias de PHP', 'responsivas')
    . "</a>"
 );
 echo "</div>";
@@ -530,7 +518,7 @@ echo "<div class='col-md-6'>
                  name='show_employee_number'
                  value='1' " . ($config['show_employee_number'] ? 'checked' : '') . ">
             <label class='form-check-label' for='show_employee_number'>";
-echo        __('Mostrar número de empleado en la responsiva');
+echo        __('Mostrar número de empleado en la responsiva', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -548,7 +536,7 @@ echo "<div class='col-md-6'>
                  name='show_qr'
                  value='1' " . ($config['show_qr'] ? 'checked' : '') . ">
             <label class='form-check-label' for='show_qr'>";
-echo        __('Mostrar QR con Url de activo en responsiva');
+echo        __('Mostrar QR con Url de activo en responsiva', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -563,7 +551,7 @@ echo "<div class='mb-4'>";
 
 echo "<label class='form-label fw-bold'>
          <i class='ti ti-briefcase me-2'></i>
-        " . __('Nombre de la empresa en las responsivas') . "
+        " . __('Nombre de la empresa en las responsivas', 'responsivas') . "
       </label>";
 
 echo "<div class='input-group'>
@@ -578,7 +566,7 @@ echo "<div class='input-group'>
       </div>";
 
 echo "<div class='form-text'>";
-echo __('Este nombre aparecerá dentro del texto de la responsiva.');
+echo __('Este nombre aparecerá dentro del texto de la responsiva.', 'responsivas');
 echo "</div>";
 
 echo "</div>";
@@ -610,11 +598,11 @@ echo "<div class='mb-2'>";
 
 echo "<label class='form-label fw-bold'>
         <i class='ti ti-users me-1'></i>
-        " . __('Testigos del comodato de celulares') . "
+        " . __('Testigos del comodato de celulares', 'responsivas') . "
       </label>";
 
 echo "<div class='form-text mb-3'>";
-echo __('Selecciona dos testigos para el comodato de celulares.');
+echo __('Selecciona dos testigos para el comodato de celulares.', 'responsivas');
 echo "</div>";
 
 // Contenedor en fila
@@ -622,13 +610,13 @@ echo "<div class='row'>";
 
 /* Testigo 1 */
 echo "<div class='col-md-6 mb-3'>";
-echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Testigo 1') . "</label>";
+echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Testigo 1', 'responsivas') . "</label>";
 dropdownUser('testigo_1', $config);
 echo "</div>";
 
 /* Testigo 2 */
 echo "<div class='col-md-6 mb-3'>";
-echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Testigo 2') . "</label>";
+echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Testigo 2', 'responsivas') . "</label>";
 dropdownUser('testigo_2', $config);
 echo "</div>";
 
@@ -642,16 +630,16 @@ echo "<div class='mb-2'>";
 
 echo "<label class='form-label fw-bold'>
         <i class='ti ti-user-shield me-1'></i>
-        " . __('Representante legal del comodato de celulares') . "
+        " . __('Representante legal del comodato de celulares', 'responsivas') . "
       </label>";
 
 echo "<div class='form-text mb-3'>";
-echo __('Selecciona el representante legal para el comodato de celulares.');
+echo __('Selecciona el representante legal para el comodato de celulares.', 'responsivas');
 echo "</div>";
 
 /* Testigo 1 */
 echo "<div class='mb-3'>";
-echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Representante legal') . "</label>";
+echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Representante legal', 'responsivas') . "</label>";
 dropdownUser('representante', $config);
 echo "</div>";
 
@@ -673,8 +661,8 @@ if (!$hasLogo) {
     echo "<div class='alert alert-warning d-flex align-items-start mb-4'>";
     echo "<i class='ti ti-alert-triangle me-2 mt-1 text-warning' aria-hidden='true'></i>";
     echo "<div>";
-    echo "<strong>" . __('Sin logo configurado.') . "</strong><br>";
-    echo __('Los PDFs se generarán sin logo.');
+    echo "<strong>" . __('Sin logo configurado.', 'responsivas') . "</strong><br>";
+    echo __('Los PDFs se generarán sin logo.', 'responsivas');
     echo "</div></div>";
 }
 
@@ -690,17 +678,17 @@ if ($hasLogo) {
     echo "<div class='mb-4'>";
 
     echo "<div class='form-text mb-1'>";
-    echo __('Da clic en la imagen para descargar una copia de respaldo.');
+    echo __('Da clic en la imagen para descargar una copia de respaldo.', 'responsivas');
     echo "</div>";
 
     echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-photo-check me-2' aria-hidden='true'></i>
-        <span>" . __('Logo actual') . "</span>
+        <span>" . __('Logo actual', 'responsivas') . "</span>
       </label>";
 
     echo "<a href='" . PluginResponsivasPaths::logoUrl() . "'
             download='logo.png'
-            title='" . __('Descargar logo') . "'>";
+            title='" . __('Descargar logo', 'responsivas') . "'>";
 
     echo "<img src='" . PluginResponsivasPaths::logoUrl() . "&t=" . time() . "'
             class='img-fluid'
@@ -715,7 +703,7 @@ if ($hasLogo) {
 
     echo "<div class='form-text mt-1'>";
     echo "Dimensiones: {$logoWidth} × {$logoHeight} px · ";
-    echo __('Tamaño: ') . "<strong>{$logoSizeKB} KB</strong>";
+    echo __('Tamaño: ', 'responsivas') . "<strong>{$logoSizeKB} KB</strong>";
     echo "</div>";
 
     echo "<div class='mt-3'>";
@@ -723,7 +711,7 @@ if ($hasLogo) {
             class='btn btn-danger d-flex align-items-center gap-2'
             data-bs-toggle='modal'
             data-bs-target='#deleteLogoModal'>
-      <i class='ti ti-trash'></i> " . __('Eliminar logo actual') . "
+      <i class='ti ti-trash'></i> " . __('Eliminar logo actual', 'responsivas') . "
     </button>";
     echo "</div>";
 
@@ -741,7 +729,7 @@ echo "<div class='mb-4'>";
 
 echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-eye me-2' aria-hidden='true'></i>
-        <span>" . __('Vista previa') . "</span>
+        <span>" . __('Vista previa', 'responsivas') . "</span>
       </label>";
 
 echo "<img id='logo-preview'
@@ -755,7 +743,7 @@ echo "<img id='logo-preview'
 echo "<div id='preview-size' class='form-text d-none mt-1'></div>";
 
 echo "<div class='form-text mb-1'>";
-echo __('Para una vista previa carga una imagen.');
+echo __('Para una vista previa carga una imagen.', 'responsivas');
 echo "</div>";
 
 echo "</div>";
@@ -768,7 +756,7 @@ echo "</div>"; // row
 echo "<div class='mb-4'>";
 echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-upload me-2' aria-hidden='true'></i>
-        <span>" . __('Cargar nuevo logo') . "</span>
+        <span>" . __('Cargar nuevo logo', 'responsivas') . "</span>
       </label>";
 echo "<input type='file'
              name='logo'
@@ -776,11 +764,11 @@ echo "<input type='file'
              accept='image/png,image/jpeg'
              onchange='previewLogo(this)'>";
 echo "<div class='form-text'>";
-echo __('PNG / JPG · Máx 500 KB · Se guardará como <b>logo.png</b>.');
+echo __('PNG / JPG · Máx 500 KB · Se guardará como <b>logo.png</b>.', 'responsivas');
 echo "</div>";
 echo "</div>";
     echo "<div class='form-text mb-1'>";
-    echo __('Una vez cargado y validado en vista previa, recuerda guardar para que se aplique.');
+    echo __('Una vez cargado y validado en vista previa, recuerda guardar para que se aplique.', 'responsivas');
     echo "</div>";
 echo "</div>"; // card-body
 echo "</div>"; // sub-card
@@ -810,16 +798,12 @@ if (!$mail_ok) {
 }
 
 // ── Hint de variables disponibles ────────────────────────
-echo "<div class='alert alert-info d-flex align-items-start mb-3' role='alert'>
-   <i class='ti ti-variable me-2 fs-5 mt-1'></i>
-   <div style='font-size:0.85rem;'>
-      <strong>" . __('Variables disponibles', 'responsivas') . ":</strong>
-      <span class='text-muted ms-2'>" . __('Usa **texto** para negrita', 'responsivas') . "</span><br>
-      <code class='me-1'>{nombre}</code> &mdash; " . __('Nombre completo del usuario', 'responsivas') . "<br>
-      <code class='me-1'>{empresa}</code> &mdash; " . __('Nombre de la empresa (configurado en General)', 'responsivas') . "<br>
-      <code class='me-1'>{fecha}</code> &mdash; " . __('Fecha del día en formato dd/mm/aaaa', 'responsivas') . "
-   </div>
-</div>";
+$email_vars = [
+   '{nombre}'  => __('Nombre completo del usuario', 'responsivas'),
+   '{empresa}' => __('Nombre de la empresa (configurado en General)', 'responsivas'),
+   '{fecha}'   => __('Fecha del día en formato dd/mm/aaaa', 'responsivas'),
+];
+responsivasVariableHints($email_vars);
 
 $email_subject_val = htmlspecialchars($config['email_subject'] ?? '', ENT_QUOTES, 'UTF-8');
 $email_body_val    = htmlspecialchars($config['email_body']    ?? '', ENT_QUOTES, 'UTF-8');
@@ -1286,7 +1270,7 @@ echo "<div class='card-footer bg-light d-flex justify-content-end gap-2'>";
 echo "<button type='submit'
              name='update'
              class='btn btn-primary d-flex align-items-center gap-2'>
-        <i class='ti ti-device-floppy' aria-hidden='true'></i> " . __('Guardar') . "
+        <i class='ti ti-device-floppy' aria-hidden='true'></i> " . __('Guardar', 'responsivas') . "
       </button>";
 
 echo "</div>"; // footer
@@ -1307,29 +1291,29 @@ echo "
       <div class='modal-header'>
         <h5 class='modal-title'>
           <i class='ti ti-alert-triangle text-warning me-2'></i>
-          " . __('Confirmar eliminación') . "
+          " . __('Confirmar eliminación', 'responsivas') . "
         </h5>
         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
 
       <div class='modal-body'>
-        <p class='mb-2'>" . __('¿Estás seguro de que deseas eliminar el logo actual?') . "</p>
+        <p class='mb-2'>" . __('¿Estás seguro de que deseas eliminar el logo actual?', 'responsivas') . "</p>
         <div class='alert alert-warning d-flex align-items-center'>
           <i class='ti ti-info-circle me-2'></i>
-          " . __('Esta acción no se puede deshacer.') . "
+          " . __('Esta acción no se puede deshacer.', 'responsivas') . "
         </div>
       </div>
 
       <div class='modal-footer'>
         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>
-          <i class='ti ti-x'></i> " . __('Cancelar') . "
+          <i class='ti ti-x'></i> " . __('Cancelar', 'responsivas') . "
         </button>
 
         <button type='submit'
                 name='delete_logo'
                 value='1'
                 class='btn btn-danger d-flex align-items-center gap-2'>
-          <i class='ti ti-trash'></i> " . __('Eliminar logo') . "
+          <i class='ti ti-trash'></i> " . __('Eliminar logo', 'responsivas') . "
         </button>
       </div>
 

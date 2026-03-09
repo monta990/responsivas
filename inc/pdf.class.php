@@ -93,7 +93,7 @@ class PluginResponsivasPDF extends TCPDF {
                 $qr_size, $qr_size,
                 $this->qr_per_page[$page],
                 0,
-                __('Abrir ficha del activo en GLPI')
+                __('Abrir ficha del activo en GLPI', 'responsivas')
             );
         }
     }

@@ -84,10 +84,6 @@ msgstr "N/D"
 msgid "Etiquetas disponibles"
 msgstr "Etiquetas disponibles"
 
-#: inc/helpers.php
-msgid "Usa **texto** para negrita"
-msgstr "Usa **texto** para negrita"
-
 #: inc/user.class.php
 msgid "Generador de responsivas"
 msgstr "Generador de responsivas"
@@ -195,14 +191,6 @@ msgstr "General"
 #: inc/config.class.php
 msgid "Correo"
 msgstr "Correo"
-
-#: inc/config.class.php
-msgid "GLPI en modo depuración."
-msgstr "GLPI en modo depuración."
-
-#: inc/config.class.php
-msgid "Esto podría provocar comportamientos inesperados."
-msgstr "Esto podría provocar comportamientos inesperados."
 
 #: inc/config.class.php
 msgid "Zona horaria para los PDFs"
@@ -379,6 +367,10 @@ msgstr "Nombre de la empresa (configurado en General)"
 #: inc/config.class.php
 msgid "Fecha del día en formato dd/mm/aaaa"
 msgstr "Fecha del día en formato dd/mm/aaaa"
+
+#: inc/config.class.php
+msgid "Usa **texto** para negrita"
+msgstr "Usa **texto** para negrita"
 
 #: inc/config.class.php
 msgid "Asunto del correo"
@@ -579,6 +571,14 @@ msgstr "Condición"
 #: inc/config.class.php
 msgid "Guardar"
 msgstr "Guardar"
+
+#: inc/pdf.class.php
+msgid "Abrir ficha del activo en GLPI"
+msgstr "Abrir ficha del activo en GLPI"
+
+#: front/computer.php
+msgid "No tienes permiso para generar responsivas de este usuario."
+msgstr "No tienes permiso para generar responsivas de este usuario."
 
 #: front/send_mail.php
 msgid "Acceso denegado."

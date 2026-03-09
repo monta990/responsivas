@@ -13,49 +13,49 @@ class PluginResponsivasUser extends CommonGLPI {
     * ÚNICO punto de acceso a los conteos (UNA VEZ)
     * ===================================================== */
     private static function getCounts(int $user_id): array {
-       global $DB;
-    
-       if (isset(self::$cache[$user_id])) {
-          return self::$cache[$user_id];
-       }
-    
-       // Leer configuración del plugin
-       $config = Config::getConfigurationValues('plugin_responsivas');
-       $cellphone_type_id = (int)($config['cellphone_type_id'] ?? 0);
-    
-       // Helper rápido
-       $count = function (string $table, array $where) use ($DB): int {
-          return (int) (
-             $DB->request([
-                'COUNT' => 'total',
-                'FROM'  => $table,
-                'WHERE' => $where
-             ])->current()['total'] ?? 0
-          );
-       };
-    
-       $data = [
-          'computers' => $count('glpi_computers', [
-             'users_id'   => $user_id,
-             'is_deleted' => 0
-          ]),
-          'printers'  => $count('glpi_printers', [
-             'users_id'   => $user_id,
-             'is_deleted' => 0
-          ]),
-          'phones'    => $cellphone_type_id
-             ? $count('glpi_phones', [
-                  'users_id'      => $user_id,
-                  'is_deleted'    => 0,
-                  'phonetypes_id' => $cellphone_type_id
-               ])
-             : 0
-       ];
-    
-       $data['total'] = array_sum($data);
-    
-       return self::$cache[$user_id] = $data;
-    }
+      global $DB;
+
+      if (isset(self::$cache[$user_id])) {
+         return self::$cache[$user_id];
+      }
+
+      $config            = Config::getConfigurationValues('plugin_responsivas');
+      $cellphone_type_id = (int)($config['cellphone_type_id'] ?? 0);
+
+      $computers = (int)($DB->request([
+         'COUNT' => 'total',
+         'FROM'  => 'glpi_computers',
+         'WHERE' => ['users_id' => $user_id, 'is_deleted' => 0],
+      ])->current()['total'] ?? 0);
+
+      $printers = (int)($DB->request([
+         'COUNT' => 'total',
+         'FROM'  => 'glpi_printers',
+         'WHERE' => ['users_id' => $user_id, 'is_deleted' => 0],
+      ])->current()['total'] ?? 0);
+
+      $phones = 0;
+      if ($cellphone_type_id > 0) {
+         $phones = (int)($DB->request([
+            'COUNT' => 'total',
+            'FROM'  => 'glpi_phones',
+            'WHERE' => [
+               'users_id'      => $user_id,
+               'is_deleted'    => 0,
+               'phonetypes_id' => $cellphone_type_id,
+            ],
+         ])->current()['total'] ?? 0);
+      }
+
+      $data = [
+         'computers' => $computers,
+         'printers'  => $printers,
+         'phones'    => $phones,
+      ];
+      $data['total'] = array_sum($data);
+
+      return self::$cache[$user_id] = $data;
+   }
 
    /* =====================================================
     * TAB (nombre + badge)
@@ -67,15 +67,20 @@ class PluginResponsivasUser extends CommonGLPI {
 
       $counts = self::getCounts($item->getID());
 
-      $badge = $counts['total'] > 0
-         ? "<span class='badge glpi-badge'>{$counts['total']}</span>"
-         : '';
-
-      return "<span class='d-flex align-items-center'>
-                <i class='ti ti-file-text me-2'></i>" .
-                __('Responsivas', 'responsivas') .
-                $badge .
-             "</span>";
+      $label = __('Responsivas', 'responsivas');
+      if ($counts['total'] > 0) {
+         // Espacio antes del número dentro del badge → strip_tags da "Responsivas 3" en móvil
+         return "<span class='d-flex align-items-center'>"
+            . "<i class='ti ti-file-text me-2'></i>"
+            . $label
+            . "<span class='badge badge-secondary ms-1'> "
+            . $counts['total']
+            . "</span></span>";
+      }
+      return "<span class='d-flex align-items-center'>"
+         . "<i class='ti ti-file-text me-2'></i>"
+         . $label
+         . "</span>";
    }
 
    public static function displayTabContentForItem(
@@ -105,13 +110,17 @@ class PluginResponsivasUser extends CommonGLPI {
          ? __('Generar responsivas', 'responsivas')
          : ($tooltip_empty ?: __('Sin equipo asignado', 'responsivas'));
 
-      $disabled = $count ? '' : 'disabled';
+      $disabled   = $count ? '' : 'disabled';
+      $href       = $count ? htmlspecialchars($url, ENT_QUOTES) : '#';
+      $extra_attr = $count
+         ? "target='_blank' data-resp-pdf-btn='1'"
+         : "aria-disabled='true' role='button' style='pointer-events:none'";
 
       return "
       <span data-bs-toggle='tooltip' title='{$tooltip}' class='d-inline-block'>
          <a class='{$class} {$disabled}'
-            href='" . ($count ? $url : '#') . "'
-            " . ($count ? "target='_blank'" : "aria-disabled='true' role='button' style='pointer-events:none'") . ">
+            href='{$href}'
+            {$extra_attr}>
             <i class='ti {$icon} me-2'></i>
             {$label}
             <span class='badge bg-light text-dark ms-2'>{$count}</span>
@@ -302,22 +311,39 @@ class PluginResponsivasUser extends CommonGLPI {
       echo self::emailButton($id, $data['total'], $user_email, $email_configured, $mail_ok, $base);
       echo "</div>";
 
-        $tz = $config['timezone'] ?? date_default_timezone_get();
-        $dt = new DateTime('now', new DateTimeZone($tz));
-      echo "
-         <div class='card-footer text-end py-2'>
-            <small>" . __('Última actualización: ') . $dt->format('d/m/Y H:i') . "</small>
-         </div>
+      $tz = $config['timezone'] ?? date_default_timezone_get();
+      $dt = new DateTime('now', new DateTimeZone($tz));
+      ?>
+      <div class="card-footer text-end py-2">
+         <small><?php echo __('Última actualización: ', 'responsivas') . $dt->format('d/m/Y H:i'); ?></small>
       </div>
+      </div><!-- /card -->
       <script>
-         if (typeof bootstrap !== 'undefined') {
-            document.querySelectorAll('[data-bs-toggle=\"tooltip\"]').forEach(el => {
-               if (!el.dataset.tooltipInit) {
-                  new bootstrap.Tooltip(el);
-                  el.dataset.tooltipInit = '1';
-               }
+         (function () {
+            if (typeof bootstrap !== 'undefined') {
+               document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+                  if (!el.dataset.tooltipInit) {
+                     new bootstrap.Tooltip(el);
+                     el.dataset.tooltipInit = '1';
+                  }
+               });
+            }
+            document.querySelectorAll('[data-resp-pdf-btn="1"]').forEach(function (btn) {
+               btn.addEventListener('click', function () {
+                  var icon = btn.querySelector('i');
+                  var origClass = icon ? icon.className : '';
+                  if (icon) icon.className = 'spinner-border spinner-border-sm me-2';
+                  btn.classList.add('disabled');
+                  btn.setAttribute('aria-disabled', 'true');
+                  setTimeout(function () {
+                     btn.classList.remove('disabled');
+                     btn.removeAttribute('aria-disabled');
+                     if (icon) icon.className = origClass;
+                  }, 5000);
+               });
             });
-         }
-      </script>";
+         })();
+      </script>
+      <?php
    }
 }
