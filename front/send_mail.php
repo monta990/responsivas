@@ -31,6 +31,123 @@ if (!Session::haveRight('user', READ)) {
 }
 
 /* ============================
+ * Modo prueba (mode=test): envía a admin sin PDFs
+ * ============================ */
+if (($_POST['mode'] ?? '') === 'test') {
+
+   if (!Session::haveRight('config', UPDATE)) {
+      Session::addMessageAfterRedirect(__('Acceso denegado.', 'responsivas'), false, ERROR);
+      Html::back();
+      exit;
+   }
+
+   $redirect_url = Plugin::getWebDir('responsivas') . '/front/config.form.php';
+   $admin_id     = Session::getLoginUserID();
+   global $DB;
+   $email_row  = $DB->request([
+      'FROM'  => 'glpi_useremails',
+      'WHERE' => ['users_id' => $admin_id, 'is_default' => 1],
+   ])->current();
+   $test_email = trim($email_row['email'] ?? '');
+
+   if (empty($test_email)) {
+      Session::addMessageAfterRedirect(
+         __('Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu perfil.', 'responsivas'),
+         false, ERROR
+      );
+      Html::redirect($redirect_url);
+      exit;
+   }
+
+   $config = Config::getConfigurationValues('plugin_responsivas');
+   $email_subject_tpl = trim($config['email_subject'] ?? '');
+   $email_body_tpl    = trim($config['email_body']    ?? '');
+   $email_footer_tpl  = trim($config['email_footer']  ?? '');
+
+   if (empty($email_subject_tpl) || empty($email_body_tpl)) {
+      Session::addMessageAfterRedirect(
+         __('Configuración de correo incompleta. Configure el asunto y cuerpo primero.', 'responsivas'),
+         false, ERROR
+      );
+      Html::redirect($redirect_url);
+      exit;
+   }
+
+   $admin_user = new User();
+   $admin_user->getFromDB($admin_id);
+
+   // Valores HTML-escapados: el template ya viene escapado, los vars deben serlo también
+   $vars = [
+      '{nombre}'  => htmlspecialchars($admin_user->getFriendlyName(), ENT_QUOTES, 'UTF-8'),
+      '{empresa}' => htmlspecialchars($config['company_name'] ?? '', ENT_QUOTES, 'UTF-8'),
+      '{fecha}'   => htmlspecialchars((new DateTime('now', new DateTimeZone($config['timezone'] ?? date_default_timezone_get())))->format('d/m/Y'), ENT_QUOTES, 'UTF-8'),
+   ];
+
+   // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
+   $email_subject = '[PRUEBA] ' . responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+   $body_safe     = nl2br(responsivasApplyTemplate(htmlspecialchars($email_body_tpl,    ENT_QUOTES, 'UTF-8'), $vars));
+   $footer_raw    = responsivasApplyTemplate(htmlspecialchars($email_footer_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+   $footer_safe   = !empty(trim($email_footer_tpl))
+      ? '<hr style="margin-top:24px;border:none;border-top:1px solid #ddd;">'
+        . '<p style="color:#888;font-size:11px;">' . nl2br($footer_raw) . '</p>'
+      : '';
+
+   $notice_safe = htmlspecialchars(
+      __('Este es un correo de prueba generado desde la configuración del plugin Responsivas. No se adjuntan PDFs.', 'responsivas'),
+      ENT_QUOTES, 'UTF-8'
+   );
+
+   $body_html = <<<HTML
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;max-width:600px;margin:0 auto;padding:20px;">
+  <p style="background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:10px;font-size:12px;color:#856404;">
+    ⚠️ {$notice_safe}
+  </p>
+  <p>{$body_safe}</p>
+  {$footer_safe}
+</body>
+</html>
+HTML;
+
+   try {
+      $mailer = new GLPIMailer();
+      $email  = $mailer->getEmail();
+      global $CFG_GLPI;
+      $fromName  = trim($CFG_GLPI['from_email_name']  ?? $CFG_GLPI['admin_email_name'] ?? '');
+      $fromEmail = trim($CFG_GLPI['from_email']        ?? $CFG_GLPI['admin_email']      ?? '');
+      if ($fromEmail !== '' && $fromName !== '' && method_exists($mailer, 'getEmail')) {
+         $mailer->getEmail()->from(new \Symfony\Component\Mime\Address($fromEmail, $fromName));
+      }
+      $email->subject($email_subject);
+      $email->to($test_email);
+      $email->html($body_html);
+      $result = $mailer->send();
+
+      if ($result) {
+         Session::addMessageAfterRedirect(
+            sprintf(__('Correo de prueba enviado correctamente a %s.', 'responsivas'), $test_email),
+            false, INFO
+         );
+      } else {
+         Session::addMessageAfterRedirect(
+            __('El servidor de correo rechazó el envío.', 'responsivas'),
+            false, ERROR
+         );
+      }
+   } catch (Throwable $e) {
+      Session::addMessageAfterRedirect(
+         sprintf(__('Error al enviar el correo: %s', 'responsivas'), $e->getMessage()),
+         false, ERROR
+      );
+   }
+
+   Html::redirect($redirect_url);
+   exit;
+}
+
+/* ============================
  * Parámetros
  * ============================ */
 $user_id = (int)($_POST['users_id'] ?? 0);
@@ -94,15 +211,15 @@ if (empty($email_subject_tpl) || empty($email_body_tpl)) {
 /* ============================
  * Sustitución de variables {nombre}, {empresa}, {fecha}
  * ============================ */
+// Valores HTML-escapados: el template ya viene escapado, los vars deben serlo también
 $vars = [
-   '{nombre}'  => $user->getFriendlyName(),
-   '{empresa}' => $config['company_name'] ?? '',
-   '{fecha}'   => (new DateTime('now', new DateTimeZone($config['timezone'] ?? date_default_timezone_get())))->format('d/m/Y'),
+   '{nombre}'  => htmlspecialchars($user->getFriendlyName(), ENT_QUOTES, 'UTF-8'),
+   '{empresa}' => htmlspecialchars($config['company_name'] ?? '', ENT_QUOTES, 'UTF-8'),
+   '{fecha}'   => htmlspecialchars((new DateTime('now', new DateTimeZone($config['timezone'] ?? date_default_timezone_get())))->format('d/m/Y'), ENT_QUOTES, 'UTF-8'),
 ];
 
-$email_subject = strtr($email_subject_tpl, $vars);
-$email_body    = strtr($email_body_tpl,    $vars);
-$email_footer  = strtr($email_footer_tpl,  $vars);
+// responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
+$email_subject = responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars);
 
 /* ============================
  * Generar PDFs
@@ -122,11 +239,12 @@ if (empty($pdfs)) {
 /* ============================
  * Construir cuerpo HTML del correo
  * ============================ */
-$body_safe   = nl2br(preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>',
-   htmlspecialchars($email_body, ENT_QUOTES, 'UTF-8')));
-$footer_safe = !empty($email_footer)
+// responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
+$body_safe   = nl2br(responsivasApplyTemplate(htmlspecialchars($email_body_tpl,    ENT_QUOTES, 'UTF-8'), $vars));
+$footer_raw  = responsivasApplyTemplate(htmlspecialchars($email_footer_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+$footer_safe = !empty(trim($email_footer_tpl))
    ? '<hr style="margin-top:24px;border:none;border-top:1px solid #ddd;">'
-     . '<p style="color:#888;font-size:11px;">' . nl2br(preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', htmlspecialchars($email_footer, ENT_QUOTES, 'UTF-8'))) . '</p>'
+     . '<p style="color:#888;font-size:11px;">' . nl2br($footer_raw) . '</p>'
    : '';
 
 $count           = count($pdfs);
@@ -154,6 +272,12 @@ try {
    $mailer = new GLPIMailer();
    $email  = $mailer->getEmail();
 
+   global $CFG_GLPI;
+   $fromName  = trim($CFG_GLPI['from_email_name']  ?? $CFG_GLPI['admin_email_name'] ?? '');
+   $fromEmail = trim($CFG_GLPI['from_email']        ?? $CFG_GLPI['admin_email']      ?? '');
+   if ($fromEmail !== '' && $fromName !== '' && method_exists($mailer, 'getEmail')) {
+      $mailer->getEmail()->from(new \Symfony\Component\Mime\Address($fromEmail, $fromName));
+   }
    $email->subject($email_subject);
    $email->to($user_email);
    $email->html($body_html);

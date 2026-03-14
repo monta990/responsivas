@@ -1,5 +1,5 @@
 <root>
-   <n>Responsivas</n>
+   <name>Responsivas</name>
    <key>responsivas</key>
    <state>stable</state>
    <logo>https://raw.githubusercontent.com/monta990/responsivas/main/logo.png</logo>
@@ -26,14 +26,15 @@
    </authors>
    <versions>
       <version>
-         <num>1.2.4</num>
+         <num>1.2.5</num>
          <compatibility>~11.0.0</compatibility>
-         <download_url>https://github.com/monta990/responsivas/releases/download/v1.2.4/responsivas-1.2.4.zip</download_url>
+         <download_url>https://github.com/monta990/responsivas/releases/download/v1.2.5/responsivas-1.2.5.zip</download_url>
       </version>
    </versions>
    <langs>
       <lang>es_MX</lang>
       <lang>en_US</lang>
+      <lang>en_GB</lang>
       <lang>fr_FR</lang>
       <lang>de_DE</lang>
    </langs>
@@ -71,4 +72,8 @@
          <tag>dokument</tag>
       </de>
    </tags>
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/monta990/responsivas/main/config.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/monta990/responsivas/main/user.png</screenshot>
+   </screenshots>
 </root>

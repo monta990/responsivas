@@ -7,7 +7,7 @@
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.4-orange)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.5-orange)](CHANGELOG.md)
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -18,10 +18,13 @@
 - 📄 **Automatic PDF generation** for computers, printers, and mobile phones
 - 📧 **Email delivery** — sends all PDFs as attachments to the assigned user's email
 - 🖊️ **Fully customizable templates** — title, introduction, body/clauses, witnesses, footer, per asset type
+- 🎨 **Text formatting** — `**bold**`, `*italic*`, `__underline__` in all template and email fields, combinable and nestable
+- ✏️ **Format toolbar (B / I / U)** — toggle buttons above every text field with smart selection wrapping
+- 🔤 **Clickable variable tags** — click any `{variable}` in the hints panel to insert it at the cursor
 - 🔢 **QR codes** on every document linking directly to the asset in GLPI
 - 👷 **Legal witnesses and representative** — configurable GLPI users
 - 📱 **Phone loan contracts** (*comodatos*) with full legal clause set
-- 🌍 **Multi-language** — Spanish (Mexico), English, French, German
+- 🌍 **Multi-language** — Spanish (Mexico), English (US & GB), French, German
 - 🔒 **CSRF protection** and GLPI permission model
 - ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
 - ✅ **Template validation** — warns before generating if required fields are empty
@@ -35,6 +38,8 @@
 | GLPI | 11.0 |
 | PHP | 8.1 |
 | TCPDF | included with GLPI |
+
+> **Supported locales:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
 
 > **Note:** GLPI 10.x is not officially supported. The plugin uses APIs introduced in GLPI 11.
 
@@ -127,9 +132,19 @@ Each asset type has its own set of template fields:
 | Footer fields | Left/right text on PDF page footer |
 | Font size | PDF body font size |
 
-**Bold text in templates:** Use `**text**` syntax (like Markdown). HTML tags are not supported because GLPI sanitizes them.
+**Text formatting in templates:** Use Markdown-style syntax — HTML tags are not supported because GLPI sanitizes them automatically.
 
-**Clickable variable tags:** All `{variable}` tags displayed in the hints panel are clickable. Click while a template field is focused to insert the tag at the cursor position. If no field is focused, the tag is copied to the clipboard.
+| Syntax | Result |
+|--------|--------|
+| `**text**` | **Bold** |
+| `*text*` | *Italic* |
+| `__text__` | Underlined |
+
+Formats can be combined and nested: `*__**text**__*` renders as bold + italic + underline simultaneously.
+
+**Format toolbar (B / I / U):** Every editable text field — template fields, email body/footer, and PDF footer corner fields — has a small toolbar above it. Selecting text and clicking a button wraps it with the appropriate markers. Clicking the same button again on already-marked text removes the markers (toggle behavior).
+
+**Clickable variable tags:** All `{variable}` tags in the hints panel are clickable. Click while a field is focused to insert the tag at the cursor position. If no field is focused, the tag is copied to the clipboard.
 
 **Available template variables:**
 
@@ -160,9 +175,9 @@ Each asset type has its own set of template fields:
 | Field | Description |
 |-------|-------------|
 | Subject | Email subject line. Supports `{nombre}`, `{empresa}`, `{fecha}` |
-| Body | Email body text. Supports `{nombre}`, `{empresa}`, `{fecha}` |
-| Footer | Optional footer below a separator line |
-| Test email button | Sends a test email to your own GLPI registered address |
+| Body | Email body text. Supports `{nombre}`, `{empresa}`, `{fecha}` and `**bold**`, `*italic*`, `__underline__` |
+| Footer | Optional footer below a separator line. Same formatting support |
+| Test email button | Sends a test email (no PDFs attached) to your own GLPI registered address |
 
 > The email test button uses a completely independent form from the Save button — no CSRF conflicts.
 
@@ -240,7 +255,7 @@ See [LICENSE](LICENSE) for full terms.
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.4-orange)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/Versión-1.2.5-orange)](CHANGELOG.md)
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -251,10 +266,13 @@ See [LICENSE](LICENSE) for full terms.
 - 📄 **Generación automática de PDFs** para computadoras, impresoras y teléfonos celulares
 - 📧 **Envío por correo** — adjunta todos los PDFs al correo registrado del usuario en GLPI
 - 🖊️ **Plantillas completamente configurables** — título, introducción, cuerpo/cláusulas, testigos y pie de página, por tipo de activo
+- 🎨 **Formato de texto** — `**negrita**`, `*cursiva*`, `__subrayado__` en todos los campos, combinables y anidables
+- ✏️ **Barra de formato (B / I / U)** — botones toggle sobre cada campo de texto
+- 🔤 **Variables clicleables** — haz clic en cualquier `{variable}` para insertarla en el cursor
 - 🔢 **Códigos QR** en cada documento con enlace directo al activo en GLPI
 - 👷 **Testigos y representante legal** — usuarios de GLPI configurables
 - 📱 **Contratos de comodato** para teléfonos con set completo de cláusulas legales
-- 🌍 **Multiidioma** — Español (México), Inglés, Francés, Alemán
+- 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán
 - 🔒 **Protección CSRF** y modelo de permisos de GLPI
 - ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
@@ -268,6 +286,8 @@ See [LICENSE](LICENSE) for full terms.
 | GLPI | 11.0 |
 | PHP | 8.1 |
 | TCPDF | incluido con GLPI |
+
+> **Idiomas soportados:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
 
 > **Nota:** GLPI 10.x no está soportado oficialmente. El plugin utiliza APIs introducidas en GLPI 11.
 
@@ -360,9 +380,19 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 | Campos del pie de página | Texto izquierdo/derecho en el pie del PDF |
 | Tamaño de fuente | Tamaño de letra del cuerpo del PDF |
 
-**Negritas en las plantillas:** Usa la sintaxis `**texto**` (como Markdown). Las etiquetas HTML no funcionan porque GLPI las sanitiza automáticamente.
+**Formato de texto en las plantillas:** Usa sintaxis estilo Markdown — las etiquetas HTML no funcionan porque GLPI las sanitiza automáticamente.
 
-**Etiquetas de variable clicleables:** Todas las etiquetas `{variable}` del panel de hints son clicleables. Haz clic mientras un campo de plantilla está activo para insertar la etiqueta en la posición del cursor. Si ningún campo está activo, la etiqueta se copia al portapapeles.
+| Sintaxis | Resultado |
+|----------|-----------|
+| `**texto**` | **Negrita** |
+| `*texto*` | *Cursiva* |
+| `__texto__` | Subrayado |
+
+Los formatos se pueden combinar y anidar: `*__**texto**__*` produce negrita + cursiva + subrayado simultáneamente.
+
+**Barra de formato (B / I / U):** Cada campo de texto editable — plantillas del documento, cuerpo/pie del correo y los cuatro campos del pie de página del PDF — tiene una pequeña barra de botones encima. Selecciona texto y haz clic en un botón para envolver con los marcadores. Volver a hacer clic en el mismo botón sobre texto ya marcado elimina los marcadores (comportamiento de toggle).
+
+**Etiquetas de variable clicleables:** Todas las etiquetas `{variable}` del panel de hints son clicleables. Haz clic mientras un campo está activo para insertar la etiqueta en la posición del cursor. Si ningún campo está activo, la etiqueta se copia al portapapeles.
 
 **Variables disponibles en las plantillas:**
 
@@ -393,9 +423,9 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 | Campo | Descripción |
 |-------|-------------|
 | Asunto | Asunto del correo. Soporta `{nombre}`, `{empresa}`, `{fecha}` |
-| Cuerpo | Cuerpo del correo. Soporta `{nombre}`, `{empresa}`, `{fecha}` |
-| Pie de correo | Texto opcional bajo una línea separadora |
-| Botón de correo de prueba | Envía un correo de prueba a tu propio correo registrado en GLPI |
+| Cuerpo | Cuerpo del correo. Soporta `{nombre}`, `{empresa}`, `{fecha}` y `**negrita**`, `*cursiva*`, `__subrayado__` |
+| Pie de correo | Texto opcional bajo una línea separadora. Mismo soporte de formato |
+| Botón de correo de prueba | Envía un correo de prueba (sin PDFs adjuntos) a tu propio correo registrado en GLPI |
 
 > El botón de correo de prueba usa un formulario completamente independiente del botón Guardar, sin conflictos de token CSRF.
 

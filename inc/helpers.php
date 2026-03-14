@@ -125,8 +125,10 @@ function responsivasRenderTemplate(string $escaped_text): string
 
    foreach ($lines as $line) {
       $line = rtrim($line);
-      // **texto** → <strong>texto</strong>
-      $line = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $line);
+      // Orden: ** primero para que * no capture dentro de **texto**
+      $line = preg_replace_callback('/\*\*(.+?)\*\*/s', static fn($m) => '<strong>' . $m[1] . '</strong>', $line);
+      $line = preg_replace_callback('/\*(.+?)\*/s',       static fn($m) => '<em>'     . $m[1] . '</em>',     $line);
+      $line = preg_replace_callback('/__(.+?)__/s',        static fn($m) => '<u>'      . $m[1] . '</u>',      $line);
 
       // Línea de lista: empieza con uno o más dígitos + punto + espacio
       if (preg_match('/^\d+\.\s+(.+)$/', $line, $m)) {
@@ -169,7 +171,11 @@ function responsivasApplyTemplate(string $template, array $vars): string
    // Normalizar \n literal
    $template = str_replace('\\n', "\n", $template);
    // **texto** → <strong>texto</strong>  (antes de sustituir variables)
-   $template = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $template);
+   // Orden: ** primero para que * no capture dentro de **texto**
+   // Inline styles: mejor compatibilidad con clientes de correo (Outlook, etc.)
+   $template = preg_replace_callback('/\*\*(.+?)\*\*/s', static fn($m) => '<span style="font-weight:bold">'          . $m[1] . '</span>', $template);
+   $template = preg_replace_callback('/\*(.+?)\*/s',       static fn($m) => '<span style="font-style:italic">'         . $m[1] . '</span>', $template);
+   $template = preg_replace_callback('/__(.+?)__/s',        static fn($m) => '<span style="text-decoration:underline">' . $m[1] . '</span>', $template);
    return strtr($template, $vars);
 }
 
@@ -181,6 +187,11 @@ function responsivasTemplateEditor(string $label, string $name, string $value, s
    // Normalizar \n literal → salto real, y <strong> → **text** para visualización en textarea
    $value = str_replace('\\n', "\n", $value);
    $value = preg_replace('/<strong>(.*?)<\/strong>/i', '**$1**', $value);
+   $value = preg_replace('/<em>(.*?)<\/em>/i', '*$1*', $value);
+   $value = preg_replace('/<u>(.*?)<\/u>/i', '__$1__', $value);
+   $value = preg_replace('/<span style=["\']font-weight:bold["\']>(.*?)<\/span>/i', '**$1**', $value);
+   $value = preg_replace('/<span style=["\']font-style:italic["\']>(.*?)<\/span>/i', '*$1*', $value);
+   $value = preg_replace('/<span style=["\']text-decoration:underline["\']>(.*?)<\/span>/i', '__$1__', $value);
    // Limpiar cualquier otra etiqueta HTML que haya quedado
    $value = strip_tags($value);
    $value_esc = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
@@ -189,8 +200,13 @@ function responsivasTemplateEditor(string $label, string $name, string $value, s
    <div class='mb-3'>
       <label class='form-label fw-bold'>
          <i class='ti ti-file-pencil me-1'></i>{$label}
-      </label>
-      <textarea class='form-control font-monospace'
+      </label>";
+   echo "<div class='d-flex gap-1 mb-1'>"
+      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='Negrita — **texto**'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>"
+      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*' title='Cursiva — *texto*'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>"
+      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='Subrayado — __texto__'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>"
+      . "</div>";
+   echo "<textarea class='form-control font-monospace'
                 name='{$name}'
                 rows='{$rows}'
                 spellcheck='false'
@@ -208,7 +224,8 @@ function responsivasVariableHints(array $vars): void
    echo '<i class="ti ti-tags me-2 fs-5 mt-1"></i>';
    echo '<div style="font-size:0.85rem;">';
    echo '<strong>' . __('Etiquetas disponibles', 'responsivas') . ':</strong> '
-      . '<span class="text-muted">' . __('Usa **texto** para negrita', 'responsivas') . '</span><br>';
+      . '<span class="text-muted">' . '<b>**' . __('negrita', 'responsivas') . '**</b>' . ' &nbsp;&bull;&nbsp; <i>*' . __('cursiva', 'responsivas') . '*</i>' . ' &nbsp;&bull;&nbsp; <u>__' . __('subrayado', 'responsivas') . '__</u>' . '</span><br>';
+   echo '<span class="text-muted d-block mt-1" style="font-size:0.82em;"><i class="ti ti-hand-click me-1"></i>' . __('Haz clic en una variable para insertarla en el campo activo.', 'responsivas') . '</span>';
    $first = true;
    foreach ($vars as $tag => $desc) {
       $tag_safe  = htmlspecialchars($tag,  ENT_QUOTES, 'UTF-8');

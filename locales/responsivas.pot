@@ -670,3 +670,15 @@ msgstr ""
 #: inc/pdfbuilder.class.php
 msgid "Párrafo de testigos (Teléfono)"
 msgstr ""
+
+msgid "negrita"
+msgstr ""
+
+msgid "cursiva"
+msgstr ""
+
+msgid "subrayado"
+msgstr ""
+
+msgid "Haz clic en una variable para insertarla en el campo activo."
+msgstr ""

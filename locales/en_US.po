@@ -681,3 +681,15 @@ msgstr "Clauses (Phone)"
 #: inc/pdfbuilder.class.php
 msgid "Párrafo de testigos (Teléfono)"
 msgstr "Witnesses paragraph (Phone)"
+
+msgid "negrita"
+msgstr "bold"
+
+msgid "cursiva"
+msgstr "italic"
+
+msgid "subrayado"
+msgstr "underline"
+
+msgid "Haz clic en una variable para insertarla en el campo activo."
+msgstr "Click a variable to insert it at the cursor position."

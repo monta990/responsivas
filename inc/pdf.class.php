@@ -52,22 +52,40 @@ class PluginResponsivasPDF extends TCPDF {
         $this->Cell(0, 5, $this->location . ' a ' . $this->fecha_header, 0, 1, 'R');
     }
 
+    /**
+     * Convierte marcadores **bold**, *italic*, __underline__ a HTML inline.
+     * Mismo orden que responsivasApplyTemplate para resultados consistentes.
+     */
+    private static function fmtCell(string $text): string {
+        $text = preg_replace_callback('/\*\*(.+?)\*\*/s', static fn($m) => '<b>'  . $m[1] . '</b>', $text);
+        $text = preg_replace_callback('/\*(.+?)\*/s',       static fn($m) => '<i>'  . $m[1] . '</i>', $text);
+        $text = preg_replace_callback('/__(.+?)__/s',         static fn($m) => '<u>'  . $m[1] . '</u>', $text);
+        return $text;
+    }
+
     public function Footer(): void {
         $this->SetY(-20);
 
         $cfg = Config::getConfigurationValues('plugin_responsivas');
         $p   = $this->footer_prefix;
+        $fs  = (int)($cfg[$this->font_size_key] ?? 10);
 
-        $this->SetFont(
-            Config::getConfigurationValue('core', 'pdffont'),
-            '',
-            (int)($cfg[$this->font_size_key] ?? 10)
-        );
+        $this->SetFont(Config::getConfigurationValue('core', 'pdffont'), '', $fs);
 
-        $this->Cell(90, 5, $cfg["{$p}_footer_left_1"]  ?? '', 0, 0, 'L');
-        $this->Cell(0,  5, $cfg["{$p}_footer_right_1"] ?? '', 0, 1, 'R');
-        $this->Cell(90, 5, $cfg["{$p}_footer_left_2"]  ?? '', 0, 0, 'L');
-        $this->Cell(0,  5, $cfg["{$p}_footer_right_2"] ?? '', 0, 0, 'R');
+        $pageW = $this->getPageWidth() - $this->getMargins()['left'] - $this->getMargins()['right'];
+        $half  = $pageW / 2;
+        $h     = 5;
+        $x     = $this->getMargins()['left'];
+
+        // Fila 1: capturar Y antes de escribir para que ambas celdas queden en la misma línea
+        $y1 = $this->GetY();
+        $this->writeHTMLCell($half, $h, $x,           $y1, self::fmtCell($cfg["{$p}_footer_left_1"]  ?? ''), 0, 0, false, true, 'L');
+        $this->writeHTMLCell($half, $h, $x + $half,   $y1, self::fmtCell($cfg["{$p}_footer_right_1"] ?? ''), 0, 1, false, true, 'R');
+
+        // Fila 2: inferior izquierda | inferior derecha
+        $y2 = $this->GetY();
+        $this->writeHTMLCell($half, $h, $x,           $y2, self::fmtCell($cfg["{$p}_footer_left_2"]  ?? ''), 0, 0, false, true, 'L');
+        $this->writeHTMLCell($half, $h, $x + $half,   $y2, self::fmtCell($cfg["{$p}_footer_right_2"] ?? ''), 0, 0, false, true, 'R');
 
         $page = $this->getPage();
         if (

@@ -202,6 +202,25 @@ if (isset($_POST['update'])) {
 // =============================
 // Helper de footers
 // =============================
+function responsivasFormatToolbar(): void
+{
+   echo "
+<div class='d-flex gap-1 mb-1'>
+  <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**'
+          title='Negrita — **texto**'>
+    <b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small>
+  </button>
+  <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*'
+          title='Cursiva — *texto*'>
+    <i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small>
+  </button>
+  <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__'
+          title='Subrayado — __texto__'>
+    <u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small>
+  </button>
+</div>";
+}
+
 function responsivasFooterFields(string $prefix, array $config): void {
 
     $rows = [
@@ -253,6 +272,12 @@ function responsivasFooterFields(string $prefix, array $config): void {
                 <i class='ti ti-{$field['icon']}' aria-hidden='true'></i>
                 {$field['label']}
               </label>
+
+              <div class='d-flex gap-1 mb-1'>
+                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='Negrita — **texto**'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>
+                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*'  title='Cursiva — *texto*'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>
+                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='Subrayado — __texto__'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>
+              </div>
 
               <div class='input-group'>
                 <span class='input-group-text'>
@@ -693,10 +718,9 @@ if ($hasLogo) {
     echo "<img src='" . PluginResponsivasPaths::logoUrl() . "&t=" . time() . "'
             class='img-fluid'
             style='max-height:80px;
-                   background:#fff;
                    padding:8px;
                    border-radius:6px;
-                   border:1px solid #ddd;
+                   border:1px solid var(--tblr-border-color);
                    cursor:pointer'>";
 
     echo "</a>";
@@ -735,10 +759,9 @@ echo "<label class='form-label fw-bold d-flex align-items-center'>
 echo "<img id='logo-preview'
           class='img-fluid d-none'
           style='max-height:80px;
-                 background:#fff;
                  padding:8px;
                  border-radius:6px;
-                 border:1px dashed #bbb'>";
+                 border:1px dashed var(--tblr-border-color)'>";
 
 echo "<div id='preview-size' class='form-text d-none mt-1'></div>";
 
@@ -834,8 +857,9 @@ echo "<div class='row mb-3'>
     <label class='form-label fw-semibold'>
       <i class='ti ti-align-left me-1'></i>
       " . __('Cuerpo del correo', 'responsivas') . "
-    </label>
-    <textarea class='form-control'
+    </label>";
+responsivasFormatToolbar();
+echo "<textarea class='form-control'
               name='email_body'
               rows='5'
               placeholder='" . __('Cuerpo del correo', 'responsivas') . "'>" . $email_body_val . "</textarea>
@@ -851,8 +875,9 @@ echo "<div class='row mb-3'>
     <label class='form-label fw-semibold'>
       <i class='ti ti-align-bottom me-1'></i>
       " . __('Pie del correo', 'responsivas') . "
-    </label>
-    <textarea class='form-control'
+    </label>";
+responsivasFormatToolbar();
+echo "<textarea class='form-control'
               name='email_footer'
               rows='3'
               placeholder='" . __('Pie del correo (opcional)', 'responsivas') . "'>" . $email_footer_val . "</textarea>
@@ -870,7 +895,7 @@ $core_cfg = Config::getConfigurationValues('core');
 $mail_ok  = ($core_cfg['use_notifications']    ?? 0) == 1
          && ($core_cfg['notifications_mailing'] ?? 0) == 1;
 
-$test_action  = Plugin::getWebDir('responsivas') . '/front/send_test_mail.php';
+$test_action  = Plugin::getWebDir('responsivas') . '/front/send_mail.php';
 $has_config   = !empty(trim($config['email_subject'] ?? '')) && !empty(trim($config['email_body'] ?? ''));
 $btn_disabled = (!$mail_ok || !$has_config);
 $btn_tooltip  = !$mail_ok
@@ -927,9 +952,9 @@ echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-typography'></i></span>
         <input type='text'
-               class='form-control'
+               class='form-control bg-body text-body'
                value='" . (Config::getConfigurationValue('core', 'pdffont')) . "'
-               disabled>
+               readonly>
       </div>";
 echo "<div class='form-text'>Fuente usada en PDFs, se puede cambiar en ajustes de GLPI</div>";
 echo "</div>";
@@ -1037,9 +1062,9 @@ echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-typography'></i></span>
         <input type='text'
-               class='form-control'
+               class='form-control bg-body text-body'
                value='" . (Config::getConfigurationValue('core', 'pdffont')) . "'
-               disabled>
+               readonly>
       </div>";
 echo "<div class='form-text'>Fuente usada en PDFs, se puede cambiar en ajustes de GLPI</div>";
 echo "</div>";
@@ -1279,6 +1304,7 @@ echo "</form>"; // cierre del form principal
 // Form del correo de prueba — FUERA del form principal para evitar anidamiento
 echo "<form id='test-mail-form' method='post' action='{$test_action}' style='display:none;'>
    <input type='hidden' name='_glpi_csrf_token' value='{$test_csrf_token}'>
+      <input type='hidden' name='mode' value='test'>
 </form>";
 
 echo "</div>"; // main card

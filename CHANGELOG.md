@@ -6,6 +6,40 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.5] — 2026-03-13
+
+### Added
+- **Italic and underline formatting** — introduced `*cursiva*` (italic) and `__subrayado__` (underline) syntax alongside the existing `**negrita**`. Rendering applies in PDFs, PDF footer corner fields, and email body/footer. All three formats can be combined and nested (e.g. `*__**texto**__*`). Evaluation order is always `**` → `*` → `__` to avoid capture conflicts.
+- **Format toolbar (B / I / U)** — toggle buttons appear above every editable text field in the configuration: email body/footer, all document template fields (title, intro, body, clauses), and all four PDF footer corner fields. Clicking a button wraps selected text with the appropriate markers, or inserts a placeholder. Clicking again on already-marked text removes the markers (toggle).
+- **Clickable variable hints** — the hint panel now shows `**negrita**`, `*cursiva*`, `__subrayado__` inline and a "click to insert" instruction. All `{variable}` tags are clickable and insert at the cursor position in the last focused field.
+- **Friendly sender name in outgoing mail** — `send_mail.php` reads `from_email_name` / `from_email` from `$CFG_GLPI` (falling back to `admin_email_name` / `admin_email`) and sets it via `new Symfony\Component\Mime\Address($fromEmail, $fromName)`, matching how GLPI's native notifications work. Applies to both real and test sends.
+- **en_GB locale** — added `en_GB.po` and `en_GB.mo` (170 strings). British English is now a fully supported locale alongside `es_MX`, `en_US`, `fr_FR`, `de_DE`. Registered in `plugin.xml`.
+
+### Fixed
+- **Dark theme: read-only font inputs** — "Fuente usada" inputs in the Computadoras and Impresoras tabs rendered with browser-default light background in dark mode. Replaced `disabled` with `readonly` + `bg-body text-body` Bootstrap classes so the active theme applies correctly.
+- **Dark theme: hardcoded border colors** — logo preview and current-logo borders used hardcoded `#ddd`/`#bbb`. Replaced with `var(--tblr-border-color)` for theme-aware rendering.
+- **Dark theme: helper text contrast** — `.form-text` elements now use `var(--bs-secondary-color, var(--bs-body-color))` at 80% opacity instead of a fixed gray, adapting to light and dark themes.
+- **Email formatting not applied** — `send_mail.php` had its own isolated rendering pipeline (`strtr` + a single `preg_replace` for `**bold**` only). All three format markers (`** * __`) now render correctly in sent emails through the shared `responsivasApplyTemplate()` helper.
+- **Email subject `null` on real send** — after the mail pipeline refactor, `$email_subject` was never assigned in real-send mode, causing a `TypeError` from Symfony Mailer (`subject() must be of type string, null given`). Fixed by adding the subject assignment before the mailer call.
+- **Format button toggling backwards** — clicking B/I/U on already-formatted text added more markers instead of removing them. Replaced the wrap-only logic with proper toggle detection (`wrappedInside` / `wrappedOutside`) that strips markers when they are already present.
+- **PDF footer corner fields rendered as plain text** — the four footer fields were passed to TCPDF's `Cell()`, which ignores HTML markup. Replaced with `writeHTMLCell()` and a new private `fmtCell()` method that converts `** * __` markers to `<b>/<i>/<u>` tags before rendering.
+- **PDF footer row Y-coordinate desync** — in the footer's first row, both cells called `$this->GetY()` independently; after the left cell wrote, the cursor had advanced, causing the right cell to start on a different Y. Fixed by capturing `$y1 = $this->GetY()` once before writing both cells.
+- **RFC 2822 sender address error** — `$email->from($fromEmail, $fromName)` is not a valid Symfony Mailer signature and caused "does not comply with addr-spec of RFC 2822". Fixed to `$mailer->getEmail()->from(new Symfony\Component\Mime\Address($fromEmail, $fromName))`, gated behind `method_exists($mailer, 'getEmail')`.
+- **XSS in email HTML** — variable substitution values (`{nombre}`, `{empresa}`, `{fecha}`) were passed raw into an already HTML-escaped template, allowing names containing `&`, `<`, or `>` to inject unescaped characters into the email HTML. Values in `$vars` are now HTML-escaped before substitution.
+- **i18n: four new strings missing from locales** — `negrita`, `cursiva`, `subrayado`, and `Haz clic en una variable para insertarla en el campo activo.` were used in PHP but not present in `.pot` or any `.po`/`.mo` file. Added to all five locale files and recompiled.
+
+### Changed
+- **Merged `send_test_mail.php` into `send_mail.php`** — test-mode logic is now a branch inside `send_mail.php` triggered by a hidden `mode=test` POST field. Reduces the front endpoint count by one.
+- **Email rendering unified** — both real and test email paths now use `responsivasApplyTemplate()` for consistent variable substitution and format rendering. Inline CSS styles (`font-weight:bold`, `font-style:italic`, `text-decoration:underline`) are used instead of HTML tags for better compatibility with Outlook and other mail clients.
+- **Format toolbar: `data-wrap` + event delegation** — buttons carry `data-wrap` attributes; a single delegated `click` listener on `document` handles all toolbars across the page. No inline `onclick` handlers in PHP strings.
+
+### Locales
+- Added `en_GB` (170 strings). Total active locales: `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`.
+- Added 4 new strings to all locales: `negrita`, `cursiva`, `subrayado`, `Haz clic en una variable para insertarla en el campo activo.`
+- All `.mo` files recompiled. Total: **170 strings** per locale.
+
+---
+
 ## [1.2.4] — 2026-03-08
 
 ### Fixed
@@ -23,6 +57,9 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Removed debug mode banner** — the `if (glpi_use_mode & 2)` block in `config.class.php` that displayed a GLPI debug warning is removed. GLPI already shows its own debug indicator globally; the plugin-level duplicate was redundant and added unnecessary strings to the locale files.
 
 ### Added
+- **Italic and underline formatting** — `*cursiva*` and `__subrayado__` syntax added alongside `**negrita**`, applied in both PDF generation and email body/footer rendering. Textarea display round-trips all three formats correctly.
+- **Format toolbar for email fields** — **B**, *I*, <u>U</u> buttons above the email body and footer textareas wrap selected text (or insert a placeholder) with the correct markers on click.
+- **Friendly sender name in outgoing mail** — `send_mail.php` now reads `from_email_name` / `from_email` from `$CFG_GLPI` (falling back to `admin_email_name` / `admin_email`) and passes it to the mailer. Applies to both real and test-mode sends.
 - **Clickable variable tags in configuration** — all `{variable}` tags in every template hints panel are now clickable buttons. Clicking a tag while a textarea is focused inserts it at the cursor position. If no textarea is focused, the tag is copied to the clipboard. Consistent with the behavior in the Email Signatures plugin.
 
 ### Locales
@@ -44,7 +81,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.2.2] — 2025-03-08
+## [1.2.2] — 2025-03-07
 
 ### Added
 - **Template validation before PDF generation** — `validateTemplates()` is called at the start of every `buildComputerPdf`, `buildPrinterPdf`, and `buildPhonePdf`. If any required field is empty, the operation is aborted and an error message lists exactly which fields need to be filled in Configuration.
@@ -93,8 +130,6 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [1.1.0] — 2025-03-04
 
 ### Added
-- **Email Signatures integration** — option to include user's GLPI profile photo and WhatsApp QR code in email signature.
-- **Variable hints panel** — vertical list of available template variables shown next to each textarea, with description and bold usage note.
 - CSRF protection on all POST endpoints.
 - Proper file validation on logo upload.
 
@@ -124,6 +159,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.2.5]: ../../compare/v1.2.4...v1.2.5
 [1.2.4]: ../../compare/v1.2.3...v1.2.4
 [1.2.3]: ../../compare/v1.2.2...v1.2.3
 [1.2.2]: ../../compare/v1.2.1...v1.2.2
