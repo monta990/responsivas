@@ -78,6 +78,8 @@ if (isset($_POST['update'])) {
         'timezone'             => Html::cleanInputText($_POST['timezone']),
         'show_employee_number' => isset($_POST['show_employee_number']),
         'show_qr'              => isset($_POST['show_qr']),
+        'pdf_compression'      => isset($_POST['pdf_compression']) ? 1 : 0,
+        'pdf_protection'       => isset($_POST['pdf_protection'])  ? 1 : 0,
         'company_name'         => Html::cleanInputText(trim($_POST['company_name'] ?? '')),
         'currency'             => Html::cleanInputText(trim($_POST['currency'] ?? '$')),
         'testigo_1'            => (int)($_POST['testigo_1'] ?? 0),
@@ -388,7 +390,7 @@ echo "<div class='ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1'>
       </div>";
 
 echo "<h4 class='card-title ms-5 mb-0'>" .
-      __('Configuración del plugin Responsivas', 'responsivas') .
+      __('Configuración de Responsivas', 'responsivas') .
      "</h4>";
 echo "</div>";
 
@@ -562,6 +564,42 @@ echo "<div class='col-md-6'>
                  value='1' " . ($config['show_qr'] ? 'checked' : '') . ">
             <label class='form-check-label' for='show_qr'>";
 echo        __('Mostrar QR con Url de activo en responsiva', 'responsivas');
+echo        "</label>
+        </div>
+      </div>";
+
+/* ===== Comprimir PDF ===== */
+echo "<div class='col-md-6'>
+        <label class='form-label fw-bold d-flex align-items-center'>
+          <i class='ti ti-file-zip me-2'></i>
+          " . __('Comprimir PDF', 'responsivas') . "
+        </label>
+        <div class='form-check form-switch'>
+          <input class='form-check-input'
+                 type='checkbox'
+                 id='pdf_compression'
+                 name='pdf_compression'
+                 value='1' " . ($config['pdf_compression'] ?? 1 ? 'checked' : '') . ">
+            <label class='form-check-label' for='pdf_compression'>";
+echo        __('Comprimir el archivo PDF generado', 'responsivas');
+echo        "</label>
+        </div>
+      </div>";
+
+/* ===== Proteger PDF (restringir copia/edición) ===== */
+echo "<div class='col-md-6'>
+        <label class='form-label fw-bold d-flex align-items-center'>
+          <i class='ti ti-lock me-2'></i>
+          " . __('Proteger PDF', 'responsivas') . "
+        </label>
+        <div class='form-check form-switch'>
+          <input class='form-check-input'
+                 type='checkbox'
+                 id='pdf_protection'
+                 name='pdf_protection'
+                 value='1' " . ($config['pdf_protection'] ?? 1 ? 'checked' : '') . ">
+            <label class='form-check-label' for='pdf_protection'>";
+echo        __('Restringir copia y edición del PDF', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -982,6 +1020,7 @@ echo "</div>"; // row
 
 echo "<div class='row'>";
 responsivasFooterFields('pc', $config);
+
 echo "</div>"; // row
 
 echo "</div>"; //card-body
@@ -1036,6 +1075,23 @@ responsivasTemplateEditor(
 echo "</div>"; //card-body
 echo "</div>"; //card
 
+
+// ── Botón Vista Previa ─────────────────────────────────────────────────────
+$_preview_url = Plugin::getWebDir('responsivas') . '/front/preview.php?type=pc';
+echo "
+<div class='card mt-3 rounded-0 border-primary'>
+  <div class='card-body py-3 d-flex align-items-center justify-content-between'>
+    <div class='text-muted' style='font-size:0.875rem;'>
+      <i class='ti ti-info-circle me-1'></i>"
+      . __('Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua.', 'responsivas') .
+    "</div>
+    <a href='{$_preview_url}' target='_blank'
+       class='btn btn-primary d-flex align-items-center gap-2 ms-3 flex-shrink-0'>
+      <i class='ti ti-eye'></i>
+      " . __('Vista previa', 'responsivas') . "
+    </a>
+  </div>
+</div>";
 echo "</div>"; //Tab Computers
 
 echo "<div class='tab-pane fade' id='tab-pri' role='tabpanel'>";
@@ -1092,6 +1148,7 @@ echo "</div>"; // row
 
 echo "<div class='row'>";
 responsivasFooterFields('pri', $config);
+
 echo "</div>"; // row
 
 echo "</div>"; //card-body
@@ -1145,6 +1202,23 @@ responsivasTemplateEditor(
 echo "</div>"; //card-body
 echo "</div>"; //card
 
+
+// ── Botón Vista Previa ─────────────────────────────────────────────────────
+$_preview_url = Plugin::getWebDir('responsivas') . '/front/preview.php?type=pri';
+echo "
+<div class='card mt-3 rounded-0 border-primary'>
+  <div class='card-body py-3 d-flex align-items-center justify-content-between'>
+    <div class='text-muted' style='font-size:0.875rem;'>
+      <i class='ti ti-info-circle me-1'></i>"
+      . __('Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua.', 'responsivas') .
+    "</div>
+    <a href='{$_preview_url}' target='_blank'
+       class='btn btn-primary d-flex align-items-center gap-2 ms-3 flex-shrink-0'>
+      <i class='ti ti-eye'></i>
+      " . __('Vista previa', 'responsivas') . "
+    </a>
+  </div>
+</div>";
 echo "</div>"; //Tab printers
 
 echo "<div class='tab-pane fade' id='tab-pho' role='tabpanel'>";
@@ -1215,6 +1289,7 @@ echo "</div>"; // row
 
 echo "<div class='row'>";
 responsivasFooterFields('pho', $config);
+
 echo "</div>"; // row
 
 echo "</div>"; // card-body
@@ -1287,7 +1362,24 @@ responsivasTemplateEditor(
 echo "</div>"; //card-body
 echo "</div>"; //card
 
-echo "</div>"; // tab-pane
+
+// ── Botón Vista Previa ─────────────────────────────────────────────────────
+$_preview_url = Plugin::getWebDir('responsivas') . '/front/preview.php?type=pho';
+echo "
+<div class='card mt-3 rounded-0 border-primary'>
+  <div class='card-body py-3 d-flex align-items-center justify-content-between'>
+    <div class='text-muted' style='font-size:0.875rem;'>
+      <i class='ti ti-info-circle me-1'></i>"
+      . __('Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua.', 'responsivas') .
+    "</div>
+    <a href='{$_preview_url}' target='_blank'
+       class='btn btn-primary d-flex align-items-center gap-2 ms-3 flex-shrink-0'>
+      <i class='ti ti-eye'></i>
+      " . __('Vista previa', 'responsivas') . "
+    </a>
+  </div>
+</div>";
+echo "</div>"; // tab-pane pho
 
 /* Footer acciones */
 echo "<div class='card-footer bg-light d-flex justify-content-end gap-2'>";

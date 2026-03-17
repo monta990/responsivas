@@ -16,8 +16,14 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginResponsivasPDF extends TCPDF {
 
-    public string $fecha_header = '';
-    public string $location     = '';
+    public string $fecha_header  = '';
+    public string $location      = '';
+    public bool   $show_watermark = false;
+    public string $watermark_text = 'VISTA PREVIA';
+
+    /** Set before creating a PDF instance to enable watermark on all pages */
+    public static $global_watermark      = false;
+    public static $global_watermark_text = 'VISTA PREVIA';
 
     protected array  $qr_per_page   = [];
     protected string $font_size_key = 'pc_font_size';
@@ -36,7 +42,41 @@ class PluginResponsivasPDF extends TCPDF {
         $this->qr_per_page[$page] = $url;
     }
 
-    public function Header(): void {
+
+    /**
+     * Dibuja la marca de agua diagonal centrada en la página actual.
+     * Se llama desde Header() para que aparezca en cada página.
+     */
+    protected function drawWatermark(): void
+    {
+        // Support both instance flag and static class flag
+        if (!$this->show_watermark && !static::$global_watermark) {
+            return;
+        }
+        $text = $this->show_watermark ? $this->watermark_text : static::$global_watermark_text;
+        $this->StartTransform();
+        $this->SetFont('helvetica', 'B', 52);
+        $this->SetTextColor(200, 200, 200);
+        $this->SetAlpha(0.25);
+
+        $x = $this->getPageWidth()  / 2;
+        $y = $this->getPageHeight() / 2;
+
+        $this->Rotate(45, $x, $y);
+        $this->Text($x - 55, $y, $text);
+        $this->Rotate(0);
+
+        $this->SetAlpha(1);
+        $this->SetTextColor(0, 0, 0);
+        $this->StopTransform();
+        $this->SetFont(
+            Config::getConfigurationValue('core', 'pdffont'),
+            '',
+            (int)(Config::getConfigurationValues('plugin_responsivas')[$this->font_size_key] ?? 10)
+        );
+    }
+
+        public function Header(): void {
         $img_file = PluginResponsivasPaths::logoPath();
         if (is_readable($img_file)) {
             $this->Image($img_file, 20, 10, 80, 0, '', '', '', true, 300);
@@ -50,6 +90,7 @@ class PluginResponsivasPDF extends TCPDF {
         );
         $this->SetY(15);
         $this->Cell(0, 5, $this->location . ' a ' . $this->fecha_header, 0, 1, 'R');
+        $this->drawWatermark();
     }
 
     /**

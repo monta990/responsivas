@@ -162,7 +162,7 @@ msgid "Sin equipo asignado"
 msgstr ""
 
 #: inc/config.class.php
-msgid "Configuración del plugin Responsivas"
+msgid "Configuración de Responsivas"
 msgstr ""
 
 #: inc/config.class.php
@@ -681,4 +681,37 @@ msgid "subrayado"
 msgstr ""
 
 msgid "Haz clic en una variable para insertarla en el campo activo."
+msgstr ""
+
+msgid "Vista previa"
+msgstr ""
+
+msgid "VISTA PREVIA"
+msgstr ""
+
+msgid "Error al generar la vista previa: %s"
+msgstr ""
+
+msgid "Testigo Demo 1"
+msgstr ""
+
+msgid "Testigo Demo 2"
+msgstr ""
+
+msgid "Representante Demo"
+msgstr ""
+
+msgid "Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua."
+msgstr ""
+
+msgid "Comprimir PDF"
+msgstr ""
+
+msgid "Comprimir el archivo PDF generado"
+msgstr ""
+
+msgid "Proteger PDF"
+msgstr ""
+
+msgid "Restringir copia y edición del PDF"
 msgstr ""

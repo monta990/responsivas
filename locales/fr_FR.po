@@ -1,7 +1,6 @@
 # Responsivas Plugin
 # Language: fr_FR
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: Responsivas 1.2.1\n"
@@ -25,12 +24,19 @@ msgid "Responsivas requiere PHP 8.1 o superior. Versión actual: %s"
 msgstr "Responsivas nécessite PHP 8.1 ou supérieur. Version actuelle : %s"
 
 #: setup.php
-msgid "Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
-msgstr "Responsivas nécessite TCPDF, qui doit être disponible dans le répertoire vendor de GLPI."
+msgid ""
+"Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
+msgstr ""
+"Responsivas nécessite TCPDF, qui doit être disponible dans le répertoire "
+"vendor de GLPI."
 
 #: setup.php
-msgid "No se pudo crear el directorio de archivos del plugin Responsivas. Verifique permisos."
-msgstr "Impossible de créer le répertoire des fichiers du plugin Responsivas. Vérifiez les permissions."
+msgid ""
+"No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
+" permisos."
+msgstr ""
+"Impossible de créer le répertoire des fichiers du plugin Responsivas. "
+"Vérifiez les permissions."
 
 #: hook.php
 msgid "Plugin Responsivas desinstalado. Configuración eliminada."
@@ -50,7 +56,9 @@ msgstr "Impossible de récupérer l'entité."
 
 #: inc/pdfbuilder.class.php
 msgid "No está configurado el tipo de teléfono para comodatos en el plugin."
-msgstr "Le type de téléphone pour les contrats de prêt n'est pas configuré dans le plugin."
+msgstr ""
+"Le type de téléphone pour les contrats de prêt n'est pas configuré dans le "
+"plugin."
 
 #: inc/pdfbuilder.class.php
 msgid "El usuario no tiene teléfonos del tipo configurado asignados."
@@ -58,7 +66,8 @@ msgstr "L'utilisateur n'a pas de téléphones du type configuré assignés."
 
 #: inc/pdfbuilder.class.php
 msgid "Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin."
-msgstr "Vous devez configurer Témoin 1 et Témoin 2 dans les paramètres du plugin."
+msgstr ""
+"Vous devez configurer Témoin 1 et Témoin 2 dans les paramètres du plugin."
 
 #: inc/pdfbuilder.class.php
 msgid "Uno o ambos testigos configurados no son válidos o están inactivos."
@@ -66,15 +75,20 @@ msgstr "Un ou les deux témoins configurés sont invalides ou inactifs."
 
 #: inc/pdfbuilder.class.php
 msgid "Debe configurar representante legal en la configuración del plugin."
-msgstr "Vous devez configurer le représentant légal dans les paramètres du plugin."
+msgstr ""
+"Vous devez configurer le représentant légal dans les paramètres du plugin."
 
 #: inc/pdfbuilder.class.php
 msgid "El representante legal no es válido o está inactivo."
 msgstr "Le représentant légal est invalide ou inactif."
 
 #: inc/pdfbuilder.class.php
-msgid "El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → Información administrativa y financiera → Precio de compra."
-msgstr "Le téléphone \"%s\" n'a pas de prix d'achat. Ajoutez-le dans Gestion → Informations administratives et financières → Prix d'achat."
+msgid ""
+"El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → "
+"Información administrativa y financiera → Precio de compra."
+msgstr ""
+"Le téléphone \"%s\" n'a pas de prix d'achat. Ajoutez-le dans Gestion → "
+"Informations administratives et financières → Prix d'achat."
 
 #: inc/pdfbuilder.class.php
 msgid "N/D"
@@ -93,8 +107,12 @@ msgid "Seleccione el tipo de activo a generar responsivas"
 msgstr "Sélectionnez le type d'actif pour générer les responsivas"
 
 #: inc/user.class.php
-msgid "El tipo de teléfono para responsivas no ha sido configurado. Contacta al administrador."
-msgstr "Le type de téléphone pour les responsivas n'a pas été configuré. Contactez l'administrateur."
+msgid ""
+"El tipo de teléfono para responsivas no ha sido configurado. Contacta al "
+"administrador."
+msgstr ""
+"Le type de téléphone pour les responsivas n'a pas été configuré. Contactez "
+"l'administrateur."
 
 #: inc/user.class.php
 msgid "Mostrar QR"
@@ -173,8 +191,8 @@ msgid "Sin equipo asignado"
 msgstr "Aucun équipement assigné"
 
 #: inc/config.class.php
-msgid "Configuración del plugin Responsivas"
-msgstr "Configuration du plugin Responsivas"
+msgid "Configuración de Responsivas"
+msgstr "Configuration de Responsivas"
 
 #: inc/config.class.php
 msgid "Configuración guardada correctamente."
@@ -197,8 +215,14 @@ msgid "Zona horaria para los PDFs"
 msgstr "Fuseau horaire pour les PDFs"
 
 #: inc/config.class.php
-msgid "Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al instalar el complemento se toma de manera predeterminada la del servidor en ese momento, más información en: %s"
-msgstr "Ce fuseau horaire sera utilisé pour afficher les dates et heures dans les PDFs. À l'installation du plugin, il prend par défaut celui du serveur. Plus d'informations sur : %s"
+msgid ""
+"Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al "
+"instalar el complemento se toma de manera predeterminada la del servidor en "
+"ese momento, más información en: %s"
+msgstr ""
+"Ce fuseau horaire sera utilisé pour afficher les dates et heures dans les "
+"PDFs. À l'installation du plugin, il prend par défaut celui du serveur. Plus"
+" d'informations sur : %s"
 
 #: inc/config.class.php
 msgid "Lista de zonas horarias de PHP"
@@ -225,8 +249,12 @@ msgid "Símbolo de moneda"
 msgstr "Symbole monétaire"
 
 #: inc/config.class.php
-msgid "Símbolo o código que aparece antes del precio en los comodatos de teléfono (ej: $, USD, MXN, €)."
-msgstr "Symbole ou code qui apparaît avant le prix dans les contrats de prêt téléphonique (ex : $, USD, MXN, €)."
+msgid ""
+"Símbolo o código que aparece antes del precio en los comodatos de teléfono "
+"(ej: $, USD, MXN, €)."
+msgstr ""
+"Symbole ou code qui apparaît avant le prix dans les contrats de prêt "
+"téléphonique (ex : $, USD, MXN, €)."
 
 #: inc/config.class.php
 msgid "Testigos del comodato de celulares"
@@ -250,7 +278,8 @@ msgstr "Représentant légal pour les contrats de prêt téléphonique"
 
 #: inc/config.class.php
 msgid "Selecciona el representante legal para el comodato de celulares."
-msgstr "Sélectionnez le représentant légal pour le contrat de prêt téléphonique."
+msgstr ""
+"Sélectionnez le représentant légal pour le contrat de prêt téléphonique."
 
 #: inc/config.class.php
 msgid "Representante legal"
@@ -297,8 +326,12 @@ msgid "Para una vista previa carga una imagen."
 msgstr "Chargez une image pour un aperçu."
 
 #: inc/config.class.php
-msgid "Una vez cargado y validado en vista previa, recuerda guardar para que se aplique."
-msgstr "Une fois chargé et validé en aperçu, n'oubliez pas de sauvegarder pour l'appliquer."
+msgid ""
+"Una vez cargado y validado en vista previa, recuerda guardar para que se "
+"aplique."
+msgstr ""
+"Une fois chargé et validé en aperçu, n'oubliez pas de sauvegarder pour "
+"l'appliquer."
 
 #: inc/config.class.php
 msgid "Confirmar eliminación"
@@ -393,12 +426,24 @@ msgid "Pie del correo (opcional)"
 msgstr "Pied de l'e-mail (facultatif)"
 
 #: inc/config.class.php
-msgid "Opcional. Aparece al pie del correo, separado por una línea. Puedes usar {nombre}, {empresa} y {fecha}."
-msgstr "Optionnel. Apparaît en bas de l'e-mail, séparé par une ligne. Vous pouvez utiliser {nombre}, {empresa} et {fecha}."
+msgid ""
+"Opcional. Aparece al pie del correo, separado por una línea. Puedes usar "
+"{nombre}, {empresa} y {fecha}."
+msgstr ""
+"Optionnel. Apparaît en bas de l'e-mail, séparé par une ligne. Vous pouvez "
+"utiliser {nombre}, {empresa} et {fecha}."
 
 #: inc/config.class.php
-msgid "El servidor de correo de GLPI no está configurado o las notificaciones por correo están desactivadas. El botón de envío fallará hasta que lo configures en <strong>Configuración → Notificaciones → Configuración de correos</strong>."
-msgstr "Le serveur de messagerie GLPI n'est pas configuré ou les notifications par e-mail sont désactivées. Le bouton d'envoi échouera jusqu'à ce que vous le configuriez dans <strong>Configuration → Notifications → Configuration des e-mails</strong>."
+msgid ""
+"El servidor de correo de GLPI no está configurado o las notificaciones por "
+"correo están desactivadas. El botón de envío fallará hasta que lo configures"
+" en <strong>Configuración → Notificaciones → Configuración de "
+"correos</strong>."
+msgstr ""
+"Le serveur de messagerie GLPI n'est pas configuré ou les notifications par "
+"e-mail sont désactivées. Le bouton d'envoi échouera jusqu'à ce que vous le "
+"configuriez dans <strong>Configuration → Notifications → Configuration des "
+"e-mails</strong>."
 
 #: inc/config.class.php
 msgid "Configure el asunto y cuerpo del correo primero"
@@ -434,31 +479,43 @@ msgstr "Paragraphe d'introduction"
 
 #: inc/config.class.php
 msgid "Párrafo introductorio antes de la tabla. Usa **texto** para negrita."
-msgstr "Paragraphe introductif avant le tableau. Utilisez **texte** pour le gras."
+msgstr ""
+"Paragraphe introductif avant le tableau. Utilisez **texte** pour le gras."
 
 #: inc/config.class.php
 msgid "Cuerpo / Cláusulas"
 msgstr "Corps / Clauses"
 
 #: inc/config.class.php
-msgid "Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. Línea en blanco → nuevo párrafo. **texto** → negrita."
-msgstr "Texte juridique après le tableau. Lignes avec \"1. texte\" → liste numérotée. Ligne vide → nouveau paragraphe. **texte** → gras."
+msgid ""
+"Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. "
+"Línea en blanco → nuevo párrafo. **texto** → negrita."
+msgstr ""
+"Texte juridique après le tableau. Lignes avec \"1. texte\" → liste "
+"numérotée. Ligne vide → nouveau paragraphe. **texte** → gras."
 
 #: inc/config.class.php
 msgid "Párrafo de apertura"
 msgstr "Paragraphe d'ouverture"
 
 #: inc/config.class.php
-msgid "Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
-msgstr "Paragraphe de comparution avant les clauses. Utilisez **texte** pour le gras."
+msgid ""
+"Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
+msgstr ""
+"Paragraphe de comparution avant les clauses. Utilisez **texte** pour le "
+"gras."
 
 #: inc/config.class.php
 msgid "Cláusulas"
 msgstr "Clauses"
 
 #: inc/config.class.php
-msgid "Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} para la cláusula de vida útil. **texto** → negrita."
-msgstr "Une clause par ligne au format \"1. texte\". Utilisez {clausula_vida_util} pour la clause de durée de vie. **texte** → gras."
+msgid ""
+"Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} "
+"para la cláusula de vida útil. **texto** → negrita."
+msgstr ""
+"Une clause par ligne au format \"1. texte\". Utilisez {clausula_vida_util} "
+"pour la clause de durée de vie. **texte** → gras."
 
 #: inc/config.class.php
 msgid "Párrafo de testigos"
@@ -578,7 +635,9 @@ msgstr "Ouvrir la fiche d'actif dans GLPI"
 
 #: front/computer.php
 msgid "No tienes permiso para generar responsivas de este usuario."
-msgstr "Vous n'avez pas la permission de générer des responsivas pour cet utilisateur."
+msgstr ""
+"Vous n'avez pas la permission de générer des responsivas pour cet "
+"utilisateur."
 
 #: front/send_mail.php
 msgid "Acceso denegado."
@@ -589,8 +648,12 @@ msgid "El usuario no tiene dirección de correo electrónico registrada."
 msgstr "L'utilisateur n'a pas d'adresse e-mail enregistrée."
 
 #: front/send_mail.php
-msgid "Configuración de correo incompleta. Configure el asunto y cuerpo en la pestaña Correo."
-msgstr "Configuration e-mail incomplète. Configurez l'objet et le corps dans l'onglet E-mail."
+msgid ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo en la "
+"pestaña Correo."
+msgstr ""
+"Configuration e-mail incomplète. Configurez l'objet et le corps dans "
+"l'onglet E-mail."
 
 #: front/send_mail.php
 msgid "No hay responsivas que generar para este usuario."
@@ -623,24 +686,38 @@ msgid "Usuario inválido."
 msgstr "Utilisateur invalide."
 
 #: front/send_test_mail.php
-msgid "Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu perfil."
-msgstr "Votre utilisateur n'a pas d'adresse e-mail enregistrée dans GLPI. Ajoutez-la dans votre profil."
+msgid ""
+"Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu "
+"perfil."
+msgstr ""
+"Votre utilisateur n'a pas d'adresse e-mail enregistrée dans GLPI. Ajoutez-la"
+" dans votre profil."
 
 #: front/send_test_mail.php
-msgid "Configuración de correo incompleta. Configure el asunto y cuerpo primero."
-msgstr "Configuration e-mail incomplète. Configurez d'abord l'objet et le corps."
+msgid ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo primero."
+msgstr ""
+"Configuration e-mail incomplète. Configurez d'abord l'objet et le corps."
 
 #: front/send_test_mail.php
-msgid "Este es un correo de prueba generado desde la configuración del plugin Responsivas. No se adjuntan PDFs."
-msgstr "Ceci est un e-mail de test généré depuis la configuration du plugin Responsivas. Aucun PDF n'est joint."
+msgid ""
+"Este es un correo de prueba generado desde la configuración del plugin "
+"Responsivas. No se adjuntan PDFs."
+msgstr ""
+"Ceci est un e-mail de test généré depuis la configuration du plugin "
+"Responsivas. Aucun PDF n'est joint."
 
 #: front/send_test_mail.php
 msgid "Correo de prueba enviado correctamente a %s."
 msgstr "E-mail de test envoyé avec succès à %s."
 
 #: inc/pdfbuilder.class.php
-msgid "La plantilla del documento tiene campos vacíos. Completa los siguientes campos en Configuración → Responsivas: %s"
-msgstr "Le modèle de document a des champs vides. Complétez les champs suivants dans Configuration → Responsivas : %s"
+msgid ""
+"La plantilla del documento tiene campos vacíos. Completa los siguientes "
+"campos en Configuración → Responsivas: %s"
+msgstr ""
+"Le modèle de document a des champs vides. Complétez les champs suivants dans"
+" Configuration → Responsivas : %s"
 
 #: inc/pdfbuilder.class.php
 msgid "Título (Computadora)"
@@ -693,3 +770,36 @@ msgstr "souligné"
 
 msgid "Haz clic en una variable para insertarla en el campo activo."
 msgstr "Cliquez sur une variable pour l'insérer à la position du curseur."
+
+msgid "VISTA PREVIA"
+msgstr "APERÇU"
+
+msgid "Error al generar la vista previa: %s"
+msgstr "Erreur lors de la génération de l'aperçu : %s"
+
+msgid "Testigo Demo 1"
+msgstr "Témoin démo 1"
+
+msgid "Testigo Demo 2"
+msgstr "Témoin démo 2"
+
+msgid "Representante Demo"
+msgstr "Représentant démo"
+
+msgid ""
+"Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
+"de agua."
+msgstr ""
+"Génère un aperçu PDF avec les paramètres actuels. Un filigrane est appliqué."
+
+msgid "Comprimir PDF"
+msgstr "Compresser le PDF"
+
+msgid "Comprimir el archivo PDF generado"
+msgstr "Compresser le fichier PDF généré"
+
+msgid "Proteger PDF"
+msgstr "Protéger le PDF"
+
+msgid "Restringir copia y edición del PDF"
+msgstr "Restreindre la copie et l'édition du PDF"

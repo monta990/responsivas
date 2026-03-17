@@ -6,6 +6,24 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.6] — 2026-03-17
+
+### Added
+- **PDF preview with watermark** — each asset type tab (Computadoras, Impresoras, Teléfonos) has a "Vista previa" button at the bottom. Generates a full PDF using the current saved templates. If the logged-in admin has real assets of that type they are used; otherwise realistic demo data is substituted (Dell Latitude 5540 / HP LaserJet Pro M404n / Samsung Galaxy A54 5G). A diagonal "VISTA PREVIA" watermark appears on every page at 25% opacity. The demo uses real configured witnesses, representative, entity location, and a real GLPI state name; only asset-specific fields are demo values.
+- **Compression and protection toggles** — two new switches in the "Opciones de la responsiva" card (General tab): **Comprimir PDF** and **Proteger PDF** (restrict copy/edit). Both active by default. Changes apply to all generated PDFs via the shared `makePdf()` factory.
+
+### Changed
+- **Shared PDF factory `makePdf()`** — all PDF creation (real and preview) now goes through a single private method. `SetTitle`, `SetSubject`, `SetKeywords`, `SetPDFVersion`, `SetProtection`, `SetCompression`, margins, fonts — all configured in one place.
+- **Shared render methods** — `renderPcPage()`, `renderPriPage()`, `renderPhoPage()` hold the single source of HTML for each document type. Real builds and preview demo both call them; a layout change in any render method applies to both automatically.
+- **Plugin title** — removed the word "plugin" from the configuration page heading. Now reads **"Configuración de Responsivas"** (es_MX), **"Responsivas Settings"** (en_US/en_GB), **"Configuration de Responsivas"** (fr_FR), **"Responsivas Einstellungen"** (de_DE).
+
+### Locales
+- Added 4 new strings: `Comprimir PDF`, `Comprimir el archivo PDF generado`, `Proteger PDF`, `Restringir copia y edición del PDF`.
+- Updated title string across all 5 locales.
+- Total: **180 strings** per locale.
+
+---
+
 ## [1.2.5] — 2026-03-13
 
 ### Added
@@ -159,6 +177,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.2.6]: ../../compare/v1.2.5...v1.2.6
 [1.2.5]: ../../compare/v1.2.4...v1.2.5
 [1.2.4]: ../../compare/v1.2.3...v1.2.4
 [1.2.3]: ../../compare/v1.2.2...v1.2.3

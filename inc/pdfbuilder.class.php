@@ -151,24 +151,14 @@ HTML;
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
 
-      $pdf = new PluginResponsivasPDF('P', 'mm', 'LETTER');
-      $pdf->setDocumentType('pc_font_size', 'pc');
-      $pdf->fecha_header = fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']);
-      $pdf->location     = $location;
-      $pdf->SetCreator('GLPI');
-      $pdf->SetAuthor($creator);
-      $pdf->SetTitle('Responsiva Computadora - ' . $full_name);
-      $pdf->SetPDFVersion('1.4');
-      $pdf->SetSubject('Responsiva de computadora');
-      $pdf->SetKeywords('responsiva, computadora, activos, TI');
-      $pdf->SetMargins(15, 25, 15);
-      $pdf->SetAutoPageBreak(true, 30);
-      $pdf->SetPrintHeader(true);
-      $pdf->SetPrintFooter(true);
-      $pdf->setCompression(true);
-      $pdf->setFontSubsetting(true);
-      $pdf->SetProtection(['copy', 'modify'], '', null);
-      $pdf->SetFont(Config::getConfigurationValue('core', 'pdffont'), '', (int)$config['pc_font_size']);
+      $pdf = self::makePdf('pc',
+         'Responsiva Computadora - ' . $full_name,
+         'Responsiva de computadora',
+         'responsiva, computadora, activos, TI',
+         $location,
+         fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']),
+         $config, 30.0
+      );
 
       $full_name_safe = e($full_name);
 
@@ -287,27 +277,18 @@ HTML;
             '{fecha}'       => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}'       => $location,
          ];
-         $pc_titulo = responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
+         $pc_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
          $pc_intro  = responsivasApplyTemplate($config['pc_intro']  ?? '', $pc_vars);
          $pc_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pc_cuerpo'] ?? '', $pc_vars));
 
-         $html = <<<HTML
-<h2 style="text-align:center;">{$pc_titulo}</h2>
-<p style="text-align:justify;">{$pc_intro}</p>
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-<tr style="background-color:{$th_bg};"><td width="20%"><strong>Marca</strong></td><td width="20%"><strong>Modelo</strong></td><td width="20%"><strong>Serie</strong></td><td width="20%"><strong>Procesador</strong></td><td width="20%"><strong>Velocidad</strong></td></tr>
-<tr style="background-color:{$td_bg};"><td>{$marca}</td><td>{$modelo}</td><td>{$serie}</td><td>{$cpu_name}</td><td>{$cpu_freq}</td></tr>
-<tr style="background-color:{$th_bg};"><td><strong>Memoria RAM</strong></td><td><strong>SO</strong></td><td><strong>Almacenamiento</strong></td><td><strong>Tipo</strong></td><td><strong>Condición</strong></td></tr>
-<tr style="background-color:{$td_bg};"><td>{$ram_texto}</td><td>{$os_texto}</td><td>{$disco}</td><td>{$tipo}</td><td>{$estado_nombre}</td></tr>
-{$dispositivos_html}
-<tr style="background-color:{$th_bg};"><td width="100%"><strong>Comentarios</strong></td></tr>
-<tr style="background-color:{$td_bg};"><td width="100%">{$comentarios}</td></tr>
-</table>
-{$pc_cuerpo}
-<table><tr><td height="30"></td></tr></table>
-<div style="text-align:center;"><strong>_________________________________<br>{$full_name_safe}{$employee_line_html}</strong></div>
-HTML;
-         $pdf->writeHTML($html, true, false, true, false, '');
+         $pdf->writeHTML(self::renderPcPage(
+            $pc_titulo, $pc_intro, $pc_cuerpo,
+            $marca, $modelo, $serie, $cpu_name, $cpu_freq,
+            $ram_texto, $os_texto, $disco, $tipo, $estado_nombre,
+            $comentarios, $dispositivos_html,
+            $full_name_safe, $employee_line_html,
+            $th_bg, $td_bg
+         ), true, false, true, false, '');
       }
 
       return [
@@ -357,24 +338,14 @@ HTML;
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
 
-      $pdf = new PluginResponsivasPDF('P', 'mm', 'LETTER');
-      $pdf->setDocumentType('pri_font_size', 'pri');
-      $pdf->fecha_header = fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']);
-      $pdf->location     = $location;
-      $pdf->SetCreator('GLPI');
-      $pdf->SetAuthor($creator);
-      $pdf->SetTitle('Responsiva Impresora - ' . $full_name);
-      $pdf->SetPDFVersion('1.4');
-      $pdf->SetSubject('Responsiva de impresora');
-      $pdf->SetKeywords('responsiva, impresora, activos, TI');
-      $pdf->SetMargins(15, 25, 15);
-      $pdf->SetAutoPageBreak(true, 40);
-      $pdf->SetPrintHeader(true);
-      $pdf->SetPrintFooter(true);
-      $pdf->setCompression(true);
-      $pdf->setFontSubsetting(true);
-      $pdf->SetProtection(['copy', 'modify'], '', null);
-      $pdf->SetFont(Config::getConfigurationValue('core', 'pdffont'), '', (int)$config['pri_font_size']);
+      $pdf = self::makePdf('pri',
+         'Responsiva Impresora - ' . $full_name,
+         'Responsiva de impresora',
+         'responsiva, impresora, activos, TI',
+         $location,
+         fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']),
+         $config, 40.0
+      );
       $pdf->AddPage();
 
       $i          = 0;
@@ -413,46 +384,16 @@ HTML;
             '{tipo}'    => $tipo,
             '{estado}'  => $estado_nombre,
          ]);
-         $pri_titulo = responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
+         $pri_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
          $pri_intro  = responsivasApplyTemplate($config['pri_intro']  ?? '', $pri_vars);
          $pri_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pri_cuerpo'] ?? '', $pri_vars));
 
-         $html = <<<HTML
-<h2 style="text-align:center;">{$pri_titulo}</h2>
-<p style="text-align:justify;">{$pri_intro}</p>
-<table border="1" cellpadding="6" cellspacing="0" width="100%">
-  <tr style="background-color:{$th_bg};">
-    <td width="20%"><strong>Marca</strong></td>
-    <td width="20%"><strong>Modelo</strong></td>
-    <td width="20%"><strong>Serie</strong></td>
-    <td width="20%"><strong>Tipo</strong></td>
-    <td width="20%"><strong>Condición</strong></td>
-  </tr>
-  <tr style="background-color:{$td_bg};">
-    <td>{$marca}</td>
-    <td>{$modelo}</td>
-    <td>{$serie}</td>
-    <td>{$tipo}</td>
-    <td>{$estado_nombre}</td>
-  </tr>
-  <tr style="background-color:{$th_bg};">
-    <td width="100%"><strong>Comentarios</strong></td>
-  </tr>
-  <tr style="background-color:{$td_bg};">
-    <td width="100%">{$comentarios}</td>
-  </tr>
-</table>
-{$pri_cuerpo}
-<table><tr><td height="40"></td></tr></table>
-<div style="text-align:center;">
-<strong>
-_________________________________<br>
-{$full_safe}<br>
-{$employee_line}
-</strong>
-</div>
-HTML;
-         $pdf->writeHTML($html, true, false, true, false, '');
+         $pdf->writeHTML(self::renderPriPage(
+            $pri_titulo, $pri_intro, $pri_cuerpo,
+            $marca, $modelo, $serie, $tipo, $estado_nombre, $comentarios,
+            $full_safe, $employee_line,
+            $th_bg, $td_bg
+         ), true, false, true, false, '');
          $i++;
       }
 
@@ -562,24 +503,14 @@ HTML;
       $fecha_texto = fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']);
       $creator    = self::getCreator();
 
-      $pdf = new PluginResponsivasPDF('P', 'mm', 'LETTER');
-      $pdf->setDocumentType('pho_font_size', 'pho');
-      $pdf->fecha_header = $fecha_texto;
-      $pdf->location     = $location;
-      $pdf->SetCreator('GLPI');
-      $pdf->SetAuthor($creator);
-      $pdf->SetTitle('Comodato Teléfono - ' . $full_name);
-      $pdf->SetPDFVersion('1.4');
-      $pdf->SetSubject('Comodato de teléfono');
-      $pdf->SetKeywords('comodato, teléfono, activos, TI');
-      $pdf->SetMargins(15, 25, 15);
-      $pdf->SetAutoPageBreak(true, 25);
-      $pdf->SetPrintHeader(true);
-      $pdf->SetPrintFooter(true);
-      $pdf->setCompression(true);
-      $pdf->setFontSubsetting(true);
-      $pdf->SetProtection(['copy', 'modify'], '', null);
-      $pdf->SetFont(Config::getConfigurationValue('core', 'pdffont'), '', (int)($config['pho_font_size']));
+      $pdf = self::makePdf('pho',
+         'Comodato Teléfono - ' . $full_name,
+         'Comodato de teléfono',
+         'comodato, teléfono, activos, TI',
+         $location,
+         $fecha_texto,
+         $config, 25.0
+      );
 
       $full_name_safe = e($full_name);
 
@@ -692,33 +623,16 @@ HTML;
             '{testigo2}'          => $testigo2_nombre,
             '{clausula_vida_util}'=> $clausula_vida_util_text,
          ];
-         $pho_titulo    = responsivasApplyTemplate($config['pho_titulo']    ?? 'CONTRATO DE COMODATO', $pho_vars);
+         $pho_titulo    = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
          $pho_apertura  = responsivasApplyTemplate($config['pho_apertura']  ?? '', $pho_vars);
          $pho_clausulas = responsivasRenderTemplate(responsivasApplyTemplate($config['pho_clausulas'] ?? '', $pho_vars));
          $pho_testigos  = responsivasApplyTemplate($config['pho_testigos']  ?? '', $pho_vars);
 
-         $html = <<<HTML
-<p style="text-align:center;"><strong>{$pho_titulo}</strong></p>
-<p style="text-align:justify; line-height:1.15;">{$pho_apertura}</p>
-<p style="text-align:center;"><strong>CLÁUSULAS</strong></p>
-{$pho_clausulas}
-<p style="text-align:justify; line-height:1.15;">{$pho_testigos}</p>
-<br>
-<table width="100%" style="text-align:center;">
-<tr>
-  <td width="50%"><strong>COMODANTE</strong><br><br>_______________________________<br>{$representante_nombre}</td>
-  <td width="50%"><strong>COMODATARIO</strong><br><br>_______________________________<br>{$full_name_safe}<br>{$employee_line}</td>
-</tr>
-</table>
-<br>
-<table width="100%" style="text-align:center;">
-<tr>
-  <td width="50%"><strong>TESTIGO</strong><br><br>_______________________________<br>{$testigo1_nombre}</td>
-  <td width="50%"><strong>TESTIGO</strong><br><br>_______________________________<br>{$testigo2_nombre}</td>
-</tr>
-</table>
-HTML;
-         $pdf->writeHTML($html, true, false, true, false, '');
+         $pdf->writeHTML(self::renderPhoPage(
+            $pho_titulo, $pho_apertura, $pho_clausulas, $pho_testigos,
+            $representante_nombre, $full_name_safe, $employee_line,
+            $testigo1_nombre, $testigo2_nombre
+         ), true, false, true, false, '');
       }
 
       return [
@@ -726,4 +640,385 @@ HTML;
          'filename' => self::makeFilename('Comodato_Celular', $full_name),
       ];
    }
+   /* =====================================================
+    * VISTA PREVIA con marca de agua
+    * Intenta usar activos reales del admin; si no tiene,
+    * construye datos demo para que la plantilla se vea real.
+    * ===================================================== */
+
+   /* =====================================================
+    * MÉTODOS COMPARTIDOS DE RENDERIZADO HTML
+    * Usados tanto por los builds reales como por el demo.
+    * Cualquier cambio en el layout se aplica a ambos automáticamente.
+    * ===================================================== */
+
+
+   /* =====================================================
+    * FACTORY COMPARTIDO
+    * Crea y configura un PluginResponsivasPDF con todos
+    * los ajustes base. Usado por builds reales y demo.
+    * $page_break: margen inferior para auto page break.
+    * ===================================================== */
+   private static function makePdf(
+      string $type,         // 'pc' | 'pri' | 'pho'
+      string $title,
+      string $subject,
+      string $keywords,
+      string $location,
+      string $fecha_header,
+      array  $config,
+      float  $page_break = 30.0,
+      bool   $watermark  = false
+   ): PluginResponsivasPDF {
+      $font_key = match ($type) { 'pc' => 'pc_font_size', 'pri' => 'pri_font_size', 'pho' => 'pho_font_size' };
+      $creator  = self::getCreator();
+
+      $pdf = new PluginResponsivasPDF('P', 'mm', 'LETTER');
+      $pdf->setDocumentType($font_key, $type);
+      $pdf->fecha_header   = $fecha_header;
+      $pdf->location       = $location;
+      $pdf->show_watermark = $watermark;
+      $pdf->watermark_text = __('VISTA PREVIA', 'responsivas');
+      $pdf->SetCreator('GLPI');
+      $pdf->SetAuthor($creator);
+      $pdf->SetTitle($title);
+      $pdf->SetPDFVersion('1.4');
+      $pdf->SetSubject($subject);
+      $pdf->SetKeywords($keywords);
+      $pdf->SetMargins(15, 25, 15);
+      $pdf->SetAutoPageBreak(true, $page_break);
+      $pdf->SetPrintHeader(true);
+      $pdf->SetPrintFooter(true);
+      $pdf->setCompression((bool)($config['pdf_compression'] ?? 1));
+      $pdf->setFontSubsetting(true);
+      if ((int)($config['pdf_protection'] ?? 1) === 1) {
+         $pdf->SetProtection(['copy', 'modify'], '', null);
+      }
+      $pdf->SetFont(Config::getConfigurationValue('core', 'pdffont'), '', (int)($config[$font_key] ?? 10));
+      return $pdf;
+   }
+
+   private static function renderPcPage(
+      string $titulo, string $intro, string $cuerpo,
+      string $marca, string $modelo, string $serie,
+      string $cpu_name, string $cpu_freq,
+      string $ram, string $os, string $disco,
+      string $tipo, string $estado, string $comentarios,
+      string $dispositivos_html,
+      string $full_name_safe, string $employee_line_html,
+      string $th_bg, string $td_bg
+   ): string {
+      return <<<HTML
+<h2 style="text-align:center;">{$titulo}</h2>
+<p style="text-align:justify;">{$intro}</p>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr style="background-color:{$th_bg};"><td width="20%"><strong>Marca</strong></td><td width="20%"><strong>Modelo</strong></td><td width="20%"><strong>Serie</strong></td><td width="20%"><strong>Procesador</strong></td><td width="20%"><strong>Velocidad</strong></td></tr>
+<tr style="background-color:{$td_bg};"><td>{$marca}</td><td>{$modelo}</td><td>{$serie}</td><td>{$cpu_name}</td><td>{$cpu_freq}</td></tr>
+<tr style="background-color:{$th_bg};"><td><strong>Memoria RAM</strong></td><td><strong>SO</strong></td><td><strong>Almacenamiento</strong></td><td><strong>Tipo</strong></td><td><strong>Condición</strong></td></tr>
+<tr style="background-color:{$td_bg};"><td>{$ram}</td><td>{$os}</td><td>{$disco}</td><td>{$tipo}</td><td>{$estado}</td></tr>
+{$dispositivos_html}
+<tr style="background-color:{$th_bg};"><td width="100%"><strong>Comentarios</strong></td></tr>
+<tr style="background-color:{$td_bg};"><td width="100%">{$comentarios}</td></tr>
+</table>
+{$cuerpo}
+<table><tr><td height="30"></td></tr></table>
+<div style="text-align:center;"><strong>_________________________________<br>{$full_name_safe}{$employee_line_html}</strong></div>
+HTML;
+   }
+
+   private static function renderPriPage(
+      string $titulo, string $intro, string $cuerpo,
+      string $marca, string $modelo, string $serie,
+      string $tipo, string $estado, string $comentarios,
+      string $full_safe, string $employee_line,
+      string $th_bg, string $td_bg
+   ): string {
+      return <<<HTML
+<h2 style="text-align:center;">{$titulo}</h2>
+<p style="text-align:justify;">{$intro}</p>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <tr style="background-color:{$th_bg};">
+    <td width="20%"><strong>Marca</strong></td>
+    <td width="20%"><strong>Modelo</strong></td>
+    <td width="20%"><strong>Serie</strong></td>
+    <td width="20%"><strong>Tipo</strong></td>
+    <td width="20%"><strong>Condición</strong></td>
+  </tr>
+  <tr style="background-color:{$td_bg};">
+    <td>{$marca}</td>
+    <td>{$modelo}</td>
+    <td>{$serie}</td>
+    <td>{$tipo}</td>
+    <td>{$estado}</td>
+  </tr>
+  <tr style="background-color:{$th_bg};">
+    <td colspan="5"><strong>Comentarios</strong></td>
+  </tr>
+  <tr style="background-color:{$td_bg};">
+    <td colspan="5">{$comentarios}</td>
+  </tr>
+</table>
+{$cuerpo}
+<table><tr><td height="40"></td></tr></table>
+<div style="text-align:center;">
+<strong>
+_________________________________<br>
+{$full_safe}<br>
+{$employee_line}
+</strong>
+</div>
+HTML;
+   }
+
+   private static function renderPhoPage(
+      string $titulo, string $apertura, string $clausulas, string $testigos,
+      string $representante, string $full_name_safe, string $employee_line,
+      string $testigo1, string $testigo2
+   ): string {
+      return <<<HTML
+<p style="text-align:center;"><strong>{$titulo}</strong></p>
+<p style="text-align:justify; line-height:1.15;">{$apertura}</p>
+<p style="text-align:center;"><strong>CLÁUSULAS</strong></p>
+{$clausulas}
+<p style="text-align:justify; line-height:1.15;">{$testigos}</p>
+<br>
+<table width="100%" style="text-align:center;">
+<tr>
+  <td width="50%"><strong>COMODANTE</strong><br><br>_______________________________<br>{$representante}</td>
+  <td width="50%"><strong>COMODATARIO</strong><br><br>_______________________________<br>{$full_name_safe}<br>{$employee_line}</td>
+</tr>
+</table>
+<br>
+<table width="100%" style="text-align:center;">
+<tr>
+  <td width="50%"><strong>TESTIGO</strong><br><br>_______________________________<br>{$testigo1}</td>
+  <td width="50%"><strong>TESTIGO</strong><br><br>_______________________________<br>{$testigo2}</td>
+</tr>
+</table>
+HTML;
+   }
+
+   public static function buildPreview(string $type, int $user_id, array $config): array
+   {
+      global $CFG_GLPI;
+
+      // No validar plantillas aquí — si están vacías usamos demo igual
+      $user = new User();
+      if (!$user->getFromDB($user_id)) {
+         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
+      }
+
+      // ── Intentar con activos reales ──────────────────────────────────
+      // Primero comprobamos si el usuario tiene activos del tipo solicitado
+      // antes de llamar a buildXxxPdf (que lanza excepción si no hay activos
+      // pero también si la plantilla está vacía o faltan datos de entidad)
+      $has_assets = match ($type) {
+         'pc'  => count((new Computer())->find(['users_id' => $user_id, 'is_deleted' => 0])) > 0,
+         'pri' => count((new Printer())->find(['users_id'  => $user_id, 'is_deleted' => 0])) > 0,
+         'pho' => self::userHasPhones($user_id, $config),
+      };
+
+      if ($has_assets) {
+         try {
+            // Activar watermark ANTES de construir para que Header() lo dibuje
+            // en cada página conforme se agregan
+            $method = match ($type) {
+               'pc'  => 'buildComputerPdf',
+               'pri' => 'buildPrinterPdf',
+               'pho' => 'buildPhonePdf',
+            };
+            // Activar watermark estático ANTES de que se construya el PDF
+            // para que Header() lo dibuje en cada página al agregarla
+            PluginResponsivasPDF::$global_watermark      = true;
+            PluginResponsivasPDF::$global_watermark_text = __('VISTA PREVIA', 'responsivas');
+            $result = self::$method($user_id);
+            PluginResponsivasPDF::$global_watermark = false; // reset
+            return $result;
+         } catch (Throwable) {
+            // Caída silenciosa → usar demo
+         }
+      }
+
+      // ── Sin activos o error → construir PDF demo ─────────────────────
+      return self::buildDemoPdf($type, $user, $config);
+   }
+
+   /** Verifica si el usuario tiene teléfonos del tipo configurado */
+   private static function userHasPhones(int $user_id, array $config): bool
+   {
+      global $DB;
+      $type_id = (int)($config['cellphone_type_id'] ?? 0);
+      if ($type_id === 0) return false;
+      $iter = $DB->request([
+         'COUNT' => 'cnt',
+         'FROM'  => 'glpi_phones',
+         'WHERE' => ['users_id' => $user_id, 'phonetypes_id' => $type_id, 'is_deleted' => 0],
+      ]);
+      return ($iter->current()['cnt'] ?? 0) > 0;
+   }
+
+   /* =====================================================
+    * PDF completamente demo (sin datos reales de GLPI)
+    * ===================================================== */
+   private static function buildDemoPdf(string $type, User $user, array $config): array
+   {
+      global $CFG_GLPI;
+
+      $full_name         = $user->getFriendlyName();
+      $full_name_safe    = e($full_name);
+      $company_name      = e($config['company_name'] ?? 'Mi Empresa');
+      $real_employee     = trim($user->fields['registration_number'] ?? '');
+      $demo_emp          = $real_employee !== '' ? e($real_employee) : 'EMP-001';
+      $show_employee     = (int)($config['show_employee_number'] ?? 0);
+      $th_bg             = '#E6E6E6';
+      $td_bg             = '#FFFFFF';
+
+      // Ubicación desde la entidad activa (igual que los builds reales)
+      $entity = new Entity();
+      $entity->getFromDB(Session::getActiveEntity());
+      $location = e(implode(', ', array_filter([
+         $entity->fields['town']    ?? '',
+         $entity->fields['state']   ?? '',
+         $entity->fields['country'] ?? '',
+      ]))) ?: 'Hermosillo, Sonora, México';
+
+      // Testigos / representante reales si están configurados, si no → demo
+      $t1_id  = (int)($config['testigo_1']     ?? 0);
+      $t2_id  = (int)($config['testigo_2']     ?? 0);
+      $rep_id = (int)($config['representante'] ?? 0);
+      $testigo1 = ($t1_id  > 0 && ($n = nombreUsuario($t1_id))  !== '') ? $n : __('Testigo Demo 1',     'responsivas');
+      $testigo2 = ($t2_id  > 0 && ($n = nombreUsuario($t2_id))  !== '') ? $n : __('Testigo Demo 2',     'responsivas');
+      $rep      = ($rep_id > 0 && ($n = nombreUsuario($rep_id)) !== '') ? $n : __('Representante Demo', 'responsivas');
+
+      // Entity address/postcode (igual que el build real de teléfono)
+      $address  = e($entity->fields['address']  ?? '');
+      $postcode = e($entity->fields['postcode']  ?? '');
+
+      // Estado al azar de los existentes en GLPI
+      global $DB;
+      $states     = iterator_to_array($DB->request(['SELECT' => ['name'], 'FROM' => 'glpi_states', 'LIMIT' => 10]));
+      $demo_state = !empty($states) ? e(reset($states)['name']) : 'En uso';
+
+      $fecha_header = fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']);
+
+      // ── Computadora ─────────────────────────────────────────────────
+      if ($type === 'pc') {
+         $pdf = self::makePdf('pc',
+            'Vista Previa - Responsiva Computadora - ' . $full_name,
+            'Vista previa responsiva de computadora',
+            'vista previa, responsiva, computadora, activos, TI',
+            $location, $fecha_header, $config, 30.0, true
+         );
+         $pdf->AddPage();
+         $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
+
+         $employee_line      = ($show_employee && $demo_emp) ? "Empleado No: {$demo_emp}<br>" : '';
+         $employee_line_html = $employee_line ? "<br>{$employee_line}" : '';
+
+         $pc_vars = [
+            '{nombre}' => e($full_name), '{empresa}' => $company_name,
+            '{num_empleado}' => $demo_emp,   '{activo}' => 'PC-DEMO-001',
+            '{serie}' => 'SN-DEMO-123456',   '{marca}'  => 'Dell',
+            '{modelo}' => 'Latitude 5540',   '{tipo}'   => 'Laptop',
+            '{estado}' => $demo_state,
+            '{fecha}' => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+            '{lugar}' => $location,
+         ];
+         $pc_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
+         $pc_intro  = responsivasApplyTemplate($config['pc_intro']  ?? '', $pc_vars);
+         $pc_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pc_cuerpo'] ?? '', $pc_vars));
+
+         $pdf->writeHTML(self::renderPcPage(
+            $pc_titulo, $pc_intro, $pc_cuerpo,
+            'Dell', 'Latitude 5540', 'SN-DEMO-123456',
+            'Intel Core i5-1345U', '1.60 GHz',
+            '16 GB DDR4', 'Windows 11 Pro', 'SSD 512 GB',
+            'Laptop', $demo_state,
+            e(__('Equipo demo para vista previa de plantilla', 'responsivas')),
+            '', $full_name_safe, $employee_line_html, $th_bg, $td_bg
+         ), true, false, true, false, '');
+         return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Computo_DEMO', $full_name)];
+      }
+
+      // ── Impresora ────────────────────────────────────────────────────
+      if ($type === 'pri') {
+         $pdf = self::makePdf('pri',
+            'Vista Previa - Responsiva Impresora - ' . $full_name,
+            'Vista previa responsiva de impresora',
+            'vista previa, responsiva, impresora, activos, TI',
+            $location, $fecha_header, $config, 40.0, true
+         );
+         $pdf->AddPage();
+         $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
+
+         $employee_line = ($show_employee && $demo_emp) ? "Empleado No: {$demo_emp}<br>" : '';
+         $full_safe     = $full_name_safe;
+
+         $pri_vars = [
+            '{nombre}' => e($full_name), '{empresa}' => $company_name,
+            '{num_empleado}' => $demo_emp,   '{activo}' => 'IMP-DEMO-001',
+            '{serie}' => 'SN-IMP-789012',    '{marca}'  => 'HP',
+            '{modelo}' => 'LaserJet Pro M404n', '{tipo}' => 'Impresora',
+            '{estado}' => $demo_state,
+            '{fecha}' => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+            '{lugar}' => $location,
+         ];
+         $pri_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
+         $pri_intro  = responsivasApplyTemplate($config['pri_intro']  ?? '', $pri_vars);
+         $pri_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pri_cuerpo'] ?? '', $pri_vars));
+
+         $pdf->writeHTML(self::renderPriPage(
+            $pri_titulo, $pri_intro, $pri_cuerpo,
+            'HP', 'LaserJet Pro M404n', 'SN-IMP-789012',
+            'Impresora', $demo_state,
+            e(__('Impresora demo para vista previa de plantilla', 'responsivas')),
+            $full_safe, $employee_line, $th_bg, $td_bg
+         ), true, false, true, false, '');
+         return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DEMO', $full_name)];
+      }
+
+      // ── Teléfono ─────────────────────────────────────────────────────
+      $pdf = self::makePdf('pho',
+         'Vista Previa - Comodato Teléfono - ' . $full_name,
+         'Vista previa comodato de teléfono',
+         'vista previa, comodato, teléfono, activos, TI',
+         $location, $fecha_header, $config, 25.0, true
+      );
+      $pdf->AddPage();
+      $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
+
+      $currency      = !empty($config['currency']) ? $config['currency'] : '$';
+      $employee_line = ($show_employee && $demo_emp) ? "Empleado No: {$demo_emp}" : '';
+
+      $pho_vars = [
+         '{nombre}'             => e($full_name),    '{empresa}'       => $company_name,
+         '{num_empleado}'       => $demo_emp,         '{activo}'        => 'CEL-DEMO-001',
+         '{serie_uuid}'         => 'UUID-DEMO-001',   '{imei}'          => '352999DEMO0001',
+         '{marca}'              => 'Samsung',          '{modelo}'        => 'Galaxy A54 5G',
+         '{condicion}'          => $demo_state,        '{estado}'        => $demo_state,
+         '{almacenamiento}'     => '128 GB',           '{ram}'           => '6 GB',
+         '{linea}'              => '662-100-0001',     '{precio}'        => '$ 7,500.00',
+         '{fecha}'              => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+         '{lugar}'              => $location,
+         '{direccion}'          => $address,
+         '{cp}'                 => $postcode,
+         '{hora}'               => (new DateTime('now', new DateTimeZone($config['timezone'])))->format('H') . ':00',
+         '{testigo1}'           => e($testigo1),       '{testigo2}'      => e($testigo2),
+         '{representante}'      => e($rep),
+         '{clausula_vida_util}' => 'Se establece como <strong>vida útil</strong> un periodo de 24 meses desde la fecha de asignación.',
+      ];
+      $pho_titulo    = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
+      $pho_apertura  = responsivasApplyTemplate($config['pho_apertura']  ?? '', $pho_vars);
+      $pho_clausulas = responsivasRenderTemplate(responsivasApplyTemplate($config['pho_clausulas'] ?? '', $pho_vars));
+      $pho_testigos  = responsivasApplyTemplate($config['pho_testigos']  ?? '', $pho_vars);
+
+      $pdf->writeHTML(self::renderPhoPage(
+         $pho_titulo, $pho_apertura, $pho_clausulas, $pho_testigos,
+         e($rep), $full_name_safe, $employee_line,
+         e($testigo1), e($testigo2)
+      ), true, false, true, false, '');
+      return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
+   }
+
+
 }

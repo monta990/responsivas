@@ -184,8 +184,8 @@ msgid "Sin equipo asignado"
 msgstr "No equipment assigned"
 
 #: inc/config.class.php
-msgid "Configuración del plugin Responsivas"
-msgstr "Responsivas Plugin Configuration"
+msgid "Configuración de Responsivas"
+msgstr "Responsivas Settings"
 
 #: inc/config.class.php
 msgid "Configuración guardada correctamente."
@@ -755,3 +755,36 @@ msgstr "underline"
 
 msgid "Haz clic en una variable para insertarla en el campo activo."
 msgstr "Click a variable to insert it at the cursor position."
+
+msgid "VISTA PREVIA"
+msgstr "PREVIEW"
+
+msgid "Error al generar la vista previa: %s"
+msgstr "Error generating the preview: %s"
+
+msgid "Testigo Demo 1"
+msgstr "Demo Witness 1"
+
+msgid "Testigo Demo 2"
+msgstr "Demo Witness 2"
+
+msgid "Representante Demo"
+msgstr "Demo Representative"
+
+msgid ""
+"Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
+"de agua."
+msgstr ""
+"Generates a PDF preview using current settings. A watermark is applied."
+
+msgid "Comprimir PDF"
+msgstr "Compress PDF"
+
+msgid "Comprimir el archivo PDF generado"
+msgstr "Compress the generated PDF file"
+
+msgid "Proteger PDF"
+msgstr "Protect PDF"
+
+msgid "Restringir copia y edición del PDF"
+msgstr "Restrict PDF copying and editing"

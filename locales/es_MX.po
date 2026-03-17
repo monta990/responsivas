@@ -1,7 +1,6 @@
 # Responsivas Plugin
 # Language: es_MX
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: Responsivas 1.2.1\n"
@@ -25,12 +24,18 @@ msgid "Responsivas requiere PHP 8.1 o superior. Versión actual: %s"
 msgstr "Responsivas requiere PHP 8.1 o superior. Versión actual: %s"
 
 #: setup.php
-msgid "Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
-msgstr "Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
+msgid ""
+"Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
+msgstr ""
+"Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
 
 #: setup.php
-msgid "No se pudo crear el directorio de archivos del plugin Responsivas. Verifique permisos."
-msgstr "No se pudo crear el directorio de archivos del plugin Responsivas. Verifique permisos."
+msgid ""
+"No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
+" permisos."
+msgstr ""
+"No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
+" permisos."
 
 #: hook.php
 msgid "Plugin Responsivas desinstalado. Configuración eliminada."
@@ -73,8 +78,12 @@ msgid "El representante legal no es válido o está inactivo."
 msgstr "El representante legal no es válido o está inactivo."
 
 #: inc/pdfbuilder.class.php
-msgid "El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → Información administrativa y financiera → Precio de compra."
-msgstr "El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → Información administrativa y financiera → Precio de compra."
+msgid ""
+"El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → "
+"Información administrativa y financiera → Precio de compra."
+msgstr ""
+"El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → "
+"Información administrativa y financiera → Precio de compra."
 
 #: inc/pdfbuilder.class.php
 msgid "N/D"
@@ -93,8 +102,12 @@ msgid "Seleccione el tipo de activo a generar responsivas"
 msgstr "Seleccione el tipo de activo a generar responsivas"
 
 #: inc/user.class.php
-msgid "El tipo de teléfono para responsivas no ha sido configurado. Contacta al administrador."
-msgstr "El tipo de teléfono para responsivas no ha sido configurado. Contacta al administrador."
+msgid ""
+"El tipo de teléfono para responsivas no ha sido configurado. Contacta al "
+"administrador."
+msgstr ""
+"El tipo de teléfono para responsivas no ha sido configurado. Contacta al "
+"administrador."
 
 #: inc/user.class.php
 msgid "Mostrar QR"
@@ -173,8 +186,8 @@ msgid "Sin equipo asignado"
 msgstr "Sin equipo asignado"
 
 #: inc/config.class.php
-msgid "Configuración del plugin Responsivas"
-msgstr "Configuración del plugin Responsivas"
+msgid "Configuración de Responsivas"
+msgstr "Configuración de Responsivas"
 
 #: inc/config.class.php
 msgid "Configuración guardada correctamente."
@@ -197,8 +210,14 @@ msgid "Zona horaria para los PDFs"
 msgstr "Zona horaria para los PDFs"
 
 #: inc/config.class.php
-msgid "Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al instalar el complemento se toma de manera predeterminada la del servidor en ese momento, más información en: %s"
-msgstr "Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al instalar el complemento se toma de manera predeterminada la del servidor en ese momento, más información en: %s"
+msgid ""
+"Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al "
+"instalar el complemento se toma de manera predeterminada la del servidor en "
+"ese momento, más información en: %s"
+msgstr ""
+"Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al "
+"instalar el complemento se toma de manera predeterminada la del servidor en "
+"ese momento, más información en: %s"
 
 #: inc/config.class.php
 msgid "Lista de zonas horarias de PHP"
@@ -225,8 +244,12 @@ msgid "Símbolo de moneda"
 msgstr "Símbolo de moneda"
 
 #: inc/config.class.php
-msgid "Símbolo o código que aparece antes del precio en los comodatos de teléfono (ej: $, USD, MXN, €)."
-msgstr "Símbolo o código que aparece antes del precio en los comodatos de teléfono (ej: $, USD, MXN, €)."
+msgid ""
+"Símbolo o código que aparece antes del precio en los comodatos de teléfono "
+"(ej: $, USD, MXN, €)."
+msgstr ""
+"Símbolo o código que aparece antes del precio en los comodatos de teléfono "
+"(ej: $, USD, MXN, €)."
 
 #: inc/config.class.php
 msgid "Testigos del comodato de celulares"
@@ -297,8 +320,12 @@ msgid "Para una vista previa carga una imagen."
 msgstr "Para una vista previa carga una imagen."
 
 #: inc/config.class.php
-msgid "Una vez cargado y validado en vista previa, recuerda guardar para que se aplique."
-msgstr "Una vez cargado y validado en vista previa, recuerda guardar para que se aplique."
+msgid ""
+"Una vez cargado y validado en vista previa, recuerda guardar para que se "
+"aplique."
+msgstr ""
+"Una vez cargado y validado en vista previa, recuerda guardar para que se "
+"aplique."
 
 #: inc/config.class.php
 msgid "Confirmar eliminación"
@@ -393,12 +420,24 @@ msgid "Pie del correo (opcional)"
 msgstr "Pie del correo (opcional)"
 
 #: inc/config.class.php
-msgid "Opcional. Aparece al pie del correo, separado por una línea. Puedes usar {nombre}, {empresa} y {fecha}."
-msgstr "Opcional. Aparece al pie del correo, separado por una línea. Puedes usar {nombre}, {empresa} y {fecha}."
+msgid ""
+"Opcional. Aparece al pie del correo, separado por una línea. Puedes usar "
+"{nombre}, {empresa} y {fecha}."
+msgstr ""
+"Opcional. Aparece al pie del correo, separado por una línea. Puedes usar "
+"{nombre}, {empresa} y {fecha}."
 
 #: inc/config.class.php
-msgid "El servidor de correo de GLPI no está configurado o las notificaciones por correo están desactivadas. El botón de envío fallará hasta que lo configures en <strong>Configuración → Notificaciones → Configuración de correos</strong>."
-msgstr "El servidor de correo de GLPI no está configurado o las notificaciones por correo están desactivadas. El botón de envío fallará hasta que lo configures en <strong>Configuración → Notificaciones → Configuración de correos</strong>."
+msgid ""
+"El servidor de correo de GLPI no está configurado o las notificaciones por "
+"correo están desactivadas. El botón de envío fallará hasta que lo configures"
+" en <strong>Configuración → Notificaciones → Configuración de "
+"correos</strong>."
+msgstr ""
+"El servidor de correo de GLPI no está configurado o las notificaciones por "
+"correo están desactivadas. El botón de envío fallará hasta que lo configures"
+" en <strong>Configuración → Notificaciones → Configuración de "
+"correos</strong>."
 
 #: inc/config.class.php
 msgid "Configure el asunto y cuerpo del correo primero"
@@ -441,24 +480,34 @@ msgid "Cuerpo / Cláusulas"
 msgstr "Cuerpo / Cláusulas"
 
 #: inc/config.class.php
-msgid "Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. Línea en blanco → nuevo párrafo. **texto** → negrita."
-msgstr "Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. Línea en blanco → nuevo párrafo. **texto** → negrita."
+msgid ""
+"Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. "
+"Línea en blanco → nuevo párrafo. **texto** → negrita."
+msgstr ""
+"Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. "
+"Línea en blanco → nuevo párrafo. **texto** → negrita."
 
 #: inc/config.class.php
 msgid "Párrafo de apertura"
 msgstr "Párrafo de apertura"
 
 #: inc/config.class.php
-msgid "Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
-msgstr "Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
+msgid ""
+"Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
+msgstr ""
+"Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
 
 #: inc/config.class.php
 msgid "Cláusulas"
 msgstr "Cláusulas"
 
 #: inc/config.class.php
-msgid "Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} para la cláusula de vida útil. **texto** → negrita."
-msgstr "Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} para la cláusula de vida útil. **texto** → negrita."
+msgid ""
+"Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} "
+"para la cláusula de vida útil. **texto** → negrita."
+msgstr ""
+"Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} "
+"para la cláusula de vida útil. **texto** → negrita."
 
 #: inc/config.class.php
 msgid "Párrafo de testigos"
@@ -589,8 +638,12 @@ msgid "El usuario no tiene dirección de correo electrónico registrada."
 msgstr "El usuario no tiene dirección de correo electrónico registrada."
 
 #: front/send_mail.php
-msgid "Configuración de correo incompleta. Configure el asunto y cuerpo en la pestaña Correo."
-msgstr "Configuración de correo incompleta. Configure el asunto y cuerpo en la pestaña Correo."
+msgid ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo en la "
+"pestaña Correo."
+msgstr ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo en la "
+"pestaña Correo."
 
 #: front/send_mail.php
 msgid "No hay responsivas que generar para este usuario."
@@ -623,24 +676,38 @@ msgid "Usuario inválido."
 msgstr "Usuario inválido."
 
 #: front/send_test_mail.php
-msgid "Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu perfil."
-msgstr "Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu perfil."
+msgid ""
+"Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu "
+"perfil."
+msgstr ""
+"Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu "
+"perfil."
 
 #: front/send_test_mail.php
-msgid "Configuración de correo incompleta. Configure el asunto y cuerpo primero."
-msgstr "Configuración de correo incompleta. Configure el asunto y cuerpo primero."
+msgid ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo primero."
+msgstr ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo primero."
 
 #: front/send_test_mail.php
-msgid "Este es un correo de prueba generado desde la configuración del plugin Responsivas. No se adjuntan PDFs."
-msgstr "Este es un correo de prueba generado desde la configuración del plugin Responsivas. No se adjuntan PDFs."
+msgid ""
+"Este es un correo de prueba generado desde la configuración del plugin "
+"Responsivas. No se adjuntan PDFs."
+msgstr ""
+"Este es un correo de prueba generado desde la configuración del plugin "
+"Responsivas. No se adjuntan PDFs."
 
 #: front/send_test_mail.php
 msgid "Correo de prueba enviado correctamente a %s."
 msgstr "Correo de prueba enviado correctamente a %s."
 
 #: inc/pdfbuilder.class.php
-msgid "La plantilla del documento tiene campos vacíos. Completa los siguientes campos en Configuración → Responsivas: %s"
-msgstr "La plantilla del documento tiene campos vacíos. Completa los siguientes campos en Configuración → Responsivas: %s"
+msgid ""
+"La plantilla del documento tiene campos vacíos. Completa los siguientes "
+"campos en Configuración → Responsivas: %s"
+msgstr ""
+"La plantilla del documento tiene campos vacíos. Completa los siguientes "
+"campos en Configuración → Responsivas: %s"
 
 #: inc/pdfbuilder.class.php
 msgid "Título (Computadora)"
@@ -693,3 +760,37 @@ msgstr "subrayado"
 
 msgid "Haz clic en una variable para insertarla en el campo activo."
 msgstr "Haz clic en una variable para insertarla en el campo activo."
+
+msgid "VISTA PREVIA"
+msgstr "VISTA PREVIA"
+
+msgid "Error al generar la vista previa: %s"
+msgstr "Error al generar la vista previa: %s"
+
+msgid "Testigo Demo 1"
+msgstr "Testigo Demo 1"
+
+msgid "Testigo Demo 2"
+msgstr "Testigo Demo 2"
+
+msgid "Representante Demo"
+msgstr "Representante Demo"
+
+msgid ""
+"Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
+"de agua."
+msgstr ""
+"Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
+"de agua."
+
+msgid "Comprimir PDF"
+msgstr "Comprimir PDF"
+
+msgid "Comprimir el archivo PDF generado"
+msgstr "Comprimir el archivo PDF generado"
+
+msgid "Proteger PDF"
+msgstr "Proteger PDF"
+
+msgid "Restringir copia y edición del PDF"
+msgstr "Restringir copia y edición del PDF"

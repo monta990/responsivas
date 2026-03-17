@@ -7,7 +7,7 @@
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.5-orange)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.6-orange)](CHANGELOG.md)
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -27,6 +27,8 @@
 - 🌍 **Multi-language** — Spanish (Mexico), English (US & GB), French, German
 - 🔒 **CSRF protection** and GLPI permission model
 - ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
+- 👁️ **PDF preview with watermark** — each asset tab has a "Vista previa" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
+- 🔐 **Compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions directly from the General configuration tab
 - ✅ **Template validation** — warns before generating if required fields are empty
 
 ---
@@ -40,6 +42,8 @@
 | TCPDF | included with GLPI |
 
 > **Supported locales:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
+
+> The configuration page is titled **"Configuración de Responsivas"** — the word "plugin" was intentionally removed for a cleaner UI.
 
 > **Note:** GLPI 10.x is not officially supported. The plugin uses APIs introduced in GLPI 11.
 
@@ -111,6 +115,8 @@ Navigate to **Setup → Plugins → Responsivas** (or **Administration → Plugi
 | Timezone | Used for document date/time |
 | Show employee number | Toggle employee number display on PDFs |
 | Show QR code | Toggle QR code on documents |
+| Compress PDF | Enable/disable PDF file compression |
+| Protect PDF | Enable/disable copy and edit restrictions on the PDF |
 | Currency symbol | Used in phone loan contract price display |
 
 ### Witnesses tab
@@ -255,7 +261,7 @@ See [LICENSE](LICENSE) for full terms.
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.5-orange)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/Versión-1.2.6-orange)](CHANGELOG.md)
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -275,6 +281,8 @@ See [LICENSE](LICENSE) for full terms.
 - 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán
 - 🔒 **Protección CSRF** y modelo de permisos de GLPI
 - ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin
+- 👁️ **Vista previa con marca de agua** — cada pestaña de activo tiene un botón "Vista previa" que genera un PDF completo con los datos actuales (o datos demo si el admin no tiene activos de ese tipo)
+- 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
 
 ---
@@ -359,6 +367,8 @@ Navega a **Configuración → Plugins → Responsivas** (o **Administración →
 | Zona horaria | Usada para la fecha y hora del documento |
 | Mostrar número de empleado | Activa/desactiva el número de empleado en los PDFs |
 | Mostrar QR | Activa/desactiva el código QR en los documentos |
+| Comprimir PDF | Activa/desactiva la compresión del archivo PDF |
+| Proteger PDF | Activa/desactiva las restricciones de copia y edición del PDF |
 | Símbolo de moneda | Se usa en los comodatos de teléfono para mostrar el precio |
 
 ### Pestaña Testigos
