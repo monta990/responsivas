@@ -239,6 +239,13 @@ See [LICENSE](LICENSE) for full terms.
 
 ---
 
+## Buy me a coffee :)
+If you like my work, you can support me by a donate here:
+
+<a href="https://www.buymeacoffee.com/monta990" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="51px" width="210px"></a>
+
+---
+
 ## Author
 
 **Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
@@ -484,6 +491,14 @@ Los pull requests son bienvenidos. Para cambios importantes, por favor abre un i
 
 Este plugin se distribuye bajo la **Licencia Pública General GNU v2 o posterior (GPLv2+)**.  
 Consulta [LICENSE](LICENSE) para los términos completos.
+
+
+---
+
+## Comprame un cafe :)
+Si te gusta mi trabajo, me puedes apoyar donando aquí:
+
+<a href="https://www.buymeacoffee.com/monta990" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="51px" width="210px"></a>
 
 ---
 
