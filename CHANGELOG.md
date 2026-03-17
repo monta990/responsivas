@@ -6,7 +6,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.2.6] — 2026-03-17
+## [1.2.6] — 2026-03-17 - UNRELEASED
 
 ### Added
 - **PDF preview with watermark** — each asset type tab (Computadoras, Impresoras, Teléfonos) has a "Vista previa" button at the bottom. Generates a full PDF using the current saved templates. If the logged-in admin has real assets of that type they are used; otherwise realistic demo data is substituted (Dell Latitude 5540 / HP LaserJet Pro M404n / Samsung Galaxy A54 5G). A diagonal "VISTA PREVIA" watermark appears on every page at 25% opacity. The demo uses real configured witnesses, representative, entity location, and a real GLPI state name; only asset-specific fields are demo values.
