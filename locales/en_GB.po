@@ -788,3 +788,37 @@ msgstr "Protect PDF"
 
 msgid "Restringir copia y edición del PDF"
 msgstr "Restrict PDF copying and editing"
+
+msgid "Texto de marca de agua"
+msgstr "Watermark text"
+
+msgid ""
+"Texto diagonal que aparece en las vistas previas. Vacío usa el "
+"predeterminado."
+msgstr "Diagonal text shown on previews. Leave empty for the default."
+
+msgid "Opacidad de marca de agua (%)"
+msgstr "Watermark opacity (%)"
+
+msgid "5–100. Predeterminado: 25."
+msgstr "5–100. Default: 25."
+
+msgid "Cláusula de vida útil (con factura)"
+msgstr "Useful life clause (with invoice)"
+
+msgid ""
+"Se usa cuando el teléfono tiene factura y proveedor. Variables: "
+"{fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado."
+msgstr ""
+"Used when the phone has an invoice and supplier. Variables: {fecha_compra}, "
+"{factura}, {proveedor}. Empty uses the default text."
+
+msgid "Cláusula de vida útil (sin factura)"
+msgstr "Useful life clause (without invoice)"
+
+msgid ""
+"Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa"
+" el texto predeterminado."
+msgstr ""
+"Used when the phone has no registered invoice or supplier. Empty uses the "
+"default text."

@@ -277,7 +277,7 @@ HTML;
             '{fecha}'       => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}'       => $location,
          ];
-         $pc_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
+         $pc_titulo = responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
          $pc_intro  = responsivasApplyTemplate($config['pc_intro']  ?? '', $pc_vars);
          $pc_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pc_cuerpo'] ?? '', $pc_vars));
 
@@ -384,7 +384,7 @@ HTML;
             '{tipo}'    => $tipo,
             '{estado}'  => $estado_nombre,
          ]);
-         $pri_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
+         $pri_titulo = responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
          $pri_intro  = responsivasApplyTemplate($config['pri_intro']  ?? '', $pri_vars);
          $pri_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pri_cuerpo'] ?? '', $pri_vars));
 
@@ -589,14 +589,27 @@ HTML;
          $estado   = e($estado);
 
          // ── Plantillas editables ──
-         $clausula_vida_util_text = '';
+         // Cláusula de vida útil — usa plantilla configurable, cae a texto predeterminado si vacío
+         $vu_vars = [
+            '{fecha_compra}' => $fecha_compra !== 'N/D' ? e($fecha_compra) : '',
+            '{factura}'      => e($factura),
+            '{proveedor}'    => e($proveedor),
+         ];
          if ($factura !== 'N/D' && $proveedor !== 'N/D') {
-            $partes_cu = [];
-            if ($fecha_compra !== 'N/D') $partes_cu[] = 'contados a partir del ' . e($fecha_compra);
-            $partes_cu[]              = 'con base en la factura ' . e($factura) . ' emitida por ' . e($proveedor);
-            $clausula_vida_util_text  = 'Se establece como <strong>vida útil</strong> un periodo de 24 meses ' . implode(', ', $partes_cu) . '.';
+            $vu_tpl = trim($config['pho_vida_util_factura'] ?? '');
+            if ($vu_tpl !== '') {
+               $clausula_vida_util_text = responsivasApplyTemplate($vu_tpl, $vu_vars);
+            } else {
+               $partes_cu = [];
+               if ($fecha_compra !== 'N/D') $partes_cu[] = 'contados a partir del ' . e($fecha_compra);
+               $partes_cu[]             = 'con base en la factura ' . e($factura) . ' emitida por ' . e($proveedor);
+               $clausula_vida_util_text = 'Se establece como <strong>vida útil</strong> un periodo de 24 meses ' . implode(', ', $partes_cu) . '.';
+            }
          } else {
-            $clausula_vida_util_text = 'Se establece como <strong>vida útil</strong> un periodo de 24 meses desde la fecha de asignación.';
+            $vu_tpl = trim($config['pho_vida_util_sin'] ?? '');
+            $clausula_vida_util_text = $vu_tpl !== ''
+               ? $vu_tpl
+               : 'Se establece como <strong>vida útil</strong> un periodo de 24 meses desde la fecha de asignación.';
          }
 
          $pho_vars = [
@@ -623,7 +636,7 @@ HTML;
             '{testigo2}'          => $testigo2_nombre,
             '{clausula_vida_util}'=> $clausula_vida_util_text,
          ];
-         $pho_titulo    = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
+         $pho_titulo    = responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
          $pho_apertura  = responsivasApplyTemplate($config['pho_apertura']  ?? '', $pho_vars);
          $pho_clausulas = responsivasRenderTemplate(responsivasApplyTemplate($config['pho_clausulas'] ?? '', $pho_vars));
          $pho_testigos  = responsivasApplyTemplate($config['pho_testigos']  ?? '', $pho_vars);
@@ -677,8 +690,10 @@ HTML;
       $pdf->setDocumentType($font_key, $type);
       $pdf->fecha_header   = $fecha_header;
       $pdf->location       = $location;
-      $pdf->show_watermark = $watermark;
-      $pdf->watermark_text = __('VISTA PREVIA', 'responsivas');
+      $pdf->show_watermark    = $watermark;
+      $wm_text                = trim($config['watermark_text'] ?? '');
+      $pdf->watermark_text    = $wm_text !== '' ? $wm_text : __('VISTA PREVIA', 'responsivas');
+      $pdf->watermark_opacity = max(5, min(100, (int)($config['watermark_opacity'] ?? 25)));
       $pdf->SetCreator('GLPI');
       $pdf->SetAuthor($creator);
       $pdf->SetTitle($title);
@@ -829,8 +844,9 @@ HTML;
             };
             // Activar watermark estático ANTES de que se construya el PDF
             // para que Header() lo dibuje en cada página al agregarla
+            $wm_text = trim($config['watermark_text'] ?? '');
             PluginResponsivasPDF::$global_watermark      = true;
-            PluginResponsivasPDF::$global_watermark_text = __('VISTA PREVIA', 'responsivas');
+            PluginResponsivasPDF::$global_watermark_text = $wm_text !== '' ? $wm_text : __('VISTA PREVIA', 'responsivas');
             $result = self::$method($user_id);
             PluginResponsivasPDF::$global_watermark = false; // reset
             return $result;
@@ -924,7 +940,7 @@ HTML;
             '{fecha}' => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}' => $location,
          ];
-         $pc_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
+         $pc_titulo = responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
          $pc_intro  = responsivasApplyTemplate($config['pc_intro']  ?? '', $pc_vars);
          $pc_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pc_cuerpo'] ?? '', $pc_vars));
 
@@ -963,7 +979,7 @@ HTML;
             '{fecha}' => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}' => $location,
          ];
-         $pri_titulo = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
+         $pri_titulo = responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
          $pri_intro  = responsivasApplyTemplate($config['pri_intro']  ?? '', $pri_vars);
          $pri_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pri_cuerpo'] ?? '', $pri_vars));
 
@@ -1007,7 +1023,7 @@ HTML;
          '{representante}'      => e($rep),
          '{clausula_vida_util}' => 'Se establece como <strong>vida útil</strong> un periodo de 24 meses desde la fecha de asignación.',
       ];
-      $pho_titulo    = __('VISTA PREVIA', 'responsivas') . ' — ' . responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
+      $pho_titulo    = responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
       $pho_apertura  = responsivasApplyTemplate($config['pho_apertura']  ?? '', $pho_vars);
       $pho_clausulas = responsivasRenderTemplate(responsivasApplyTemplate($config['pho_clausulas'] ?? '', $pho_vars));
       $pho_testigos  = responsivasApplyTemplate($config['pho_testigos']  ?? '', $pho_vars);

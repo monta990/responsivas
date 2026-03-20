@@ -80,6 +80,8 @@ if (isset($_POST['update'])) {
         'show_qr'              => isset($_POST['show_qr']),
         'pdf_compression'      => isset($_POST['pdf_compression']) ? 1 : 0,
         'pdf_protection'       => isset($_POST['pdf_protection'])  ? 1 : 0,
+        'watermark_text'       => Html::cleanInputText(trim($_POST['watermark_text']   ?? '')),
+        'watermark_opacity'    => max(5, min(100, (int)($_POST['watermark_opacity'] ?? 25))),
         'company_name'         => Html::cleanInputText(trim($_POST['company_name'] ?? '')),
         'currency'             => Html::cleanInputText(trim($_POST['currency'] ?? '$')),
         'testigo_1'            => (int)($_POST['testigo_1'] ?? 0),
@@ -98,6 +100,8 @@ if (isset($_POST['update'])) {
         'pho_apertura'         => trim($_POST['pho_apertura']   ?? ''),
         'pho_clausulas'        => trim($_POST['pho_clausulas']  ?? ''),
         'pho_testigos'         => trim($_POST['pho_testigos']   ?? ''),
+        'pho_vida_util_factura' => trim($_POST['pho_vida_util_factura'] ?? ''),
+        'pho_vida_util_sin'     => trim($_POST['pho_vida_util_sin']     ?? ''),
         'cellphone_type_id'    => (int)($_POST['cellphone_type_id'] ?? 0),
         'email_subject'        => Html::cleanInputText(trim($_POST['email_subject'] ?? '')),
         'email_body'           => trim($_POST['email_body']   ?? ''),
@@ -606,6 +610,41 @@ echo        "</label>
 
 echo "</div>";
 echo "</div>";
+
+/* ===== Texto de marca de agua ===== */
+echo "<div class='row mt-3'>
+  <div class='col-md-8'>
+    <label class='form-label fw-bold d-flex align-items-center'>
+      <i class='ti ti-watermark me-2'></i>
+      " . __('Texto de marca de agua', 'responsivas') . "
+    </label>
+    <div class='input-group'>
+      <span class='input-group-text'><i class='ti ti-eye'></i></span>
+      <input type='text'
+             class='form-control'
+             name='watermark_text'
+             maxlength='40'
+             placeholder='" . __('VISTA PREVIA', 'responsivas') . "'
+             value='" . Html::cleanInputText($config['watermark_text'] ?? '') . "'>
+    </div>
+    <div class='form-text'>" . __('Texto diagonal que aparece en las vistas previas. Vacío usa el predeterminado.', 'responsivas') . "</div>
+  </div>
+  <div class='col-md-4'>
+    <label class='form-label fw-bold d-flex align-items-center'>
+      <i class='ti ti-adjustments me-2'></i>
+      " . __('Opacidad de marca de agua (%)', 'responsivas') . "
+    </label>
+    <div class='input-group'>
+      <span class='input-group-text'><i class='ti ti-percentage'></i></span>
+      <input type='number'
+             class='form-control'
+             name='watermark_opacity'
+             min='5' max='100' step='5'
+             value='" . (int)($config['watermark_opacity'] ?? 25) . "'>
+    </div>
+    <div class='form-text'>" . __('5–100. Predeterminado: 25.', 'responsivas') . "</div>
+  </div>
+</div>";
 
 /* ============================
  * Nombre de la empresa
@@ -1357,6 +1396,22 @@ responsivasTemplateEditor(
    $config['pho_testigos'] ?? '',
    __('Texto de comparecencia de testigos. Usa **texto** para negrita.', 'responsivas'),
    3
+);
+
+responsivasTemplateEditor(
+   __('Cláusula de vida útil (con factura)', 'responsivas'),
+   'pho_vida_util_factura',
+   $config['pho_vida_util_factura'] ?? '',
+   __('Se usa cuando el teléfono tiene factura y proveedor. Variables: {fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado.', 'responsivas'),
+   2
+);
+
+responsivasTemplateEditor(
+   __('Cláusula de vida útil (sin factura)', 'responsivas'),
+   'pho_vida_util_sin',
+   $config['pho_vida_util_sin'] ?? '',
+   __('Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa el texto predeterminado.', 'responsivas'),
+   2
 );
 
 echo "</div>"; //card-body

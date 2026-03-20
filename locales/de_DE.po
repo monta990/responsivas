@@ -803,3 +803,37 @@ msgstr "PDF schützen"
 
 msgid "Restringir copia y edición del PDF"
 msgstr "PDF-Kopieren und -Bearbeiten einschränken"
+
+msgid "Texto de marca de agua"
+msgstr "Wasserzeichentext"
+
+msgid ""
+"Texto diagonal que aparece en las vistas previas. Vacío usa el "
+"predeterminado."
+msgstr "Diagonaler Text auf Vorschauen. Leer = Standardwert."
+
+msgid "Opacidad de marca de agua (%)"
+msgstr "Wasserzeichen-Deckkraft (%)"
+
+msgid "5–100. Predeterminado: 25."
+msgstr "5–100. Standard: 25."
+
+msgid "Cláusula de vida útil (con factura)"
+msgstr "Nutzungsdauerklausel (mit Rechnung)"
+
+msgid ""
+"Se usa cuando el teléfono tiene factura y proveedor. Variables: "
+"{fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado."
+msgstr ""
+"Verwendet wenn das Telefon eine Rechnung und einen Lieferanten hat. "
+"Variablen: {fecha_compra}, {factura}, {proveedor}. Leer = Standardtext."
+
+msgid "Cláusula de vida útil (sin factura)"
+msgstr "Nutzungsdauerklausel (ohne Rechnung)"
+
+msgid ""
+"Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa"
+" el texto predeterminado."
+msgstr ""
+"Verwendet wenn das Telefon keine registrierte Rechnung oder Lieferant hat. "
+"Leer = Standardtext."

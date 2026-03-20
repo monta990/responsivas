@@ -6,11 +6,13 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.2.6] — 2026-03-17 - UNRELEASED
+## [1.2.6] — 2026-03-17
 
 ### Added
 - **PDF preview with watermark** — each asset type tab (Computadoras, Impresoras, Teléfonos) has a "Vista previa" button at the bottom. Generates a full PDF using the current saved templates. If the logged-in admin has real assets of that type they are used; otherwise realistic demo data is substituted (Dell Latitude 5540 / HP LaserJet Pro M404n / Samsung Galaxy A54 5G). A diagonal "VISTA PREVIA" watermark appears on every page at 25% opacity. The demo uses real configured witnesses, representative, entity location, and a real GLPI state name; only asset-specific fields are demo values.
 - **Compression and protection toggles** — two new switches in the "Opciones de la responsiva" card (General tab): **Comprimir PDF** and **Proteger PDF** (restrict copy/edit). Both active by default. Changes apply to all generated PDFs via the shared `makePdf()` factory.
+- **Watermark customization** — two new fields below the compression/protection toggles: **Texto de marca de agua** (the diagonal text shown on previews, defaults to "VISTA PREVIA") and **Opacidad de marca de agua** (5–100%, defaults to 25%). Both values are stored in config and applied via `makePdf()` to all preview PDFs.
+- **Editable useful-life clauses** — two new template editors at the bottom of the Teléfonos tab: **Cláusula de vida útil (con factura)** (used when the phone has an invoice and supplier; supports `{fecha_compra}`, `{factura}`, `{proveedor}`) and **Cláusula de vida útil (sin factura)** (used when no invoice data exists). Both pre-filled on install/update via `setup.php` with `migrate=keep`; never overwritten if customised.
 
 ### Changed
 - **Shared PDF factory `makePdf()`** — all PDF creation (real and preview) now goes through a single private method. `SetTitle`, `SetSubject`, `SetKeywords`, `SetPDFVersion`, `SetProtection`, `SetCompression`, margins, fonts — all configured in one place.
@@ -20,7 +22,9 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Locales
 - Added 4 new strings: `Comprimir PDF`, `Comprimir el archivo PDF generado`, `Proteger PDF`, `Restringir copia y edición del PDF`.
 - Updated title string across all 5 locales.
-- Total: **180 strings** per locale.
+- Added 4 strings for watermark customization fields.
+- Added 4 strings for editable useful-life clause editors.
+- Total: **188 strings** per locale.
 
 ---
 

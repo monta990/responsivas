@@ -7,7 +7,7 @@
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.5-orange)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.6-orange)](CHANGELOG.md)
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -27,6 +27,9 @@
 - 🌍 **Multi-language** — Spanish (Mexico), English (US & GB), French, German
 - 🔒 **CSRF protection** and GLPI permission model
 - ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
+- 👁️ **PDF preview with watermark** — each asset tab has a "Vista previa" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
+- 🔐 **Compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions directly from the General configuration tab
+- 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Teléfonos tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
 - ✅ **Template validation** — warns before generating if required fields are empty
 
 ---
@@ -40,6 +43,8 @@
 | TCPDF | included with GLPI |
 
 > **Supported locales:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
+
+> The configuration page is titled **"Configuración de Responsivas"** — the word "plugin" was intentionally removed for a cleaner UI.
 
 > **Note:** GLPI 10.x is not officially supported. The plugin uses APIs introduced in GLPI 11.
 
@@ -71,30 +76,31 @@ responsivas/
 │   ├── computer.php          # Computer tab endpoint
 │   ├── config.form.php       # Plugin configuration UI
 │   ├── phone.php             # Phone tab endpoint
+│   ├── preview.php           # Watermarked PDF preview endpoint
 │   ├── printer.php           # Printer tab endpoint
-│   ├── resource.send.php     # Send documents action
-│   ├── send_mail.php         # Email send endpoint
-│   └── send_test_mail.php    # Test email endpoint
+│   ├── resource.send.php     # Logo resource endpoint
+│   └── send_mail.php         # Email send endpoint
 ├── inc/
 │   ├── config.class.php      # Configuration form and storage
 │   ├── generator.class.php   # PDF generation orchestrator
 │   ├── helpers.php           # Template renderer, editor, variable hints
 │   ├── paths.class.php       # Plugin path helpers
-│   ├── pdf.class.php         # TCPDF wrapper
-│   ├── pdfbuilder.class.php  # Per-asset PDF builders + template validation
+│   ├── pdf.class.php         # TCPDF wrapper (watermark, footer)
+│   ├── pdfbuilder.class.php  # PDF factory, render methods, demo builder
 │   └── user.class.php        # User tab integration
 ├── locales/
-│   ├── responsivas.pot       # Translation template (166 strings)
+│   ├── responsivas.pot       # Translation template (188 strings)
 │   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
-│   ├── en_US.po / en_US.mo  # English
+│   ├── en_US.po / en_US.mo  # English (US)
+│   ├── en_GB.po / en_GB.mo  # English (GB)
 │   ├── fr_FR.po / fr_FR.mo  # French
 │   └── de_DE.po / de_DE.mo  # German
 ├── CHANGELOG.md
 ├── hook.php                  # Install / uninstall hooks
 ├── LICENSE
 ├── logo.png                  # Plugin icon (128×128) — read by GLPI Marketplace
+├── plugin.xml                # GLPI catalog metadata
 ├── README.md
-├── responsivas.xml           # GLPI catalog metadata
 └── setup.php                 # Plugin registration and schema migration
 ```
 
@@ -111,6 +117,10 @@ Navigate to **Setup → Plugins → Responsivas** (or **Administration → Plugi
 | Timezone | Used for document date/time |
 | Show employee number | Toggle employee number display on PDFs |
 | Show QR code | Toggle QR code on documents |
+| Compress PDF | Enable/disable PDF file compression |
+| Protect PDF | Enable/disable copy and edit restrictions on the PDF |
+| Watermark text | Diagonal text shown on preview PDFs (default: `VISTA PREVIA`) |
+| Watermark opacity | Opacity percentage for the watermark (5–100, default: 25) |
 | Currency symbol | Used in phone loan contract price display |
 
 ### Witnesses tab
@@ -129,6 +139,8 @@ Each asset type has its own set of template fields:
 | Introduction / Opening paragraph | Text before the asset table |
 | Body / Clauses | Main responsibility text or legal clauses |
 | Witnesses paragraph | *(Phone only)* Closing witness statement |
+| Useful-life clause (with invoice) | *(Phone only)* Template when phone has invoice and supplier data |
+| Useful-life clause (without invoice) | *(Phone only)* Template when phone has no invoice or supplier |
 | Footer fields | Left/right text on PDF page footer |
 | Font size | PDF body font size |
 
@@ -166,7 +178,10 @@ Formats can be combined and nested: `*__**text**__*` renders as bold + italic + 
 | `{ram}` | *(Phone)* RAM |
 | `{precio}` | *(Phone)* Purchase price |
 | `{estado}` | Asset condition/status |
-| `{clausula_vida_util}` | *(Phone)* Auto-generated useful life clause |
+| `{clausula_vida_util}` | *(Phone)* Useful life clause — text defined in configuration |
+| `{fecha_compra}` | *(Phone — useful-life template)* Purchase date |
+| `{factura}` | *(Phone — useful-life template)* Invoice number |
+| `{proveedor}` | *(Phone — useful-life template)* Supplier name |
 | `{testigo1}` / `{testigo2}` | Witness names |
 | `{direccion}` | Entity address |
 | `{cp}` | Entity postal code |
@@ -262,7 +277,7 @@ If you like my work, you can support me by a donate here:
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.5-orange)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/Versión-1.2.6-orange)](CHANGELOG.md)
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -282,6 +297,9 @@ If you like my work, you can support me by a donate here:
 - 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán
 - 🔒 **Protección CSRF** y modelo de permisos de GLPI
 - ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin
+- 👁️ **Vista previa con marca de agua** — cada pestaña de activo tiene un botón "Vista previa" que genera un PDF completo con los datos actuales (o datos demo si el admin no tiene activos de ese tipo)
+- 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
+- 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
 
 ---
@@ -326,30 +344,31 @@ responsivas/
 │   ├── computer.php          # Endpoint de pestaña de computadoras
 │   ├── config.form.php       # Interfaz de configuración del plugin
 │   ├── phone.php             # Endpoint de pestaña de teléfonos
+│   ├── preview.php           # Endpoint de vista previa con marca de agua
 │   ├── printer.php           # Endpoint de pestaña de impresoras
-│   ├── resource.send.php     # Acción de envío de documentos
-│   ├── send_mail.php         # Endpoint de envío de correo
-│   └── send_test_mail.php    # Endpoint de correo de prueba
+│   ├── resource.send.php     # Endpoint de recurso de logo
+│   └── send_mail.php         # Endpoint de envío de correo
 ├── inc/
 │   ├── config.class.php      # Formulario y almacenamiento de configuración
 │   ├── generator.class.php   # Orquestador de generación de PDFs
 │   ├── helpers.php           # Renderizador de plantillas, editor, hints de variables
 │   ├── paths.class.php       # Helpers de rutas del plugin
-│   ├── pdf.class.php         # Wrapper de TCPDF
-│   ├── pdfbuilder.class.php  # Constructores de PDF por activo + validación de plantillas
+│   ├── pdf.class.php         # Wrapper de TCPDF (marca de agua, pie de página)
+│   ├── pdfbuilder.class.php  # Factory de PDF, métodos render, constructor demo
 │   └── user.class.php        # Integración de pestaña en usuario
 ├── locales/
-│   ├── responsivas.pot       # Plantilla de traducciones (166 cadenas)
+│   ├── responsivas.pot       # Plantilla de traducciones (188 cadenas)
 │   ├── es_MX.po / es_MX.mo  # Español (México)
-│   ├── en_US.po / en_US.mo  # Inglés
+│   ├── en_US.po / en_US.mo  # Inglés (EE. UU.)
+│   ├── en_GB.po / en_GB.mo  # Inglés (Reino Unido)
 │   ├── fr_FR.po / fr_FR.mo  # Francés
 │   └── de_DE.po / de_DE.mo  # Alemán
 ├── CHANGELOG.md
 ├── hook.php                  # Hooks de instalación / desinstalación
 ├── LICENSE
 ├── logo.png                  # Ícono del plugin (128×128) — leído por el Marketplace de GLPI
+├── plugin.xml                # Metadatos del catálogo de GLPI
 ├── README.md
-├── responsivas.xml           # Metadatos del catálogo de GLPI
 └── setup.php                 # Registro del plugin y migración de schema
 ```
 
@@ -366,6 +385,10 @@ Navega a **Configuración → Plugins → Responsivas** (o **Administración →
 | Zona horaria | Usada para la fecha y hora del documento |
 | Mostrar número de empleado | Activa/desactiva el número de empleado en los PDFs |
 | Mostrar QR | Activa/desactiva el código QR en los documentos |
+| Comprimir PDF | Activa/desactiva la compresión del archivo PDF |
+| Proteger PDF | Activa/desactiva las restricciones de copia y edición del PDF |
+| Texto de marca de agua | Texto diagonal en las vistas previas (predeterminado: `VISTA PREVIA`) |
+| Opacidad de marca de agua | Porcentaje de opacidad de la marca de agua (5–100, predeterminado: 25) |
 | Símbolo de moneda | Se usa en los comodatos de teléfono para mostrar el precio |
 
 ### Pestaña Testigos
@@ -384,6 +407,8 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 | Introducción / Párrafo de apertura | Texto antes de la tabla del activo |
 | Cuerpo / Cláusulas | Texto principal de responsabilidad o cláusulas legales |
 | Párrafo de testigos | *(Solo teléfono)* Declaración final de testigos |
+| Cláusula de vida útil (con factura) | *(Solo teléfono)* Plantilla cuando el teléfono tiene factura y proveedor registrados |
+| Cláusula de vida útil (sin factura) | *(Solo teléfono)* Plantilla cuando el teléfono no tiene factura o proveedor registrado |
 | Campos del pie de página | Texto izquierdo/derecho en el pie del PDF |
 | Tamaño de fuente | Tamaño de letra del cuerpo del PDF |
 
@@ -421,7 +446,10 @@ Los formatos se pueden combinar y anidar: `*__**texto**__*` produce negrita + cu
 | `{ram}` | *(Teléfono)* Memoria RAM |
 | `{precio}` | *(Teléfono)* Precio de compra |
 | `{estado}` | Condición / estado del activo |
-| `{clausula_vida_util}` | *(Teléfono)* Cláusula de vida útil generada automáticamente |
+| `{clausula_vida_util}` | *(Teléfono)* Cláusula de vida útil — texto definido en la configuración |
+| `{fecha_compra}` | *(Teléfono — plantilla vida útil)* Fecha de compra |
+| `{factura}` | *(Teléfono — plantilla vida útil)* Número de factura |
+| `{proveedor}` | *(Teléfono — plantilla vida útil)* Nombre del proveedor |
 | `{testigo1}` / `{testigo2}` | Nombres de los testigos |
 | `{direccion}` | Dirección de la entidad |
 | `{cp}` | Código postal de la entidad |
@@ -491,7 +519,6 @@ Los pull requests son bienvenidos. Para cambios importantes, por favor abre un i
 
 Este plugin se distribuye bajo la **Licencia Pública General GNU v2 o posterior (GPLv2+)**.  
 Consulta [LICENSE](LICENSE) para los términos completos.
-
 
 ---
 

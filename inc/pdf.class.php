@@ -20,6 +20,7 @@ class PluginResponsivasPDF extends TCPDF {
     public string $location      = '';
     public bool   $show_watermark = false;
     public string $watermark_text = 'VISTA PREVIA';
+    public int    $watermark_opacity = 25;
 
     /** Set before creating a PDF instance to enable watermark on all pages */
     public static $global_watermark      = false;
@@ -53,11 +54,12 @@ class PluginResponsivasPDF extends TCPDF {
         if (!$this->show_watermark && !static::$global_watermark) {
             return;
         }
-        $text = $this->show_watermark ? $this->watermark_text : static::$global_watermark_text;
+        $text    = $this->show_watermark ? $this->watermark_text : static::$global_watermark_text;
+        $opacity = $this->watermark_opacity > 0 ? $this->watermark_opacity / 100 : 0.25; // stored as 5-100
         $this->StartTransform();
         $this->SetFont('helvetica', 'B', 52);
         $this->SetTextColor(200, 200, 200);
-        $this->SetAlpha(0.25);
+        $this->SetAlpha($opacity);
 
         $x = $this->getPageWidth()  / 2;
         $y = $this->getPageHeight() / 2;
