@@ -7,7 +7,7 @@
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.6-orange)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.7-orange)](CHANGELOG.md)
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -31,6 +31,17 @@
 - 🔐 **Compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions directly from the General configuration tab
 - 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Teléfonos tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
 - ✅ **Template validation** — warns before generating if required fields are empty
+
+---
+
+## Security & Bug Fixes (v1.2.7)
+
+| # | Area | Fix |
+|---|------|-----|
+| 1 | Input validation | Font size clamped to 6–72 pt server-side; value `0` can no longer reach TCPDF |
+| 2 | Input validation | Watermark text enforced to 40 chars server-side with `mb_substr()` |
+| 3 | Input validation | Timezone validated against `DateTimeZone::listIdentifiers()` before saving; invalid values fall back to `America/Hermosillo` |
+| 4 | Access control | `send_mail.php` now calls `$user->canView()` to enforce entity-level permissions; prevents cross-entity PDF sends |
 
 ---
 
@@ -277,7 +288,7 @@ If you like my work, you can support me by a donate here:
 [![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
 [![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.6-orange)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/Versión-1.2.7-orange)](CHANGELOG.md)
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -301,6 +312,17 @@ If you like my work, you can support me by a donate here:
 - 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
 - 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
+
+---
+
+## Seguridad y correcciones (v1.2.7)
+
+| # | Área | Corrección |
+|---|------|-----------|
+| 1 | Validación de entrada | Tamaño de fuente limitado a 6–72 pt en el servidor; el valor `0` ya no puede llegar a TCPDF |
+| 2 | Validación de entrada | Texto de marca de agua limitado a 40 caracteres en el servidor con `mb_substr()` |
+| 3 | Validación de entrada | La zona horaria se valida contra `DateTimeZone::listIdentifiers()` antes de guardarse; valores inválidos caen a `America/Hermosillo` |
+| 4 | Control de acceso | `send_mail.php` ahora llama a `$user->canView()` para aplicar permisos a nivel de entidad; evita envíos de PDF entre entidades no autorizadas |
 
 ---
 

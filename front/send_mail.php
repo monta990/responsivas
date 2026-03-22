@@ -166,7 +166,7 @@ if ($user_id <= 0) {
  * Cargar usuario
  * ============================ */
 $user = new User();
-if (!$user->getFromDB($user_id)) {
+if (!$user->getFromDB($user_id) || !$user->canView()) {
    Session::addMessageAfterRedirect(__('Usuario no encontrado.', 'responsivas'), false, ERROR);
    $redirect_user($user_id);
    exit;

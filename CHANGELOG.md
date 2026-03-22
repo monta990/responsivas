@@ -6,6 +6,16 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.7] — 2026-03-22
+
+### Fixed
+- **Font size bounds** — `pc_font_size`, `pri_font_size` and `pho_font_size` are now clamped to `6–72 pt` on save. Previously a value of `0` could be stored and passed to TCPDF, causing a crash or blank PDF on the next generation.
+- **Watermark text length** — enforced server-side 40-character limit with `mb_substr()`. The HTML `maxlength=40` attribute was the only guard before; a crafted POST could bypass it and overflow the watermark drawing area in TCPDF.
+- **Timezone validation** — the timezone value is now validated against `DateTimeZone::listIdentifiers()` before being saved. An invalid value now falls back to `America/Hermosillo` instead of being stored and causing silent date errors on every document.
+- **IDOR on send_mail.php** — added `$user->canView()` check after `getFromDB()`. GLPI evaluates entity-level permissions in `canView()`, preventing an authenticated technician from triggering a PDF send for a user in an entity they do not have access to.
+
+---
+
 ## [1.2.6] — 2026-03-17
 
 ### Added
@@ -181,6 +191,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.2.7]: ../../compare/v1.2.6...v1.2.7
 [1.2.6]: ../../compare/v1.2.5...v1.2.6
 [1.2.5]: ../../compare/v1.2.4...v1.2.5
 [1.2.4]: ../../compare/v1.2.3...v1.2.4

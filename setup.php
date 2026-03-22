@@ -32,7 +32,7 @@ function plugin_init_responsivas() {
 function plugin_version_responsivas() {
    return [
       'name'          => 'Responsivas',
-      'version'       => '1.2.6',
+      'version'       => '1.2.7',
       'author'        => 'Edwin Elias Alvarez',
       'license'       => 'GPLv2+',
       'homepage'      => 'https://sontechs.com',

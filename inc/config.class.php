@@ -75,19 +75,22 @@ if (isset($_POST['delete_logo'])) {
 if (isset($_POST['update'])) {
     // Guardar configuración general
     $values = [
-        'timezone'             => Html::cleanInputText($_POST['timezone']),
+        'timezone'             => (function() {
+            $tz = Html::cleanInputText($_POST['timezone'] ?? '');
+            return in_array($tz, \DateTimeZone::listIdentifiers(), true) ? $tz : 'America/Hermosillo';
+         })(),
         'show_employee_number' => isset($_POST['show_employee_number']),
         'show_qr'              => isset($_POST['show_qr']),
         'pdf_compression'      => isset($_POST['pdf_compression']) ? 1 : 0,
         'pdf_protection'       => isset($_POST['pdf_protection'])  ? 1 : 0,
-        'watermark_text'       => Html::cleanInputText(trim($_POST['watermark_text']   ?? '')),
+        'watermark_text'       => mb_substr(Html::cleanInputText(trim($_POST['watermark_text'] ?? '')), 0, 40),
         'watermark_opacity'    => max(5, min(100, (int)($_POST['watermark_opacity'] ?? 25))),
         'company_name'         => Html::cleanInputText(trim($_POST['company_name'] ?? '')),
         'currency'             => Html::cleanInputText(trim($_POST['currency'] ?? '$')),
         'testigo_1'            => (int)($_POST['testigo_1'] ?? 0),
         'testigo_2'            => (int)($_POST['testigo_2'] ?? 0),
         'representante'        => (int)($_POST['representante'] ?? 0),
-        'pc_font_size'         => (int)($_POST['pc_font_size'] ?? 0),
+        'pc_font_size'         => max(6, min(72, (int)($_POST['pc_font_size'] ?? 10))),
         'pc_titulo'            => Html::cleanInputText(trim($_POST['pc_titulo']  ?? '')),
         'pc_intro'             => trim($_POST['pc_intro']  ?? ''),
         'pc_cuerpo'            => trim($_POST['pc_cuerpo'] ?? ''),
