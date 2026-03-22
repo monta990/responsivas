@@ -43,17 +43,6 @@
 
 ---
 
-## Security & Bug Fixes (v1.2.7)
-
-| # | Area | Fix |
-|---|------|-----|
-| 1 | Input validation | Font size clamped to 6–72 pt server-side; value `0` can no longer reach TCPDF |
-| 2 | Input validation | Watermark text enforced to 40 chars server-side with `mb_substr()` |
-| 3 | Input validation | Timezone validated against `DateTimeZone::listIdentifiers()` before saving; invalid values fall back to `America/Hermosillo` |
-| 4 | Access control | `send_mail.php` now calls `$user->canView()` to enforce entity-level permissions; prevents cross-entity PDF sends |
-
----
-
 ## Requirements
 
 | Component | Minimum version |
@@ -338,17 +327,6 @@ Report bugs or request features on the [issue tracker](https://github.com/respon
 - 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
 - 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
-
----
-
-## Seguridad y correcciones (v1.2.7)
-
-| # | Área | Corrección |
-|---|------|-----------|
-| 1 | Validación de entrada | Tamaño de fuente limitado a 6–72 pt en el servidor; el valor `0` ya no puede llegar a TCPDF |
-| 2 | Validación de entrada | Texto de marca de agua limitado a 40 caracteres en el servidor con `mb_substr()` |
-| 3 | Validación de entrada | La zona horaria se valida contra `DateTimeZone::listIdentifiers()` antes de guardarse; valores inválidos caen a `America/Hermosillo` |
-| 4 | Control de acceso | `send_mail.php` ahora llama a `$user->canView()` para aplicar permisos a nivel de entidad; evita envíos de PDF entre entidades no autorizadas |
 
 ---
 
