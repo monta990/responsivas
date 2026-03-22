@@ -2,12 +2,21 @@
   <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Responsivas logo" width="96">
 </p>
 
-# Responsivas — GLPI Plugin
+<h1 align="center">Responsivas</h1>
 
-[![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
-[![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
-[![License](https://img.shields.io/badge/License-GPLv2%2B-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.7-orange)](CHANGELOG.md)
+<p align="center">
+  <strong>GLPI plugin — Automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue?style=flat-square" alt="GLPI compatibility"></a>
+  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v2%2B-green?style=flat-square" alt="License"></a>
+  <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple?style=flat-square" alt="PHP"></a>
+</p>
+
+---
+
+## Overview
 
 **Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
@@ -49,8 +58,8 @@
 
 | Component | Minimum version |
 |-----------|----------------|
-| GLPI | 11.0 |
-| PHP | 8.1 |
+| GLPI | ≥ 11.0.0 |
+| PHP | ≥ 8.2 |
 | TCPDF | included with GLPI |
 
 > **Supported locales:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
@@ -258,10 +267,15 @@ Pull requests are welcome. For major changes, please open an issue first.
 
 ---
 
-## License
+## Changelog
 
-This plugin is released under the **GNU General Public License v2 or later (GPLv2+)**.  
-See [LICENSE](LICENSE) for full terms.
+See [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+## Author
+
+**Edwin Elias Alvarez** — [GitHub](https://github.com/monta990)
 
 ---
 
@@ -272,23 +286,35 @@ If you like my work, you can support me by a donate here:
 
 ---
 
-## Author
+## License
 
-**Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
+GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
----
+## Issues
+
+Report bugs or request features on the [issue tracker](https://github.com/responsivas/mailblast/issues).
+
 ---
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Logo Responsivas" width="96">
+  <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Responsivas logo" width="96">
 </p>
 
-# Responsivas — Plugin para GLPI
+<h1 align="center">Responsivas</h1>
 
-[![GLPI](https://img.shields.io/badge/GLPI-11.x-blue)](https://glpi-project.org)
-[![PHP](https://img.shields.io/badge/PHP-8.1%2B-purple)](https://php.net)
-[![Licencia](https://img.shields.io/badge/Licencia-GPLv2%2B-green)](LICENSE)
-[![Versión](https://img.shields.io/badge/Versión-1.2.7-orange)](CHANGELOG.md)
+<p align="center">
+  <strong>Plugin para GLPI — Automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue?style=flat-square" alt="GLPI compatibility"></a>
+  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v2%2B-green?style=flat-square" alt="License"></a>
+  <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple?style=flat-square" alt="PHP"></a>
+</p>
+
+---
+
+## Overview
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -330,8 +356,8 @@ If you like my work, you can support me by a donate here:
 
 | Componente | Versión mínima |
 |------------|---------------|
-| GLPI | 11.0 |
-| PHP | 8.1 |
+| GLPI | ≥ 11.0.0 |
+| PHP | ≥ 8.2 |
 | TCPDF | incluido con GLPI |
 
 > **Idiomas soportados:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
@@ -537,20 +563,29 @@ Los pull requests son bienvenidos. Para cambios importantes, por favor abre un i
 
 ---
 
-## Licencia
+## Cambios
 
-Este plugin se distribuye bajo la **Licencia Pública General GNU v2 o posterior (GPLv2+)**.  
-Consulta [LICENSE](LICENSE) para los términos completos.
-
----
-
-## Comprame un cafe :)
-Si te gusta mi trabajo, me puedes apoyar donando aquí:
-
-<a href="https://www.buymeacoffee.com/monta990" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="51px" width="210px"></a>
+Ver [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
 ## Autor
 
-**Edwin Elias Alvarez** — [Sontechs](https://sontechs.com)
+**Edwin Elias Alvarez** — [GitHub](https://github.com/monta990)
+
+---
+
+## Comprame un cafe :)
+Si te gusta mi trabajo, me puedes apoyar con una donación:
+
+<a href="https://www.buymeacoffee.com/monta990" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="51px" width="210px"></a>
+
+---
+
+## Licencia
+
+GPL v2 o posterior. Ver [LICENSE](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+
+## Problemas
+
+Reporta errores o solicita funcionalidades en el [issue tracker](https://github.com/monta990/responsivas/issues).
