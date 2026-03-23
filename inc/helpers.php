@@ -28,7 +28,7 @@ function e(string $value): string {
 function fechaATexto($fecha, ?string $timezone = null): string {
 
    if (empty($fecha) || $fecha === '0000-00-00') {
-      return __('N/D', 'responsivas');
+      return __('N/A', 'responsivas');
    }
 
    try {
@@ -46,7 +46,7 @@ function fechaATexto($fecha, ?string $timezone = null): string {
       $locale = $_SESSION['glpilanguage'] ?? $CFG_GLPI['language'];
 
       if (!class_exists('IntlDateFormatter')) {
-         return __('N/D', 'responsivas');
+         return __('N/A', 'responsivas');
       }
 
       $fmt = new IntlDateFormatter(
@@ -60,14 +60,14 @@ function fechaATexto($fecha, ?string $timezone = null): string {
       return $fmt->format($dt);
 
    } catch (Throwable) {
-      return __('N/D', 'responsivas');
+      return __('N/A', 'responsivas');
    }
 }
 
 /* ============================
  * Dropdown name con cache
  * ============================ */
-function ddn(?int $id, string $table, string $default = 'N/D'): string {
+function ddn(?int $id, string $table, string $default = 'N/A'): string {
    static $cache = [];
 
    if (!$id) {
@@ -223,9 +223,9 @@ function responsivasVariableHints(array $vars): void
    echo '<div class="alert alert-info d-flex align-items-start mb-3" role="alert">';
    echo '<i class="ti ti-tags me-2 fs-5 mt-1"></i>';
    echo '<div style="font-size:0.85rem;">';
-   echo '<strong>' . __('Etiquetas disponibles', 'responsivas') . ':</strong> '
-      . '<span class="text-muted">' . '<b>**' . __('negrita', 'responsivas') . '**</b>' . ' &nbsp;&bull;&nbsp; <i>*' . __('cursiva', 'responsivas') . '*</i>' . ' &nbsp;&bull;&nbsp; <u>__' . __('subrayado', 'responsivas') . '__</u>' . '</span><br>';
-   echo '<span class="text-muted d-block mt-1" style="font-size:0.82em;"><i class="ti ti-hand-click me-1"></i>' . __('Haz clic en una variable para insertarla en el campo activo.', 'responsivas') . '</span>';
+   echo '<strong>' . __('Available tags', 'responsivas') . ':</strong> '
+      . '<span class="text-muted">' . '<b>**' . __('bold', 'responsivas') . '**</b>' . ' &nbsp;&bull;&nbsp; <i>*' . __('italic', 'responsivas') . '*</i>' . ' &nbsp;&bull;&nbsp; <u>__' . __('underline', 'responsivas') . '__</u>' . '</span><br>';
+   echo '<span class="text-muted d-block mt-1" style="font-size:0.82em;"><i class="ti ti-hand-click me-1"></i>' . __('Click a variable to insert it at the cursor position.', 'responsivas') . '</span>';
    $first = true;
    foreach ($vars as $tag => $desc) {
       $tag_safe  = htmlspecialchars($tag,  ENT_QUOTES, 'UTF-8');

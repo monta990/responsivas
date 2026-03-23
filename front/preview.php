@@ -15,7 +15,7 @@ require_once dirname(__DIR__) . '/inc/pdfbuilder.class.php';
 // Se acepta GET para evitar el CheckCsrfListener de GLPI 11
 Session::checkLoginUser();
 if (!Session::haveRight('config', UPDATE)) {
-   Session::addMessageAfterRedirect(__('Acceso denegado.', 'responsivas'), false, ERROR);
+   Session::addMessageAfterRedirect(__('Access denied.', 'responsivas'), false, ERROR);
    Html::back();
    exit;
 }
@@ -36,7 +36,7 @@ try {
    $result = PluginResponsivasPdfBuilder::buildPreview($type, $admin_id, $config);
 } catch (Throwable $e) {
    Session::addMessageAfterRedirect(
-      sprintf(__('Error al generar la vista previa: %s', 'responsivas'), $e->getMessage()),
+      sprintf(__('Error generating the preview: %s', 'responsivas'), $e->getMessage()),
       false, ERROR
    );
    Html::back();
@@ -45,7 +45,12 @@ try {
 
 /** @var PluginResponsivasPDF $pdf */
 $pdf      = $result['pdf'];
-$filename = 'Vista_Previa_' . $result['filename'];
+$config   = Config::getConfigurationValues('plugin_responsivas');
+$wm_text  = trim($config['watermark_text'] ?? '');
+$prefix   = $wm_text !== '' ? $wm_text : __('Preview', 'responsivas');
+// Sanitize prefix for use as filename
+$prefix   = preg_replace('/[^A-Za-z0-9_\-]/', '_', $prefix);
+$filename = $prefix . '_' . $result['filename'];
 
 header('Content-Type: application/pdf');
 header('Content-Disposition: inline; filename="' . $filename . '"');

@@ -19,12 +19,12 @@ class PluginResponsivasPDF extends TCPDF {
     public string $fecha_header  = '';
     public string $location      = '';
     public bool   $show_watermark = false;
-    public string $watermark_text = 'VISTA PREVIA';
+    public string $watermark_text = 'PREVIEW';
     public int    $watermark_opacity = 25;
 
     /** Set before creating a PDF instance to enable watermark on all pages */
     public static $global_watermark      = false;
-    public static $global_watermark_text = 'VISTA PREVIA';
+    public static $global_watermark_text = 'PREVIEW';
 
     protected array  $qr_per_page   = [];
     protected string $font_size_key = 'pc_font_size';
@@ -154,7 +154,7 @@ class PluginResponsivasPDF extends TCPDF {
                 $qr_size, $qr_size,
                 $this->qr_per_page[$page],
                 0,
-                __('Abrir ficha del activo en GLPI', 'responsivas')
+                __('Open asset record in GLPI', 'responsivas')
             );
         }
     }

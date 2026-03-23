@@ -6,6 +6,25 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.3.0] — 2026-03-23
+
+### Changed
+- **English as base language** — the plugin now uses English as the fallback language for all translatable strings. Previously, Spanish (es_MX) was the base: any user without a supported locale would see Spanish. Now users with unsupported locales see English, which is the standard GLPI plugin convention.
+- All 191 msgid strings in PHP source files changed from Spanish to English.
+- **POT rebuilt** from scratch with English msgids.
+- **es_MX** locale updated to full Spanish translations for all 191 strings (no functional change for Spanish users).
+- **en_US / en_GB** locale files updated — msgstr left empty (gettext falls back to the English msgid automatically).
+- **fr_FR / de_DE** translations remapped to the new English msgids; no content loss.
+
+### Fixed
+- **PHP minimum version corrected to 8.2** — GLPI 11 requires PHP 8.2; the plugin incorrectly declared `minphpversion = 8.1`. Updated in `setup.php` and all locale error strings.
+
+### Locales
+- Base language: **English** (msgid = English text)
+- Total: **191 strings** per locale
+
+---
+
 ## [1.2.7] — 2026-03-22
 
 ### Fixed
@@ -191,6 +210,7 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.3.0]: ../../compare/v1.2.7...v1.3.0
 [1.2.7]: ../../compare/v1.2.6...v1.2.7
 [1.2.6]: ../../compare/v1.2.5...v1.2.6
 [1.2.5]: ../../compare/v1.2.4...v1.2.5

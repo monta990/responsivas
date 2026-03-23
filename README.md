@@ -1,13 +1,10 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Responsivas logo" width="96">
 </p>
-
 <h1 align="center">Responsivas</h1>
-
 <p align="center">
   <strong>GLPI plugin — Automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users</strong>
 </p>
-
 <p align="center">
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue?style=flat-square" alt="GLPI compatibility"></a>
   <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v2%2B-green?style=flat-square" alt="License"></a>
@@ -55,6 +52,8 @@
 
 > The configuration page is titled **"Configuración de Responsivas"** — the word "plugin" was intentionally removed for a cleaner UI.
 
+> **Base language:** English. Users without a supported locale see English. Spanish (es_MX) is a full translation.
+
 > **Note:** GLPI 10.x is not officially supported. The plugin uses APIs introduced in GLPI 11.
 
 ---
@@ -98,7 +97,7 @@ responsivas/
 │   ├── pdfbuilder.class.php  # PDF factory, render methods, demo builder
 │   └── user.class.php        # User tab integration
 ├── locales/
-│   ├── responsivas.pot       # Translation template (188 strings)
+│   ├── responsivas.pot       # Translation template (191 strings)
 │   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
 │   ├── en_US.po / en_US.mo  # English (US)
 │   ├── en_GB.po / en_GB.mo  # English (GB)
@@ -269,6 +268,7 @@ See [CHANGELOG.md](CHANGELOG.md).
 ---
 
 ## Buy me a coffee :)
+
 If you like my work, you can support me by a donate here:
 
 <a href="https://www.buymeacoffee.com/monta990" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="51px" width="210px"></a>
@@ -281,20 +281,17 @@ GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/old-licenses/gpl-2.0
 
 ## Issues
 
-Report bugs or request features on the [issue tracker](https://github.com/responsivas/responsivas/issues).
+Report bugs or request features on the [issue tracker](https://github.com/monta990/responsivas/issues).
 
 ---
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Responsivas logo" width="96">
 </p>
-
 <h1 align="center">Responsivas</h1>
-
 <p align="center">
-  <strong>Plugin para GLPI — Automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users</strong>
+  <strong>Plugin para GLPI — Genera automáticamente cartas responsivas y contratos de comodato en PDF para activos de TI asignados a usuarios</strong>
 </p>
-
 <p align="center">
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue?style=flat-square" alt="GLPI compatibility"></a>
   <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v2%2B-green?style=flat-square" alt="License"></a>
@@ -340,6 +337,8 @@ Report bugs or request features on the [issue tracker](https://github.com/respon
 
 > **Idiomas soportados:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
 
+> **Idioma base:** Inglés. Usuarios sin idioma soportado verán el plugin en inglés. El español (es_MX) es una traducción completa.
+
 > **Nota:** GLPI 10.x no está soportado oficialmente. El plugin utiliza APIs introducidas en GLPI 11.
 
 ---
@@ -383,7 +382,7 @@ responsivas/
 │   ├── pdfbuilder.class.php  # Factory de PDF, métodos render, constructor demo
 │   └── user.class.php        # Integración de pestaña en usuario
 ├── locales/
-│   ├── responsivas.pot       # Plantilla de traducciones (188 cadenas)
+│   ├── responsivas.pot       # Plantilla de traducciones (191 cadenas)
 │   ├── es_MX.po / es_MX.mo  # Español (México)
 │   ├── en_US.po / en_US.mo  # Inglés (EE. UU.)
 │   ├── en_GB.po / en_GB.mo  # Inglés (Reino Unido)
@@ -554,6 +553,7 @@ Ver [CHANGELOG.md](CHANGELOG.md).
 ---
 
 ## Comprame un cafe :)
+
 Si te gusta mi trabajo, me puedes apoyar con una donación:
 
 <a href="https://www.buymeacoffee.com/monta990" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="51px" width="210px"></a>

@@ -81,16 +81,16 @@ HTML;
       ];
 
       $labels = [
-         'pc_titulo'      => __('Título (Computadora)', 'responsivas'),
-         'pc_intro'       => __('Introducción (Computadora)', 'responsivas'),
-         'pc_cuerpo'      => __('Cuerpo / Cláusulas (Computadora)', 'responsivas'),
-         'pri_titulo'     => __('Título (Impresora)', 'responsivas'),
-         'pri_intro'      => __('Introducción (Impresora)', 'responsivas'),
-         'pri_cuerpo'     => __('Cuerpo / Cláusulas (Impresora)', 'responsivas'),
-         'pho_titulo'     => __('Título (Teléfono)', 'responsivas'),
-         'pho_apertura'   => __('Párrafo de apertura (Teléfono)', 'responsivas'),
-         'pho_clausulas'  => __('Cláusulas (Teléfono)', 'responsivas'),
-         'pho_testigos'   => __('Párrafo de testigos (Teléfono)', 'responsivas'),
+         'pc_titulo'      => __('Title (Computer)', 'responsivas'),
+         'pc_intro'       => __('Introduction (Computer)', 'responsivas'),
+         'pc_cuerpo'      => __('Body / Clauses (Computer)', 'responsivas'),
+         'pri_titulo'     => __('Title (Printer)', 'responsivas'),
+         'pri_intro'      => __('Introduction (Printer)', 'responsivas'),
+         'pri_cuerpo'     => __('Body / Clauses (Printer)', 'responsivas'),
+         'pho_titulo'     => __('Title (Phone)', 'responsivas'),
+         'pho_apertura'   => __('Opening paragraph (Phone)', 'responsivas'),
+         'pho_clausulas'  => __('Clauses (Phone)', 'responsivas'),
+         'pho_testigos'   => __('Witnesses paragraph (Phone)', 'responsivas'),
       ];
 
       $missing = [];
@@ -102,7 +102,7 @@ HTML;
 
       if (!empty($missing)) {
          throw new RuntimeException(sprintf(
-            __('La plantilla del documento tiene campos vacíos. Completa los siguientes campos en Configuración → Responsivas: %s', 'responsivas'),
+            __('The document template has empty fields. Complete the following fields in Configuration → Responsivas: %s', 'responsivas'),
             implode(', ', $missing)
          ));
       }
@@ -117,7 +117,7 @@ HTML;
 
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
+         throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
       $computers = [];
@@ -127,12 +127,12 @@ HTML;
          $computers[]  = $comp;
       }
       if (empty($computers)) {
-         throw new RuntimeException(__('El usuario no tiene equipos asignados.', 'responsivas'));
+         throw new RuntimeException(__('The user has no assigned equipment.', 'responsivas'));
       }
 
       $entity = new Entity();
       if (!$entity->getFromDB(Session::getActiveEntity())) {
-         throw new RuntimeException(__('No se pudo obtener la entidad.', 'responsivas'));
+         throw new RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
       $location = e(implode(', ', array_filter([
@@ -169,8 +169,8 @@ HTML;
 
          $marca         = e(ddn($comp->fields['manufacturers_id'], 'glpi_manufacturers'));
          $modelo        = e(ddn($comp->fields['computermodels_id'], 'glpi_computermodels'));
-         $serie         = e($comp->fields['serial'] ?: 'N/D');
-         $activo        = e($comp->fields['otherserial'] ?: 'N/D');
+         $serie         = e($comp->fields['serial'] ?: 'N/A');
+         $activo        = e($comp->fields['otherserial'] ?: 'N/A');
          $comentarios   = e($comp->fields['comment'] ?: 'Sin comentarios');
          $tipo          = e(ddn($comp->fields['computertypes_id'], 'glpi_computertypes', 'No especificado'));
          $estado_nombre = e(ddn($comp->fields['states_id'], 'glpi_states'));
@@ -235,7 +235,7 @@ HTML;
 <td width='20%'>Monitor</td>
 <td width='20%'>" . e(ddn($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
 <td width='20%'>" . e(ddn($row['monitormodels_id'], 'glpi_monitormodels')) . "</td>
-<td width='20%'>" . e($row['serial'] ?: 'N/D') . " / " . e($row['otherserial'] ?: 'N/D') . "</td>
+<td width='20%'>" . e($row['serial'] ?: 'N/A') . " / " . e($row['otherserial'] ?: 'N/A') . "</td>
 <td width='20%'>" . e(ddn($row['states_id'], 'glpi_states')) . "</td>
 </tr>";
          }
@@ -253,10 +253,10 @@ HTML;
          foreach ($result as $row) {
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
             $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
-<td width='20%'>" . e($row['tipo'] ?? 'N/D') . "</td>
+<td width='20%'>" . e($row['tipo'] ?? 'N/A') . "</td>
 <td width='20%'>" . e(ddn($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
-<td width='20%'>" . e(!empty($row['modelo']) ? $row['modelo'] : 'N/D') . "</td>
-<td width='20%'>" . e($row['serial'] ?: 'N/D') . " / " . e($row['otherserial'] ?: 'N/D') . "</td>
+<td width='20%'>" . e(!empty($row['modelo']) ? $row['modelo'] : 'N/A') . "</td>
+<td width='20%'>" . e($row['serial'] ?: 'N/A') . " / " . e($row['otherserial'] ?: 'N/A') . "</td>
 <td width='20%'>" . e(ddn($row['states_id'], 'glpi_states')) . "</td>
 </tr>";
          }
@@ -309,17 +309,17 @@ HTML;
 
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
+         throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
       $printers = (new Printer())->find(['users_id' => $user_id, 'is_deleted' => 0]);
       if (empty($printers)) {
-         throw new RuntimeException(__('El usuario no tiene equipos asignados.', 'responsivas'));
+         throw new RuntimeException(__('The user has no assigned equipment.', 'responsivas'));
       }
 
       $entity = new Entity();
       if (!$entity->getFromDB(Session::getActiveEntity())) {
-         throw new RuntimeException(__('No se pudo obtener la entidad.', 'responsivas'));
+         throw new RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
       $location = e(implode(', ', array_filter([
@@ -372,8 +372,8 @@ HTML;
          $modelo        = e(ddn($printer['printermodels_id'] ?? 0, 'glpi_printermodels', 'No especificado'));
          $tipo          = e(ddn($printer['printertypes_id'] ?? 0, 'glpi_printertypes', 'No especificado'));
          $estado_nombre = e(ddn($printer['states_id'] ?? 0, 'glpi_states'));
-         $serie         = e(!empty($printer['serial'])      ? $printer['serial']      : 'N/D');
-         $activo        = e(!empty($printer['otherserial']) ? $printer['otherserial'] : 'N/D');
+         $serie         = e(!empty($printer['serial'])      ? $printer['serial']      : 'N/A');
+         $activo        = e(!empty($printer['otherserial']) ? $printer['otherserial'] : 'N/A');
          $comentarios   = e(!empty($printer['comment'])     ? $printer['comment']     : 'Sin comentarios');
 
          $pri_vars = array_merge($pri_base_vars, [
@@ -415,12 +415,12 @@ HTML;
 
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
+         throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
       $cellphone_type_id = (int)($config['cellphone_type_id'] ?? 0);
       if ($cellphone_type_id <= 0) {
-         throw new RuntimeException(__('No está configurado el tipo de teléfono para comodatos en el plugin.', 'responsivas'));
+         throw new RuntimeException(__('The phone type for loan agreements is not configured in the plugin.', 'responsivas'));
       }
 
       $phones = (new Phone())->find([
@@ -429,12 +429,12 @@ HTML;
          'phonetypes_id' => $cellphone_type_id,
       ]);
       if (empty($phones)) {
-         throw new RuntimeException(__('El usuario no tiene teléfonos del tipo configurado asignados.', 'responsivas'));
+         throw new RuntimeException(__('The user has no phones of the configured type assigned.', 'responsivas'));
       }
 
       $entity = new Entity();
       if (!$entity->getFromDB(Session::getActiveEntity())) {
-         throw new RuntimeException(__('No se pudo obtener la entidad.', 'responsivas'));
+         throw new RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
       $address  = e($entity->fields['address']  ?? '');
@@ -447,17 +447,17 @@ HTML;
 
       $full_name       = $user->getFriendlyName();
       $employee_number = $user->fields['registration_number'] ?? '';
-      $user_mobile     = !empty($user->fields['mobile']) ? $user->fields['mobile'] : 'N/D';
+      $user_mobile     = !empty($user->fields['mobile']) ? $user->fields['mobile'] : 'N/A';
 
       $testigo1_id      = (int)($config['testigo_1']     ?? 0);
       $testigo2_id      = (int)($config['testigo_2']     ?? 0);
       $representante_id = (int)($config['representante'] ?? 0);
 
       if ($testigo1_id <= 0 || $testigo2_id <= 0) {
-         throw new RuntimeException(__('Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin.', 'responsivas'));
+         throw new RuntimeException(__('You must configure Witness 1 and Witness 2 in the plugin settings.', 'responsivas'));
       }
       if ($representante_id <= 0) {
-         throw new RuntimeException(__('Debe configurar representante legal en la configuración del plugin.', 'responsivas'));
+         throw new RuntimeException(__('You must configure the legal representative in the plugin settings.', 'responsivas'));
       }
 
       $testigo1_nombre      = nombreUsuario($testigo1_id);
@@ -465,10 +465,10 @@ HTML;
       $representante_nombre = nombreUsuario($representante_id);
 
       if (!$testigo1_nombre || !$testigo2_nombre) {
-         throw new RuntimeException(__('Uno o ambos testigos configurados no son válidos o están inactivos.', 'responsivas'));
+         throw new RuntimeException(__('One or both configured witnesses are invalid or inactive.', 'responsivas'));
       }
       if (!$representante_nombre) {
-         throw new RuntimeException(__('El representante legal no es válido o está inactivo.', 'responsivas'));
+         throw new RuntimeException(__('The legal representative is invalid or inactive.', 'responsivas'));
       }
 
       $show_employee = (int)($config['show_employee_number'] ?? 1);
@@ -489,9 +489,9 @@ HTML;
          if ($precio_check <= 0) {
             $nombre_tel    = trim(ddn($phone['manufacturers_id'] ?? 0, 'glpi_manufacturers', '') . ' ' . ddn($phone['phonemodels_id'] ?? 0, 'glpi_phonemodels', ''));
             $nombre_activo = trim($phone['name'] ?? '');
-            $identificador = $nombre_activo !== '' ? $nombre_activo . ($nombre_tel !== '' ? " ({$nombre_tel})" : '') : ($nombre_tel ?: 'IMEI: ' . ($phone['serial'] ?? 'N/D'));
+            $identificador = $nombre_activo !== '' ? $nombre_activo . ($nombre_tel !== '' ? " ({$nombre_tel})" : '') : ($nombre_tel ?: 'IMEI: ' . ($phone['serial'] ?? 'N/A'));
             throw new RuntimeException(sprintf(
-               __('El teléfono "%s" no tiene precio de compra. Agrégalo en Gestión → Información administrativa y financiera → Precio de compra.', 'responsivas'),
+               __('Phone "%s" has no purchase price. Add it in Management → Administrative and financial information → Purchase price.', 'responsivas'),
                $identificador
             ));
          }
@@ -522,19 +522,19 @@ HTML;
 
          $marca  = ddn($phone['manufacturers_id'] ?? 0, 'glpi_manufacturers', 'No especificada');
          $modelo = ddn($phone['phonemodels_id'] ?? 0, 'glpi_phonemodels', 'No especificado');
-         $imei   = $phone['serial'] ?? 'N/D';
-         $activo = $phone['otherserial'] ?? 'N/D';
-         $serie  = $phone['uuid'] ?? 'N/D';
+         $imei   = $phone['serial'] ?? 'N/A';
+         $activo = $phone['otherserial'] ?? 'N/A';
+         $serie  = $phone['uuid'] ?? 'N/A';
          $linea  = $user_mobile;
          $estado = ddn($phone['states_id'] ?? 0, 'glpi_states');
 
          // Infocoms
          $infocoms          = (new Infocom())->find(['itemtype' => 'Phone', 'items_id' => (int)$phone['id']], [], 1);
          $precio_compra_num = 0.0;
-         $precio_compra     = 'N/D';
-         $factura           = 'N/D';
-         $fecha_compra      = 'N/D';
-         $proveedor         = 'N/D';
+         $precio_compra     = 'N/A';
+         $factura           = 'N/A';
+         $fecha_compra      = 'N/A';
+         $proveedor         = 'N/A';
 
          if (!empty($infocoms)) {
             $infocom = reset($infocoms);
@@ -591,17 +591,17 @@ HTML;
          // ── Plantillas editables ──
          // Cláusula de vida útil — usa plantilla configurable, cae a texto predeterminado si vacío
          $vu_vars = [
-            '{fecha_compra}' => $fecha_compra !== 'N/D' ? e($fecha_compra) : '',
+            '{fecha_compra}' => $fecha_compra !== 'N/A' ? e($fecha_compra) : '',
             '{factura}'      => e($factura),
             '{proveedor}'    => e($proveedor),
          ];
-         if ($factura !== 'N/D' && $proveedor !== 'N/D') {
+         if ($factura !== 'N/A' && $proveedor !== 'N/A') {
             $vu_tpl = trim($config['pho_vida_util_factura'] ?? '');
             if ($vu_tpl !== '') {
                $clausula_vida_util_text = responsivasApplyTemplate($vu_tpl, $vu_vars);
             } else {
                $partes_cu = [];
-               if ($fecha_compra !== 'N/D') $partes_cu[] = 'contados a partir del ' . e($fecha_compra);
+               if ($fecha_compra !== 'N/A') $partes_cu[] = 'contados a partir del ' . e($fecha_compra);
                $partes_cu[]             = 'con base en la factura ' . e($factura) . ' emitida por ' . e($proveedor);
                $clausula_vida_util_text = 'Se establece como <strong>vida útil</strong> un periodo de 24 meses ' . implode(', ', $partes_cu) . '.';
             }
@@ -692,7 +692,7 @@ HTML;
       $pdf->location       = $location;
       $pdf->show_watermark    = $watermark;
       $wm_text                = trim($config['watermark_text'] ?? '');
-      $pdf->watermark_text    = $wm_text !== '' ? $wm_text : __('VISTA PREVIA', 'responsivas');
+      $pdf->watermark_text    = $wm_text !== '' ? $wm_text : __('PREVIEW', 'responsivas');
       $pdf->watermark_opacity = max(5, min(100, (int)($config['watermark_opacity'] ?? 25)));
       $pdf->SetCreator('GLPI');
       $pdf->SetAuthor($creator);
@@ -820,7 +820,7 @@ HTML;
       // No validar plantillas aquí — si están vacías usamos demo igual
       $user = new User();
       if (!$user->getFromDB($user_id)) {
-         throw new RuntimeException(__('Usuario no encontrado.', 'responsivas'));
+         throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
       // ── Intentar con activos reales ──────────────────────────────────
@@ -846,7 +846,7 @@ HTML;
             // para que Header() lo dibuje en cada página al agregarla
             $wm_text = trim($config['watermark_text'] ?? '');
             PluginResponsivasPDF::$global_watermark      = true;
-            PluginResponsivasPDF::$global_watermark_text = $wm_text !== '' ? $wm_text : __('VISTA PREVIA', 'responsivas');
+            PluginResponsivasPDF::$global_watermark_text = $wm_text !== '' ? $wm_text : __('PREVIEW', 'responsivas');
             $result = self::$method($user_id);
             PluginResponsivasPDF::$global_watermark = false; // reset
             return $result;
@@ -902,9 +902,9 @@ HTML;
       $t1_id  = (int)($config['testigo_1']     ?? 0);
       $t2_id  = (int)($config['testigo_2']     ?? 0);
       $rep_id = (int)($config['representante'] ?? 0);
-      $testigo1 = ($t1_id  > 0 && ($n = nombreUsuario($t1_id))  !== '') ? $n : __('Testigo Demo 1',     'responsivas');
-      $testigo2 = ($t2_id  > 0 && ($n = nombreUsuario($t2_id))  !== '') ? $n : __('Testigo Demo 2',     'responsivas');
-      $rep      = ($rep_id > 0 && ($n = nombreUsuario($rep_id)) !== '') ? $n : __('Representante Demo', 'responsivas');
+      $testigo1 = ($t1_id  > 0 && ($n = nombreUsuario($t1_id))  !== '') ? $n : __('Demo Witness 1',     'responsivas');
+      $testigo2 = ($t2_id  > 0 && ($n = nombreUsuario($t2_id))  !== '') ? $n : __('Demo Witness 2',     'responsivas');
+      $rep      = ($rep_id > 0 && ($n = nombreUsuario($rep_id)) !== '') ? $n : __('Demo Representative', 'responsivas');
 
       // Entity address/postcode (igual que el build real de teléfono)
       $address  = e($entity->fields['address']  ?? '');
@@ -950,7 +950,7 @@ HTML;
             'Intel Core i5-1345U', '1.60 GHz',
             '16 GB DDR4', 'Windows 11 Pro', 'SSD 512 GB',
             'Laptop', $demo_state,
-            e(__('Equipo demo para vista previa de plantilla', 'responsivas')),
+            e(__('Demo equipment for template preview', 'responsivas')),
             '', $full_name_safe, $employee_line_html, $th_bg, $td_bg
          ), true, false, true, false, '');
          return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Computo_DEMO', $full_name)];
@@ -987,7 +987,7 @@ HTML;
             $pri_titulo, $pri_intro, $pri_cuerpo,
             'HP', 'LaserJet Pro M404n', 'SN-IMP-789012',
             'Impresora', $demo_state,
-            e(__('Impresora demo para vista previa de plantilla', 'responsivas')),
+            e(__('Demo printer for template preview', 'responsivas')),
             $full_safe, $employee_line, $th_bg, $td_bg
          ), true, false, true, false, '');
          return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DEMO', $full_name)];

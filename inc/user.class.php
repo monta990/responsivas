@@ -107,8 +107,8 @@ class PluginResponsivasUser extends CommonGLPI {
    ): string {
 
       $tooltip = $count
-         ? __('Generar responsivas', 'responsivas')
-         : ($tooltip_empty ?: __('Sin equipo asignado', 'responsivas'));
+         ? __('Generate responsibility documents', 'responsivas')
+         : ($tooltip_empty ?: __('No equipment assigned', 'responsivas'));
 
       $disabled   = $count ? '' : 'disabled';
       $href       = $count ? htmlspecialchars($url, ENT_QUOTES) : '#';
@@ -141,19 +141,19 @@ class PluginResponsivasUser extends CommonGLPI {
    ): string {
 
       if ($total <= 0) {
-         $tooltip  = __('Sin responsivas que enviar', 'responsivas');
+         $tooltip  = __('No responsibility documents to send', 'responsivas');
          $disabled = true;
       } elseif (empty($user_email)) {
-         $tooltip  = __('Sin correo electrónico', 'responsivas');
+         $tooltip  = __('No email address', 'responsivas');
          $disabled = true;
       } elseif (!$email_configured) {
-         $tooltip  = __('Correo no configurado', 'responsivas');
+         $tooltip  = __('Email not configured', 'responsivas');
          $disabled = true;
       } elseif (!$mail_ok) {
-         $tooltip  = __('Servidor de correo de GLPI no configurado', 'responsivas');
+         $tooltip  = __('GLPI mail server not configured', 'responsivas');
          $disabled = true;
       } else {
-         $tooltip  = __('Enviar todas las responsivas al correo del usuario', 'responsivas');
+         $tooltip  = __('Send all responsibility documents to the user email', 'responsivas');
          $disabled = false;
       }
 
@@ -167,7 +167,7 @@ class PluginResponsivasUser extends CommonGLPI {
                     aria-disabled='true'
                     style='pointer-events:none'>
                <i class='ti ti-mail me-2'></i>
-               " . __('Enviar por correo', 'responsivas') . "
+               " . __('Send by email', 'responsivas') . "
             </button>
          </span>";
       }
@@ -177,10 +177,10 @@ class PluginResponsivasUser extends CommonGLPI {
       $csrf_token = htmlspecialchars(Session::getNewCSRFToken(), ENT_QUOTES);
       $user_email_safe = htmlspecialchars($user_email, ENT_QUOTES, 'UTF-8');
 
-      $lbl_send    = __('Enviar por correo', 'responsivas');
-      $lbl_confirm = __('Confirmar envío', 'responsivas');
-      $lbl_cancel  = __('Cancelar', 'responsivas');
-      $lbl_body    = sprintf(__('¿Enviar las responsivas al correo %s?', 'responsivas'), "<strong>{$user_email_safe}</strong>");
+      $lbl_send    = __('Send by email', 'responsivas');
+      $lbl_confirm = __('Confirm sending', 'responsivas');
+      $lbl_cancel  = __('Cancel', 'responsivas');
+      $lbl_body    = sprintf(__('Send the responsibility documents to %s?', 'responsivas'), "<strong>{$user_email_safe}</strong>");
 
       return "
       <!-- Formulario oculto -->
@@ -259,19 +259,19 @@ class PluginResponsivasUser extends CommonGLPI {
                <i class='fs-2x ti ti-file-text'></i>
             </div>
             <h4 class='card-title ms-5 mb-0'>" .
-               __('Generador de responsivas', 'responsivas') .
+               __('Responsibility Document Generator', 'responsivas') .
             "</h4>
          </div>
 
          <h3 class='text-center mt-3'>" .
-            __('Seleccione el tipo de activo a generar responsivas', 'responsivas') .
+            __('Select the asset type to generate responsibility documents', 'responsivas') .
          "</h3>";
 
         if (empty($config['cellphone_type_id'])) {
            echo "
            <div class='alert alert-warning mx-auto' style='max-width:600px'>
               <i class='ti ti-alert-triangle me-2'></i>
-              " . __('El tipo de teléfono para responsivas no ha sido configurado. Contacta al administrador.', 'responsivas') . "
+              " . __('The phone type for responsibility documents has not been configured. Contact the administrator.', 'responsivas') . "
            </div>";
         }
 
@@ -281,27 +281,27 @@ class PluginResponsivasUser extends CommonGLPI {
          $data['computers'],
          "{$base}/computer.php?users_id={$id}",
          'ti-device-desktop',
-         __('Computadoras', 'responsivas'),
+         __('Computers', 'responsivas'),
          'btn btn-primary',
-         __('Sin computadoras asignadas', 'responsivas')
+         __('No computers assigned', 'responsivas')
       );
 
       echo self::button(
          $data['printers'],
          "{$base}/printer.php?users_id={$id}",
          'ti-printer',
-         __('Impresoras', 'responsivas'),
+         __('Printers', 'responsivas'),
          'btn btn-secondary',
-         __('Sin impresoras asignadas', 'responsivas')
+         __('No printers assigned', 'responsivas')
       );
 
       echo self::button(
          $data['phones'],
          "{$base}/phone.php?users_id={$id}",
          'ti-device-mobile',
-         __('Teléfonos', 'responsivas'),
+         __('Phones', 'responsivas'),
          'btn btn-info',
-         __('Sin teléfonos del tipo configurado asignados', 'responsivas')
+         __('No phones of the configured type assigned', 'responsivas')
       );
 
       echo "</div>";
@@ -315,7 +315,7 @@ class PluginResponsivasUser extends CommonGLPI {
       $dt = new DateTime('now', new DateTimeZone($tz));
       ?>
       <div class="card-footer text-end py-2">
-         <small><?php echo __('Última actualización: ', 'responsivas') . $dt->format('d/m/Y H:i'); ?></small>
+         <small><?php echo __('Last updated: ', 'responsivas') . $dt->format('d/m/Y H:i'); ?></small>
       </div>
       </div><!-- /card -->
       <script>

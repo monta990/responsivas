@@ -52,7 +52,7 @@ if (isset($_POST['delete_logo'])) {
 
     if (is_file($logoPath) && !@unlink($logoPath)) {
         Session::addMessageAfterRedirect(
-            __('No se pudo eliminar el logo.', 'responsivas'),
+            __('Could not delete the logo.', 'responsivas'),
             false,
             ERROR
         );
@@ -61,7 +61,7 @@ if (isset($_POST['delete_logo'])) {
     }
 
     Session::addMessageAfterRedirect(
-        __('Logo eliminado correctamente.', 'responsivas'),
+        __('Logo deleted successfully.', 'responsivas'),
         false,
         INFO
     );
@@ -126,7 +126,7 @@ if (isset($_POST['update'])) {
     
     if ($values['cellphone_type_id'] === 0) {
        Session::addMessageAfterRedirect(
-          __('Debes seleccionar un tipo de teléfono válido.', 'responsivas'),
+          __('You must select a valid phone type.', 'responsivas'),
           false,
           WARNING
        );
@@ -151,7 +151,7 @@ if (isset($_POST['update'])) {
         if ($size > $maxSize) {
 
             Session::addMessageAfterRedirect(
-                __('El archivo excede el tamaño máximo permitido (500 KB).', 'responsivas'),
+                __('The file exceeds the maximum allowed size (500 KB).', 'responsivas'),
                 false,
                 ERROR
             );
@@ -159,7 +159,7 @@ if (isset($_POST['update'])) {
         } elseif (!in_array($mime, $allowedMime)) {
 
             Session::addMessageAfterRedirect(
-                __('Formato no permitido. Solo PNG o JPG.', 'responsivas'),
+                __('Format not allowed. PNG or JPG only.', 'responsivas'),
                 false,
                 ERROR
             );
@@ -176,7 +176,7 @@ if (isset($_POST['update'])) {
                     imagepng($img, $logoPath);
                     imagedestroy($img);
                 } else {
-                    Session::addMessageAfterRedirect(__('Error al procesar imagen JPG', 'responsivas'), false, ERROR);
+                    Session::addMessageAfterRedirect(__('Error processing JPG image', 'responsivas'), false, ERROR);
                 }
             } else {
                 move_uploaded_file($tmpFile, $logoPath);
@@ -185,7 +185,7 @@ if (isset($_POST['update'])) {
             chmod($logoPath, 0644);
 
             Session::addMessageAfterRedirect(
-                __('Logo actualizado correctamente.', 'responsivas'),
+                __('Logo updated successfully.', 'responsivas'),
                 false,
                 INFO
             );
@@ -199,7 +199,7 @@ if (isset($_POST['update'])) {
     // =============================
     if (!$logo_uploaded) {
         Session::addMessageAfterRedirect(
-            __('Configuración guardada correctamente.', 'responsivas'),
+            __('Configuration saved successfully.', 'responsivas'),
             false,
             INFO
         );
@@ -397,7 +397,7 @@ echo "<div class='ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1'>
       </div>";
 
 echo "<h4 class='card-title ms-5 mb-0'>" .
-      __('Configuración de Responsivas', 'responsivas') .
+      __('Responsivas Settings', 'responsivas') .
      "</h4>";
 echo "</div>";
 
@@ -425,7 +425,7 @@ echo "
             data-bs-target='#tab-email'
             type='button'
             role='tab'>
-      <i class='ti ti-mail me-1'></i> " . __('Correo', 'responsivas') . "
+      <i class='ti ti-mail me-1'></i> " . __('Email', 'responsivas') . "
     </button>
   </li>
 
@@ -471,7 +471,7 @@ if (empty($config['cellphone_type_id'])) {
    echo "
    <div class='alert alert-warning d-flex align-items-start mb-4'>
       <i class='ti ti-alert-triangle me-2'></i>
-      " . __('El tipo de teléfono para responsivas no ha sido configurado. Contacta al administrador.', 'responsivas') . "
+      " . __('The phone type for responsibility documents has not been configured. Contact the administrator.', 'responsivas') . "
    </div>";
 }
 
@@ -497,7 +497,7 @@ echo "<div class='mb-4'>";
 // Label
 echo "<label class='form-label fw-bold d-flex align-items-center mb-2'>
         <i class='ti ti-world me-2'></i>
-        <span>" . __('Zona horaria para los PDFs', 'responsivas') . "</span>
+        <span>" . __('Timezone for PDFs', 'responsivas') . "</span>
       </label>";
 
 // Wrapper con icono
@@ -524,9 +524,9 @@ echo "</div>"; // fin input-group
 // Ayuda debajo
 echo "<div class='form-text'>";
 echo sprintf(
-   __('Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al instalar el complemento se toma de manera predeterminada la del servidor en ese momento, más información en: %s', 'responsivas'),
+   __('This timezone will be used to display dates and times in PDFs. At plugin installation it defaults to the server timezone. More information at: %s', 'responsivas'),
    "<a href='https://www.php.net/manual/timezones.php' target='_blank' rel='noopener noreferrer'>"
-   . __('Lista de zonas horarias de PHP', 'responsivas')
+   . __('PHP timezone list', 'responsivas')
    . "</a>"
 );
 echo "</div>";
@@ -543,7 +543,7 @@ echo "<div class='row'>";
 echo "<div class='col-md-6'>
         <label class='form-label fw-bold d-flex align-items-center'>
           <i class='ti ti-id-badge me-2'></i>
-          " . __('Mostrar número de empleado', 'responsivas') . "
+          " . __('Show employee number', 'responsivas') . "
         </label>
         <div class='form-check form-switch'>
           <input class='form-check-input'
@@ -552,7 +552,7 @@ echo "<div class='col-md-6'>
                  name='show_employee_number'
                  value='1' " . ($config['show_employee_number'] ? 'checked' : '') . ">
             <label class='form-check-label' for='show_employee_number'>";
-echo        __('Mostrar número de empleado en la responsiva', 'responsivas');
+echo        __('Show employee number in the responsibility document', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -561,7 +561,7 @@ echo        "</label>
 echo "<div class='col-md-6'>
         <label class='form-label fw-bold d-flex align-items-center'>
           <i class='ti ti-qrcode me-2'></i>
-          " . __('Mostrar QR', 'responsivas') . "
+          " . __('Show QR', 'responsivas') . "
         </label>
         <div class='form-check form-switch'>
           <input class='form-check-input'
@@ -570,7 +570,7 @@ echo "<div class='col-md-6'>
                  name='show_qr'
                  value='1' " . ($config['show_qr'] ? 'checked' : '') . ">
             <label class='form-check-label' for='show_qr'>";
-echo        __('Mostrar QR con Url de activo en responsiva', 'responsivas');
+echo        __('Show QR with asset URL in responsibility document', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -579,7 +579,7 @@ echo        "</label>
 echo "<div class='col-md-6'>
         <label class='form-label fw-bold d-flex align-items-center'>
           <i class='ti ti-file-zip me-2'></i>
-          " . __('Comprimir PDF', 'responsivas') . "
+          " . __('Compress PDF', 'responsivas') . "
         </label>
         <div class='form-check form-switch'>
           <input class='form-check-input'
@@ -588,7 +588,7 @@ echo "<div class='col-md-6'>
                  name='pdf_compression'
                  value='1' " . ($config['pdf_compression'] ?? 1 ? 'checked' : '') . ">
             <label class='form-check-label' for='pdf_compression'>";
-echo        __('Comprimir el archivo PDF generado', 'responsivas');
+echo        __('Compress the generated PDF file', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -597,7 +597,7 @@ echo        "</label>
 echo "<div class='col-md-6'>
         <label class='form-label fw-bold d-flex align-items-center'>
           <i class='ti ti-lock me-2'></i>
-          " . __('Proteger PDF', 'responsivas') . "
+          " . __('Protect PDF', 'responsivas') . "
         </label>
         <div class='form-check form-switch'>
           <input class='form-check-input'
@@ -606,7 +606,7 @@ echo "<div class='col-md-6'>
                  name='pdf_protection'
                  value='1' " . ($config['pdf_protection'] ?? 1 ? 'checked' : '') . ">
             <label class='form-check-label' for='pdf_protection'>";
-echo        __('Restringir copia y edición del PDF', 'responsivas');
+echo        __('Restrict PDF copying and editing', 'responsivas');
 echo        "</label>
         </div>
       </div>";
@@ -619,7 +619,7 @@ echo "<div class='row mt-3'>
   <div class='col-md-8'>
     <label class='form-label fw-bold d-flex align-items-center'>
       <i class='ti ti-watermark me-2'></i>
-      " . __('Texto de marca de agua', 'responsivas') . "
+      " . __('Watermark text', 'responsivas') . "
     </label>
     <div class='input-group'>
       <span class='input-group-text'><i class='ti ti-eye'></i></span>
@@ -627,15 +627,15 @@ echo "<div class='row mt-3'>
              class='form-control'
              name='watermark_text'
              maxlength='40'
-             placeholder='" . __('VISTA PREVIA', 'responsivas') . "'
+             placeholder='" . __('PREVIEW', 'responsivas') . "'
              value='" . Html::cleanInputText($config['watermark_text'] ?? '') . "'>
     </div>
-    <div class='form-text'>" . __('Texto diagonal que aparece en las vistas previas. Vacío usa el predeterminado.', 'responsivas') . "</div>
+    <div class='form-text'>" . __('Diagonal text shown on previews. Leave empty for the default.', 'responsivas') . "</div>
   </div>
   <div class='col-md-4'>
     <label class='form-label fw-bold d-flex align-items-center'>
       <i class='ti ti-adjustments me-2'></i>
-      " . __('Opacidad de marca de agua (%)', 'responsivas') . "
+      " . __('Watermark opacity (%)', 'responsivas') . "
     </label>
     <div class='input-group'>
       <span class='input-group-text'><i class='ti ti-percentage'></i></span>
@@ -645,7 +645,7 @@ echo "<div class='row mt-3'>
              min='5' max='100' step='5'
              value='" . (int)($config['watermark_opacity'] ?? 25) . "'>
     </div>
-    <div class='form-text'>" . __('5–100. Predeterminado: 25.', 'responsivas') . "</div>
+    <div class='form-text'>" . __('5–100. Default: 25.', 'responsivas') . "</div>
   </div>
 </div>";
 
@@ -656,7 +656,7 @@ echo "<div class='mb-4'>";
 
 echo "<label class='form-label fw-bold'>
          <i class='ti ti-briefcase me-2'></i>
-        " . __('Nombre de la empresa en las responsivas', 'responsivas') . "
+        " . __('Company name in responsibility documents', 'responsivas') . "
       </label>";
 
 echo "<div class='input-group'>
@@ -671,7 +671,7 @@ echo "<div class='input-group'>
       </div>";
 
 echo "<div class='form-text'>";
-echo __('Este nombre aparecerá dentro del texto de la responsiva.', 'responsivas');
+echo __('This name will appear in the responsibility document text.', 'responsivas');
 echo "</div>";
 
 echo "</div>";
@@ -682,7 +682,7 @@ echo "</div>";
 echo "<div class='mb-3'>";
 echo "<label class='form-label fw-bold'>
         <i class='ti ti-currency-dollar me-1'></i>
-        " . __('Símbolo de moneda', 'responsivas') . "
+        " . __('Currency symbol', 'responsivas') . "
       </label>";
 echo "<div class='input-group' style='max-width:200px;'>
         <span class='input-group-text'><i class='ti ti-coin' aria-hidden='true'></i></span>
@@ -693,7 +693,7 @@ echo "<div class='input-group' style='max-width:200px;'>
                placeholder='$'
                value=\"" . Html::cleanInputText($config['currency'] ?? '$') . "\">
       </div>";
-echo "<div class='form-text'>" . __('Símbolo o código que aparece antes del precio en los comodatos de teléfono (ej: $, USD, MXN, €).', 'responsivas') . "</div>";
+echo "<div class='form-text'>" . __('Symbol or code that appears before the price in phone loan agreements (e.g.: $, USD, MXN, €).', 'responsivas') . "</div>";
 echo "</div>";
 
 /* ============================
@@ -703,11 +703,11 @@ echo "<div class='mb-2'>";
 
 echo "<label class='form-label fw-bold'>
         <i class='ti ti-users me-1'></i>
-        " . __('Testigos del comodato de celulares', 'responsivas') . "
+        " . __('Witnesses for phone loan agreements', 'responsivas') . "
       </label>";
 
 echo "<div class='form-text mb-3'>";
-echo __('Selecciona dos testigos para el comodato de celulares.', 'responsivas');
+echo __('Select two witnesses for the phone loan agreement.', 'responsivas');
 echo "</div>";
 
 // Contenedor en fila
@@ -715,13 +715,13 @@ echo "<div class='row'>";
 
 /* Testigo 1 */
 echo "<div class='col-md-6 mb-3'>";
-echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Testigo 1', 'responsivas') . "</label>";
+echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Witness 1', 'responsivas') . "</label>";
 dropdownUser('testigo_1', $config);
 echo "</div>";
 
 /* Testigo 2 */
 echo "<div class='col-md-6 mb-3'>";
-echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Testigo 2', 'responsivas') . "</label>";
+echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Witness 2', 'responsivas') . "</label>";
 dropdownUser('testigo_2', $config);
 echo "</div>";
 
@@ -735,16 +735,16 @@ echo "<div class='mb-2'>";
 
 echo "<label class='form-label fw-bold'>
         <i class='ti ti-user-shield me-1'></i>
-        " . __('Representante legal del comodato de celulares', 'responsivas') . "
+        " . __('Legal representative for phone loan agreements', 'responsivas') . "
       </label>";
 
 echo "<div class='form-text mb-3'>";
-echo __('Selecciona el representante legal para el comodato de celulares.', 'responsivas');
+echo __('Select the legal representative for the phone loan agreement.', 'responsivas');
 echo "</div>";
 
 /* Testigo 1 */
 echo "<div class='mb-3'>";
-echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Representante legal', 'responsivas') . "</label>";
+echo "<label class='form-label'><i class='ti ti-user me-1'></i>" . __('Legal representative', 'responsivas') . "</label>";
 dropdownUser('representante', $config);
 echo "</div>";
 
@@ -766,8 +766,8 @@ if (!$hasLogo) {
     echo "<div class='alert alert-warning d-flex align-items-start mb-4'>";
     echo "<i class='ti ti-alert-triangle me-2 mt-1 text-warning' aria-hidden='true'></i>";
     echo "<div>";
-    echo "<strong>" . __('Sin logo configurado.', 'responsivas') . "</strong><br>";
-    echo __('Los PDFs se generarán sin logo.', 'responsivas');
+    echo "<strong>" . __('No logo configured.', 'responsivas') . "</strong><br>";
+    echo __('PDFs will be generated without a logo.', 'responsivas');
     echo "</div></div>";
 }
 
@@ -783,17 +783,17 @@ if ($hasLogo) {
     echo "<div class='mb-4'>";
 
     echo "<div class='form-text mb-1'>";
-    echo __('Da clic en la imagen para descargar una copia de respaldo.', 'responsivas');
+    echo __('Click the image to download a backup copy.', 'responsivas');
     echo "</div>";
 
     echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-photo-check me-2' aria-hidden='true'></i>
-        <span>" . __('Logo actual', 'responsivas') . "</span>
+        <span>" . __('Current logo', 'responsivas') . "</span>
       </label>";
 
     echo "<a href='" . PluginResponsivasPaths::logoUrl() . "'
             download='logo.png'
-            title='" . __('Descargar logo', 'responsivas') . "'>";
+            title='" . __('Download logo', 'responsivas') . "'>";
 
     echo "<img src='" . PluginResponsivasPaths::logoUrl() . "&t=" . time() . "'
             class='img-fluid'
@@ -807,7 +807,7 @@ if ($hasLogo) {
 
     echo "<div class='form-text mt-1'>";
     echo "Dimensiones: {$logoWidth} × {$logoHeight} px · ";
-    echo __('Tamaño: ', 'responsivas') . "<strong>{$logoSizeKB} KB</strong>";
+    echo __('Size: ', 'responsivas') . "<strong>{$logoSizeKB} KB</strong>";
     echo "</div>";
 
     echo "<div class='mt-3'>";
@@ -815,7 +815,7 @@ if ($hasLogo) {
             class='btn btn-danger d-flex align-items-center gap-2'
             data-bs-toggle='modal'
             data-bs-target='#deleteLogoModal'>
-      <i class='ti ti-trash'></i> " . __('Eliminar logo actual', 'responsivas') . "
+      <i class='ti ti-trash'></i> " . __('Delete current logo', 'responsivas') . "
     </button>";
     echo "</div>";
 
@@ -833,7 +833,7 @@ echo "<div class='mb-4'>";
 
 echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-eye me-2' aria-hidden='true'></i>
-        <span>" . __('Vista previa', 'responsivas') . "</span>
+        <span>" . __('Preview', 'responsivas') . "</span>
       </label>";
 
 echo "<img id='logo-preview'
@@ -846,7 +846,7 @@ echo "<img id='logo-preview'
 echo "<div id='preview-size' class='form-text d-none mt-1'></div>";
 
 echo "<div class='form-text mb-1'>";
-echo __('Para una vista previa carga una imagen.', 'responsivas');
+echo __('Load an image for a preview.', 'responsivas');
 echo "</div>";
 
 echo "</div>";
@@ -859,7 +859,7 @@ echo "</div>"; // row
 echo "<div class='mb-4'>";
 echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-upload me-2' aria-hidden='true'></i>
-        <span>" . __('Cargar nuevo logo', 'responsivas') . "</span>
+        <span>" . __('Upload new logo', 'responsivas') . "</span>
       </label>";
 echo "<input type='file'
              name='logo'
@@ -867,11 +867,11 @@ echo "<input type='file'
              accept='image/png,image/jpeg'
              onchange='previewLogo(this)'>";
 echo "<div class='form-text'>";
-echo __('PNG / JPG · Máx 500 KB · Se guardará como <b>logo.png</b>.', 'responsivas');
+echo __('PNG / JPG · Max 500 KB · Will be saved as <b>logo.png</b>.', 'responsivas');
 echo "</div>";
 echo "</div>";
     echo "<div class='form-text mb-1'>";
-    echo __('Una vez cargado y validado en vista previa, recuerda guardar para que se aplique.', 'responsivas');
+    echo __('Once loaded and validated in preview, remember to save for it to take effect.', 'responsivas');
     echo "</div>";
 echo "</div>"; // card-body
 echo "</div>"; // sub-card
@@ -884,7 +884,7 @@ echo "</div>"; //Tab general
 echo "<div class='tab-pane fade' id='tab-email' role='tabpanel'>";
 
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-mail', __('Opciones del correo electrónico', 'responsivas'));
+responsivasRibbonSubHeader('ti-mail', __('Email options', 'responsivas'));
 
 echo "<div class='card-body'>";
 
@@ -896,15 +896,15 @@ $mail_ok   = ($core_cfg['use_notifications']    ?? 0) == 1
 if (!$mail_ok) {
    echo "<div class='alert alert-warning d-flex align-items-center mb-3' role='alert'>
       <i class='ti ti-alert-triangle me-2 fs-5'></i>
-      <div>" . __('El servidor de correo de GLPI no está configurado o las notificaciones por correo están desactivadas. El botón de envío fallará hasta que lo configures en <strong>Configuración → Notificaciones → Configuración de correos</strong>.', 'responsivas') . "</div>
+      <div>" . __('The GLPI mail server is not configured or email notifications are disabled. The send button will fail until you configure it in <strong>Configuration → Notifications → Email configuration</strong>.', 'responsivas') . "</div>
    </div>";
 }
 
 // ── Hint de variables disponibles ────────────────────────
 $email_vars = [
-   '{nombre}'  => __('Nombre completo del usuario', 'responsivas'),
-   '{empresa}' => __('Nombre de la empresa (configurado en General)', 'responsivas'),
-   '{fecha}'   => __('Fecha del día en formato dd/mm/aaaa', 'responsivas'),
+   '{nombre}'  => __('Full name of the assigned user', 'responsivas'),
+   '{empresa}' => __('Company name (configured in General)', 'responsivas'),
+   '{fecha}'   => __('Document date in dd/mm/yyyy format', 'responsivas'),
 ];
 responsivasVariableHints($email_vars);
 
@@ -917,16 +917,16 @@ echo "<div class='row mt-3 mb-3'>
   <div class='col-12'>
     <label class='form-label fw-semibold'>
       <i class='ti ti-pencil me-1'></i>
-      " . __('Asunto del correo', 'responsivas') . "
+      " . __('Email subject', 'responsivas') . "
     </label>
     <input type='text'
            class='form-control'
            name='email_subject'
            maxlength='255'
-           placeholder='" . __('Asunto del correo', 'responsivas') . "'
+           placeholder='" . __('Email subject', 'responsivas') . "'
            value='{$email_subject_val}'>
     <div class='form-text'>
-      " . __('Puedes usar las variables {nombre}, {empresa} y {fecha}.', 'responsivas') . "
+      " . __('You can use the variables {nombre}, {empresa} and {fecha}.', 'responsivas') . "
     </div>
   </div>
 </div>";
@@ -936,15 +936,15 @@ echo "<div class='row mb-3'>
   <div class='col-12'>
     <label class='form-label fw-semibold'>
       <i class='ti ti-align-left me-1'></i>
-      " . __('Cuerpo del correo', 'responsivas') . "
+      " . __('Email body', 'responsivas') . "
     </label>";
 responsivasFormatToolbar();
 echo "<textarea class='form-control'
               name='email_body'
               rows='5'
-              placeholder='" . __('Cuerpo del correo', 'responsivas') . "'>" . $email_body_val . "</textarea>
+              placeholder='" . __('Email body', 'responsivas') . "'>" . $email_body_val . "</textarea>
     <div class='form-text'>
-      " . __('Puedes usar las variables {nombre}, {empresa} y {fecha}.', 'responsivas') . "
+      " . __('You can use the variables {nombre}, {empresa} and {fecha}.', 'responsivas') . "
     </div>
   </div>
 </div>";
@@ -954,15 +954,15 @@ echo "<div class='row mb-3'>
   <div class='col-12'>
     <label class='form-label fw-semibold'>
       <i class='ti ti-align-bottom me-1'></i>
-      " . __('Pie del correo', 'responsivas') . "
+      " . __('Email footer', 'responsivas') . "
     </label>";
 responsivasFormatToolbar();
 echo "<textarea class='form-control'
               name='email_footer'
               rows='3'
-              placeholder='" . __('Pie del correo (opcional)', 'responsivas') . "'>" . $email_footer_val . "</textarea>
+              placeholder='" . __('Email footer (optional)', 'responsivas') . "'>" . $email_footer_val . "</textarea>
     <div class='form-text'>
-      " . __('Opcional. Aparece al pie del correo, separado por una línea. Puedes usar {nombre}, {empresa} y {fecha}.', 'responsivas') . "
+      " . __('Optional. Appears at the bottom of the email, separated by a line. You can use {nombre}, {empresa} and {fecha}.', 'responsivas') . "
     </div>
   </div>
 </div>";
@@ -979,10 +979,10 @@ $test_action  = Plugin::getWebDir('responsivas') . '/front/send_mail.php';
 $has_config   = !empty(trim($config['email_subject'] ?? '')) && !empty(trim($config['email_body'] ?? ''));
 $btn_disabled = (!$mail_ok || !$has_config);
 $btn_tooltip  = !$mail_ok
-   ? __('Servidor de correo de GLPI no configurado', 'responsivas')
+   ? __('GLPI mail server not configured', 'responsivas')
    : (!$has_config
-      ? __('Configure el asunto y cuerpo del correo primero', 'responsivas')
-      : __('Envía un correo de prueba a tu dirección registrada en GLPI', 'responsivas'));
+      ? __('Configure the email subject and body first', 'responsivas')
+      : __('Sends a test email to your registered GLPI address', 'responsivas'));
 $btn_tooltip_esc = htmlspecialchars($btn_tooltip, ENT_QUOTES, 'UTF-8');
 $btn_cls         = $btn_disabled ? "btn btn-warning disabled' aria-disabled='true' style='pointer-events:none;opacity:.65" : "btn btn-warning";
 
@@ -995,12 +995,12 @@ echo "<div class='card mt-2 rounded-0'>
       <span data-bs-toggle='tooltip' title='{$btn_tooltip_esc}' class='d-inline-block'>
          <button type='submit' form='test-mail-form' class='{$btn_cls}'>
             <i class='ti ti-send me-2'></i>
-            " . __('Enviar correo de prueba', 'responsivas') . "
+            " . __('Send test email', 'responsivas') . "
          </button>
       </span>
       <span class='text-muted' style='font-size:0.85em;'>
          <i class='ti ti-info-circle me-1'></i>
-         " . __('El correo se enviará a la dirección registrada en tu perfil de GLPI.', 'responsivas') . "
+         " . __('The email will be sent to the address registered in your GLPI profile.', 'responsivas') . "
       </span>
    </div>
 </div>";
@@ -1072,45 +1072,45 @@ echo "</div>"; //card
  * SUB-CARD – Plantilla de contenido PC
  * ========================= */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-file-text', __('Plantilla del documento', 'responsivas'));
+responsivasRibbonSubHeader('ti-file-text', __('Document template', 'responsivas'));
 echo "<div class='card-body'>";
 
 // Variables disponibles para PC
 responsivasVariableHints([
-   '{nombre}'       => __('Nombre completo del usuario', 'responsivas'),
-   '{empresa}'      => __('Empresa', 'responsivas'),
-   '{num_empleado}' => __('Número de empleado', 'responsivas'),
-   '{activo}'       => __('Número de activo', 'responsivas'),
-   '{serie}'        => __('Número de serie', 'responsivas'),
-   '{marca}'        => __('Marca', 'responsivas'),
-   '{modelo}'       => __('Modelo', 'responsivas'),
-   '{tipo}'         => __('Tipo de equipo', 'responsivas'),
-   '{estado}'       => __('Condición / Estado', 'responsivas'),
-   '{fecha}'        => __('Fecha del documento', 'responsivas'),
-   '{lugar}'        => __('Ciudad, Estado, País', 'responsivas'),
+   '{nombre}'       => __('Full name of the assigned user', 'responsivas'),
+   '{empresa}'      => __('Company', 'responsivas'),
+   '{num_empleado}' => __('Employee number', 'responsivas'),
+   '{activo}'       => __('Asset number', 'responsivas'),
+   '{serie}'        => __('Serial number', 'responsivas'),
+   '{marca}'        => __('Brand', 'responsivas'),
+   '{modelo}'       => __('Model', 'responsivas'),
+   '{tipo}'         => __('Equipment type', 'responsivas'),
+   '{estado}'       => __('Condition / Status', 'responsivas'),
+   '{fecha}'        => __('Document date', 'responsivas'),
+   '{lugar}'        => __('City, State, Country', 'responsivas'),
 ]);
 
 responsivasTemplateEditor(
-   __('Título del documento', 'responsivas'),
+   __('Document title', 'responsivas'),
    'pc_titulo',
    $config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO',
-   __('Texto del encabezado principal. Usa **texto** para negrita.', 'responsivas'),
+   __('Main heading text. Use **text** for bold.', 'responsivas'),
    1
 );
 
 responsivasTemplateEditor(
-   __('Párrafo de introducción', 'responsivas'),
+   __('Introduction paragraph', 'responsivas'),
    'pc_intro',
    $config['pc_intro'] ?? '',
-   __('Párrafo introductorio antes de la tabla. Usa **texto** para negrita.', 'responsivas'),
+   __('Introductory paragraph before the table. Use **text** for bold.', 'responsivas'),
    3
 );
 
 responsivasTemplateEditor(
-   __('Cuerpo / Cláusulas', 'responsivas'),
+   __('Body / Clauses', 'responsivas'),
    'pc_cuerpo',
    $config['pc_cuerpo'] ?? '',
-   __('Texto legal después de la tabla. Líneas con "1. texto" → lista numerada. Línea en blanco → nuevo párrafo. **texto** → negrita.', 'responsivas'),
+   __('Legal text after the table. Lines with "1. text" → numbered list. Blank line → new paragraph. **text** → bold.', 'responsivas'),
    10
 );
 
@@ -1125,12 +1125,12 @@ echo "
   <div class='card-body py-3 d-flex align-items-center justify-content-between'>
     <div class='text-muted' style='font-size:0.875rem;'>
       <i class='ti ti-info-circle me-1'></i>"
-      . __('Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua.', 'responsivas') .
+      . __('Generates a PDF preview using current settings. A watermark is applied.', 'responsivas') .
     "</div>
     <a href='{$_preview_url}' target='_blank'
        class='btn btn-primary d-flex align-items-center gap-2 ms-3 flex-shrink-0'>
       <i class='ti ti-eye'></i>
-      " . __('Vista previa', 'responsivas') . "
+      " . __('Preview', 'responsivas') . "
     </a>
   </div>
 </div>";
@@ -1200,44 +1200,44 @@ echo "</div>"; //card
  * SUB-CARD – Plantilla de contenido Impresoras
  * ========================= */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-file-text', __('Plantilla del documento', 'responsivas'));
+responsivasRibbonSubHeader('ti-file-text', __('Document template', 'responsivas'));
 echo "<div class='card-body'>";
 
 responsivasVariableHints([
-   '{nombre}'       => __('Nombre completo del usuario', 'responsivas'),
-   '{empresa}'      => __('Empresa', 'responsivas'),
-   '{num_empleado}' => __('Número de empleado', 'responsivas'),
-   '{activo}'       => __('Número de activo', 'responsivas'),
-   '{serie}'        => __('Número de serie', 'responsivas'),
-   '{marca}'        => __('Marca', 'responsivas'),
-   '{modelo}'       => __('Modelo', 'responsivas'),
-   '{tipo}'         => __('Tipo', 'responsivas'),
-   '{estado}'       => __('Condición / Estado', 'responsivas'),
-   '{fecha}'        => __('Fecha del documento', 'responsivas'),
-   '{lugar}'        => __('Ciudad, Estado, País', 'responsivas'),
+   '{nombre}'       => __('Full name of the assigned user', 'responsivas'),
+   '{empresa}'      => __('Company', 'responsivas'),
+   '{num_empleado}' => __('Employee number', 'responsivas'),
+   '{activo}'       => __('Asset number', 'responsivas'),
+   '{serie}'        => __('Serial number', 'responsivas'),
+   '{marca}'        => __('Brand', 'responsivas'),
+   '{modelo}'       => __('Model', 'responsivas'),
+   '{tipo}'         => __('Type', 'responsivas'),
+   '{estado}'       => __('Condition / Status', 'responsivas'),
+   '{fecha}'        => __('Document date', 'responsivas'),
+   '{lugar}'        => __('City, State, Country', 'responsivas'),
 ]);
 
 responsivasTemplateEditor(
-   __('Título del documento', 'responsivas'),
+   __('Document title', 'responsivas'),
    'pri_titulo',
    $config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO',
-   __('Texto del encabezado principal. Usa **texto** para negrita.', 'responsivas'),
+   __('Main heading text. Use **text** for bold.', 'responsivas'),
    1
 );
 
 responsivasTemplateEditor(
-   __('Párrafo de introducción', 'responsivas'),
+   __('Introduction paragraph', 'responsivas'),
    'pri_intro',
    $config['pri_intro'] ?? '',
-   __('Párrafo introductorio antes de la tabla. Usa **texto** para negrita.', 'responsivas'),
+   __('Introductory paragraph before the table. Use **text** for bold.', 'responsivas'),
    3
 );
 
 responsivasTemplateEditor(
-   __('Cuerpo / Cláusulas', 'responsivas'),
+   __('Body / Clauses', 'responsivas'),
    'pri_cuerpo',
    $config['pri_cuerpo'] ?? '',
-   __('Texto legal después de la tabla. Líneas con "1. texto" → lista numerada. Línea en blanco → nuevo párrafo. **texto** → negrita.', 'responsivas'),
+   __('Legal text after the table. Lines with "1. text" → numbered list. Blank line → new paragraph. **text** → bold.', 'responsivas'),
    10
 );
 
@@ -1252,12 +1252,12 @@ echo "
   <div class='card-body py-3 d-flex align-items-center justify-content-between'>
     <div class='text-muted' style='font-size:0.875rem;'>
       <i class='ti ti-info-circle me-1'></i>"
-      . __('Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua.', 'responsivas') .
+      . __('Generates a PDF preview using current settings. A watermark is applied.', 'responsivas') .
     "</div>
     <a href='{$_preview_url}' target='_blank'
        class='btn btn-primary d-flex align-items-center gap-2 ms-3 flex-shrink-0'>
       <i class='ti ti-eye'></i>
-      " . __('Vista previa', 'responsivas') . "
+      " . __('Preview', 'responsivas') . "
     </a>
   </div>
 </div>";
@@ -1341,79 +1341,79 @@ echo "</div>"; // card
  * SUB-CARD – Plantilla de contenido Teléfonos
  * ========================= */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-file-text', __('Plantilla del documento', 'responsivas'));
+responsivasRibbonSubHeader('ti-file-text', __('Document template', 'responsivas'));
 echo "<div class='card-body'>";
 
 responsivasVariableHints([
-   '{nombre}'            => __('Nombre del usuario', 'responsivas'),
-   '{empresa}'           => __('Empresa', 'responsivas'),
-   '{num_empleado}'      => __('Número de empleado', 'responsivas'),
-   '{activo}'            => __('Número de activo', 'responsivas'),
-   '{serie_uuid}'        => __('UUID / Serie', 'responsivas'),
+   '{nombre}'            => __('User name', 'responsivas'),
+   '{empresa}'           => __('Company', 'responsivas'),
+   '{num_empleado}'      => __('Employee number', 'responsivas'),
+   '{activo}'            => __('Asset number', 'responsivas'),
+   '{serie_uuid}'        => __('UUID / Serial', 'responsivas'),
    '{imei}'              => __('IMEI', 'responsivas'),
-   '{marca}'             => __('Marca', 'responsivas'),
-   '{modelo}'            => __('Modelo', 'responsivas'),
-   '{estado}'            => __('Condición', 'responsivas'),
-   '{precio}'            => __('Precio de compra', 'responsivas'),
-   '{linea}'             => __('Número de línea / móvil', 'responsivas'),
+   '{marca}'             => __('Brand', 'responsivas'),
+   '{modelo}'            => __('Model', 'responsivas'),
+   '{estado}'            => __('Condition', 'responsivas'),
+   '{precio}'            => __('Purchase price', 'responsivas'),
+   '{linea}'             => __('Line / mobile number', 'responsivas'),
    '{ram}'               => __('RAM', 'responsivas'),
-   '{almacenamiento}'    => __('Almacenamiento', 'responsivas'),
-   '{fecha}'             => __('Fecha del documento', 'responsivas'),
-   '{hora}'              => __('Hora del documento', 'responsivas'),
-   '{lugar}'             => __('Ciudad, Estado, País', 'responsivas'),
-   '{direccion}'         => __('Dirección de la entidad', 'responsivas'),
-   '{cp}'                => __('Código postal', 'responsivas'),
-   '{representante}'     => __('Nombre del representante', 'responsivas'),
-   '{testigo1}'          => __('Testigo 1', 'responsivas'),
-   '{testigo2}'          => __('Testigo 2', 'responsivas'),
-   '{clausula_vida_util}'=> __('Cláusula de vida útil (auto-generada)', 'responsivas'),
+   '{almacenamiento}'    => __('Storage', 'responsivas'),
+   '{fecha}'             => __('Document date', 'responsivas'),
+   '{hora}'              => __('Document time', 'responsivas'),
+   '{lugar}'             => __('City, State, Country', 'responsivas'),
+   '{direccion}'         => __('Entity address', 'responsivas'),
+   '{cp}'                => __('ZIP / Postal code', 'responsivas'),
+   '{representante}'     => __('Representative name', 'responsivas'),
+   '{testigo1}'          => __('Witness 1', 'responsivas'),
+   '{testigo2}'          => __('Witness 2', 'responsivas'),
+   '{clausula_vida_util}'=> __('Useful life clause (auto-generated)', 'responsivas'),
 ]);
 
 responsivasTemplateEditor(
-   __('Título del documento', 'responsivas'),
+   __('Document title', 'responsivas'),
    'pho_titulo',
    $config['pho_titulo'] ?? 'CONTRATO DE COMODATO',
-   __('Encabezado del contrato. Usa **texto** para negrita.', 'responsivas'),
+   __('Contract heading. Use **text** for bold.', 'responsivas'),
    1
 );
 
 responsivasTemplateEditor(
-   __('Párrafo de apertura', 'responsivas'),
+   __('Opening paragraph', 'responsivas'),
    'pho_apertura',
    $config['pho_apertura'] ?? '',
-   __('Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita.', 'responsivas'),
+   __('Appearance paragraph before the clauses. Use **text** for bold.', 'responsivas'),
    4
 );
 
 responsivasTemplateEditor(
-   __('Cláusulas', 'responsivas'),
+   __('Clauses', 'responsivas'),
    'pho_clausulas',
    $config['pho_clausulas'] ?? '',
-   __('Una cláusula por línea con formato "1. texto". Usa {clausula_vida_util} para la cláusula de vida útil. **texto** → negrita.', 'responsivas'),
+   __('One clause per line with format "1. text". Use {clausula_vida_util} for the useful life clause. **text** → bold.', 'responsivas'),
    15
 );
 
 responsivasTemplateEditor(
-   __('Párrafo de testigos', 'responsivas'),
+   __('Witnesses paragraph', 'responsivas'),
    'pho_testigos',
    $config['pho_testigos'] ?? '',
-   __('Texto de comparecencia de testigos. Usa **texto** para negrita.', 'responsivas'),
+   __('Witnesses appearance text. Use **text** for bold.', 'responsivas'),
    3
 );
 
 responsivasTemplateEditor(
-   __('Cláusula de vida útil (con factura)', 'responsivas'),
+   __('Useful life clause (with invoice)', 'responsivas'),
    'pho_vida_util_factura',
    $config['pho_vida_util_factura'] ?? '',
-   __('Se usa cuando el teléfono tiene factura y proveedor. Variables: {fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado.', 'responsivas'),
+   __('Used when the phone has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the default text.', 'responsivas'),
    2
 );
 
 responsivasTemplateEditor(
-   __('Cláusula de vida útil (sin factura)', 'responsivas'),
+   __('Useful life clause (without invoice)', 'responsivas'),
    'pho_vida_util_sin',
    $config['pho_vida_util_sin'] ?? '',
-   __('Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa el texto predeterminado.', 'responsivas'),
+   __('Used when the phone has no registered invoice or supplier. Empty uses the default text.', 'responsivas'),
    2
 );
 
@@ -1428,12 +1428,12 @@ echo "
   <div class='card-body py-3 d-flex align-items-center justify-content-between'>
     <div class='text-muted' style='font-size:0.875rem;'>
       <i class='ti ti-info-circle me-1'></i>"
-      . __('Genera una vista previa del PDF con los datos actuales. Se aplica una marca de agua.', 'responsivas') .
+      . __('Generates a PDF preview using current settings. A watermark is applied.', 'responsivas') .
     "</div>
     <a href='{$_preview_url}' target='_blank'
        class='btn btn-primary d-flex align-items-center gap-2 ms-3 flex-shrink-0'>
       <i class='ti ti-eye'></i>
-      " . __('Vista previa', 'responsivas') . "
+      " . __('Preview', 'responsivas') . "
     </a>
   </div>
 </div>";
@@ -1445,7 +1445,7 @@ echo "<div class='card-footer bg-light d-flex justify-content-end gap-2'>";
 echo "<button type='submit'
              name='update'
              class='btn btn-primary d-flex align-items-center gap-2'>
-        <i class='ti ti-device-floppy' aria-hidden='true'></i> " . __('Guardar', 'responsivas') . "
+        <i class='ti ti-device-floppy' aria-hidden='true'></i> " . __('Save', 'responsivas') . "
       </button>";
 
 echo "</div>"; // footer
@@ -1467,29 +1467,29 @@ echo "
       <div class='modal-header'>
         <h5 class='modal-title'>
           <i class='ti ti-alert-triangle text-warning me-2'></i>
-          " . __('Confirmar eliminación', 'responsivas') . "
+          " . __('Confirm deletion', 'responsivas') . "
         </h5>
         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
 
       <div class='modal-body'>
-        <p class='mb-2'>" . __('¿Estás seguro de que deseas eliminar el logo actual?', 'responsivas') . "</p>
+        <p class='mb-2'>" . __('Are you sure you want to delete the current logo?', 'responsivas') . "</p>
         <div class='alert alert-warning d-flex align-items-center'>
           <i class='ti ti-info-circle me-2'></i>
-          " . __('Esta acción no se puede deshacer.', 'responsivas') . "
+          " . __('This action cannot be undone.', 'responsivas') . "
         </div>
       </div>
 
       <div class='modal-footer'>
         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>
-          <i class='ti ti-x'></i> " . __('Cancelar', 'responsivas') . "
+          <i class='ti ti-x'></i> " . __('Cancel', 'responsivas') . "
         </button>
 
         <button type='submit'
                 name='delete_logo'
                 value='1'
                 class='btn btn-danger d-flex align-items-center gap-2'>
-          <i class='ti ti-trash'></i> " . __('Eliminar logo', 'responsivas') . "
+          <i class='ti ti-trash'></i> " . __('Delete logo', 'responsivas') . "
         </button>
       </div>
 

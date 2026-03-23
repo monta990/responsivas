@@ -1,5 +1,3 @@
-# Responsivas Plugin
-# Language: es_MX
 #
 msgid ""
 msgstr ""
@@ -15,818 +13,651 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: setup.php
 msgid "Responsivas"
 msgstr "Responsivas"
 
-#: setup.php
-msgid "Responsivas requiere PHP 8.1 o superior. Versión actual: %s"
-msgstr "Responsivas requiere PHP 8.1 o superior. Versión actual: %s"
+msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
+msgstr "Responsivas requiere PHP 8.2 o superior. Versión actual: %s"
 
-#: setup.php
 msgid ""
-"Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
+"Responsivas requires TCPDF, which must be available in the GLPI vendor "
+"directory."
 msgstr ""
 "Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
 
-#: setup.php
 msgid ""
-"No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
-" permisos."
+"Could not create the Responsivas plugin files directory. Check permissions."
 msgstr ""
 "No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
 " permisos."
 
-#: hook.php
-msgid "Plugin Responsivas desinstalado. Configuración eliminada."
+msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr "Plugin Responsivas desinstalado. Configuración eliminada."
 
-#: inc/pdfbuilder.class.php
-msgid "Usuario no encontrado."
+msgid "User not found."
 msgstr "Usuario no encontrado."
 
-#: inc/pdfbuilder.class.php
-msgid "El usuario no tiene equipos asignados."
+msgid "The user has no assigned equipment."
 msgstr "El usuario no tiene equipos asignados."
 
-#: inc/pdfbuilder.class.php
-msgid "No se pudo obtener la entidad."
+msgid "Could not retrieve the entity."
 msgstr "No se pudo obtener la entidad."
 
-#: inc/pdfbuilder.class.php
-msgid "No está configurado el tipo de teléfono para comodatos en el plugin."
+msgid "The phone type for loan agreements is not configured in the plugin."
 msgstr "No está configurado el tipo de teléfono para comodatos en el plugin."
 
-#: inc/pdfbuilder.class.php
-msgid "El usuario no tiene teléfonos del tipo configurado asignados."
+msgid "The user has no phones of the configured type assigned."
 msgstr "El usuario no tiene teléfonos del tipo configurado asignados."
 
-#: inc/pdfbuilder.class.php
-msgid "Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin."
+msgid "You must configure Witness 1 and Witness 2 in the plugin settings."
 msgstr "Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin."
 
-#: inc/pdfbuilder.class.php
-msgid "Uno o ambos testigos configurados no son válidos o están inactivos."
+msgid "One or both configured witnesses are invalid or inactive."
 msgstr "Uno o ambos testigos configurados no son válidos o están inactivos."
 
-#: inc/pdfbuilder.class.php
-msgid "Debe configurar representante legal en la configuración del plugin."
+msgid "You must configure the legal representative in the plugin settings."
 msgstr "Debe configurar representante legal en la configuración del plugin."
 
-#: inc/pdfbuilder.class.php
-msgid "El representante legal no es válido o está inactivo."
+msgid "The legal representative is invalid or inactive."
 msgstr "El representante legal no es válido o está inactivo."
 
-#: inc/pdfbuilder.class.php
 msgid ""
-"El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → "
-"Información administrativa y financiera → Precio de compra."
+"Phone \"%s\" has no purchase price. Add it in Management → Administrative "
+"and financial information → Purchase price."
 msgstr ""
 "El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → "
 "Información administrativa y financiera → Precio de compra."
 
-#: inc/pdfbuilder.class.php
-msgid "N/D"
+msgid "N/A"
 msgstr "N/D"
 
-#: inc/helpers.php
-msgid "Etiquetas disponibles"
+msgid "Available tags"
 msgstr "Etiquetas disponibles"
 
-#: inc/user.class.php
-msgid "Generador de responsivas"
+msgid "Responsibility Document Generator"
 msgstr "Generador de responsivas"
 
-#: inc/user.class.php
-msgid "Seleccione el tipo de activo a generar responsivas"
+msgid "Select the asset type to generate responsibility documents"
 msgstr "Seleccione el tipo de activo a generar responsivas"
 
-#: inc/user.class.php
 msgid ""
-"El tipo de teléfono para responsivas no ha sido configurado. Contacta al "
-"administrador."
+"The phone type for responsibility documents has not been configured. Contact"
+" the administrator."
 msgstr ""
 "El tipo de teléfono para responsivas no ha sido configurado. Contacta al "
 "administrador."
 
-#: inc/user.class.php
-msgid "Mostrar QR"
+msgid "Show QR"
 msgstr "Mostrar QR"
 
-#: inc/user.class.php
-msgid "Mostrar número de empleado"
+msgid "Show employee number"
 msgstr "Mostrar número de empleado"
 
-#: inc/user.class.php
-msgid "Generar responsivas"
+msgid "Generate responsibility documents"
 msgstr "Generar responsivas"
 
-#: inc/user.class.php
-msgid "Computadoras"
+msgid "Computers"
 msgstr "Computadoras"
 
-#: inc/user.class.php
-msgid "Impresoras"
+msgid "Printers"
 msgstr "Impresoras"
 
-#: inc/user.class.php
-msgid "Teléfonos"
+msgid "Phones"
 msgstr "Teléfonos"
 
-#: inc/user.class.php
-msgid "Enviar por correo"
+msgid "Send by email"
 msgstr "Enviar por correo"
 
-#: inc/user.class.php
-msgid "Sin responsivas que enviar"
+msgid "No responsibility documents to send"
 msgstr "Sin responsivas que enviar"
 
-#: inc/user.class.php
-msgid "Sin correo electrónico"
+msgid "No email address"
 msgstr "Sin correo electrónico"
 
-#: inc/user.class.php
-msgid "Correo no configurado"
+msgid "Email not configured"
 msgstr "Correo no configurado"
 
-#: inc/user.class.php
-msgid "Enviar todas las responsivas al correo del usuario"
+msgid "Send all responsibility documents to the user email"
 msgstr "Enviar todas las responsivas al correo del usuario"
 
-#: inc/user.class.php
-msgid "Confirmar envío"
+msgid "Confirm sending"
 msgstr "Confirmar envío"
 
-#: inc/user.class.php
-msgid "Cancelar"
+msgid "Cancel"
 msgstr "Cancelar"
 
-#: inc/user.class.php
-msgid "¿Enviar las responsivas al correo %s?"
+msgid "Send the responsibility documents to %s?"
 msgstr "¿Enviar las responsivas al correo %s?"
 
-#: inc/user.class.php
-msgid "Sin computadoras asignadas"
+msgid "No computers assigned"
 msgstr "Sin computadoras asignadas"
 
-#: inc/user.class.php
-msgid "Sin impresoras asignadas"
+msgid "No printers assigned"
 msgstr "Sin impresoras asignadas"
 
-#: inc/user.class.php
-msgid "Sin teléfonos del tipo configurado asignados"
+msgid "No phones of the configured type assigned"
 msgstr "Sin teléfonos del tipo configurado asignados"
 
-#: inc/user.class.php
-msgid "Servidor de correo de GLPI no configurado"
+msgid "GLPI mail server not configured"
 msgstr "Servidor de correo de GLPI no configurado"
 
-#: inc/user.class.php
-msgid "Sin equipo asignado"
+msgid "No equipment assigned"
 msgstr "Sin equipo asignado"
 
-#: inc/config.class.php
-msgid "Configuración de Responsivas"
+msgid "Responsivas Settings"
 msgstr "Configuración de Responsivas"
 
-#: inc/config.class.php
-msgid "Configuración guardada correctamente."
+msgid "Configuration saved successfully."
 msgstr "Configuración guardada correctamente."
 
-#: inc/config.class.php
-msgid "Debes seleccionar un tipo de teléfono válido."
+msgid "You must select a valid phone type."
 msgstr "Debes seleccionar un tipo de teléfono válido."
 
-#: inc/config.class.php
 msgid "General"
 msgstr "General"
 
-#: inc/config.class.php
-msgid "Correo"
+msgid "Email"
 msgstr "Correo"
 
-#: inc/config.class.php
-msgid "Zona horaria para los PDFs"
+msgid "Timezone for PDFs"
 msgstr "Zona horaria para los PDFs"
 
-#: inc/config.class.php
 msgid ""
-"Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al "
-"instalar el complemento se toma de manera predeterminada la del servidor en "
-"ese momento, más información en: %s"
+"This timezone will be used to display dates and times in PDFs. At plugin "
+"installation it defaults to the server timezone. More information at: %s"
 msgstr ""
 "Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al "
 "instalar el complemento se toma de manera predeterminada la del servidor en "
 "ese momento, más información en: %s"
 
-#: inc/config.class.php
-msgid "Lista de zonas horarias de PHP"
+msgid "PHP timezone list"
 msgstr "Lista de zonas horarias de PHP"
 
-#: inc/config.class.php
-msgid "Mostrar número de empleado en la responsiva"
+msgid "Show employee number in the responsibility document"
 msgstr "Mostrar número de empleado en la responsiva"
 
-#: inc/config.class.php
-msgid "Mostrar QR con Url de activo en responsiva"
+msgid "Show QR with asset URL in responsibility document"
 msgstr "Mostrar QR con Url de activo en responsiva"
 
-#: inc/config.class.php
-msgid "Nombre de la empresa en las responsivas"
+msgid "Company name in responsibility documents"
 msgstr "Nombre de la empresa en las responsivas"
 
-#: inc/config.class.php
-msgid "Este nombre aparecerá dentro del texto de la responsiva."
+msgid "This name will appear in the responsibility document text."
 msgstr "Este nombre aparecerá dentro del texto de la responsiva."
 
-#: inc/config.class.php
-msgid "Símbolo de moneda"
+msgid "Currency symbol"
 msgstr "Símbolo de moneda"
 
-#: inc/config.class.php
 msgid ""
-"Símbolo o código que aparece antes del precio en los comodatos de teléfono "
-"(ej: $, USD, MXN, €)."
+"Symbol or code that appears before the price in phone loan agreements (e.g.:"
+" $, USD, MXN, €)."
 msgstr ""
 "Símbolo o código que aparece antes del precio en los comodatos de teléfono "
 "(ej: $, USD, MXN, €)."
 
-#: inc/config.class.php
-msgid "Testigos del comodato de celulares"
+msgid "Witnesses for phone loan agreements"
 msgstr "Testigos del comodato de celulares"
 
-#: inc/config.class.php
-msgid "Selecciona dos testigos para el comodato de celulares."
+msgid "Select two witnesses for the phone loan agreement."
 msgstr "Selecciona dos testigos para el comodato de celulares."
 
-#: inc/config.class.php
-msgid "Testigo 1"
+msgid "Witness 1"
 msgstr "Testigo 1"
 
-#: inc/config.class.php
-msgid "Testigo 2"
+msgid "Witness 2"
 msgstr "Testigo 2"
 
-#: inc/config.class.php
-msgid "Representante legal del comodato de celulares"
+msgid "Legal representative for phone loan agreements"
 msgstr "Representante legal del comodato de celulares"
 
-#: inc/config.class.php
-msgid "Selecciona el representante legal para el comodato de celulares."
+msgid "Select the legal representative for the phone loan agreement."
 msgstr "Selecciona el representante legal para el comodato de celulares."
 
-#: inc/config.class.php
-msgid "Representante legal"
+msgid "Legal representative"
 msgstr "Representante legal"
 
-#: inc/config.class.php
-msgid "Logo actual"
+msgid "Current logo"
 msgstr "Logo actual"
 
-#: inc/config.class.php
-msgid "Da clic en la imagen para descargar una copia de respaldo."
+msgid "Click the image to download a backup copy."
 msgstr "Da clic en la imagen para descargar una copia de respaldo."
 
-#: inc/config.class.php
-msgid "Tamaño: "
+msgid "Size: "
 msgstr "Tamaño: "
 
-#: inc/config.class.php
-msgid "Última actualización: "
+msgid "Last updated: "
 msgstr "Última actualización: "
 
-#: inc/config.class.php
-msgid "Sin logo configurado."
+msgid "No logo configured."
 msgstr "Sin logo configurado."
 
-#: inc/config.class.php
-msgid "Los PDFs se generarán sin logo."
+msgid "PDFs will be generated without a logo."
 msgstr "Los PDFs se generarán sin logo."
 
-#: inc/config.class.php
-msgid "Cargar nuevo logo"
+msgid "Upload new logo"
 msgstr "Cargar nuevo logo"
 
-#: inc/config.class.php
-msgid "PNG / JPG · Máx 500 KB · Se guardará como <b>logo.png</b>."
+msgid "PNG / JPG · Max 500 KB · Will be saved as <b>logo.png</b>."
 msgstr "PNG / JPG · Máx 500 KB · Se guardará como <b>logo.png</b>."
 
-#: inc/config.class.php
-msgid "Vista previa"
+msgid "Preview"
 msgstr "Vista previa"
 
-#: inc/config.class.php
-msgid "Para una vista previa carga una imagen."
+msgid "Load an image for a preview."
 msgstr "Para una vista previa carga una imagen."
 
-#: inc/config.class.php
 msgid ""
-"Una vez cargado y validado en vista previa, recuerda guardar para que se "
-"aplique."
+"Once loaded and validated in preview, remember to save for it to take "
+"effect."
 msgstr ""
 "Una vez cargado y validado en vista previa, recuerda guardar para que se "
 "aplique."
 
-#: inc/config.class.php
-msgid "Confirmar eliminación"
+msgid "Confirm deletion"
 msgstr "Confirmar eliminación"
 
-#: inc/config.class.php
-msgid "¿Estás seguro de que deseas eliminar el logo actual?"
+msgid "Are you sure you want to delete the current logo?"
 msgstr "¿Estás seguro de que deseas eliminar el logo actual?"
 
-#: inc/config.class.php
-msgid "Esta acción no se puede deshacer."
+msgid "This action cannot be undone."
 msgstr "Esta acción no se puede deshacer."
 
-#: inc/config.class.php
-msgid "Eliminar logo"
+msgid "Delete logo"
 msgstr "Eliminar logo"
 
-#: inc/config.class.php
-msgid "Eliminar logo actual"
+msgid "Delete current logo"
 msgstr "Eliminar logo actual"
 
-#: inc/config.class.php
-msgid "Descargar logo"
+msgid "Download logo"
 msgstr "Descargar logo"
 
-#: inc/config.class.php
-msgid "Logo actualizado correctamente."
+msgid "Logo updated successfully."
 msgstr "Logo actualizado correctamente."
 
-#: inc/config.class.php
-msgid "Logo eliminado correctamente."
+msgid "Logo deleted successfully."
 msgstr "Logo eliminado correctamente."
 
-#: inc/config.class.php
-msgid "No se pudo eliminar el logo."
+msgid "Could not delete the logo."
 msgstr "No se pudo eliminar el logo."
 
-#: inc/config.class.php
-msgid "Formato no permitido. Solo PNG o JPG."
+msgid "Format not allowed. PNG or JPG only."
 msgstr "Formato no permitido. Solo PNG o JPG."
 
-#: inc/config.class.php
-msgid "El archivo excede el tamaño máximo permitido (500 KB)."
+msgid "The file exceeds the maximum allowed size (500 KB)."
 msgstr "El archivo excede el tamaño máximo permitido (500 KB)."
 
-#: inc/config.class.php
-msgid "Error al procesar imagen JPG"
+msgid "Error processing JPG image"
 msgstr "Error al procesar imagen JPG"
 
-#: inc/config.class.php
-msgid "Opciones del correo electrónico"
+msgid "Email options"
 msgstr "Opciones del correo electrónico"
 
-#: inc/config.class.php
-msgid "Variables disponibles"
+msgid "Available variables"
 msgstr "Variables disponibles"
 
-#: inc/config.class.php
-msgid "Nombre completo del usuario"
+msgid "Full name of the assigned user"
 msgstr "Nombre completo del usuario"
 
-#: inc/config.class.php
-msgid "Nombre de la empresa (configurado en General)"
+msgid "Company name (configured in General)"
 msgstr "Nombre de la empresa (configurado en General)"
 
-#: inc/config.class.php
-msgid "Fecha del día en formato dd/mm/aaaa"
+msgid "Document date in dd/mm/yyyy format"
 msgstr "Fecha del día en formato dd/mm/aaaa"
 
-#: inc/config.class.php
-msgid "Usa **texto** para negrita"
+msgid "Use **text** for bold"
 msgstr "Usa **texto** para negrita"
 
-#: inc/config.class.php
-msgid "Asunto del correo"
+msgid "Email subject"
 msgstr "Asunto del correo"
 
-#: inc/config.class.php
-msgid "Puedes usar las variables {nombre}, {empresa} y {fecha}."
+msgid "You can use the variables {nombre}, {empresa} and {fecha}."
 msgstr "Puedes usar las variables {nombre}, {empresa} y {fecha}."
 
-#: inc/config.class.php
-msgid "Cuerpo del correo"
+msgid "Email body"
 msgstr "Cuerpo del correo"
 
-#: inc/config.class.php
-msgid "Pie del correo"
+msgid "Email footer"
 msgstr "Pie del correo"
 
-#: inc/config.class.php
-msgid "Pie del correo (opcional)"
+msgid "Email footer (optional)"
 msgstr "Pie del correo (opcional)"
 
-#: inc/config.class.php
 msgid ""
-"Opcional. Aparece al pie del correo, separado por una línea. Puedes usar "
-"{nombre}, {empresa} y {fecha}."
+"Optional. Appears at the bottom of the email, separated by a line. You can "
+"use {nombre}, {empresa} and {fecha}."
 msgstr ""
 "Opcional. Aparece al pie del correo, separado por una línea. Puedes usar "
 "{nombre}, {empresa} y {fecha}."
 
-#: inc/config.class.php
 msgid ""
-"El servidor de correo de GLPI no está configurado o las notificaciones por "
-"correo están desactivadas. El botón de envío fallará hasta que lo configures"
-" en <strong>Configuración → Notificaciones → Configuración de "
-"correos</strong>."
+"The GLPI mail server is not configured or email notifications are disabled. "
+"The send button will fail until you configure it in <strong>Configuration → "
+"Notifications → Email configuration</strong>."
 msgstr ""
 "El servidor de correo de GLPI no está configurado o las notificaciones por "
 "correo están desactivadas. El botón de envío fallará hasta que lo configures"
 " en <strong>Configuración → Notificaciones → Configuración de "
 "correos</strong>."
 
-#: inc/config.class.php
-msgid "Configure el asunto y cuerpo del correo primero"
+msgid "Configure the email subject and body first"
 msgstr "Configure el asunto y cuerpo del correo primero"
 
-#: inc/config.class.php
-msgid "Envía un correo de prueba a tu dirección registrada en GLPI"
+msgid "Sends a test email to your registered GLPI address"
 msgstr "Envía un correo de prueba a tu dirección registrada en GLPI"
 
-#: inc/config.class.php
-msgid "Enviar correo de prueba"
+msgid "Send test email"
 msgstr "Enviar correo de prueba"
 
-#: inc/config.class.php
-msgid "El correo se enviará a la dirección registrada en tu perfil de GLPI."
+msgid "The email will be sent to the address registered in your GLPI profile."
 msgstr "El correo se enviará a la dirección registrada en tu perfil de GLPI."
 
-#: inc/config.class.php
-msgid "Plantilla del documento"
+msgid "Document template"
 msgstr "Plantilla del documento"
 
-#: inc/config.class.php
-msgid "Título del documento"
+msgid "Document title"
 msgstr "Título del documento"
 
-#: inc/config.class.php
-msgid "Texto del encabezado principal. Usa **texto** para negrita."
+msgid "Main heading text. Use **text** for bold."
 msgstr "Texto del encabezado principal. Usa **texto** para negrita."
 
-#: inc/config.class.php
-msgid "Párrafo de introducción"
+msgid "Introduction paragraph"
 msgstr "Párrafo de introducción"
 
-#: inc/config.class.php
-msgid "Párrafo introductorio antes de la tabla. Usa **texto** para negrita."
+msgid "Introductory paragraph before the table. Use **text** for bold."
 msgstr "Párrafo introductorio antes de la tabla. Usa **texto** para negrita."
 
-#: inc/config.class.php
-msgid "Cuerpo / Cláusulas"
+msgid "Body / Clauses"
 msgstr "Cuerpo / Cláusulas"
 
-#: inc/config.class.php
 msgid ""
-"Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. "
-"Línea en blanco → nuevo párrafo. **texto** → negrita."
+"Legal text after the table. Lines with \"1. text\" → numbered list. Blank "
+"line → new paragraph. **text** → bold."
 msgstr ""
 "Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. "
 "Línea en blanco → nuevo párrafo. **texto** → negrita."
 
-#: inc/config.class.php
-msgid "Párrafo de apertura"
+msgid "Opening paragraph"
 msgstr "Párrafo de apertura"
 
-#: inc/config.class.php
-msgid ""
-"Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
+msgid "Appearance paragraph before the clauses. Use **text** for bold."
 msgstr ""
 "Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
 
-#: inc/config.class.php
-msgid "Cláusulas"
+msgid "Clauses"
 msgstr "Cláusulas"
 
-#: inc/config.class.php
 msgid ""
-"Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} "
-"para la cláusula de vida útil. **texto** → negrita."
+"One clause per line with format \"1. text\". Use {clausula_vida_util} for "
+"the useful life clause. **text** → bold."
 msgstr ""
 "Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} "
 "para la cláusula de vida útil. **texto** → negrita."
 
-#: inc/config.class.php
-msgid "Párrafo de testigos"
+msgid "Witnesses paragraph"
 msgstr "Párrafo de testigos"
 
-#: inc/config.class.php
-msgid "Texto de comparecencia de testigos. Usa **texto** para negrita."
+msgid "Witnesses appearance text. Use **text** for bold."
 msgstr "Texto de comparecencia de testigos. Usa **texto** para negrita."
 
-#: inc/config.class.php
-msgid "Encabezado del contrato. Usa **texto** para negrita."
+msgid "Contract heading. Use **text** for bold."
 msgstr "Encabezado del contrato. Usa **texto** para negrita."
 
-#: inc/config.class.php
-msgid "Empresa"
+msgid "Company"
 msgstr "Empresa"
 
-#: inc/config.class.php
-msgid "Número de empleado"
+msgid "Employee number"
 msgstr "Número de empleado"
 
-#: inc/config.class.php
-msgid "Número de activo"
+msgid "Asset number"
 msgstr "Número de activo"
 
-#: inc/config.class.php
-msgid "Número de serie"
+msgid "Serial number"
 msgstr "Número de serie"
 
-#: inc/config.class.php
-msgid "Marca"
+msgid "Brand"
 msgstr "Marca"
 
-#: inc/config.class.php
-msgid "Modelo"
+msgid "Model"
 msgstr "Modelo"
 
-#: inc/config.class.php
-msgid "Tipo de equipo"
+msgid "Equipment type"
 msgstr "Tipo de equipo"
 
-#: inc/config.class.php
-msgid "Condición / Estado"
+msgid "Condition / Status"
 msgstr "Condición / Estado"
 
-#: inc/config.class.php
-msgid "Fecha del documento"
+msgid "Document date"
 msgstr "Fecha del documento"
 
-#: inc/config.class.php
-msgid "Ciudad, Estado, País"
+msgid "City, State, Country"
 msgstr "Ciudad, Estado, País"
 
-#: inc/config.class.php
-msgid "UUID / Serie"
+msgid "UUID / Serial"
 msgstr "UUID / Serie"
 
-#: inc/config.class.php
 msgid "IMEI"
 msgstr "IMEI"
 
-#: inc/config.class.php
-msgid "Precio de compra"
+msgid "Purchase price"
 msgstr "Precio de compra"
 
-#: inc/config.class.php
-msgid "Número de línea / móvil"
+msgid "Line / mobile number"
 msgstr "Número de línea / móvil"
 
-#: inc/config.class.php
 msgid "RAM"
 msgstr "RAM"
 
-#: inc/config.class.php
-msgid "Almacenamiento"
+msgid "Storage"
 msgstr "Almacenamiento"
 
-#: inc/config.class.php
-msgid "Hora del documento"
+msgid "Document time"
 msgstr "Hora del documento"
 
-#: inc/config.class.php
-msgid "Dirección de la entidad"
+msgid "Entity address"
 msgstr "Dirección de la entidad"
 
-#: inc/config.class.php
-msgid "Código postal"
+msgid "ZIP / Postal code"
 msgstr "Código postal"
 
-#: inc/config.class.php
-msgid "Nombre del representante"
+msgid "Representative name"
 msgstr "Nombre del representante"
 
-#: inc/config.class.php
-msgid "Nombre del usuario"
+msgid "User name"
 msgstr "Nombre del usuario"
 
-#: inc/config.class.php
-msgid "Cláusula de vida útil (auto-generada)"
+msgid "Useful life clause (auto-generated)"
 msgstr "Cláusula de vida útil (auto-generada)"
 
-#: inc/config.class.php
-msgid "Tipo"
+msgid "Type"
 msgstr "Tipo"
 
-#: inc/config.class.php
-msgid "Condición"
+msgid "Condition"
 msgstr "Condición"
 
-#: inc/config.class.php
-msgid "Guardar"
+msgid "Save"
 msgstr "Guardar"
 
-#: inc/pdf.class.php
-msgid "Abrir ficha del activo en GLPI"
+msgid "Open asset record in GLPI"
 msgstr "Abrir ficha del activo en GLPI"
 
-#: front/computer.php
-msgid "No tienes permiso para generar responsivas de este usuario."
+msgid ""
+"You do not have permission to generate responsibility documents for this "
+"user."
 msgstr "No tienes permiso para generar responsivas de este usuario."
 
-#: front/send_mail.php
-msgid "Acceso denegado."
+msgid "Access denied."
 msgstr "Acceso denegado."
 
-#: front/send_mail.php
-msgid "El usuario no tiene dirección de correo electrónico registrada."
+msgid "The user does not have a registered email address."
 msgstr "El usuario no tiene dirección de correo electrónico registrada."
 
-#: front/send_mail.php
 msgid ""
-"Configuración de correo incompleta. Configure el asunto y cuerpo en la "
-"pestaña Correo."
+"Incomplete email configuration. Configure the subject and body in the Email "
+"tab."
 msgstr ""
 "Configuración de correo incompleta. Configure el asunto y cuerpo en la "
 "pestaña Correo."
 
-#: front/send_mail.php
-msgid "No hay responsivas que generar para este usuario."
+msgid "There are no responsibility documents to generate for this user."
 msgstr "No hay responsivas que generar para este usuario."
 
-#: front/send_mail.php
-msgid "Correo enviado correctamente a %s."
+msgid "Email successfully sent to %s."
 msgstr "Correo enviado correctamente a %s."
 
-#: front/send_mail.php
-msgid "Error al enviar el correo: %s"
+msgid "Error sending email: %s"
 msgstr "Error al enviar el correo: %s"
 
-#: front/send_mail.php
-msgid "El servidor de correo rechazó el envío."
+msgid "The mail server rejected the sending."
 msgstr "El servidor de correo rechazó el envío."
 
-#: front/send_mail.php
-msgid "Responsivas enviadas por correo a %s por %s (%d PDF)."
+msgid "Responsibility documents sent by email to %s by %s (%d PDF)."
 msgstr "Responsivas enviadas por correo a %s por %s (%d PDF)."
 
-#: front/send_mail.php
-msgid "Se adjunta %d responsiva PDF."
-msgid_plural "Se adjuntan %d responsivas PDF."
-msgstr[0] "Se adjunta %d responsiva PDF."
-msgstr[1] "Se adjuntan %d responsivas PDF."
+msgid "%d responsibility PDF attached."
+msgstr "Se adjunta %d responsiva PDF."
 
-#: front/send_mail.php
-msgid "Usuario inválido."
+msgid "Invalid user."
 msgstr "Usuario inválido."
 
-#: front/send_test_mail.php
 msgid ""
-"Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu "
-"perfil."
+"Your user does not have an email address registered in GLPI. Add it in your "
+"profile."
 msgstr ""
 "Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu "
 "perfil."
 
-#: front/send_test_mail.php
-msgid ""
-"Configuración de correo incompleta. Configure el asunto y cuerpo primero."
+msgid "Incomplete email configuration. Configure the subject and body first."
 msgstr ""
 "Configuración de correo incompleta. Configure el asunto y cuerpo primero."
 
-#: front/send_test_mail.php
 msgid ""
-"Este es un correo de prueba generado desde la configuración del plugin "
-"Responsivas. No se adjuntan PDFs."
+"This is a test email generated from the Responsivas plugin configuration. No"
+" PDFs are attached."
 msgstr ""
 "Este es un correo de prueba generado desde la configuración del plugin "
 "Responsivas. No se adjuntan PDFs."
 
-#: front/send_test_mail.php
-msgid "Correo de prueba enviado correctamente a %s."
+msgid "Test email successfully sent to %s."
 msgstr "Correo de prueba enviado correctamente a %s."
 
-#: inc/pdfbuilder.class.php
 msgid ""
-"La plantilla del documento tiene campos vacíos. Completa los siguientes "
-"campos en Configuración → Responsivas: %s"
+"The document template has empty fields. Complete the following fields in "
+"Configuration → Responsivas: %s"
 msgstr ""
 "La plantilla del documento tiene campos vacíos. Completa los siguientes "
 "campos en Configuración → Responsivas: %s"
 
-#: inc/pdfbuilder.class.php
-msgid "Título (Computadora)"
+msgid "Title (Computer)"
 msgstr "Título (Computadora)"
 
-#: inc/pdfbuilder.class.php
-msgid "Introducción (Computadora)"
+msgid "Introduction (Computer)"
 msgstr "Introducción (Computadora)"
 
-#: inc/pdfbuilder.class.php
-msgid "Cuerpo / Cláusulas (Computadora)"
+msgid "Body / Clauses (Computer)"
 msgstr "Cuerpo / Cláusulas (Computadora)"
 
-#: inc/pdfbuilder.class.php
-msgid "Título (Impresora)"
+msgid "Title (Printer)"
 msgstr "Título (Impresora)"
 
-#: inc/pdfbuilder.class.php
-msgid "Introducción (Impresora)"
+msgid "Introduction (Printer)"
 msgstr "Introducción (Impresora)"
 
-#: inc/pdfbuilder.class.php
-msgid "Cuerpo / Cláusulas (Impresora)"
+msgid "Body / Clauses (Printer)"
 msgstr "Cuerpo / Cláusulas (Impresora)"
 
-#: inc/pdfbuilder.class.php
-msgid "Título (Teléfono)"
+msgid "Title (Phone)"
 msgstr "Título (Teléfono)"
 
-#: inc/pdfbuilder.class.php
-msgid "Párrafo de apertura (Teléfono)"
+msgid "Opening paragraph (Phone)"
 msgstr "Párrafo de apertura (Teléfono)"
 
-#: inc/pdfbuilder.class.php
-msgid "Cláusulas (Teléfono)"
+msgid "Clauses (Phone)"
 msgstr "Cláusulas (Teléfono)"
 
-#: inc/pdfbuilder.class.php
-msgid "Párrafo de testigos (Teléfono)"
+msgid "Witnesses paragraph (Phone)"
 msgstr "Párrafo de testigos (Teléfono)"
 
-msgid "negrita"
+msgid "bold"
 msgstr "negrita"
 
-msgid "cursiva"
+msgid "italic"
 msgstr "cursiva"
 
-msgid "subrayado"
+msgid "underline"
 msgstr "subrayado"
 
-msgid "Haz clic en una variable para insertarla en el campo activo."
+msgid "Click a variable to insert it at the cursor position."
 msgstr "Haz clic en una variable para insertarla en el campo activo."
 
-msgid "VISTA PREVIA"
+msgid "PREVIEW"
 msgstr "VISTA PREVIA"
 
-msgid "Error al generar la vista previa: %s"
+msgid "Error generating the preview: %s"
 msgstr "Error al generar la vista previa: %s"
 
-msgid "Testigo Demo 1"
+msgid "Demo Witness 1"
 msgstr "Testigo Demo 1"
 
-msgid "Testigo Demo 2"
+msgid "Demo Witness 2"
 msgstr "Testigo Demo 2"
 
-msgid "Representante Demo"
+msgid "Demo Representative"
 msgstr "Representante Demo"
 
 msgid ""
-"Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
-"de agua."
+"Generates a PDF preview using current settings. A watermark is applied."
 msgstr ""
 "Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
 "de agua."
 
-msgid "Comprimir PDF"
+msgid "Compress PDF"
 msgstr "Comprimir PDF"
 
-msgid "Comprimir el archivo PDF generado"
+msgid "Compress the generated PDF file"
 msgstr "Comprimir el archivo PDF generado"
 
-msgid "Proteger PDF"
+msgid "Protect PDF"
 msgstr "Proteger PDF"
 
-msgid "Restringir copia y edición del PDF"
+msgid "Restrict PDF copying and editing"
 msgstr "Restringir copia y edición del PDF"
 
-msgid "Texto de marca de agua"
+msgid "Watermark text"
 msgstr "Texto de marca de agua"
 
-msgid ""
-"Texto diagonal que aparece en las vistas previas. Vacío usa el "
-"predeterminado."
+msgid "Diagonal text shown on previews. Leave empty for the default."
 msgstr ""
 "Texto diagonal que aparece en las vistas previas. Vacío usa el "
 "predeterminado."
 
-msgid "Opacidad de marca de agua (%)"
+msgid "Watermark opacity (%)"
 msgstr "Opacidad de marca de agua (%)"
 
-msgid "5–100. Predeterminado: 25."
+msgid "5–100. Default: 25."
 msgstr "5–100. Predeterminado: 25."
 
-msgid "Cláusula de vida útil (con factura)"
+msgid "Useful life clause (with invoice)"
 msgstr "Cláusula de vida útil (con factura)"
 
 msgid ""
-"Se usa cuando el teléfono tiene factura y proveedor. Variables: "
-"{fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado."
+"Used when the phone has an invoice and supplier. Variables: {fecha_compra}, "
+"{factura}, {proveedor}. Empty uses the default text."
 msgstr ""
 "Se usa cuando el teléfono tiene factura y proveedor. Variables: "
 "{fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado."
 
-msgid "Cláusula de vida útil (sin factura)"
+msgid "Useful life clause (without invoice)"
 msgstr "Cláusula de vida útil (sin factura)"
 
 msgid ""
-"Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa"
-" el texto predeterminado."
+"Used when the phone has no registered invoice or supplier. Empty uses the "
+"default text."
 msgstr ""
 "Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa"
 " el texto predeterminado."
+
+msgid "Demo equipment for template preview"
+msgstr "Equipo demo para vista previa de plantilla"
+
+msgid "Demo printer for template preview"
+msgstr "Impresora demo para vista previa de plantilla"

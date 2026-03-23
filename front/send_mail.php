@@ -25,7 +25,7 @@ Session::checkLoginUser();
 // CSRF validado automáticamente por CheckCsrfListener de GLPI (token generado con Session::getNewCSRFToken())
 
 if (!Session::haveRight('user', READ)) {
-   Session::addMessageAfterRedirect(__('Acceso denegado.', 'responsivas'), false, ERROR);
+   Session::addMessageAfterRedirect(__('Access denied.', 'responsivas'), false, ERROR);
    Html::redirect($CFG_GLPI['root_doc'] . '/front/user.php');
    exit;
 }
@@ -36,7 +36,7 @@ if (!Session::haveRight('user', READ)) {
 if (($_POST['mode'] ?? '') === 'test') {
 
    if (!Session::haveRight('config', UPDATE)) {
-      Session::addMessageAfterRedirect(__('Acceso denegado.', 'responsivas'), false, ERROR);
+      Session::addMessageAfterRedirect(__('Access denied.', 'responsivas'), false, ERROR);
       Html::back();
       exit;
    }
@@ -52,7 +52,7 @@ if (($_POST['mode'] ?? '') === 'test') {
 
    if (empty($test_email)) {
       Session::addMessageAfterRedirect(
-         __('Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu perfil.', 'responsivas'),
+         __('Your user does not have an email address registered in GLPI. Add it in your profile.', 'responsivas'),
          false, ERROR
       );
       Html::redirect($redirect_url);
@@ -66,7 +66,7 @@ if (($_POST['mode'] ?? '') === 'test') {
 
    if (empty($email_subject_tpl) || empty($email_body_tpl)) {
       Session::addMessageAfterRedirect(
-         __('Configuración de correo incompleta. Configure el asunto y cuerpo primero.', 'responsivas'),
+         __('Incomplete email configuration. Configure the subject and body first.', 'responsivas'),
          false, ERROR
       );
       Html::redirect($redirect_url);
@@ -93,7 +93,7 @@ if (($_POST['mode'] ?? '') === 'test') {
       : '';
 
    $notice_safe = htmlspecialchars(
-      __('Este es un correo de prueba generado desde la configuración del plugin Responsivas. No se adjuntan PDFs.', 'responsivas'),
+      __('This is a test email generated from the Responsivas plugin configuration. No PDFs are attached.', 'responsivas'),
       ENT_QUOTES, 'UTF-8'
    );
 
@@ -127,18 +127,18 @@ HTML;
 
       if ($result) {
          Session::addMessageAfterRedirect(
-            sprintf(__('Correo de prueba enviado correctamente a %s.', 'responsivas'), $test_email),
+            sprintf(__('Test email successfully sent to %s.', 'responsivas'), $test_email),
             false, INFO
          );
       } else {
          Session::addMessageAfterRedirect(
-            __('El servidor de correo rechazó el envío.', 'responsivas'),
+            __('The mail server rejected the sending.', 'responsivas'),
             false, ERROR
          );
       }
    } catch (Throwable $e) {
       Session::addMessageAfterRedirect(
-         sprintf(__('Error al enviar el correo: %s', 'responsivas'), $e->getMessage()),
+         sprintf(__('Error sending email: %s', 'responsivas'), $e->getMessage()),
          false, ERROR
       );
    }
@@ -157,7 +157,7 @@ $redirect_user = static function (int $uid) use ($CFG_GLPI): void {
 };
 
 if ($user_id <= 0) {
-   Session::addMessageAfterRedirect(__('Usuario inválido.', 'responsivas'), false, ERROR);
+   Session::addMessageAfterRedirect(__('Invalid user.', 'responsivas'), false, ERROR);
    Html::redirect($CFG_GLPI['root_doc'] . '/front/user.php');
    exit;
 }
@@ -167,7 +167,7 @@ if ($user_id <= 0) {
  * ============================ */
 $user = new User();
 if (!$user->getFromDB($user_id) || !$user->canView()) {
-   Session::addMessageAfterRedirect(__('Usuario no encontrado.', 'responsivas'), false, ERROR);
+   Session::addMessageAfterRedirect(__('User not found.', 'responsivas'), false, ERROR);
    $redirect_user($user_id);
    exit;
 }
@@ -181,7 +181,7 @@ $user_email = trim($email_row['email'] ?? '');
 
 if (empty($user_email)) {
    Session::addMessageAfterRedirect(
-      __('El usuario no tiene dirección de correo electrónico registrada.', 'responsivas'),
+      __('The user does not have a registered email address.', 'responsivas'),
       false,
       ERROR
    );
@@ -200,7 +200,7 @@ $email_footer_tpl  = trim($config['email_footer']  ?? '');
 
 if (empty($email_subject_tpl) || empty($email_body_tpl)) {
    Session::addMessageAfterRedirect(
-      __('Configuración de correo incompleta. Configure el asunto y cuerpo en la pestaña Correo.', 'responsivas'),
+      __('Incomplete email configuration. Configure the subject and body in the Email tab.', 'responsivas'),
       false,
       ERROR
    );
@@ -228,7 +228,7 @@ $pdfs = PluginResponsivasGenerator::generateAll($user_id);
 
 if (empty($pdfs)) {
    Session::addMessageAfterRedirect(
-      __('No hay responsivas que generar para este usuario.', 'responsivas'),
+      __('There are no responsibility documents to generate for this user.', 'responsivas'),
       false,
       WARNING
    );
@@ -249,7 +249,7 @@ $footer_safe = !empty(trim($email_footer_tpl))
 
 $count           = count($pdfs);
 $attachment_note = sprintf(
-   _n('Se adjunta %d responsiva PDF.', 'Se adjuntan %d responsivas PDF.', $count, 'responsivas'),
+   _n('%d responsibility PDF attached.', 'Se adjuntan %d responsivas PDF.', $count, 'responsivas'),
    $count
 );
 
@@ -290,7 +290,7 @@ try {
 
    if ($result) {
       Session::addMessageAfterRedirect(
-         sprintf(__('Correo enviado correctamente a %s.', 'responsivas'), $user_email),
+         sprintf(__('Email successfully sent to %s.', 'responsivas'), $user_email),
          false,
          INFO
       );
@@ -304,14 +304,14 @@ try {
       Log::history(
          $user_id,
          'User',
-         [0, '', sprintf(__('Responsivas enviadas por correo a %s por %s (%d PDF).', 'responsivas'), $user_email, $quien, $count)],
+         [0, '', sprintf(__('Responsibility documents sent by email to %s by %s (%d PDF).', 'responsivas'), $user_email, $quien, $count)],
          0,
          Log::HISTORY_LOG_SIMPLE_MESSAGE
       );
 
    } else {
       Session::addMessageAfterRedirect(
-         sprintf(__('Error al enviar el correo: %s', 'responsivas'), __('El servidor de correo rechazó el envío.')),
+         sprintf(__('Error sending email: %s', 'responsivas'), __('The mail server rejected the sending.')),
          false,
          ERROR
       );
@@ -319,7 +319,7 @@ try {
 
 } catch (Throwable $e) {
    Session::addMessageAfterRedirect(
-      sprintf(__('Error al enviar el correo: %s', 'responsivas'), $e->getMessage()),
+      sprintf(__('Error sending email: %s', 'responsivas'), $e->getMessage()),
       false,
       ERROR
    );
