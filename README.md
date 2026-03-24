@@ -49,14 +49,6 @@
 | PHP | ≥ 8.2 |
 | TCPDF | included with GLPI |
 
-> **Supported locales:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
-
-> The configuration page is titled **"Configuración de Responsivas"** — the word "plugin" was intentionally removed for a cleaner UI.
-
-> **Base language:** English. Users without a supported locale see English. Spanish (es_MX) is a full translation.
-
-> **Note:** GLPI 10.x is not officially supported. The plugin uses APIs introduced in GLPI 11.
-
 ---
 
 ## Installation
@@ -336,12 +328,6 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 | GLPI | ≥ 11.0.0 |
 | PHP | ≥ 8.2 |
 | TCPDF | incluido con GLPI |
-
-> **Idiomas soportados:** `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`
-
-> **Idioma base:** Inglés. Usuarios sin idioma soportado verán el plugin en inglés. El español (es_MX) es una traducción completa.
-
-> **Nota:** GLPI 10.x no está soportado oficialmente. El plugin utiliza APIs introducidas en GLPI 11.
 
 ---
 
