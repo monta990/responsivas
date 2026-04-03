@@ -661,3 +661,12 @@ msgstr "Equipo demo para vista previa de plantilla"
 
 msgid "Demo printer for template preview"
 msgstr "Impresora demo para vista previa de plantilla"
+
+msgid "Select document types to send:"
+msgstr "Selecciona los tipos de documento a enviar:"
+
+msgid "Select at least one document type."
+msgstr "Selecciona al menos un tipo de documento."
+
+msgid "Send selected responsibility documents to the user email"
+msgstr "Enviar los documentos seleccionados al correo del usuario"

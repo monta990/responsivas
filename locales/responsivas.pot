@@ -611,3 +611,12 @@ msgstr ""
 
 msgid "Demo printer for template preview"
 msgstr ""
+
+msgid "Select document types to send:"
+msgstr ""
+
+msgid "Select at least one document type."
+msgstr ""
+
+msgid "Send selected responsibility documents to the user email"
+msgstr ""

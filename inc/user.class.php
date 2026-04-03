@@ -73,7 +73,7 @@ class PluginResponsivasUser extends CommonGLPI {
          return "<span class='d-flex align-items-center'>"
             . "<i class='ti ti-file-text me-2'></i>"
             . $label
-            . "<span class='badge badge-secondary ms-1'> "
+            . "<span class='badge ms-1' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'> "
             . $counts['total']
             . "</span></span>";
       }
@@ -123,22 +123,24 @@ class PluginResponsivasUser extends CommonGLPI {
             {$extra_attr}>
             <i class='ti {$icon} me-2'></i>
             {$label}
-            <span class='badge bg-light text-dark ms-2'>{$count}</span>
+            <span class='badge ms-2' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'>{$count}</span>
          </a>
       </span>";
    }
 
    /* =====================================================
-    * BOTÓN de envío por correo
+    * SECCIÓN de envío por correo (con selección de tipos)
     * ===================================================== */
    private static function emailButton(
       int $user_id,
-      int $total,
+      array $counts,
       string $user_email,
       bool $email_configured,
       bool $mail_ok,
       string $base
    ): string {
+
+      $total = $counts['total'];
 
       if ($total <= 0) {
          $tooltip  = __('No responsibility documents to send', 'responsivas');
@@ -153,7 +155,7 @@ class PluginResponsivasUser extends CommonGLPI {
          $tooltip  = __('GLPI mail server not configured', 'responsivas');
          $disabled = true;
       } else {
-         $tooltip  = __('Send all responsibility documents to the user email', 'responsivas');
+         $tooltip  = __('Send selected responsibility documents to the user email', 'responsivas');
          $disabled = false;
       }
 
@@ -181,12 +183,50 @@ class PluginResponsivasUser extends CommonGLPI {
       $lbl_confirm = __('Confirm sending', 'responsivas');
       $lbl_cancel  = __('Cancel', 'responsivas');
       $lbl_body    = sprintf(__('Send the responsibility documents to %s?', 'responsivas'), "<strong>{$user_email_safe}</strong>");
+      $lbl_select  = __('Select document types to send:', 'responsivas');
+      $lbl_comp    = __('Computers', 'responsivas');
+      $lbl_print   = __('Printers', 'responsivas');
+      $lbl_phone   = __('Phones', 'responsivas');
+      $lbl_none    = __('Select at least one document type.', 'responsivas');
+
+      $chk_comp  = $counts['computers'] > 0
+         ? "<div class='form-check'>
+               <input class='form-check-input resp-type-check' type='checkbox' name='send_computers' id='chk_comp_{$user_id}' value='1' checked>
+               <label class='form-check-label' for='chk_comp_{$user_id}'>
+                  <i class='ti ti-device-desktop me-1'></i>{$lbl_comp}
+                  <span class='badge ms-1' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'>{$counts['computers']}</span>
+               </label>
+            </div>"
+         : '';
+
+      $chk_print = $counts['printers'] > 0
+         ? "<div class='form-check'>
+               <input class='form-check-input resp-type-check' type='checkbox' name='send_printers' id='chk_print_{$user_id}' value='1' checked>
+               <label class='form-check-label' for='chk_print_{$user_id}'>
+                  <i class='ti ti-printer me-1'></i>{$lbl_print}
+                  <span class='badge ms-1' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'>{$counts['printers']}</span>
+               </label>
+            </div>"
+         : '';
+
+      $chk_phone = $counts['phones'] > 0
+         ? "<div class='form-check'>
+               <input class='form-check-input resp-type-check' type='checkbox' name='send_phones' id='chk_phone_{$user_id}' value='1' checked>
+               <label class='form-check-label' for='chk_phone_{$user_id}'>
+                  <i class='ti ti-device-mobile me-1'></i>{$lbl_phone}
+                  <span class='badge ms-1' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'>{$counts['phones']}</span>
+               </label>
+            </div>"
+         : '';
 
       return "
-      <!-- Formulario oculto -->
+      <!-- Formulario oculto — los checkboxes del modal se copian aquí al confirmar -->
       <form id='{$form_id}' method='post' action='{$base}/send_mail.php' style='display:none;'>
          <input type='hidden' name='users_id' value='{$user_id}'>
          <input type='hidden' name='_glpi_csrf_token' value='{$csrf_token}'>
+         <input type='hidden' name='send_computers' value='' id='hidden_comp_{$user_id}'>
+         <input type='hidden' name='send_printers'  value='' id='hidden_print_{$user_id}'>
+         <input type='hidden' name='send_phones'    value='' id='hidden_phone_{$user_id}'>
       </form>
 
       <!-- Botón que abre el modal -->
@@ -196,7 +236,7 @@ class PluginResponsivasUser extends CommonGLPI {
          </button>
       </span>
 
-      <!-- Modal de confirmación -->
+      <!-- Modal de confirmación con checkboxes -->
       <div class='modal fade' id='{$modal_id}' tabindex='-1' aria-labelledby='{$modal_id}_label' aria-hidden='true'>
          <div class='modal-dialog modal-dialog-centered'>
             <div class='modal-content'>
@@ -206,16 +246,38 @@ class PluginResponsivasUser extends CommonGLPI {
                   </h5>
                   <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                </div>
-               <div class='modal-body'>{$lbl_body}</div>
+               <div class='modal-body'>
+                  <p class='mb-3'>{$lbl_body}</p>
+                  <p class='fw-bold mb-2'>{$lbl_select}</p>
+                  {$chk_comp}
+                  {$chk_print}
+                  {$chk_phone}
+                  <div class='alert alert-warning mt-2 d-none' id='warn_none_{$user_id}'>
+                     <i class='ti ti-alert-triangle me-1'></i>{$lbl_none}
+                  </div>
+               </div>
                <div class='modal-footer'>
                   <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>
                      <i class='ti ti-x me-1'></i>{$lbl_cancel}
                   </button>
                   <button type='button' class='btn btn-success' id='btn_send_{$form_id}'
                           onclick=\"(function(btn){
+                             var modal = document.getElementById('{$modal_id}');
+                             var checks = modal.querySelectorAll('.resp-type-check:checked');
+                             if(checks.length === 0){
+                                document.getElementById('warn_none_{$user_id}').classList.remove('d-none');
+                                return;
+                             }
                              btn.disabled=true;
                              var icon=btn.querySelector('i');
                              if(icon){icon.className='spinner-border spinner-border-sm me-1';icon.setAttribute('role','status');}
+                             // Copy checkbox state to hidden form fields
+                             var names=['send_computers','send_printers','send_phones'];
+                             var ids=['hidden_comp_{$user_id}','hidden_print_{$user_id}','hidden_phone_{$user_id}'];
+                             names.forEach(function(name,i){
+                                var chk=modal.querySelector('[name='+name+']:checked');
+                                document.getElementById(ids[i]).value=chk?'1':'';
+                             });
                              document.getElementById('{$form_id}').submit();
                           })(this)\">
                      <i class='ti ti-send me-1'></i>{$lbl_send}
@@ -308,7 +370,7 @@ class PluginResponsivasUser extends CommonGLPI {
 
       // ── Separador + botón de correo ──────────────────────
       echo "<div class='d-flex flex-wrap justify-content-center gap-3 mb-4 mt-2'>";
-      echo self::emailButton($id, $data['total'], $user_email, $email_configured, $mail_ok, $base);
+      echo self::emailButton($id, $data, $user_email, $email_configured, $mail_ok, $base);
       echo "</div>";
 
       $tz = $config['timezone'] ?? date_default_timezone_get();

@@ -224,7 +224,21 @@ $email_subject = responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, E
 /* ============================
  * Generar PDFs
  * ============================ */
-$pdfs = PluginResponsivasGenerator::generateAll($user_id);
+// Selected document types (at least one must be checked)
+$send_computers = !empty($_POST['send_computers']);
+$send_printers  = !empty($_POST['send_printers']);
+$send_phones    = !empty($_POST['send_phones']);
+
+// If none selected, fall back to all (backwards compatibility with direct calls)
+if (!$send_computers && !$send_printers && !$send_phones) {
+   $send_computers = $send_printers = $send_phones = true;
+}
+
+$pdfs = PluginResponsivasGenerator::generateSelected($user_id, [
+   'computers' => $send_computers,
+   'printers'  => $send_printers,
+   'phones'    => $send_phones,
+]);
 
 if (empty($pdfs)) {
    Session::addMessageAfterRedirect(

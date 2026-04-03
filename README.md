@@ -7,7 +7,7 @@
 </p>
 <p align="center">
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
-  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v2%2B-green" alt="License"></a>
+  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
 </p>
@@ -37,6 +37,7 @@
 - 👁️ **PDF preview with watermark** — each asset tab has a "Vista previa" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
 - 🔐 **Compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions directly from the General configuration tab
 - 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Teléfonos tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
+- 📬 **Selective email sending** — the send confirmation modal lets you choose which document types to include (Computers, Printers, Phones). Only asset types with at least one assigned asset are shown, each with its count. All available types are pre-checked; uncheck any to exclude it.
 - ✅ **Template validation** — warns before generating if required fields are empty
 
 ---
@@ -90,7 +91,7 @@ responsivas/
 │   ├── pdfbuilder.class.php  # PDF factory, render methods, demo builder
 │   └── user.class.php        # User tab integration
 ├── locales/
-│   ├── responsivas.pot       # Translation template (191 strings)
+│   ├── responsivas.pot       # Translation template (193 strings)
 │   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
 │   ├── en_US.po / en_US.mo  # English (US)
 │   ├── en_GB.po / en_GB.mo  # English (GB)
@@ -98,7 +99,7 @@ responsivas/
 │   └── de_DE.po / de_DE.mo  # German
 ├── CHANGELOG.md
 ├── hook.php                  # Install / uninstall hooks
-├── LICENSE
+├── LICENSE                   # GNU General Public License v3
 ├── logo.png                  # Plugin icon (128×128) — read by GLPI Marketplace
 ├── plugin.xml                # GLPI catalog metadata
 ├── README.md
@@ -270,7 +271,7 @@ If you like my work, you can support me by a donate here:
 
 ## License
 
-GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+GPL v3 or later. See [LICENSE](LICENSE).
 
 ## Issues
 
@@ -287,7 +288,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 </p>
 <p align="center">
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
-  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v2%2B-green" alt="License"></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
 </p>
@@ -317,6 +318,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 - 👁️ **Vista previa con marca de agua** — cada pestaña de activo tiene un botón "Vista previa" que genera un PDF completo con los datos actuales (o datos demo si el admin no tiene activos de ese tipo)
 - 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
 - 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones
+- 📬 **Envío selectivo por correo** — el modal de confirmación de envío permite elegir qué tipos de documentos incluir (Computadoras, Impresoras, Teléfonos). Solo se muestran los tipos con al menos un activo asignado, con su conteo. Todos los tipos disponibles vienen pre-seleccionados; desmarca los que no quieras enviar.
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
 
 ---
@@ -370,7 +372,7 @@ responsivas/
 │   ├── pdfbuilder.class.php  # Factory de PDF, métodos render, constructor demo
 │   └── user.class.php        # Integración de pestaña en usuario
 ├── locales/
-│   ├── responsivas.pot       # Plantilla de traducciones (191 cadenas)
+│   ├── responsivas.pot       # Plantilla de traducciones (193 cadenas)
 │   ├── es_MX.po / es_MX.mo  # Español (México)
 │   ├── en_US.po / en_US.mo  # Inglés (EE. UU.)
 │   ├── en_GB.po / en_GB.mo  # Inglés (Reino Unido)
@@ -378,7 +380,7 @@ responsivas/
 │   └── de_DE.po / de_DE.mo  # Alemán
 ├── CHANGELOG.md
 ├── hook.php                  # Hooks de instalación / desinstalación
-├── LICENSE
+├── LICENSE                   # Licencia Pública General GNU v3
 ├── logo.png                  # Ícono del plugin (128×128) — leído por el Marketplace de GLPI
 ├── plugin.xml                # Metadatos del catálogo de GLPI
 ├── README.md
@@ -550,7 +552,7 @@ Si te gusta mi trabajo, me puedes apoyar con una donación:
 
 ## Licencia
 
-GPL v2 o posterior. Ver [LICENSE](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+GPL v3 o posterior. Ver [LICENSE](LICENSE).
 
 ## Problemas
 

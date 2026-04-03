@@ -45,4 +45,41 @@ class PluginResponsivasGenerator
 
       return $pdfs;
    }
+   /**
+    * Generates only the selected PDF types for the user.
+    *
+    * @param int   $user_id
+    * @param array $types  Array of enabled types: ['computers'=>bool, 'printers'=>bool, 'phones'=>bool]
+    * @return array
+    */
+   public static function generateSelected(int $user_id, array $types): array
+   {
+      $pdfs    = [];
+      $methods = [];
+
+      if (!empty($types['computers'])) {
+         $methods[] = ['PluginResponsivasPdfBuilder', 'buildComputerPdf'];
+      }
+      if (!empty($types['printers'])) {
+         $methods[] = ['PluginResponsivasPdfBuilder', 'buildPrinterPdf'];
+      }
+      if (!empty($types['phones'])) {
+         $methods[] = ['PluginResponsivasPdfBuilder', 'buildPhonePdf'];
+      }
+
+      foreach ($methods as $callable) {
+         try {
+            $result = $callable($user_id);
+            $pdfs[] = [
+               'filename' => $result['filename'],
+               'content'  => $result['pdf']->Output('', 'S'),
+            ];
+         } catch (RuntimeException $e) {
+            // No assets of this type or incomplete config — skip silently
+         }
+      }
+
+      return $pdfs;
+   }
+
 }
