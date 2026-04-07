@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.2.1\n"
+"Project-Id-Version: Responsivas\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-08 00:00+0000\n"
 "PO-Revision-Date: 2026-03-08 00:00+0000\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Responsivas"
-msgstr "Responsivas"
+msgstr "Documents de responsabilité"
 
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr "Responsivas nécessite PHP 8.2 ou supérieur. Version actuelle : %s"
@@ -33,7 +33,7 @@ msgstr ""
 "Vérifiez les permissions."
 
 msgid "Responsivas plugin uninstalled. Configuration deleted."
-msgstr "Plugin Responsivas désinstallé. Configuration supprimée."
+msgstr "Plugin Responsibility Documents désinstallé. Configuration supprimée."
 
 msgid "User not found."
 msgstr "Utilisateur introuvable."
@@ -150,7 +150,7 @@ msgid "No equipment assigned"
 msgstr "Aucun équipement assigné"
 
 msgid "Responsivas Settings"
-msgstr "Configuration de Responsivas"
+msgstr "Paramètres Documents de responsabilité"
 
 msgid "Configuration saved successfully."
 msgstr "Configuration enregistrée avec succès."
@@ -678,3 +678,60 @@ msgstr "Veuillez sélectionner au moins un type de document."
 
 msgid "Send selected responsibility documents to the user email"
 msgstr "Envoyer les documents sélectionnés à l'e-mail de l'utilisateur"
+
+msgid "Serial"
+msgstr "Numéro de série"
+
+msgid "Processor"
+msgstr "Processeur"
+
+msgid "Speed"
+msgstr "Vitesse"
+
+msgid "OS"
+msgstr "SE"
+
+msgid "Comments"
+msgstr "Commentaires"
+
+msgid "Device"
+msgstr "Périphérique"
+
+msgid "Serial / Asset"
+msgstr "Série / Actif"
+
+msgid "Asset No."
+msgstr "No. Actif"
+
+msgid "Serial/UUID"
+msgstr "Série/UUID"
+
+msgid "Line"
+msgstr "Ligne"
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "CLAUSES"
+msgstr "CLAUSES"
+
+msgid "LENDER"
+msgstr "PRÊTEUR"
+
+msgid "BORROWER"
+msgstr "EMPRUNTEUR"
+
+msgid "WITNESS"
+msgstr "TÉMOIN"
+
+msgid "Not specified"
+msgstr "Non spécifié"
+
+msgid "No comments"
+msgstr "Sans commentaires"
+
+msgid "In use"
+msgstr "En service"
+
+msgid "Employee No.: "
+msgstr "Employé n° : "

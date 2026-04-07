@@ -51,13 +51,14 @@ class PluginResponsivasPdfBuilder
    private static function appendDevicesHeader(string &$html, bool &$printed, string $th_bg): void
    {
       if ($printed) return;
+      $l = self::lbl();
       $html .= <<<HTML
 <tr style="background-color:{$th_bg};">
-  <td width="20%"><strong>Dispositivo</strong></td>
-  <td width="20%"><strong>Marca</strong></td>
-  <td width="20%"><strong>Modelo</strong></td>
-  <td width="20%"><strong>Serie / Activo</strong></td>
-  <td width="20%"><strong>Condición</strong></td>
+  <td width="20%"><strong>{$l['device']}</strong></td>
+  <td width="20%"><strong>{$l['brand']}</strong></td>
+  <td width="20%"><strong>{$l['model']}</strong></td>
+  <td width="20%"><strong>{$l['serial_asset']}</strong></td>
+  <td width="20%"><strong>{$l['condition']}</strong></td>
 </tr>
 HTML;
       $printed = true;
@@ -108,6 +109,50 @@ HTML;
       }
    }
 
+
+   /* =====================================================
+    * ETIQUETAS TRADUCIBLES DEL DOCUMENTO
+    * Centraliza todos los strings de cabeceras de tablas
+    * y etiquetas de firma que aparecen en los PDFs.
+    * ===================================================== */
+   private static function lbl(): array
+   {
+      static $cache = null;
+      if ($cache !== null) return $cache;
+      return $cache = [
+         // Table headers
+         'brand'       => __('Brand',        'responsivas'),
+         'model'       => __('Model',        'responsivas'),
+         'serial'      => __('Serial',       'responsivas'),
+         'processor'   => __('Processor',    'responsivas'),
+         'speed'       => __('Speed',        'responsivas'),
+         'ram'         => __('RAM',          'responsivas'),
+         'os'          => __('OS',           'responsivas'),
+         'storage'     => __('Storage',      'responsivas'),
+         'type'        => __('Type',         'responsivas'),
+         'condition'   => __('Condition',    'responsivas'),
+         'comments'    => __('Comments',     'responsivas'),
+         'device'      => __('Device',       'responsivas'),
+         'serial_asset'=> __('Serial / Asset','responsivas'),
+         'asset_no'    => __('Asset No.',    'responsivas'),
+         'serial_uuid' => __('Serial/UUID',  'responsivas'),
+         'imei'        => __('IMEI',         'responsivas'),
+         'line'        => __('Line',         'responsivas'),
+         'price'       => __('Price',        'responsivas'),
+         // Signature labels
+         'clauses'     => __('CLAUSES',      'responsivas'),
+         'lender'      => __('LENDER',       'responsivas'),
+         'borrower'    => __('BORROWER',     'responsivas'),
+         'witness'     => __('WITNESS',      'responsivas'),
+         // Fallbacks
+         'not_specified' => __('Not specified', 'responsivas'),
+         'no_comments'   => __('No comments',   'responsivas'),
+         'na'            => __('N/A',            'responsivas'),
+         'in_use'        => __('In use',         'responsivas'),
+         'employee_no'   => __('Employee No.: ', 'responsivas'),
+      ];
+   }
+
    public static function buildComputerPdf(int $user_id): array
    {
       global $DB, $CFG_GLPI;
@@ -145,7 +190,7 @@ HTML;
       $employee_number = e($user->fields['registration_number'] ?? '');
       $show_employee   = (int)($config['show_employee_number'] ?? 0);
       $company_name    = e($config['company_name'] ?? '');
-      $employee_line   = ($show_employee && $employee_number) ? "Empleado No: {$employee_number}<br>" : '';
+      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . $employee_number . "<br>") : '';
       $creator         = self::getCreator();
 
       $th_bg = '#E6E6E6';
@@ -171,13 +216,13 @@ HTML;
          $modelo        = e(ddn($comp->fields['computermodels_id'], 'glpi_computermodels'));
          $serie         = e($comp->fields['serial'] ?: 'N/A');
          $activo        = e($comp->fields['otherserial'] ?: 'N/A');
-         $comentarios   = e($comp->fields['comment'] ?: 'Sin comentarios');
-         $tipo          = e(ddn($comp->fields['computertypes_id'], 'glpi_computertypes', 'No especificado'));
+         $comentarios   = e($comp->fields['comment'] ?: __('No comments', 'responsivas'));
+         $tipo          = e(ddn($comp->fields['computertypes_id'], 'glpi_computertypes', __('Not specified', 'responsivas')));
          $estado_nombre = e(ddn($comp->fields['states_id'], 'glpi_states'));
 
          // CPU
-         $cpu_name = 'No especificado';
-         $cpu_freq = 'No especificada';
+         $cpu_name = __('Not specified', 'responsivas');
+         $cpu_freq = __('Not specified', 'responsivas');
          foreach ((new Item_DeviceProcessor())->find(['items_id' => $comp->getID(), 'itemtype' => 'Computer'], ['id DESC'], 1) as $row) {
             $device = new DeviceProcessor();
             if ($device->getFromDB($row['deviceprocessors_id'])) {
@@ -197,10 +242,10 @@ HTML;
                $ram_parts[] = $device->fields['designation'];
             }
          }
-         $ram_texto = e($ram_parts ? implode(' + ', $ram_parts) : 'No especificada');
+         $ram_texto = e($ram_parts ? implode(' + ', $ram_parts) : __('Not specified', 'responsivas'));
 
          // SO
-         $os_texto = 'No especificado';
+         $os_texto = __('Not specified', 'responsivas');
          foreach ((new Item_OperatingSystem())->find(['items_id' => $comp->getID(), 'itemtype' => 'Computer', 'is_deleted' => 0], ['date_mod DESC'], 1) as $row) {
             $partes = [];
             if ($so = ddn($row['operatingsystems_id'] ?? 0, 'glpi_operatingsystems', ''))         $partes[] = $so;
@@ -217,7 +262,7 @@ HTML;
                $disk_names[] = $device->fields['designation'];
             }
          }
-         $disco = $disk_names ? e(implode(', ', array_unique($disk_names))) : 'No especificado';
+         $disco = $disk_names ? e(implode(', ', array_unique($disk_names))) : __('Not specified', 'responsivas');
 
          // Periféricos (monitores y accesorios)
          $dispositivos_html    = '';
@@ -332,7 +377,7 @@ HTML;
       $employee_number = !empty($user->fields['registration_number']) ? $user->fields['registration_number'] : '';
       $show_employee   = (int)($config['show_employee_number'] ?? 0);
       $company_name    = e($config['company_name'] ?? '');
-      $employee_line   = ($show_employee && $employee_number) ? "Empleado No: " . e($employee_number) . "<br>" : '';
+      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . e($employee_number) . "<br>") : '';
       $creator         = self::getCreator();
 
       $th_bg = '#E6E6E6';
@@ -368,13 +413,13 @@ HTML;
          $asset_url = $CFG_GLPI['url_base'] . '/front/printer.form.php?id=' . (int)$printer['id'];
          $pdf->setQrForPage($page, $asset_url);
 
-         $marca         = e(ddn($printer['manufacturers_id'] ?? 0, 'glpi_manufacturers', 'No especificada'));
-         $modelo        = e(ddn($printer['printermodels_id'] ?? 0, 'glpi_printermodels', 'No especificado'));
-         $tipo          = e(ddn($printer['printertypes_id'] ?? 0, 'glpi_printertypes', 'No especificado'));
+         $marca         = e(ddn($printer['manufacturers_id'] ?? 0, 'glpi_manufacturers', __('Not specified', 'responsivas')));
+         $modelo        = e(ddn($printer['printermodels_id'] ?? 0, 'glpi_printermodels', __('Not specified', 'responsivas')));
+         $tipo          = e(ddn($printer['printertypes_id'] ?? 0, 'glpi_printertypes', __('Not specified', 'responsivas')));
          $estado_nombre = e(ddn($printer['states_id'] ?? 0, 'glpi_states'));
          $serie         = e(!empty($printer['serial'])      ? $printer['serial']      : 'N/A');
          $activo        = e(!empty($printer['otherserial']) ? $printer['otherserial'] : 'N/A');
-         $comentarios   = e(!empty($printer['comment'])     ? $printer['comment']     : 'Sin comentarios');
+         $comentarios   = e(!empty($printer['comment'])     ? $printer['comment']     : __('No comments', 'responsivas'));
 
          $pri_vars = array_merge($pri_base_vars, [
             '{activo}'  => $activo,
@@ -474,7 +519,7 @@ HTML;
       $show_employee = (int)($config['show_employee_number'] ?? 1);
       $company_name  = e($config['company_name'] ?? '');
       $emp_safe      = e($employee_number);
-      $employee_line = ($show_employee && !empty($emp_safe)) ? "Empleado No: {$emp_safe}<br>" : '';
+      $employee_line = ($show_employee && !empty($emp_safe)) ? (__("Employee No.: ", "responsivas") . $emp_safe . "<br>") : '';
 
       // Pre-validar precios ANTES de crear el PDF
       foreach ($phones as $phone) {
@@ -520,8 +565,8 @@ HTML;
          $asset_url = $CFG_GLPI['url_base'] . '/front/phone.form.php?id=' . (int)$phone['id'];
          $pdf->setQrForPage($page, $asset_url);
 
-         $marca  = ddn($phone['manufacturers_id'] ?? 0, 'glpi_manufacturers', 'No especificada');
-         $modelo = ddn($phone['phonemodels_id'] ?? 0, 'glpi_phonemodels', 'No especificado');
+         $marca  = ddn($phone['manufacturers_id'] ?? 0, 'glpi_manufacturers', __('Not specified', 'responsivas'));
+         $modelo = ddn($phone['phonemodels_id'] ?? 0, 'glpi_phonemodels', __('Not specified', 'responsivas'));
          $imei   = $phone['serial'] ?? 'N/A';
          $activo = $phone['otherserial'] ?? 'N/A';
          $serie  = $phone['uuid'] ?? 'N/A';
@@ -559,10 +604,10 @@ HTML;
                if (!empty($des)) $ram_parts[] = $des;
             }
          }
-         $ram_texto = !empty($ram_parts) ? implode(' + ', $ram_parts) : 'No especificada';
+         $ram_texto = !empty($ram_parts) ? implode(' + ', $ram_parts) : __('Not specified', 'responsivas');
 
          // Disco
-         $disco    = 'No especificado';
+         $disco    = __('Not specified', 'responsivas');
          $total_mb = 0;
          $nombres  = [];
          foreach ((new Item_DeviceHardDrive())->find(['items_id' => (int)$phone['id'], 'itemtype' => 'Phone', 'is_deleted' => 0]) as $row) {
@@ -723,16 +768,17 @@ HTML;
       string $full_name_safe, string $employee_line_html,
       string $th_bg, string $td_bg
    ): string {
+      $l = self::lbl();
       return <<<HTML
 <h2 style="text-align:center;">{$titulo}</h2>
 <p style="text-align:justify;">{$intro}</p>
 <table border="1" cellpadding="3" cellspacing="0" width="100%">
-<tr style="background-color:{$th_bg};"><td width="20%"><strong>Marca</strong></td><td width="20%"><strong>Modelo</strong></td><td width="20%"><strong>Serie</strong></td><td width="20%"><strong>Procesador</strong></td><td width="20%"><strong>Velocidad</strong></td></tr>
+<tr style="background-color:{$th_bg};"><td width="20%"><strong>{$l['brand']}</strong></td><td width="20%"><strong>{$l['model']}</strong></td><td width="20%"><strong>{$l['serial']}</strong></td><td width="20%"><strong>{$l['processor']}</strong></td><td width="20%"><strong>{$l['speed']}</strong></td></tr>
 <tr style="background-color:{$td_bg};"><td>{$marca}</td><td>{$modelo}</td><td>{$serie}</td><td>{$cpu_name}</td><td>{$cpu_freq}</td></tr>
-<tr style="background-color:{$th_bg};"><td><strong>Memoria RAM</strong></td><td><strong>SO</strong></td><td><strong>Almacenamiento</strong></td><td><strong>Tipo</strong></td><td><strong>Condición</strong></td></tr>
+<tr style="background-color:{$th_bg};"><td><strong>{$l['ram']}</strong></td><td><strong>{$l['os']}</strong></td><td><strong>{$l['storage']}</strong></td><td><strong>{$l['type']}</strong></td><td><strong>{$l['condition']}</strong></td></tr>
 <tr style="background-color:{$td_bg};"><td>{$ram}</td><td>{$os}</td><td>{$disco}</td><td>{$tipo}</td><td>{$estado}</td></tr>
 {$dispositivos_html}
-<tr style="background-color:{$th_bg};"><td width="100%"><strong>Comentarios</strong></td></tr>
+<tr style="background-color:{$th_bg};"><td width="100%"><strong>{$l['comments']}</strong></td></tr>
 <tr style="background-color:{$td_bg};"><td width="100%">{$comentarios}</td></tr>
 </table>
 {$cuerpo}
@@ -748,16 +794,17 @@ HTML;
       string $full_safe, string $employee_line,
       string $th_bg, string $td_bg
    ): string {
+      $l = self::lbl();
       return <<<HTML
 <h2 style="text-align:center;">{$titulo}</h2>
 <p style="text-align:justify;">{$intro}</p>
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
   <tr style="background-color:{$th_bg};">
-    <td width="20%"><strong>Marca</strong></td>
-    <td width="20%"><strong>Modelo</strong></td>
-    <td width="20%"><strong>Serie</strong></td>
-    <td width="20%"><strong>Tipo</strong></td>
-    <td width="20%"><strong>Condición</strong></td>
+    <td width="20%"><strong>{$l['brand']}</strong></td>
+    <td width="20%"><strong>{$l['model']}</strong></td>
+    <td width="20%"><strong>{$l['serial']}</strong></td>
+    <td width="20%"><strong>{$l['type']}</strong></td>
+    <td width="20%"><strong>{$l['condition']}</strong></td>
   </tr>
   <tr style="background-color:{$td_bg};">
     <td>{$marca}</td>
@@ -767,7 +814,7 @@ HTML;
     <td>{$estado}</td>
   </tr>
   <tr style="background-color:{$th_bg};">
-    <td colspan="5"><strong>Comentarios</strong></td>
+    <td colspan="5"><strong>{$l['comments']}</strong></td>
   </tr>
   <tr style="background-color:{$td_bg};">
     <td colspan="5">{$comentarios}</td>
@@ -790,24 +837,25 @@ HTML;
       string $representante, string $full_name_safe, string $employee_line,
       string $testigo1, string $testigo2
    ): string {
+      $l = self::lbl();
       return <<<HTML
 <p style="text-align:center;"><strong>{$titulo}</strong></p>
 <p style="text-align:justify; line-height:1.15;">{$apertura}</p>
-<p style="text-align:center;"><strong>CLÁUSULAS</strong></p>
+<p style="text-align:center;"><strong>{$l['clauses']}</strong></p>
 {$clausulas}
 <p style="text-align:justify; line-height:1.15;">{$testigos}</p>
 <br>
 <table width="100%" style="text-align:center;">
 <tr>
-  <td width="50%"><strong>COMODANTE</strong><br><br>_______________________________<br>{$representante}</td>
-  <td width="50%"><strong>COMODATARIO</strong><br><br>_______________________________<br>{$full_name_safe}<br>{$employee_line}</td>
+  <td width="50%"><strong>{$l['lender']}</strong><br><br>_______________________________<br>{$representante}</td>
+  <td width="50%"><strong>{$l['borrower']}</strong><br><br>_______________________________<br>{$full_name_safe}<br>{$employee_line}</td>
 </tr>
 </table>
 <br>
 <table width="100%" style="text-align:center;">
 <tr>
-  <td width="50%"><strong>TESTIGO</strong><br><br>_______________________________<br>{$testigo1}</td>
-  <td width="50%"><strong>TESTIGO</strong><br><br>_______________________________<br>{$testigo2}</td>
+  <td width="50%"><strong>{$l['witness']}</strong><br><br>_______________________________<br>{$testigo1}</td>
+  <td width="50%"><strong>{$l['witness']}</strong><br><br>_______________________________<br>{$testigo2}</td>
 </tr>
 </table>
 HTML;
@@ -928,7 +976,7 @@ HTML;
          $pdf->AddPage();
          $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
 
-         $employee_line      = ($show_employee && $demo_emp) ? "Empleado No: {$demo_emp}<br>" : '';
+         $employee_line      = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp . "<br>") : '';
          $employee_line_html = $employee_line ? "<br>{$employee_line}" : '';
 
          $pc_vars = [
@@ -967,7 +1015,7 @@ HTML;
          $pdf->AddPage();
          $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
 
-         $employee_line = ($show_employee && $demo_emp) ? "Empleado No: {$demo_emp}<br>" : '';
+         $employee_line = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp . "<br>") : '';
          $full_safe     = $full_name_safe;
 
          $pri_vars = [
@@ -1004,7 +1052,7 @@ HTML;
       $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
 
       $currency      = !empty($config['currency']) ? $config['currency'] : '$';
-      $employee_line = ($show_employee && $demo_emp) ? "Empleado No: {$demo_emp}" : '';
+      $employee_line = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp) : '';
 
       $pho_vars = [
          '{nombre}'             => e($full_name),    '{empresa}'       => $company_name,

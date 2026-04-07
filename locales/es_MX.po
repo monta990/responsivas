@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.2.1\n"
+"Project-Id-Version: Responsivas\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-08 00:00+0000\n"
 "PO-Revision-Date: 2026-03-08 00:00+0000\n"
@@ -670,3 +670,60 @@ msgstr "Selecciona al menos un tipo de documento."
 
 msgid "Send selected responsibility documents to the user email"
 msgstr "Enviar los documentos seleccionados al correo del usuario"
+
+msgid "Serial"
+msgstr "Serie"
+
+msgid "Processor"
+msgstr "Procesador"
+
+msgid "Speed"
+msgstr "Velocidad"
+
+msgid "OS"
+msgstr "SO"
+
+msgid "Comments"
+msgstr "Comentarios"
+
+msgid "Device"
+msgstr "Dispositivo"
+
+msgid "Serial / Asset"
+msgstr "Serie / Activo"
+
+msgid "Asset No."
+msgstr "No. Activo"
+
+msgid "Serial/UUID"
+msgstr "Serie/UUID"
+
+msgid "Line"
+msgstr "Línea"
+
+msgid "Price"
+msgstr "Precio"
+
+msgid "CLAUSES"
+msgstr "CLÁUSULAS"
+
+msgid "LENDER"
+msgstr "COMODANTE"
+
+msgid "BORROWER"
+msgstr "COMODATARIO"
+
+msgid "WITNESS"
+msgstr "TESTIGO"
+
+msgid "Not specified"
+msgstr "No especificado"
+
+msgid "No comments"
+msgstr "Sin comentarios"
+
+msgid "In use"
+msgstr "En uso"
+
+msgid "Employee No.: "
+msgstr "Empleado No.: "

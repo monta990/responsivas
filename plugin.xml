@@ -26,9 +26,9 @@
    </authors>
    <versions>
       <version>
-         <num>1.3.1</num>
+         <num>1.3.2</num>
          <compatibility>~11.0.0</compatibility>
-         <download_url>https://github.com/monta990/responsivas/releases/download/v1.3.1/responsivas-1.3.1.zip</download_url>
+         <download_url>https://github.com/monta990/responsivas/releases/download/v1.3.2/responsivas-1.3.2.zip</download_url>
       </version>
    </versions>
    <langs>
@@ -37,6 +37,7 @@
       <lang>en_GB</lang>
       <lang>fr_FR</lang>
       <lang>de_DE</lang>
+      <lang>it_IT</lang>
    </langs>
    <license>GPL v3+</license>
    <tags>

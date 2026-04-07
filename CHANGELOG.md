@@ -6,6 +6,25 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.2] — 2026-04-06
+
+### Fixed
+- **Hardcoded Spanish labels in PDF documents** — all table headers (`Brand`, `Model`, `Serial`, `Processor`, `Speed`, `RAM`, `OS`, `Storage`, `Type`, `Condition`, `Comments`, `Device`, `Serial / Asset`), signature labels (`LENDER`, `BORROWER`, `WITNESS`, `CLAUSES`), fallback values (`Not specified`, `No comments`, `N/A`, `In use`), and the employee number prefix (`Employee No.:`) were hardcoded in Spanish inside `pdfbuilder.class.php`. All moved to the translation system via a shared `lbl()` method and `__()` calls. Any language now gets fully translated PDF content.
+
+### Added
+- **Italian locale (it_IT)** — new `it_IT.po` / `it_IT.mo` with PDF labels translated. Other UI strings are present as empty msgstr (standard practice; gettext falls back to English msgid). Registered in `plugin.xml`.
+
+### Changed
+- **Plugin display name localized** — the name `Responsivas` was hardcoded in the tab, configuration page title, and all locale files. Now fully translated: `Responsibility Documents` (en_US/en_GB), `Documents de responsabilité` (fr_FR), `Verantwortungsdokumente` (de_DE), `Documenti di responsabilità` (it_IT), `Responsivas` (es_MX unchanged). The plugin identifier key remains `responsivas`.
+- **Version removed from .po/.pot headers** — `Project-Id-Version` now reads `Responsivas` without a version number, following gettext convention (the version belongs in the changelog, not in locale file headers).
+
+### Locales
+- Added Italian (`it_IT`). Total locales: `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`, `it_IT`.
+- Added 19 new translated strings (PDF table and signature labels).
+- Total: **212 strings** per locale.
+
+---
+
 ## [1.3.1] — 2026-04-03
 
 ### Added
@@ -213,6 +232,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+[1.3.2]: ../../compare/v1.3.1...v1.3.2
 [1.3.1]: ../../compare/v1.3.0...v1.3.1
 [1.3.0]: ../../compare/v1.2.7...v1.3.0
 [1.2.7]: ../../compare/v1.2.6...v1.2.7

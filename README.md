@@ -31,7 +31,7 @@
 - 🔢 **QR codes** on every document linking directly to the asset in GLPI
 - 👷 **Legal witnesses and representative** — configurable GLPI users
 - 📱 **Phone loan contracts** (*comodatos*) with full legal clause set
-- 🌍 **Multi-language** — Spanish (Mexico), English (US & GB), French, German
+- 🌍 **Multi-language** — Spanish (Mexico), English (US & GB), French, German, Italian
 - 🔒 **CSRF protection** and GLPI permission model
 - ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
 - 👁️ **PDF preview with watermark** — each asset tab has a "Vista previa" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
@@ -91,7 +91,8 @@ responsivas/
 │   ├── pdfbuilder.class.php  # PDF factory, render methods, demo builder
 │   └── user.class.php        # User tab integration
 ├── locales/
-│   ├── responsivas.pot       # Translation template (193 strings)
+│   ├── responsivas.pot       # Translation template (212 strings)
+│   ├── it_IT.po / it_IT.mo  # Italian
 │   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
 │   ├── en_US.po / en_US.mo  # English (US)
 │   ├── en_GB.po / en_GB.mo  # English (GB)
@@ -312,7 +313,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 - 🔢 **Códigos QR** en cada documento con enlace directo al activo en GLPI
 - 👷 **Testigos y representante legal** — usuarios de GLPI configurables
 - 📱 **Contratos de comodato** para teléfonos con set completo de cláusulas legales
-- 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán
+- 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán, Italiano
 - 🔒 **Protección CSRF** y modelo de permisos de GLPI
 - ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin
 - 👁️ **Vista previa con marca de agua** — cada pestaña de activo tiene un botón "Vista previa" que genera un PDF completo con los datos actuales (o datos demo si el admin no tiene activos de ese tipo)
@@ -372,7 +373,8 @@ responsivas/
 │   ├── pdfbuilder.class.php  # Factory de PDF, métodos render, constructor demo
 │   └── user.class.php        # Integración de pestaña en usuario
 ├── locales/
-│   ├── responsivas.pot       # Plantilla de traducciones (193 cadenas)
+│   ├── responsivas.pot       # Plantilla de traducciones (212 cadenas)
+│   ├── it_IT.po / it_IT.mo  # Italiano
 │   ├── es_MX.po / es_MX.mo  # Español (México)
 │   ├── en_US.po / en_US.mo  # Inglés (EE. UU.)
 │   ├── en_GB.po / en_GB.mo  # Inglés (Reino Unido)

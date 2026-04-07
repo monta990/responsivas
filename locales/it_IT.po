@@ -1,18 +1,26 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.2.1\n"
+"Project-Id-Version: Responsivas\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-03 00:00+0000\n"
+"PO-Revision-Date: 2026-04-03 00:00+0000\n"
+"Last-Translator: Edwin Elias Alvarez\n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Responsivas"
-msgstr ""
+msgstr "Documenti di responsabilità"
 
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr ""
 
 msgid ""
-"Responsivas requires TCPDF, which must be available in GLPI's vendor "
+"Responsivas requires TCPDF, which must be available in the GLPI vendor "
 "directory."
 msgstr ""
 
@@ -22,6 +30,7 @@ msgstr ""
 
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr ""
+"Plugin Documenti di responsabilità disinstallato. Configurazione eliminata."
 
 msgid "User not found."
 msgstr ""
@@ -56,7 +65,7 @@ msgid ""
 msgstr ""
 
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 msgid "Available tags"
 msgstr ""
@@ -130,7 +139,7 @@ msgid "No equipment assigned"
 msgstr ""
 
 msgid "Responsivas Settings"
-msgstr ""
+msgstr "Impostazioni Documenti di responsabilità"
 
 msgid "Configuration saved successfully."
 msgstr ""
@@ -382,10 +391,10 @@ msgid "Serial number"
 msgstr ""
 
 msgid "Brand"
-msgstr ""
+msgstr "Marca"
 
 msgid "Model"
-msgstr ""
+msgstr "Modello"
 
 msgid "Equipment type"
 msgstr ""
@@ -415,7 +424,7 @@ msgid "RAM"
 msgstr ""
 
 msgid "Storage"
-msgstr ""
+msgstr "Archiviazione"
 
 msgid "Document time"
 msgstr ""
@@ -436,10 +445,10 @@ msgid "Useful life clause (auto-generated)"
 msgstr ""
 
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 msgid "Condition"
-msgstr ""
+msgstr "Condizione"
 
 msgid "Save"
 msgstr ""
@@ -622,58 +631,58 @@ msgid "Send selected responsibility documents to the user email"
 msgstr ""
 
 msgid "Serial"
-msgstr ""
+msgstr "Seriale"
 
 msgid "Processor"
-msgstr ""
+msgstr "Processore"
 
 msgid "Speed"
-msgstr ""
+msgstr "Velocità"
 
 msgid "OS"
-msgstr ""
+msgstr "SO"
 
 msgid "Comments"
-msgstr ""
+msgstr "Commenti"
 
 msgid "Device"
-msgstr ""
+msgstr "Dispositivo"
 
 msgid "Serial / Asset"
-msgstr ""
+msgstr "Seriale / Attivo"
 
 msgid "Asset No."
-msgstr ""
+msgstr "N. Attivo"
 
 msgid "Serial/UUID"
-msgstr ""
+msgstr "Seriale/UUID"
 
 msgid "Line"
-msgstr ""
+msgstr "Linea"
 
 msgid "Price"
-msgstr ""
+msgstr "Prezzo"
 
 msgid "CLAUSES"
-msgstr ""
+msgstr "CLAUSOLE"
 
 msgid "LENDER"
-msgstr ""
+msgstr "COMODANTE"
 
 msgid "BORROWER"
-msgstr ""
+msgstr "COMODATARIO"
 
 msgid "WITNESS"
-msgstr ""
+msgstr "TESTIMONE"
 
 msgid "Not specified"
-msgstr ""
+msgstr "Non specificato"
 
 msgid "No comments"
-msgstr ""
+msgstr "Nessun commento"
 
 msgid "In use"
-msgstr ""
+msgstr "In uso"
 
 msgid "Employee No.: "
-msgstr ""
+msgstr "N. dipendente: "

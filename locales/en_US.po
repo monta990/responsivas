@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.2.1\n"
+"Project-Id-Version: Responsivas\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-08 00:00+0000\n"
 "PO-Revision-Date: 2026-03-08 00:00+0000\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Responsivas"
-msgstr ""
+msgstr "Responsibility Documents"
 
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr ""
@@ -138,7 +138,7 @@ msgid "No equipment assigned"
 msgstr ""
 
 msgid "Responsivas Settings"
-msgstr ""
+msgstr "Responsibility Documents Settings"
 
 msgid "Configuration saved successfully."
 msgstr ""
@@ -627,4 +627,61 @@ msgid "Select at least one document type."
 msgstr ""
 
 msgid "Send selected responsibility documents to the user email"
+msgstr ""
+
+msgid "Serial"
+msgstr ""
+
+msgid "Processor"
+msgstr ""
+
+msgid "Speed"
+msgstr ""
+
+msgid "OS"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Device"
+msgstr ""
+
+msgid "Serial / Asset"
+msgstr ""
+
+msgid "Asset No."
+msgstr ""
+
+msgid "Serial/UUID"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "CLAUSES"
+msgstr ""
+
+msgid "LENDER"
+msgstr ""
+
+msgid "BORROWER"
+msgstr ""
+
+msgid "WITNESS"
+msgstr ""
+
+msgid "Not specified"
+msgstr ""
+
+msgid "No comments"
+msgstr ""
+
+msgid "In use"
+msgstr ""
+
+msgid "Employee No.: "
 msgstr ""
