@@ -263,7 +263,7 @@ $footer_safe = !empty(trim($email_footer_tpl))
 
 $count           = count($pdfs);
 $attachment_note = sprintf(
-   _n('%d responsibility PDF attached.', 'Se adjuntan %d responsivas PDF.', $count, 'responsivas'),
+   _n('%d responsibility PDF attached.', '%d responsibility PDFs attached.', $count, 'responsivas'),
    $count
 );
 

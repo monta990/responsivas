@@ -9,6 +9,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ## [1.3.2] — 2026-04-06
 
 ### Fixed
+- **Full i18n audit — all strings now translated in all locales** — comprehensive audit across all PHP files and all 6 locales. Fixed: (1) `_n()` plural form had Spanish hardcoded as second argument; (2) `hook.php` Event::log message was hardcoded Spanish with no `__()` call; (3) `fr_FR` and `de_DE` had singular PDF-count string untranslated (msgstr === msgid); (4) two orphan strings removed from POT (`Available variables`, `Send all responsibility documents to the user email`). Result: `es_MX`, `fr_FR`, `de_DE`, `it_IT` all at 0 empty translations (211 strings each).
 - **Hardcoded Spanish labels in PDF documents** — all table headers (`Brand`, `Model`, `Serial`, `Processor`, `Speed`, `RAM`, `OS`, `Storage`, `Type`, `Condition`, `Comments`, `Device`, `Serial / Asset`), signature labels (`LENDER`, `BORROWER`, `WITNESS`, `CLAUSES`), fallback values (`Not specified`, `No comments`, `N/A`, `In use`), and the employee number prefix (`Employee No.:`) were hardcoded in Spanish inside `pdfbuilder.class.php`. All moved to the translation system via a shared `lbl()` method and `__()` calls. Any language now gets fully translated PDF content.
 
 ### Added
@@ -19,9 +20,10 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - **Version removed from .po/.pot headers** — `Project-Id-Version` now reads `Responsivas` without a version number, following gettext convention (the version belongs in the changelog, not in locale file headers).
 
 ### Locales
-- Added Italian (`it_IT`). Total locales: `es_MX`, `en_US`, `en_GB`, `fr_FR`, `de_DE`, `it_IT`.
-- Added 19 new translated strings (PDF table and signature labels).
-- Total: **212 strings** per locale.
+- Added Italian (`it_IT`) — fully translated (212/212 strings).
+- Added 19 new strings for PDF table and signature labels.
+- **All non-English locales now have 0 empty translations** (`es_MX`, `fr_FR`, `de_DE`, `it_IT` fully translated).
+- Total: **211 strings** per locale × 6 locales. All non-English locales fully translated (0 empty).
 
 ---
 

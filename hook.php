@@ -2,30 +2,28 @@
 
 use Glpi\Event;
 
-// Requerido por GLPI. Funciones de ciclo de vida del plugin.
+// Required by GLPI. Plugin lifecycle functions.
 
 if (!defined('GLPI_ROOT')) {
    die('Direct access not allowed');
 }
 
 /**
- * Desinstalación del plugin.
- * Elimina toda la configuración guardada en BD para garantizar
- * que la próxima instalación parta de defaults limpios.
+ * Plugin uninstall.
+ * Removes all configuration stored in the database to ensure
+ * a clean slate on the next installation.
  */
 function plugin_responsivas_uninstall() {
    global $DB;
 
-   // Borrar toda la configuración del plugin de la BD
    $DB->delete('glpi_configs', ['context' => 'plugin_responsivas']);
 
-   // Registrar desinstalación en el log de eventos de GLPI
    Event::log(
       0,
       'plugin_responsivas',
       3,
       'plugin',
-      'Plugin Responsivas desinstalado. Configuración eliminada.'
+      __('Responsivas plugin uninstalled. Configuration deleted.', 'responsivas')
    );
 
    return true;

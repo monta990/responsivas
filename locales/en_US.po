@@ -110,9 +110,6 @@ msgstr ""
 msgid "Email not configured"
 msgstr ""
 
-msgid "Send all responsibility documents to the user email"
-msgstr ""
-
 msgid "Confirm sending"
 msgstr ""
 
@@ -276,9 +273,6 @@ msgid "Error processing JPG image"
 msgstr ""
 
 msgid "Email options"
-msgstr ""
-
-msgid "Available variables"
 msgstr ""
 
 msgid "Full name of the assigned user"
@@ -684,4 +678,7 @@ msgid "In use"
 msgstr ""
 
 msgid "Employee No.: "
+msgstr ""
+
+msgid "%d responsibility PDFs attached."
 msgstr ""

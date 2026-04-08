@@ -18,377 +18,403 @@ msgstr "Documenti di responsabilità"
 
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr ""
+"Responsibility Documents richiede PHP 8.2 o superiore. Versione attuale: %s"
 
 msgid ""
 "Responsivas requires TCPDF, which must be available in the GLPI vendor "
 "directory."
 msgstr ""
+"Responsibility Documents richiede TCPDF, che deve essere disponibile nella "
+"directory vendor di GLPI."
 
 msgid ""
 "Could not create the Responsivas plugin files directory. Check permissions."
 msgstr ""
+"Impossibile creare la directory dei file del plugin. Controlla i permessi."
 
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr ""
 "Plugin Documenti di responsabilità disinstallato. Configurazione eliminata."
 
 msgid "User not found."
-msgstr ""
+msgstr "Utente non trovato."
 
 msgid "The user has no assigned equipment."
-msgstr ""
+msgstr "L'utente non ha apparecchiature assegnate."
 
 msgid "Could not retrieve the entity."
-msgstr ""
+msgstr "Impossibile recuperare l'entità."
 
 msgid "The phone type for loan agreements is not configured in the plugin."
 msgstr ""
+"Il tipo di telefono per i contratti di comodato non è configurato nel "
+"plugin."
 
 msgid "The user has no phones of the configured type assigned."
-msgstr ""
+msgstr "L'utente non ha telefoni del tipo configurato assegnati."
 
 msgid "You must configure Witness 1 and Witness 2 in the plugin settings."
 msgstr ""
+"Devi configurare il Testimone 1 e il Testimone 2 nelle impostazioni del "
+"plugin."
 
 msgid "One or both configured witnesses are invalid or inactive."
 msgstr ""
+"Uno o entrambi i testimoni configurati non sono validi o sono inattivi."
 
 msgid "You must configure the legal representative in the plugin settings."
 msgstr ""
+"Devi configurare il rappresentante legale nelle impostazioni del plugin."
 
 msgid "The legal representative is invalid or inactive."
-msgstr ""
+msgstr "Il rappresentante legale non è valido o è inattivo."
 
 msgid ""
 "Phone \"%s\" has no purchase price. Add it in Management → Administrative "
 "and financial information → Purchase price."
 msgstr ""
+"Il telefono \"%s\" non ha un prezzo di acquisto. Aggiungilo in Gestione → "
+"Informazioni amministrative e finanziarie → Prezzo di acquisto."
 
 msgid "N/A"
 msgstr "N/D"
 
 msgid "Available tags"
-msgstr ""
+msgstr "Tag disponibili"
 
 msgid "Responsibility Document Generator"
-msgstr ""
+msgstr "Generatore documenti di responsabilità"
 
 msgid "Select the asset type to generate responsibility documents"
-msgstr ""
+msgstr "Seleziona il tipo di attivo per generare documenti di responsabilità"
 
 msgid ""
 "The phone type for responsibility documents has not been configured. Contact"
 " the administrator."
 msgstr ""
+"Il tipo di telefono per i documenti di responsabilità non è stato "
+"configurato. Contatta l'amministratore."
 
 msgid "Show QR"
-msgstr ""
+msgstr "Mostra QR"
 
 msgid "Show employee number"
-msgstr ""
+msgstr "Mostra numero dipendente"
 
 msgid "Generate responsibility documents"
-msgstr ""
+msgstr "Genera documenti di responsabilità"
 
 msgid "Computers"
-msgstr ""
+msgstr "Computer"
 
 msgid "Printers"
-msgstr ""
+msgstr "Stampanti"
 
 msgid "Phones"
-msgstr ""
+msgstr "Telefoni"
 
 msgid "Send by email"
-msgstr ""
+msgstr "Invia via email"
 
 msgid "No responsibility documents to send"
-msgstr ""
+msgstr "Nessun documento di responsabilità da inviare"
 
 msgid "No email address"
-msgstr ""
+msgstr "Nessun indirizzo email"
 
 msgid "Email not configured"
-msgstr ""
-
-msgid "Send all responsibility documents to the user email"
-msgstr ""
+msgstr "Email non configurata"
 
 msgid "Confirm sending"
-msgstr ""
+msgstr "Conferma invio"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 msgid "Send the responsibility documents to %s?"
-msgstr ""
+msgstr "Inviare i documenti di responsabilità a %s?"
 
 msgid "No computers assigned"
-msgstr ""
+msgstr "Nessun computer assegnato"
 
 msgid "No printers assigned"
-msgstr ""
+msgstr "Nessuna stampante assegnata"
 
 msgid "No phones of the configured type assigned"
-msgstr ""
+msgstr "Nessun telefono del tipo configurato assegnato"
 
 msgid "GLPI mail server not configured"
-msgstr ""
+msgstr "Server di posta GLPI non configurato"
 
 msgid "No equipment assigned"
-msgstr ""
+msgstr "Nessuna apparecchiatura assegnata"
 
 msgid "Responsivas Settings"
 msgstr "Impostazioni Documenti di responsabilità"
 
 msgid "Configuration saved successfully."
-msgstr ""
+msgstr "Configurazione salvata con successo."
 
 msgid "You must select a valid phone type."
-msgstr ""
+msgstr "Devi selezionare un tipo di telefono valido."
 
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 msgid "Timezone for PDFs"
-msgstr ""
+msgstr "Fuso orario per PDF"
 
 msgid ""
 "This timezone will be used to display dates and times in PDFs. At plugin "
 "installation it defaults to the server timezone. More information at: %s"
 msgstr ""
+"Questo fuso orario verrà usato per le date e ore nei PDF. All'installazione,"
+" il valore predefinito è il fuso orario del server. Ulteriori informazioni "
+"su: %s"
 
 msgid "PHP timezone list"
-msgstr ""
+msgstr "Elenco fusi orari PHP"
 
 msgid "Show employee number in the responsibility document"
-msgstr ""
+msgstr "Mostra numero dipendente nel documento di responsabilità"
 
 msgid "Show QR with asset URL in responsibility document"
-msgstr ""
+msgstr "Mostra QR con URL attivo nel documento di responsabilità"
 
 msgid "Company name in responsibility documents"
-msgstr ""
+msgstr "Nome azienda nei documenti di responsabilità"
 
 msgid "This name will appear in the responsibility document text."
-msgstr ""
+msgstr "Questo nome apparirà nel testo del documento di responsabilità."
 
 msgid "Currency symbol"
-msgstr ""
+msgstr "Simbolo valuta"
 
 msgid ""
 "Symbol or code that appears before the price in phone loan agreements (e.g.:"
 " $, USD, MXN, €)."
 msgstr ""
+"Simbolo o codice che appare prima del prezzo nei contratti di comodato (es.:"
+" $, USD, MXN, €)."
 
 msgid "Witnesses for phone loan agreements"
-msgstr ""
+msgstr "Testimoni per contratti di comodato telefono"
 
 msgid "Select two witnesses for the phone loan agreement."
-msgstr ""
+msgstr "Seleziona due testimoni per il contratto di comodato."
 
 msgid "Witness 1"
-msgstr ""
+msgstr "Testimone 1"
 
 msgid "Witness 2"
-msgstr ""
+msgstr "Testimone 2"
 
 msgid "Legal representative for phone loan agreements"
-msgstr ""
+msgstr "Rappresentante legale per i contratti di comodato telefono"
 
 msgid "Select the legal representative for the phone loan agreement."
-msgstr ""
+msgstr "Seleziona il rappresentante legale per il contratto di comodato."
 
 msgid "Legal representative"
-msgstr ""
+msgstr "Rappresentante legale"
 
 msgid "Current logo"
-msgstr ""
+msgstr "Logo attuale"
 
 msgid "Click the image to download a backup copy."
-msgstr ""
+msgstr "Clicca sull'immagine per scaricare una copia di backup."
 
 msgid "Size: "
-msgstr ""
+msgstr "Dimensione: "
 
 msgid "Last updated: "
-msgstr ""
+msgstr "Ultimo aggiornamento: "
 
 msgid "No logo configured."
-msgstr ""
+msgstr "Nessun logo configurato."
 
 msgid "PDFs will be generated without a logo."
-msgstr ""
+msgstr "I PDF saranno generati senza logo."
 
 msgid "Upload new logo"
-msgstr ""
+msgstr "Carica nuovo logo"
 
 msgid "PNG / JPG · Max 500 KB · Will be saved as <b>logo.png</b>."
-msgstr ""
+msgstr "PNG / JPG · Max 500 KB · Verrà salvato come <b>logo.png</b>."
 
 msgid "Preview"
-msgstr ""
+msgstr "Anteprima"
 
 msgid "Load an image for a preview."
-msgstr ""
+msgstr "Carica un'immagine per un'anteprima."
 
 msgid ""
 "Once loaded and validated in preview, remember to save for it to take "
 "effect."
 msgstr ""
+"Una volta caricato e validato nell'anteprima, ricorda di salvare per "
+"applicare le modifiche."
 
 msgid "Confirm deletion"
-msgstr ""
+msgstr "Conferma eliminazione"
 
 msgid "Are you sure you want to delete the current logo?"
-msgstr ""
+msgstr "Sei sicuro di voler eliminare il logo attuale?"
 
 msgid "This action cannot be undone."
-msgstr ""
+msgstr "Questa azione non può essere annullata."
 
 msgid "Delete logo"
-msgstr ""
+msgstr "Elimina logo"
 
 msgid "Delete current logo"
-msgstr ""
+msgstr "Elimina logo attuale"
 
 msgid "Download logo"
-msgstr ""
+msgstr "Scarica logo"
 
 msgid "Logo updated successfully."
-msgstr ""
+msgstr "Logo aggiornato con successo."
 
 msgid "Logo deleted successfully."
-msgstr ""
+msgstr "Logo eliminato con successo."
 
 msgid "Could not delete the logo."
-msgstr ""
+msgstr "Impossibile eliminare il logo."
 
 msgid "Format not allowed. PNG or JPG only."
-msgstr ""
+msgstr "Formato non consentito. Solo PNG o JPG."
 
 msgid "The file exceeds the maximum allowed size (500 KB)."
-msgstr ""
+msgstr "Il file supera la dimensione massima consentita (500 KB)."
 
 msgid "Error processing JPG image"
-msgstr ""
+msgstr "Errore nell'elaborazione dell'immagine JPG"
 
 msgid "Email options"
-msgstr ""
-
-msgid "Available variables"
-msgstr ""
+msgstr "Opzioni email"
 
 msgid "Full name of the assigned user"
-msgstr ""
+msgstr "Nome completo dell'utente assegnato"
 
 msgid "Company name (configured in General)"
-msgstr ""
+msgstr "Nome azienda (configurato in Generale)"
 
 msgid "Document date in dd/mm/yyyy format"
-msgstr ""
+msgstr "Data documento in formato gg/mm/aaaa"
 
 msgid "Use **text** for bold"
-msgstr ""
+msgstr "Usa **testo** per il grassetto"
 
 msgid "Email subject"
-msgstr ""
+msgstr "Oggetto email"
 
 msgid "You can use the variables {nombre}, {empresa} and {fecha}."
-msgstr ""
+msgstr "Puoi usare le variabili {nombre}, {empresa} e {fecha}."
 
 msgid "Email body"
-msgstr ""
+msgstr "Corpo email"
 
 msgid "Email footer"
-msgstr ""
+msgstr "Piè di pagina email"
 
 msgid "Email footer (optional)"
-msgstr ""
+msgstr "Piè di pagina email (opzionale)"
 
 msgid ""
 "Optional. Appears at the bottom of the email, separated by a line. You can "
 "use {nombre}, {empresa} and {fecha}."
 msgstr ""
+"Opzionale. Appare in fondo all'email, separato da una riga. Puoi usare "
+"{nombre}, {empresa} e {fecha}."
 
 msgid ""
 "The GLPI mail server is not configured or email notifications are disabled. "
 "The send button will fail until you configure it in <strong>Configuration → "
 "Notifications → Email configuration</strong>."
 msgstr ""
+"Il server di posta GLPI non è configurato o le notifiche email sono "
+"disabilitate. Il pulsante di invio fallirà finché non lo configuri in "
+"<strong>Configurazione → Notifiche → Configurazione email</strong>."
 
 msgid "Configure the email subject and body first"
-msgstr ""
+msgstr "Configura prima l'oggetto e il corpo dell'email"
 
 msgid "Sends a test email to your registered GLPI address"
-msgstr ""
+msgstr "Invia un'email di test al tuo indirizzo GLPI registrato"
 
 msgid "Send test email"
-msgstr ""
+msgstr "Invia email di test"
 
 msgid "The email will be sent to the address registered in your GLPI profile."
-msgstr ""
+msgstr "L'email verrà inviata all'indirizzo registrato nel tuo profilo GLPI."
 
 msgid "Document template"
-msgstr ""
+msgstr "Modello documento"
 
 msgid "Document title"
-msgstr ""
+msgstr "Titolo documento"
 
 msgid "Main heading text. Use **text** for bold."
-msgstr ""
+msgstr "Testo dell'intestazione principale. Usa **testo** per il grassetto."
 
 msgid "Introduction paragraph"
-msgstr ""
+msgstr "Paragrafo di introduzione"
 
 msgid "Introductory paragraph before the table. Use **text** for bold."
 msgstr ""
+"Paragrafo introduttivo prima della tabella. Usa **testo** per il grassetto."
 
 msgid "Body / Clauses"
-msgstr ""
+msgstr "Corpo / Clausole"
 
 msgid ""
 "Legal text after the table. Lines with \"1. text\" → numbered list. Blank "
 "line → new paragraph. **text** → bold."
 msgstr ""
+"Testo legale dopo la tabella. Righe con \"1. testo\" → elenco numerato. Riga"
+" vuota → nuovo paragrafo. **testo** → grassetto."
 
 msgid "Opening paragraph"
-msgstr ""
+msgstr "Paragrafo di apertura"
 
 msgid "Appearance paragraph before the clauses. Use **text** for bold."
 msgstr ""
+"Paragrafo di apertura prima delle clausole. Usa **testo** per il grassetto."
 
 msgid "Clauses"
-msgstr ""
+msgstr "Clausole"
 
 msgid ""
 "One clause per line with format \"1. text\". Use {clausula_vida_util} for "
 "the useful life clause. **text** → bold."
 msgstr ""
+"Una clausola per riga con formato \"1. testo\". Usa {clausula_vida_util} per"
+" la clausola di vita utile. **testo** → grassetto."
 
 msgid "Witnesses paragraph"
-msgstr ""
+msgstr "Paragrafo testimoni"
 
 msgid "Witnesses appearance text. Use **text** for bold."
-msgstr ""
+msgstr "Testo di comparizione dei testimoni. Usa **testo** per il grassetto."
 
 msgid "Contract heading. Use **text** for bold."
-msgstr ""
+msgstr "Intestazione del contratto. Usa **testo** per il grassetto."
 
 msgid "Company"
-msgstr ""
+msgstr "Azienda"
 
 msgid "Employee number"
-msgstr ""
+msgstr "Numero dipendente"
 
 msgid "Asset number"
-msgstr ""
+msgstr "Numero attivo"
 
 msgid "Serial number"
-msgstr ""
+msgstr "Numero seriale"
 
 msgid "Brand"
 msgstr "Marca"
@@ -397,52 +423,52 @@ msgid "Model"
 msgstr "Modello"
 
 msgid "Equipment type"
-msgstr ""
+msgstr "Tipo apparecchiatura"
 
 msgid "Condition / Status"
-msgstr ""
+msgstr "Condizione / Stato"
 
 msgid "Document date"
-msgstr ""
+msgstr "Data documento"
 
 msgid "City, State, Country"
-msgstr ""
+msgstr "Città, Stato, Paese"
 
 msgid "UUID / Serial"
-msgstr ""
+msgstr "UUID / Seriale"
 
 msgid "IMEI"
-msgstr ""
+msgstr "IMEI"
 
 msgid "Purchase price"
-msgstr ""
+msgstr "Prezzo di acquisto"
 
 msgid "Line / mobile number"
-msgstr ""
+msgstr "Linea / numero mobile"
 
 msgid "RAM"
-msgstr ""
+msgstr "RAM"
 
 msgid "Storage"
 msgstr "Archiviazione"
 
 msgid "Document time"
-msgstr ""
+msgstr "Ora documento"
 
 msgid "Entity address"
-msgstr ""
+msgstr "Indirizzo entità"
 
 msgid "ZIP / Postal code"
-msgstr ""
+msgstr "CAP / Codice postale"
 
 msgid "Representative name"
-msgstr ""
+msgstr "Nome rappresentante"
 
 msgid "User name"
-msgstr ""
+msgstr "Nome utente"
 
 msgid "Useful life clause (auto-generated)"
-msgstr ""
+msgstr "Clausola vita utile (auto-generata)"
 
 msgid "Type"
 msgstr "Tipo"
@@ -451,184 +477,204 @@ msgid "Condition"
 msgstr "Condizione"
 
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 msgid "Open asset record in GLPI"
-msgstr ""
+msgstr "Apri scheda attivo in GLPI"
 
 msgid ""
 "You do not have permission to generate responsibility documents for this "
 "user."
 msgstr ""
+"Non hai il permesso di generare documenti di responsabilità per questo "
+"utente."
 
 msgid "Access denied."
-msgstr ""
+msgstr "Accesso negato."
 
 msgid "The user does not have a registered email address."
-msgstr ""
+msgstr "L'utente non ha un indirizzo email registrato."
 
 msgid ""
 "Incomplete email configuration. Configure the subject and body in the Email "
 "tab."
 msgstr ""
+"Configurazione email incompleta. Configura oggetto e corpo nella scheda "
+"Email."
 
 msgid "There are no responsibility documents to generate for this user."
 msgstr ""
+"Non ci sono documenti di responsabilità da generare per questo utente."
 
 msgid "Email successfully sent to %s."
-msgstr ""
+msgstr "Email inviata con successo a %s."
 
 msgid "Error sending email: %s"
-msgstr ""
+msgstr "Errore nell'invio dell'email: %s"
 
 msgid "The mail server rejected the sending."
-msgstr ""
+msgstr "Il server di posta ha rifiutato l'invio."
 
 msgid "Responsibility documents sent by email to %s by %s (%d PDF)."
-msgstr ""
+msgstr "Documenti di responsabilità inviati via email a %s da %s (%d PDF)."
 
 msgid "%d responsibility PDF attached."
-msgstr ""
+msgstr "%d documento PDF di responsabilità allegato."
 
 msgid "Invalid user."
-msgstr ""
+msgstr "Utente non valido."
 
 msgid ""
 "Your user does not have an email address registered in GLPI. Add it in your "
 "profile."
 msgstr ""
+"Il tuo utente non ha un indirizzo email registrato in GLPI. Aggiungilo nel "
+"tuo profilo."
 
 msgid "Incomplete email configuration. Configure the subject and body first."
 msgstr ""
+"Configurazione email incompleta. Configura prima l'oggetto e il corpo."
 
 msgid ""
 "This is a test email generated from the Responsivas plugin configuration. No"
 " PDFs are attached."
 msgstr ""
+"Questa è un'email di test generata dalla configurazione del plugin "
+"Responsibility Documents. Nessun PDF allegato."
 
 msgid "Test email successfully sent to %s."
-msgstr ""
+msgstr "Email di test inviata con successo a %s."
 
 msgid ""
 "The document template has empty fields. Complete the following fields in "
 "Configuration → Responsivas: %s"
 msgstr ""
+"Il modello documento ha campi vuoti. Completa i seguenti campi in "
+"Configurazione → Responsibility Documents: %s"
 
 msgid "Title (Computer)"
-msgstr ""
+msgstr "Titolo (Computer)"
 
 msgid "Introduction (Computer)"
-msgstr ""
+msgstr "Introduzione (Computer)"
 
 msgid "Body / Clauses (Computer)"
-msgstr ""
+msgstr "Corpo / Clausole (Computer)"
 
 msgid "Title (Printer)"
-msgstr ""
+msgstr "Titolo (Stampante)"
 
 msgid "Introduction (Printer)"
-msgstr ""
+msgstr "Introduzione (Stampante)"
 
 msgid "Body / Clauses (Printer)"
-msgstr ""
+msgstr "Corpo / Clausole (Stampante)"
 
 msgid "Title (Phone)"
-msgstr ""
+msgstr "Titolo (Telefono)"
 
 msgid "Opening paragraph (Phone)"
-msgstr ""
+msgstr "Paragrafo di apertura (Telefono)"
 
 msgid "Clauses (Phone)"
-msgstr ""
+msgstr "Clausole (Telefono)"
 
 msgid "Witnesses paragraph (Phone)"
-msgstr ""
+msgstr "Paragrafo testimoni (Telefono)"
 
 msgid "bold"
-msgstr ""
+msgstr "grassetto"
 
 msgid "italic"
-msgstr ""
+msgstr "corsivo"
 
 msgid "underline"
-msgstr ""
+msgstr "sottolineato"
 
 msgid "Click a variable to insert it at the cursor position."
-msgstr ""
+msgstr "Clicca una variabile per inserirla nella posizione del cursore."
 
 msgid "PREVIEW"
-msgstr ""
+msgstr "ANTEPRIMA"
 
 msgid "Error generating the preview: %s"
-msgstr ""
+msgstr "Errore nella generazione dell'anteprima: %s"
 
 msgid "Demo Witness 1"
-msgstr ""
+msgstr "Testimone Demo 1"
 
 msgid "Demo Witness 2"
-msgstr ""
+msgstr "Testimone Demo 2"
 
 msgid "Demo Representative"
-msgstr ""
+msgstr "Rappresentante Demo"
 
 msgid ""
 "Generates a PDF preview using current settings. A watermark is applied."
 msgstr ""
+"Genera un'anteprima PDF con le impostazioni attuali. Viene applicata una "
+"filigrana."
 
 msgid "Compress PDF"
-msgstr ""
+msgstr "Comprimi PDF"
 
 msgid "Compress the generated PDF file"
-msgstr ""
+msgstr "Comprimi il file PDF generato"
 
 msgid "Protect PDF"
-msgstr ""
+msgstr "Proteggi PDF"
 
 msgid "Restrict PDF copying and editing"
-msgstr ""
+msgstr "Limita copia e modifica del PDF"
 
 msgid "Watermark text"
-msgstr ""
+msgstr "Testo filigrana"
 
 msgid "Diagonal text shown on previews. Leave empty for the default."
 msgstr ""
+"Testo diagonale mostrato nelle anteprime. Lascia vuoto per il valore "
+"predefinito."
 
 msgid "Watermark opacity (%)"
-msgstr ""
+msgstr "Opacità filigrana (%)"
 
 msgid "5–100. Default: 25."
-msgstr ""
+msgstr "5–100. Predefinito: 25."
 
 msgid "Useful life clause (with invoice)"
-msgstr ""
+msgstr "Clausola vita utile (con fattura)"
 
 msgid ""
 "Used when the phone has an invoice and supplier. Variables: {fecha_compra}, "
 "{factura}, {proveedor}. Empty uses the default text."
 msgstr ""
+"Usato quando il telefono ha una fattura e un fornitore. Variabili: "
+"{fecha_compra}, {factura}, {proveedor}. Vuoto usa il testo predefinito."
 
 msgid "Useful life clause (without invoice)"
-msgstr ""
+msgstr "Clausola vita utile (senza fattura)"
 
 msgid ""
 "Used when the phone has no registered invoice or supplier. Empty uses the "
 "default text."
 msgstr ""
+"Usato quando il telefono non ha fattura o fornitore registrato. Vuoto usa il"
+" testo predefinito."
 
 msgid "Demo equipment for template preview"
-msgstr ""
+msgstr "Apparecchiatura demo per anteprima modello"
 
 msgid "Demo printer for template preview"
-msgstr ""
+msgstr "Stampante demo per anteprima modello"
 
 msgid "Select document types to send:"
-msgstr ""
+msgstr "Seleziona i tipi di documento da inviare:"
 
 msgid "Select at least one document type."
-msgstr ""
+msgstr "Seleziona almeno un tipo di documento."
 
 msgid "Send selected responsibility documents to the user email"
-msgstr ""
+msgstr "Invia i documenti selezionati all'email dell'utente"
 
 msgid "Serial"
 msgstr "Seriale"
@@ -686,3 +732,6 @@ msgstr "In uso"
 
 msgid "Employee No.: "
 msgstr "N. dipendente: "
+
+msgid "%d responsibility PDFs attached."
+msgstr "%d documenti PDF di responsabilità allegati."

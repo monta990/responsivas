@@ -101,10 +101,6 @@ msgstr ""
 
 msgid "Email not configured"
 msgstr ""
-
-msgid "Send all responsibility documents to the user email"
-msgstr ""
-
 msgid "Confirm sending"
 msgstr ""
 
@@ -269,10 +265,6 @@ msgstr ""
 
 msgid "Email options"
 msgstr ""
-
-msgid "Available variables"
-msgstr ""
-
 msgid "Full name of the assigned user"
 msgstr ""
 
@@ -676,4 +668,7 @@ msgid "In use"
 msgstr ""
 
 msgid "Employee No.: "
+msgstr ""
+
+msgid "%d responsibility PDFs attached."
 msgstr ""

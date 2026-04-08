@@ -121,9 +121,6 @@ msgstr "Keine E-Mail-Adresse"
 msgid "Email not configured"
 msgstr "E-Mail nicht konfiguriert"
 
-msgid "Send all responsibility documents to the user email"
-msgstr "Alle Verantwortungsdokumente an die E-Mail des Benutzers senden"
-
 msgid "Confirm sending"
 msgstr "Versand bestätigen"
 
@@ -295,9 +292,6 @@ msgstr "Fehler beim Verarbeiten des JPG-Bildes"
 
 msgid "Email options"
 msgstr "E-Mail-Optionen"
-
-msgid "Available variables"
-msgstr "Verfügbare Variablen"
 
 msgid "Full name of the assigned user"
 msgstr "Vollständiger Name des Benutzers"
@@ -521,7 +515,7 @@ msgid "Responsibility documents sent by email to %s by %s (%d PDF)."
 msgstr "Verantwortungsdokumente per E-Mail an %s von %s gesendet (%d PDF)."
 
 msgid "%d responsibility PDF attached."
-msgstr "%d responsibility PDF attached."
+msgstr "%d Verantwortungs-PDF angehängt."
 
 msgid "Invalid user."
 msgstr "Ungültiger Benutzer."
@@ -734,3 +728,6 @@ msgstr "In Verwendung"
 
 msgid "Employee No.: "
 msgstr "Mitarbeiter-Nr.: "
+
+msgid "%d responsibility PDFs attached."
+msgstr "%d Verantwortungs-PDFs angehängt."

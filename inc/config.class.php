@@ -414,7 +414,7 @@ echo "
             data-bs-target='#tab-general'
             type='button'
             role='tab'>
-      <i class='ti ti-settings me-21'></i> General
+      <i class='ti ti-settings me-21'></i> " . __('General', 'responsivas') . "
     </button>
   </li>
 
