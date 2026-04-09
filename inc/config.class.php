@@ -11,6 +11,12 @@ Session::checkRight('config', UPDATE);
 $self = Plugin::getWebDir('responsivas') . '/front/config.form.php';
 $config = Config::getConfigurationValues('plugin_responsivas');
 
+/**
+ * Renderiza un sub-header con ribbon para cada sección de configuración.
+ *
+ * @param string $icon  Clase de icono de Tabler (ej: 'ti-device-desktop')
+ * @param string $title Clave de traducción o texto del título
+ */
 function responsivasRibbonSubHeader(string $icon, string $title): void {
     echo "<div class='card-header mb-1 py-1 position-relative'>";
     echo "<div class='ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1'>
@@ -29,7 +35,7 @@ Html::header(
 );
 
 /* =============================
- * Configuración
+ * Configuration values
  * ============================= */
 $maxSize     = 500 * 1024;
 $allowedMime = ['image/png', 'image/jpeg'];
@@ -46,7 +52,7 @@ if ($hasLogo) {
 }
 
 /* =============================
- * Eliminar logo
+ * Delete logo
  * ============================= */
 if (isset($_POST['delete_logo'])) {
 
@@ -70,10 +76,10 @@ if (isset($_POST['delete_logo'])) {
 }
 
 /* =============================
- * Aplicar cambios y respuestas
+ * Apply changes and responses
  * ============================= */
 if (isset($_POST['update'])) {
-    // Guardar configuración general
+    // Save general configuration
     $values = [
         'timezone'             => (function() {
             $tz = Html::cleanInputText($_POST['timezone'] ?? '');
@@ -90,14 +96,21 @@ if (isset($_POST['update'])) {
         'testigo_1'            => (int)($_POST['testigo_1'] ?? 0),
         'testigo_2'            => (int)($_POST['testigo_2'] ?? 0),
         'representante'        => (int)($_POST['representante'] ?? 0),
+        'cellphone_type_id'    => (int)($_POST['cellphone_type_id'] ?? 0),
+        
+        // Computer templates
         'pc_font_size'         => max(6, min(72, (int)($_POST['pc_font_size'] ?? 10))),
         'pc_titulo'            => Html::cleanInputText(trim($_POST['pc_titulo']  ?? '')),
         'pc_intro'             => trim($_POST['pc_intro']  ?? ''),
         'pc_cuerpo'            => trim($_POST['pc_cuerpo'] ?? ''),
+        
+        // Printer templates
         'pri_font_size'        => (int)($_POST['pri_font_size'] ?? 0),
         'pri_titulo'           => Html::cleanInputText(trim($_POST['pri_titulo']  ?? '')),
         'pri_intro'            => trim($_POST['pri_intro']  ?? ''),
         'pri_cuerpo'           => trim($_POST['pri_cuerpo'] ?? ''),
+        
+        // Phone templates        
         'pho_font_size'        => (int)($_POST['pho_font_size'] ?? 0),
         'pho_titulo'           => Html::cleanInputText(trim($_POST['pho_titulo']    ?? '')),
         'pho_apertura'         => trim($_POST['pho_apertura']   ?? ''),
@@ -105,7 +118,8 @@ if (isset($_POST['update'])) {
         'pho_testigos'         => trim($_POST['pho_testigos']   ?? ''),
         'pho_vida_util_factura' => trim($_POST['pho_vida_util_factura'] ?? ''),
         'pho_vida_util_sin'     => trim($_POST['pho_vida_util_sin']     ?? ''),
-        'cellphone_type_id'    => (int)($_POST['cellphone_type_id'] ?? 0),
+         
+         // Email configuration
         'email_subject'        => Html::cleanInputText(trim($_POST['email_subject'] ?? '')),
         'email_body'           => trim($_POST['email_body']   ?? ''),
         'email_footer'         => trim($_POST['email_footer'] ?? ''),
@@ -236,7 +250,7 @@ function responsivasFooterFields(string $prefix, array $config): void {
         [
             [
                 'key'   => 'left_1',
-                'label' => 'Superior izquierda',
+                'label' => __('Footer left text', 'responsivas'),
                 'icon'  => 'corner-up-left',
                 'help'  => 'Ejemplo: Original: Empresa'
             ],
@@ -436,7 +450,7 @@ echo "
             data-bs-target='#tab-pc'
             type='button'
             role='tab'>
-      <i class='ti ti-device-desktop me-1'></i> Computadoras
+      <i class='ti ti-device-desktop me-1'></i> " . __('Computers', 'responsivas') . "
     </button>
   </li>
 
@@ -447,7 +461,7 @@ echo "
             data-bs-target='#tab-pri'
             type='button'
             role='tab'>
-      <i class='ti ti-printer me-1'></i> Impresoras
+      <i class='ti ti-printer me-1'></i> " . __('Printers', 'responsivas') . "
     </button>
   </li>
 
@@ -458,7 +472,7 @@ echo "
             data-bs-target='#tab-pho'
             type='button'
             role='tab'>
-      <i class='ti ti-device-mobile me-1'></i> Teléfonos
+      <i class='ti ti-device-mobile me-1'></i> " . __('Phones', 'responsivas') . "
     </button>
   </li>
 

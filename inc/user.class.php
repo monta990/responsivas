@@ -73,7 +73,7 @@ class PluginResponsivasUser extends CommonGLPI {
          return "<span class='d-flex align-items-center'>"
             . "<i class='ti ti-file-text me-2'></i>"
             . $label
-            . "<span class='badge ms-1' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'> "
+            . "<span class='badge badge-secondary ms-1'> "
             . $counts['total']
             . "</span></span>";
       }
@@ -123,7 +123,7 @@ class PluginResponsivasUser extends CommonGLPI {
             {$extra_attr}>
             <i class='ti {$icon} me-2'></i>
             {$label}
-            <span class='badge ms-2' style='background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);'>{$count}</span>
+            <span class='badge badge-secondary ms-1'>{$count}</span>
          </a>
       </span>";
    }
