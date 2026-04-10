@@ -1,0 +1,811 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Responsivas\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-08 00:00+0000\n"
+"PO-Revision-Date: 2026-03-08 00:00+0000\n"
+"Last-Translator: Edwin Elias Alvarez <edwin@sontechs.com>\n"
+"Language-Team: Spanish (Mexico)\n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Responsivas"
+msgstr "Responsivas"
+
+msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
+msgstr "Responsivas requiere PHP 8.2 o superior. Versión actual: %s"
+
+msgid ""
+"Responsivas requires TCPDF, which must be available in the GLPI vendor "
+"directory."
+msgstr ""
+"Responsivas requiere TCPDF, que debe estar disponible en el vendor de GLPI."
+
+msgid ""
+"Could not create the Responsivas plugin files directory. Check permissions."
+msgstr ""
+"No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
+" permisos."
+
+msgid "Responsibility Forms"
+msgstr "Responsivas"
+
+msgid "Responsivas plugin uninstalled. Configuration deleted."
+msgstr "Plugin Responsivas desinstalado. Configuración eliminada."
+
+msgid "User not found."
+msgstr "Usuario no encontrado."
+
+msgid "The user has no assigned equipment."
+msgstr "El usuario no tiene equipos asignados."
+
+msgid "Could not retrieve the entity."
+msgstr "No se pudo obtener la entidad."
+
+msgid "The phone type for loan agreements is not configured in the plugin."
+msgstr "No está configurado el tipo de teléfono para comodatos en el plugin."
+
+msgid "The user has no phones of the configured type assigned."
+msgstr "El usuario no tiene teléfonos del tipo configurado asignados."
+
+msgid "You must configure Witness 1 and Witness 2 in the plugin settings."
+msgstr "Debe configurar Testigo 1 y Testigo 2 en la configuración del plugin."
+
+msgid "One or both configured witnesses are invalid or inactive."
+msgstr "Uno o ambos testigos configurados no son válidos o están inactivos."
+
+msgid "You must configure the legal representative in the plugin settings."
+msgstr "Debe configurar representante legal en la configuración del plugin."
+
+msgid "The legal representative is invalid or inactive."
+msgstr "El representante legal no es válido o está inactivo."
+
+msgid ""
+"Phone \"%s\" has no purchase price. Add it in Management → Administrative "
+"and financial information → Purchase price."
+msgstr ""
+"El teléfono \"%s\" no tiene precio de compra. Agrégalo en Gestión → "
+"Información administrativa y financiera → Precio de compra."
+
+msgid "N/A"
+msgstr "N/D"
+
+msgid "Available tags"
+msgstr "Etiquetas disponibles"
+
+msgid "Responsibility Document Generator"
+msgstr "Generador de responsivas"
+
+msgid "Select the asset type to generate responsibility documents"
+msgstr "Seleccione el tipo de activo a generar responsivas"
+
+msgid ""
+"The phone type for responsibility documents has not been configured. Contact"
+" the administrator."
+msgstr ""
+"El tipo de teléfono para responsivas no ha sido configurado. Contacta al "
+"administrador."
+
+msgid "Show QR"
+msgstr "Mostrar QR"
+
+msgid "Show employee number"
+msgstr "Mostrar número de empleado"
+
+msgid "Generate responsibility documents"
+msgstr "Generar responsivas"
+
+msgid "Computers"
+msgstr "Computadoras"
+
+msgid "Printers"
+msgstr "Impresoras"
+
+msgid "Phones"
+msgstr "Teléfonos"
+
+msgid "Send by email"
+msgstr "Enviar por correo"
+
+msgid "No responsibility documents to send"
+msgstr "Sin responsivas que enviar"
+
+msgid "No email address"
+msgstr "Sin correo electrónico"
+
+msgid "Email not configured"
+msgstr "Correo no configurado"
+
+msgid "Confirm sending"
+msgstr "Confirmar envío"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Send the responsibility documents to %s?"
+msgstr "¿Enviar las responsivas al correo %s?"
+
+msgid "No computers assigned"
+msgstr "Sin computadoras asignadas"
+
+msgid "No printers assigned"
+msgstr "Sin impresoras asignadas"
+
+msgid "No phones of the configured type assigned"
+msgstr "Sin teléfonos del tipo configurado asignados"
+
+msgid "GLPI mail server not configured"
+msgstr "Servidor de correo de GLPI no configurado"
+
+msgid "No equipment assigned"
+msgstr "Sin equipo asignado"
+
+msgid "Responsivas Settings"
+msgstr "Configuración de Responsivas"
+
+msgid "Configuration saved successfully."
+msgstr "Configuración guardada correctamente."
+
+msgid "You must select a valid phone type."
+msgstr "Debes seleccionar un tipo de teléfono válido."
+
+msgid "General"
+msgstr "General"
+
+msgid "Email"
+msgstr "Correo"
+
+msgid "Timezone for PDFs"
+msgstr "Zona horaria para los PDFs"
+
+msgid ""
+"This timezone will be used to display dates and times in PDFs. At plugin "
+"installation it defaults to the server timezone. More information at: %s"
+msgstr ""
+"Esta zona horaria se usará para mostrar fechas y horas en los PDFs, al "
+"instalar el complemento se toma de manera predeterminada la del servidor en "
+"ese momento, más información en: %s"
+
+msgid "PHP timezone list"
+msgstr "Lista de zonas horarias de PHP"
+
+msgid "Show employee number in the responsibility document"
+msgstr "Mostrar número de empleado en la responsiva"
+
+msgid "Show QR with asset URL in responsibility document"
+msgstr "Mostrar QR con Url de activo en responsiva"
+
+msgid "Company name in responsibility documents"
+msgstr "Nombre de la empresa en las responsivas"
+
+msgid "This name will appear in the responsibility document text."
+msgstr "Este nombre aparecerá dentro del texto de la responsiva."
+
+msgid "Currency symbol"
+msgstr "Símbolo de moneda"
+
+msgid ""
+"Symbol or code that appears before the price in phone loan agreements (e.g.:"
+" $, USD, MXN, €)."
+msgstr ""
+"Símbolo o código que aparece antes del precio en los comodatos de teléfono "
+"(ej: $, USD, MXN, €)."
+
+msgid "Witnesses for phone loan agreements"
+msgstr "Testigos del comodato de celulares"
+
+msgid "Select two witnesses for the phone loan agreement."
+msgstr "Selecciona dos testigos para el comodato de celulares."
+
+msgid "Witness 1"
+msgstr "Testigo 1"
+
+msgid "Witness 2"
+msgstr "Testigo 2"
+
+msgid "Legal representative for phone loan agreements"
+msgstr "Representante legal del comodato de celulares"
+
+msgid "Select the legal representative for the phone loan agreement."
+msgstr "Selecciona el representante legal para el comodato de celulares."
+
+msgid "Legal representative"
+msgstr "Representante legal"
+
+msgid "Current logo"
+msgstr "Logo actual"
+
+msgid "Click the image to download a backup copy."
+msgstr "Da clic en la imagen para descargar una copia de respaldo."
+
+msgid "Size: "
+msgstr "Tamaño: "
+
+msgid "Last updated: "
+msgstr "Última actualización: "
+
+msgid "No logo configured."
+msgstr "Sin logo configurado."
+
+msgid "PDFs will be generated without a logo."
+msgstr "Los PDFs se generarán sin logo."
+
+msgid "Upload new logo"
+msgstr "Cargar nuevo logo"
+
+msgid "PNG / JPG · Max 500 KB · Will be saved as <b>logo.png</b>."
+msgstr "PNG / JPG · Máx 500 KB · Se guardará como <b>logo.png</b>."
+
+msgid "Preview"
+msgstr "Vista previa"
+
+msgid "Load an image for a preview."
+msgstr "Para una vista previa carga una imagen."
+
+msgid ""
+"Once loaded and validated in preview, remember to save for it to take "
+"effect."
+msgstr ""
+"Una vez cargado y validado en vista previa, recuerda guardar para que se "
+"aplique."
+
+msgid "Confirm deletion"
+msgstr "Confirmar eliminación"
+
+msgid "Are you sure you want to delete the current logo?"
+msgstr "¿Estás seguro de que deseas eliminar el logo actual?"
+
+msgid "This action cannot be undone."
+msgstr "Esta acción no se puede deshacer."
+
+msgid "Delete logo"
+msgstr "Eliminar logo"
+
+msgid "Delete current logo"
+msgstr "Eliminar logo actual"
+
+msgid "Download logo"
+msgstr "Descargar logo"
+
+msgid "Logo updated successfully."
+msgstr "Logo actualizado correctamente."
+
+msgid "Logo deleted successfully."
+msgstr "Logo eliminado correctamente."
+
+msgid "Could not delete the logo."
+msgstr "No se pudo eliminar el logo."
+
+msgid "Format not allowed. PNG or JPG only."
+msgstr "Formato no permitido. Solo PNG o JPG."
+
+msgid "The file exceeds the maximum allowed size (500 KB)."
+msgstr "El archivo excede el tamaño máximo permitido (500 KB)."
+
+msgid "Error processing JPG image"
+msgstr "Error al procesar imagen JPG"
+
+msgid "Email options"
+msgstr "Opciones del correo electrónico"
+
+msgid "Full name of the assigned user"
+msgstr "Nombre completo del usuario"
+
+msgid "Company name (configured in General)"
+msgstr "Nombre de la empresa (configurado en General)"
+
+msgid "Document date in dd/mm/yyyy format"
+msgstr "Fecha del día en formato dd/mm/aaaa"
+
+msgid "Use **text** for bold"
+msgstr "Usa **texto** para negrita"
+
+msgid "Email subject"
+msgstr "Asunto del correo"
+
+msgid "You can use the variables {nombre}, {empresa} and {fecha}."
+msgstr "Puedes usar las variables {nombre}, {empresa} y {fecha}."
+
+msgid "Email body"
+msgstr "Cuerpo del correo"
+
+msgid "Email footer"
+msgstr "Pie del correo"
+
+msgid "Email footer (optional)"
+msgstr "Pie del correo (opcional)"
+
+msgid ""
+"Optional. Appears at the bottom of the email, separated by a line. You can "
+"use {nombre}, {empresa} and {fecha}."
+msgstr ""
+"Opcional. Aparece al pie del correo, separado por una línea. Puedes usar "
+"{nombre}, {empresa} y {fecha}."
+
+msgid ""
+"The GLPI mail server is not configured or email notifications are disabled. "
+"The send button will fail until you configure it in <strong>Configuration → "
+"Notifications → Email configuration</strong>."
+msgstr ""
+"El servidor de correo de GLPI no está configurado o las notificaciones por "
+"correo están desactivadas. El botón de envío fallará hasta que lo configures"
+" en <strong>Configuración → Notificaciones → Configuración de "
+"correos</strong>."
+
+msgid "Configure the email subject and body first"
+msgstr "Configure el asunto y cuerpo del correo primero"
+
+msgid "Sends a test email to your registered GLPI address"
+msgstr "Envía un correo de prueba a tu dirección registrada en GLPI"
+
+msgid "Send test email"
+msgstr "Enviar correo de prueba"
+
+msgid "The email will be sent to the address registered in your GLPI profile."
+msgstr "El correo se enviará a la dirección registrada en tu perfil de GLPI."
+
+msgid "Document template"
+msgstr "Plantilla del documento"
+
+msgid "Document title"
+msgstr "Título del documento"
+
+msgid "Main heading text. Use **text** for bold."
+msgstr "Texto del encabezado principal. Usa **texto** para negrita."
+
+msgid "Introduction paragraph"
+msgstr "Párrafo de introducción"
+
+msgid "Introductory paragraph before the table. Use **text** for bold."
+msgstr "Párrafo introductorio antes de la tabla. Usa **texto** para negrita."
+
+msgid "Body / Clauses"
+msgstr "Cuerpo / Cláusulas"
+
+msgid ""
+"Legal text after the table. Lines with \"1. text\" → numbered list. Blank "
+"line → new paragraph. **text** → bold."
+msgstr ""
+"Texto legal después de la tabla. Líneas con \"1. texto\" → lista numerada. "
+"Línea en blanco → nuevo párrafo. **texto** → negrita."
+
+msgid "Opening paragraph"
+msgstr "Párrafo de apertura"
+
+msgid "Appearance paragraph before the clauses. Use **text** for bold."
+msgstr ""
+"Párrafo de comparecencia antes de las cláusulas. Usa **texto** para negrita."
+
+msgid "Clauses"
+msgstr "Cláusulas"
+
+msgid ""
+"One clause per line with format \"1. text\". Use {clausula_vida_util} for "
+"the useful life clause. **text** → bold."
+msgstr ""
+"Una cláusula por línea con formato \"1. texto\". Usa {clausula_vida_util} "
+"para la cláusula de vida útil. **texto** → negrita."
+
+msgid "Witnesses paragraph"
+msgstr "Párrafo de testigos"
+
+msgid "Witnesses appearance text. Use **text** for bold."
+msgstr "Texto de comparecencia de testigos. Usa **texto** para negrita."
+
+msgid "Contract heading. Use **text** for bold."
+msgstr "Encabezado del contrato. Usa **texto** para negrita."
+
+msgid "Company"
+msgstr "Empresa"
+
+msgid "Employee number"
+msgstr "Número de empleado"
+
+msgid "Asset number"
+msgstr "Número de activo"
+
+msgid "Serial number"
+msgstr "Número de serie"
+
+msgid "Brand"
+msgstr "Marca"
+
+msgid "Model"
+msgstr "Modelo"
+
+msgid "Equipment type"
+msgstr "Tipo de equipo"
+
+msgid "Condition / Status"
+msgstr "Condición / Estado"
+
+msgid "Document date"
+msgstr "Fecha del documento"
+
+msgid "City, State, Country"
+msgstr "Ciudad, Estado, País"
+
+msgid "UUID / Serial"
+msgstr "UUID / Serie"
+
+msgid "IMEI"
+msgstr "IMEI"
+
+msgid "Purchase price"
+msgstr "Precio de compra"
+
+msgid "Line / mobile number"
+msgstr "Número de línea / móvil"
+
+msgid "RAM"
+msgstr "RAM"
+
+msgid "Storage"
+msgstr "Almacenamiento"
+
+msgid "Document time"
+msgstr "Hora del documento"
+
+msgid "Entity address"
+msgstr "Dirección de la entidad"
+
+msgid "ZIP / Postal code"
+msgstr "Código postal"
+
+msgid "Representative name"
+msgstr "Nombre del representante"
+
+msgid "User name"
+msgstr "Nombre del usuario"
+
+msgid "Useful life clause (auto-generated)"
+msgstr "Cláusula de vida útil (auto-generada)"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Condition"
+msgstr "Condición"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Open asset record in GLPI"
+msgstr "Abrir ficha del activo en GLPI"
+
+msgid ""
+"You do not have permission to generate responsibility documents for this "
+"user."
+msgstr "No tienes permiso para generar responsivas de este usuario."
+
+msgid "Access denied."
+msgstr "Acceso denegado."
+
+msgid "The user does not have a registered email address."
+msgstr "El usuario no tiene dirección de correo electrónico registrada."
+
+msgid ""
+"Incomplete email configuration. Configure the subject and body in the Email "
+"tab."
+msgstr ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo en la "
+"pestaña Correo."
+
+msgid "There are no responsibility documents to generate for this user."
+msgstr "No hay responsivas que generar para este usuario."
+
+msgid "Email successfully sent to %s."
+msgstr "Correo enviado correctamente a %s."
+
+msgid "Error sending email: %s"
+msgstr "Error al enviar el correo: %s"
+
+msgid "The mail server rejected the sending."
+msgstr "El servidor de correo rechazó el envío."
+
+msgid "Responsibility documents sent by email to %s by %s (%d PDF)."
+msgstr "Responsivas enviadas por correo a %s por %s (%d PDF)."
+
+msgid "%d responsibility PDF attached."
+msgstr "Se adjunta %d responsiva PDF."
+
+msgid "Invalid user."
+msgstr "Usuario inválido."
+
+msgid ""
+"Your user does not have an email address registered in GLPI. Add it in your "
+"profile."
+msgstr ""
+"Tu usuario no tiene dirección de correo registrada en GLPI. Agrégala en tu "
+"perfil."
+
+msgid "Incomplete email configuration. Configure the subject and body first."
+msgstr ""
+"Configuración de correo incompleta. Configure el asunto y cuerpo primero."
+
+msgid ""
+"This is a test email generated from the Responsivas plugin configuration. No"
+" PDFs are attached."
+msgstr ""
+"Este es un correo de prueba generado desde la configuración del plugin "
+"Responsivas. No se adjuntan PDFs."
+
+msgid "Test email successfully sent to %s."
+msgstr "Correo de prueba enviado correctamente a %s."
+
+msgid ""
+"The document template has empty fields. Complete the following fields in "
+"Configuration → Responsivas: %s"
+msgstr ""
+"La plantilla del documento tiene campos vacíos. Completa los siguientes "
+"campos en Configuración → Responsivas: %s"
+
+msgid "Title (Computer)"
+msgstr "Título (Computadora)"
+
+msgid "Introduction (Computer)"
+msgstr "Introducción (Computadora)"
+
+msgid "Body / Clauses (Computer)"
+msgstr "Cuerpo / Cláusulas (Computadora)"
+
+msgid "Title (Printer)"
+msgstr "Título (Impresora)"
+
+msgid "Introduction (Printer)"
+msgstr "Introducción (Impresora)"
+
+msgid "Body / Clauses (Printer)"
+msgstr "Cuerpo / Cláusulas (Impresora)"
+
+msgid "Title (Phone)"
+msgstr "Título (Teléfono)"
+
+msgid "Opening paragraph (Phone)"
+msgstr "Párrafo de apertura (Teléfono)"
+
+msgid "Clauses (Phone)"
+msgstr "Cláusulas (Teléfono)"
+
+msgid "Witnesses paragraph (Phone)"
+msgstr "Párrafo de testigos (Teléfono)"
+
+msgid "bold"
+msgstr "negrita"
+
+msgid "italic"
+msgstr "cursiva"
+
+msgid "underline"
+msgstr "subrayado"
+
+msgid "Click a variable to insert it at the cursor position."
+msgstr "Haz clic en una variable para insertarla en el campo activo."
+
+msgid "PREVIEW"
+msgstr "VISTA PREVIA"
+
+msgid "Error generating the preview: %s"
+msgstr "Error al generar la vista previa: %s"
+
+msgid "Demo Witness 1"
+msgstr "Testigo Demo 1"
+
+msgid "Demo Witness 2"
+msgstr "Testigo Demo 2"
+
+msgid "Demo Representative"
+msgstr "Representante Demo"
+
+msgid ""
+"Generates a PDF preview using current settings. A watermark is applied."
+msgstr ""
+"Genera una vista previa del PDF con los datos actuales. Se aplica una marca "
+"de agua."
+
+msgid "Compress PDF"
+msgstr "Comprimir PDF"
+
+msgid "Compress the generated PDF file"
+msgstr "Comprimir el archivo PDF generado"
+
+msgid "Protect PDF"
+msgstr "Proteger PDF"
+
+msgid "Restrict PDF copying and editing"
+msgstr "Restringir copia y edición del PDF"
+
+msgid "Watermark text"
+msgstr "Texto de marca de agua"
+
+msgid "Diagonal text shown on previews. Leave empty for the default."
+msgstr ""
+"Texto diagonal que aparece en las vistas previas. Vacío usa el "
+"predeterminado."
+
+msgid "Watermark opacity (%)"
+msgstr "Opacidad de marca de agua (%)"
+
+msgid "5–100. Default: 25."
+msgstr "5–100. Predeterminado: 25."
+
+msgid "Useful life clause (with invoice)"
+msgstr "Cláusula de vida útil (con factura)"
+
+msgid ""
+"Used when the phone has an invoice and supplier. Variables: {fecha_compra}, "
+"{factura}, {proveedor}. Empty uses the default text."
+msgstr ""
+"Se usa cuando el teléfono tiene factura y proveedor. Variables: "
+"{fecha_compra}, {factura}, {proveedor}. Vacío usa el texto predeterminado."
+
+msgid "Useful life clause (without invoice)"
+msgstr "Cláusula de vida útil (sin factura)"
+
+msgid ""
+"Used when the phone has no registered invoice or supplier. Empty uses the "
+"default text."
+msgstr ""
+"Se usa cuando el teléfono no tiene factura o proveedor registrado. Vacío usa"
+" el texto predeterminado."
+
+msgid "Demo equipment for template preview"
+msgstr "Equipo demo para vista previa de plantilla"
+
+msgid "Demo printer for template preview"
+msgstr "Impresora demo para vista previa de plantilla"
+
+msgid "Select document types to send:"
+msgstr "Selecciona los tipos de documento a enviar:"
+
+msgid "Select at least one document type."
+msgstr "Selecciona al menos un tipo de documento."
+
+msgid "Send selected responsibility documents to the user email"
+msgstr "Enviar los documentos seleccionados al correo del usuario"
+
+msgid "Serial"
+msgstr "Serie"
+
+msgid "Processor"
+msgstr "Procesador"
+
+msgid "Speed"
+msgstr "Velocidad"
+
+msgid "OS"
+msgstr "SO"
+
+msgid "Comments"
+msgstr "Comentarios"
+
+msgid "Device"
+msgstr "Dispositivo"
+
+msgid "Serial / Asset"
+msgstr "Serie / Activo"
+
+msgid "Asset No."
+msgstr "No. Activo"
+
+msgid "Serial/UUID"
+msgstr "Serie/UUID"
+
+msgid "Line"
+msgstr "Línea"
+
+msgid "Price"
+msgstr "Precio"
+
+msgid "CLAUSES"
+msgstr "CLÁUSULAS"
+
+msgid "LENDER"
+msgstr "COMODANTE"
+
+msgid "BORROWER"
+msgstr "COMODATARIO"
+
+msgid "WITNESS"
+msgstr "TESTIGO"
+
+msgid "Not specified"
+msgstr "No especificado"
+
+msgid "No comments"
+msgstr "Sin comentarios"
+
+msgid "In use"
+msgstr "En uso"
+
+msgid "Employee No.: "
+msgstr "Empleado No.: "
+
+msgid "%d responsibility PDFs attached."
+msgstr "Se adjuntan %d responsivas PDF."
+
+msgid "Footer left text"
+msgstr "Superior izquierda"
+
+msgid "Example: Original: Company"
+msgstr "Ejemplo: Original: Empresa"
+
+msgid "Top right"
+msgstr "Superior derecha"
+
+msgid "Example: Copy: Employee"
+msgstr "Ejemplo: Copia: Colaborador"
+
+msgid "Bottom left"
+msgstr "Inferior izquierda"
+
+msgid "Bottom right"
+msgstr "Inferior derecha"
+
+msgid "Example: SIS-RESP-001"
+msgstr "Ejemplo: SIS-RESP-001"
+
+msgid "Example: Rev 1.4 08/01/2026"
+msgstr "Ejemplo: Rev 1.4 08/01/2026"
+
+msgid "Document footer"
+msgstr "Pie de página del documento"
+
+msgid "These lines will appear in the footer of the responsibility document."
+msgstr "Estas líneas aparecerán en el pie de página de la responsiva."
+
+msgid "Bold — **text**"
+msgstr "Negrita — **texto**"
+
+msgid "Italic — *text*"
+msgstr "Cursiva — *texto*"
+
+msgid "Underline — __text__"
+msgstr "Subrayado — __texto__"
+
+msgid "Preview dimensions: "
+msgstr "Dimensiones de la vista previa: "
+
+msgid "Save active tab when changing"
+msgstr "Guardar tab activo al cambiar"
+
+msgid "Restore active tab on load"
+msgstr "Restaurar tab activo al cargar"
+
+msgid "Responsibility document options"
+msgstr "Opciones de la responsiva"
+
+msgid "Institutional logo"
+msgstr "Logo institucional"
+
+msgid "Computer responsibility document settings"
+msgstr "Ajustes responsiva computadoras"
+
+msgid "Font used in PDFs, can be changed in GLPI settings"
+msgstr "Fuente usada en PDFs, se puede cambiar en ajustes de GLPI"
+
+msgid "Font size (pt)"
+msgstr "Tamaño de la fuente (pt)"
+
+msgid "Enter the font size for the PDF"
+msgstr "Ingresa el tamaño de fuente para el PDF"
+
+msgid "Printer responsibility document settings"
+msgstr "Ajustes responsiva impresoras"
+
+msgid "Font used"
+msgstr "Fuente usada"
+
+msgid "Phone responsibility document settings"
+msgstr "Ajustes responsiva teléfonos"
+
+msgid "Phone type for responsibility"
+msgstr "Tipo de teléfono para responsiva"
+
+msgid "Select the phone type that will be considered for generating responsibility documents."
+msgstr "Selecciona el tipo de teléfono que será considerado para generar responsivas."
+
