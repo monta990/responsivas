@@ -34,9 +34,9 @@
 - 🌍 **Multi-language** — Spanish (Mexico), French, German, Italian (English is the base language)
 - 🔒 **CSRF protection** and GLPI permission model
 - ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
-- 👁️ **PDF preview with watermark** — each asset tab has a "Vista previa" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
+- 👁️ **PDF preview with watermark** — each asset tab has a "Preview" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
 - 🔐 **Compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions directly from the General configuration tab
-- 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Teléfonos tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
+- 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Phones tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
 - 📬 **Selective email sending** — the send confirmation modal lets you choose which document types to include (Computers, Printers, Phones). Only asset types with at least one assigned asset are shown, each with its count. All available types are pre-checked; uncheck any to exclude it.
 - ✅ **Template validation** — warns before generating if required fields are empty
 
@@ -53,11 +53,6 @@
 ---
 
 ## Installation
-
-### From the GLPI Marketplace
-1. Go to **Setup → Plugins → Marketplace**
-2. Search for **Responsivas**
-3. Click **Install**, then **Enable**
 
 ### Manual installation
 1. Download the latest release `.zip` from [Releases](../../releases)
@@ -334,11 +329,6 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 ## Instalación
 
-### Desde el Marketplace de GLPI
-1. Ve a **Configuración → Plugins → Marketplace**
-2. Busca **Responsivas**
-3. Haz clic en **Instalar** y luego en **Activar**
-
 ### Instalación manual
 1. Descarga el `.zip` de la última versión desde [Releases](../../releases)
 2. Descomprime dentro del directorio de plugins de GLPI:
@@ -371,7 +361,7 @@ responsivas/
 │   ├── pdfbuilder.class.php  # Factory de PDF, métodos render, constructor demo
 │   └── user.class.php        # Integración de pestaña en usuario
 ├── locales/
-│   ├── responsivas.pot       # Plantilla de traducciones (212 cadenas)
+│   ├── responsivas.pot       # Plantilla de traducciones
 │   ├── it_IT.po / it_IT.mo  # Italiano
 │   ├── es_MX.po / es_MX.mo  # Español (México)
 │   ├── fr_FR.po / fr_FR.mo  # Francés
@@ -389,7 +379,7 @@ responsivas/
 
 ## Configuración
 
-Navega a **Configuración → Plugins → Responsivas** (o **Administración → Plugins → Configuración de Responsivas**).
+Navega a **Configuración → Complementos → Responsivas** (o **Administración → Complementos → Configuración de Responsivas**).
 
 ### Pestaña General
 | Campo | Descripción |
