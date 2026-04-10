@@ -20,6 +20,9 @@ msgid ""
 "Could not create the Responsivas plugin files directory. Check permissions."
 msgstr ""
 
+msgid "Responsibility Forms"
+msgstr ""
+
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr ""
 
@@ -671,4 +674,85 @@ msgid "Employee No.: "
 msgstr ""
 
 msgid "%d responsibility PDFs attached."
+msgstr ""
+
+msgid "Footer left text"
+msgstr ""
+
+msgid "Example: Original: Company"
+msgstr ""
+
+msgid "Top right"
+msgstr ""
+
+msgid "Example: Copy: Employee"
+msgstr ""
+
+msgid "Bottom left"
+msgstr ""
+
+msgid "Bottom right"
+msgstr ""
+
+msgid "Example: SIS-RESP-001"
+msgstr ""
+
+msgid "Example: Rev 1.4 08/01/2026"
+msgstr ""
+
+msgid "Document footer"
+msgstr ""
+
+msgid "These lines will appear in the footer of the responsibility document."
+msgstr ""
+
+msgid "Bold — **text**"
+msgstr ""
+
+msgid "Italic — *text*"
+msgstr ""
+
+msgid "Underline — __text__"
+msgstr ""
+
+msgid "Preview dimensions: "
+msgstr ""
+
+msgid "Save active tab when changing"
+msgstr ""
+
+msgid "Restore active tab on load"
+msgstr ""
+
+msgid "Responsibility document options"
+msgstr ""
+
+msgid "Institutional logo"
+msgstr ""
+
+msgid "Computer responsibility document settings"
+msgstr ""
+
+msgid "Font used in PDFs, can be changed in GLPI settings"
+msgstr ""
+
+msgid "Font size (pt)"
+msgstr ""
+
+msgid "Enter the font size for the PDF"
+msgstr ""
+
+msgid "Printer responsibility document settings"
+msgstr ""
+
+msgid "Font used"
+msgstr ""
+
+msgid "Phone responsibility document settings"
+msgstr ""
+
+msgid "Phone type for responsibility"
+msgstr ""
+
+msgid "Select the phone type that will be considered for generating responsibility documents."
 msgstr ""

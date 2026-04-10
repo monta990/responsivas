@@ -32,6 +32,9 @@ msgstr ""
 "Impossible de créer le répertoire des fichiers du plugin Responsivas. "
 "Vérifiez les permissions."
 
+msgid "Responsibility Forms"
+msgstr "Formulaires de responsabilité"
+
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr "Plugin Responsibility Documents désinstallé. Configuration supprimée."
 
@@ -732,3 +735,85 @@ msgstr "Employé n° : "
 
 msgid "%d responsibility PDFs attached."
 msgstr "%d PDF de responsabilité joints."
+
+msgid "Footer left text"
+msgstr "En haut à gauche"
+
+msgid "Example: Original: Company"
+msgstr "Exemple : Original : Entreprise"
+
+msgid "Top right"
+msgstr "En haut à droite"
+
+msgid "Example: Copy: Employee"
+msgstr "Exemple : Copie : Employé"
+
+msgid "Bottom left"
+msgstr "En bas à gauche"
+
+msgid "Bottom right"
+msgstr "En bas à droite"
+
+msgid "Example: SIS-RESP-001"
+msgstr "Exemple : SIS-RESP-001"
+
+msgid "Example: Rev 1.4 08/01/2026"
+msgstr "Exemple : Rév 1.4 08/01/2026"
+
+msgid "Document footer"
+msgstr "Pied de page du document"
+
+msgid "These lines will appear in the footer of the responsibility document."
+msgstr "Ces lignes apparaîtront dans le pied de page du document de responsabilité."
+
+msgid "Bold — **text**"
+msgstr "Gras — **texte**"
+
+msgid "Italic — *text*"
+msgstr "Italique — *texte*"
+
+msgid "Underline — __text__"
+msgstr "Souligné — __texte__"
+
+msgid "Preview dimensions: "
+msgstr "Dimensions de l'aperçu : "
+
+msgid "Save active tab when changing"
+msgstr "Sauvegarder l'onglet actif lors du changement"
+
+msgid "Restore active tab on load"
+msgstr "Restaurer l'onglet actif au chargement"
+
+msgid "Responsibility document options"
+msgstr "Options du document de responsabilité"
+
+msgid "Institutional logo"
+msgstr "Logo institutionnel"
+
+msgid "Computer responsibility document settings"
+msgstr "Paramètres du document de responsabilité pour ordinateurs"
+
+msgid "Font used in PDFs, can be changed in GLPI settings"
+msgstr "Police utilisée dans les PDF, peut être modifiée dans les paramètres GLPI"
+
+msgid "Font size (pt)"
+msgstr "Taille de police (pt)"
+
+msgid "Enter the font size for the PDF"
+msgstr "Entrez la taille de police pour le PDF"
+
+msgid "Printer responsibility document settings"
+msgstr "Paramètres du document de responsabilité pour imprimantes"
+
+msgid "Font used"
+msgstr "Police utilisée"
+
+msgid "Phone responsibility document settings"
+msgstr "Paramètres du document de responsabilité pour téléphones"
+
+msgid "Phone type for responsibility"
+msgstr "Type de téléphone pour la responsabilité"
+
+msgid "Select the phone type that will be considered for generating responsibility documents."
+msgstr "Sélectionnez le type de téléphone qui sera pris en compte pour générer les documents de responsabilité."
+

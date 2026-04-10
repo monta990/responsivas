@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/monta990/responsivas/main/logo.png" alt="Responsivas logo" width="96">
 </p>
-<h1 align="center">Responsivas</h1>
+<h1 align="center">Responsibility Forms</h1>
 <p align="center">
   <strong>GLPI plugin — Automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users</strong>
 </p>
@@ -16,7 +16,7 @@
 
 ## Overview
 
-**Responsivas** is a GLPI plugin that automatically generates PDF responsibility documents (*cartas responsivas*) and loan contracts (*comodatos*) for IT assets assigned to users. Documents are sent directly to users via email as attachments.
+**Responsibility Forms** is a GLPI plugin that automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users. Documents are sent directly to users via email as attachments.
 
 ---
 
@@ -30,8 +30,8 @@
 - 🔤 **Clickable variable tags** — click any `{variable}` in the hints panel to insert it at the cursor
 - 🔢 **QR codes** on every document linking directly to the asset in GLPI
 - 👷 **Legal witnesses and representative** — configurable GLPI users
-- 📱 **Phone loan contracts** (*comodatos*) with full legal clause set
-- 🌍 **Multi-language** — Spanish (Mexico), English (US & GB), French, German, Italian
+- 📱 **Phone loan contracts** with full legal clause set
+- 🌍 **Multi-language** — Spanish (Mexico), French, German, Italian (English is the base language)
 - 🔒 **CSRF protection** and GLPI permission model
 - ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
 - 👁️ **PDF preview with watermark** — each asset tab has a "Vista previa" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
@@ -91,11 +91,9 @@ responsivas/
 │   ├── pdfbuilder.class.php  # PDF factory, render methods, demo builder
 │   └── user.class.php        # User tab integration
 ├── locales/
-│   ├── responsivas.pot       # Translation template (212 strings)
+│   ├── responsivas.pot       # Translation template
 │   ├── it_IT.po / it_IT.mo  # Italian
 │   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
-│   ├── en_US.po / en_US.mo  # English (US)
-│   ├── en_GB.po / en_GB.mo  # English (GB)
 │   ├── fr_FR.po / fr_FR.mo  # French
 │   └── de_DE.po / de_DE.mo  # German
 ├── CHANGELOG.md
@@ -206,7 +204,7 @@ Formats can be combined and nested: `*__**text**__*` renders as bold + italic + 
 ### Sending a responsibility document to a user
 
 1. Open any **User** record in GLPI (**Administration → Users**)
-2. Go to the **Responsivas** tab
+2. Go to the **Responsibility Forms** tab
 3. Review the list of assigned assets (computers, printers, phones)
 4. Click **Send responsibility documents**
 5. Confirm in the modal dialog
@@ -228,7 +226,7 @@ The plugin will generate one PDF per asset type (one for all computers, one for 
 ## Troubleshooting
 
 **"The document template has empty fields"**
-One or more required template fields are blank. Go to **Configuration → Responsivas → Templates** and fill in all required fields for the affected asset type.
+One or more required template fields are blank. Go to **Configuration → Responsibility Forms → Templates** and fill in all required fields for the affected asset type.
 
 **"No email address registered"**
 The target user has no default email set in GLPI. Go to **Administration → Users → [user] → Email addresses** and add a default address.
@@ -376,8 +374,6 @@ responsivas/
 │   ├── responsivas.pot       # Plantilla de traducciones (212 cadenas)
 │   ├── it_IT.po / it_IT.mo  # Italiano
 │   ├── es_MX.po / es_MX.mo  # Español (México)
-│   ├── en_US.po / en_US.mo  # Inglés (EE. UU.)
-│   ├── en_GB.po / en_GB.mo  # Inglés (Reino Unido)
 │   ├── fr_FR.po / fr_FR.mo  # Francés
 │   └── de_DE.po / de_DE.mo  # Alemán
 ├── CHANGELOG.md

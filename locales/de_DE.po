@@ -32,6 +32,9 @@ msgstr ""
 "Das Dateiverzeichnis des Responsivas-Plugins konnte nicht erstellt werden. "
 "Berechtigungen prüfen."
 
+msgid "Responsibility Forms"
+msgstr "Verantwortungsdokumente"
+
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr "Plugin Verantwortungsdokumente deinstalliert. Konfiguration gelöscht."
 
@@ -731,3 +734,85 @@ msgstr "Mitarbeiter-Nr.: "
 
 msgid "%d responsibility PDFs attached."
 msgstr "%d Verantwortungs-PDFs angehängt."
+
+msgid "Footer left text"
+msgstr "Oben links"
+
+msgid "Example: Original: Company"
+msgstr "Beispiel: Original: Firma"
+
+msgid "Top right"
+msgstr "Oben rechts"
+
+msgid "Example: Copy: Employee"
+msgstr "Beispiel: Kopie: Mitarbeiter"
+
+msgid "Bottom left"
+msgstr "Unten links"
+
+msgid "Bottom right"
+msgstr "Unten rechts"
+
+msgid "Example: SIS-RESP-001"
+msgstr "Beispiel: SIS-RESP-001"
+
+msgid "Example: Rev 1.4 08/01/2026"
+msgstr "Beispiel: Rev 1.4 08/01/2026"
+
+msgid "Document footer"
+msgstr "Dokument-Fußzeile"
+
+msgid "These lines will appear in the footer of the responsibility document."
+msgstr "Diese Zeilen erscheinen in der Fußzeile des Verantwortungsdokuments."
+
+msgid "Bold — **text**"
+msgstr "Fett — **text**"
+
+msgid "Italic — *text*"
+msgstr "Kursiv — *text*"
+
+msgid "Underline — __text__"
+msgstr "Unterstrichen — __text__"
+
+msgid "Preview dimensions: "
+msgstr "Vorschaumaße: "
+
+msgid "Save active tab when changing"
+msgstr "Aktiven Tab beim Wechseln speichern"
+
+msgid "Restore active tab on load"
+msgstr "Aktiven Tab beim Laden wiederherstellen"
+
+msgid "Responsibility document options"
+msgstr "Optionen für Verantwortungsdokument"
+
+msgid "Institutional logo"
+msgstr "Institutionelles Logo"
+
+msgid "Computer responsibility document settings"
+msgstr "Einstellungen für Computer-Verantwortungsdokument"
+
+msgid "Font used in PDFs, can be changed in GLPI settings"
+msgstr "In PDFs verwendete Schriftart, kann in GLPI-Einstellungen geändert werden"
+
+msgid "Font size (pt)"
+msgstr "Schriftgröße (pt)"
+
+msgid "Enter the font size for the PDF"
+msgstr "Geben Sie die Schriftgröße für das PDF ein"
+
+msgid "Printer responsibility document settings"
+msgstr "Einstellungen für Drucker-Verantwortungsdokument"
+
+msgid "Font used"
+msgstr "Verwendete Schriftart"
+
+msgid "Phone responsibility document settings"
+msgstr "Einstellungen für Telefon-Verantwortungsdokument"
+
+msgid "Phone type for responsibility"
+msgstr "Telefontyp für Verantwortung"
+
+msgid "Select the phone type that will be considered for generating responsibility documents."
+msgstr "Wählen Sie den Telefontyp, der für die Erstellung von Verantwortungsdokumenten berücksichtigt wird."
+

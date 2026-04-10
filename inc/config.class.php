@@ -252,34 +252,34 @@ function responsivasFooterFields(string $prefix, array $config): void {
                 'key'   => 'left_1',
                 'label' => __('Footer left text', 'responsivas'),
                 'icon'  => 'corner-up-left',
-                'help'  => 'Ejemplo: Original: Empresa'
+                'help'  => __('Example: Original: Company', 'responsivas')
             ],
             [
                 'key'   => 'right_1',
-                'label' => 'Superior derecha',
+                'label' => __('Top right', 'responsivas'),
                 'icon'  => 'corner-up-right',
-                'help'  => 'Ejemplo: Copia: Colaborador'
+                'help'  => __('Example: Copy: Employee', 'responsivas')
             ]
         ],
         [
             [
                 'key'   => 'left_2',
-                'label' => 'Inferior izquierda',
+                'label' => __('Bottom left', 'responsivas'),
                 'icon'  => 'corner-down-left',
-                'help'  => 'Ejemplo: SIS-RESP-001'
+                'help'  => __('Example: SIS-RESP-001', 'responsivas')
             ],
             [
                 'key'   => 'right_2',
-                'label' => 'Inferior derecha',
+                'label' => __('Bottom right', 'responsivas'),
                 'icon'  => 'corner-down-right',
-                'help'  => 'Ejemplo: Rev 1.4 08/01/2026'
+                'help'  => __('Example: Rev 1.4 08/01/2026', 'responsivas')
             ]
         ]
     ];
 
-    echo "<label class='form-label fw-bold'><i class='ti ti-receipt me-1'></i>Pie de página del documento</label>";
+    echo "<label class='form-label fw-bold'><i class='ti ti-receipt me-1'></i>" . __('Document footer', 'responsivas') . "</label>";
     echo "<div class='form-text text-muted mt-2 mb-3'>
-          Estas líneas aparecerán en el pie de página de la responsiva.
+          " . __('These lines will appear in the footer of the responsibility document.', 'responsivas') . "
           </div>";
 
     foreach ($rows as $row) {
@@ -297,9 +297,9 @@ function responsivasFooterFields(string $prefix, array $config): void {
               </label>
 
               <div class='d-flex gap-1 mb-1'>
-                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='Negrita — **texto**'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>
-                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*'  title='Cursiva — *texto*'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>
-                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='Subrayado — __texto__'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>
+                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='" . __('Bold — **text**', 'responsivas') . "'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>
+                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*'  title='" . __('Italic — *text*', 'responsivas') . "'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>
+                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='" . __('Underline — __text__', 'responsivas') . "'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>
               </div>
 
               <div class='input-group'>
@@ -357,9 +357,9 @@ function previewLogo(input) {
             preview.classList.remove('d-none');
 
             infoLabel.innerHTML =
-                'Dimensiones de la vista previa: ' +
+                " . __('Preview dimensions: ', 'responsivas') . "' +
                 width + ' × ' + height + ' px · ' +
-                'Tamaño: <strong>' + sizeKB + ' KB</strong>';
+                '" . __('Size: ', 'responsivas') . "<strong>' + sizeKB + ' KB</strong>';
 
             infoLabel.classList.remove('d-none');
         };
@@ -373,7 +373,7 @@ function previewLogo(input) {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Guardar tab activo al cambiar
+  // Save active tab when changing
   document.querySelectorAll('#responsivasTabs button[data-bs-toggle="tab"]').forEach(function (tab) {
     tab.addEventListener('shown.bs.tab', function (event) {
       const target = event.target.getAttribute('data-bs-target');
@@ -383,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Restaurar tab activo al cargar
+  // Restore active tab on load
   const activeTab = localStorage.getItem('responsivas_active_tab');
 
   if (activeTab) {
@@ -499,7 +499,7 @@ echo "<div class='tab-pane fade show active' id='tab-general' role='tabpanel'>";
  * SUB-CARD – OPCIONES DE RESPONSIVA
  * ===================================================== */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-file-settings', 'Opciones de la responsiva');
+responsivasRibbonSubHeader('ti-file-settings', 'Responsibility document options');
 
 echo "<div class='card-body'>";
 
@@ -771,7 +771,7 @@ echo "</div>"; // card
  * SUB-CARD – LOGO
  * ===================================================== */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-photo', 'Logo institucional');
+responsivasRibbonSubHeader('ti-photo', 'Institutional logo');
 
 echo "<div class='card-body'>";
 
@@ -1027,7 +1027,7 @@ echo "<div class='tab-pane fade' id='tab-pc' role='tabpanel'>";
  * SUB-CARD – Ajustes Computadoras
  * ========================= */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-device-desktop', 'Ajustes responsiva computadoras');
+responsivasRibbonSubHeader('ti-device-desktop', 'Computer responsibility document settings');
 
 echo "<div class='card-body'>";
 
@@ -1050,7 +1050,7 @@ echo "<div class='input-group'>
                value='" . (Config::getConfigurationValue('core', 'pdffont')) . "'
                readonly>
       </div>";
-echo "<div class='form-text'>Fuente usada en PDFs, se puede cambiar en ajustes de GLPI</div>";
+echo "<div class='form-text'>" . __('Font used in PDFs, can be changed in GLPI settings', 'responsivas') . "</div>";
 echo "</div>";
 
 // -------------------------
@@ -1058,7 +1058,7 @@ echo "</div>";
 // -------------------------
 echo "<div class='col-md-6 mb-3'>";
 echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
-        <i class='ti ti-arrows-vertical'></i> Tamaño de la fuente (pt)
+        <i class='ti ti-arrows-vertical'></i> " . __('Font size (pt)', 'responsivas') . "
       </label>";
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-text-size'></i></span>
@@ -1069,7 +1069,7 @@ echo "<div class='input-group'>
                min='6'
                max='24'>
       </div>";
-echo "<div class='form-text'>Ingresa el tamaño de fuente para el PDF</div>";
+echo "<div class='form-text'>" . __('Enter the font size for the PDF', 'responsivas') . "</div>";
 echo "</div>";
 
 echo "</div>"; // row
@@ -1156,7 +1156,7 @@ echo "<div class='tab-pane fade' id='tab-pri' role='tabpanel'>";
  * SUB-CARD – Ajustes Impresoras
  * ========================= */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-printer', 'Ajustes responsiva impresoras');
+responsivasRibbonSubHeader('ti-printer', 'Printer responsibility document settings');
 echo "<div class='card-body'>";
 
 // =========================
@@ -1169,7 +1169,7 @@ echo "<div class='row mt-3'>";
 // -------------------------
 echo "<div class='col-md-6 mb-3'>";
 echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
-        <i class='ti ti-text-wrap'></i> Fuente usada
+        <i class='ti ti-text-wrap'></i> " . __('Font used', 'responsivas') . "
       </label>";
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-typography'></i></span>
@@ -1178,7 +1178,7 @@ echo "<div class='input-group'>
                value='" . (Config::getConfigurationValue('core', 'pdffont')) . "'
                readonly>
       </div>";
-echo "<div class='form-text'>Fuente usada en PDFs, se puede cambiar en ajustes de GLPI</div>";
+echo "<div class='form-text'>" . __('Font used in PDFs, can be changed in GLPI settings', 'responsivas') . "</div>";
 echo "</div>";
 
 // -------------------------
@@ -1186,7 +1186,7 @@ echo "</div>";
 // -------------------------
 echo "<div class='col-md-6 mb-3'>";
 echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
-        <i class='ti ti-arrows-vertical'></i> Tamaño de la fuente (pt)
+        <i class='ti ti-arrows-vertical'></i> " . __('Font size (pt)', 'responsivas') . "
       </label>";
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-text-size'></i></span>
@@ -1197,7 +1197,7 @@ echo "<div class='input-group'>
                min='6'
                max='24'>
       </div>";
-echo "<div class='form-text'>Ingresa el tamaño de fuente para el PDF</div>";
+echo "<div class='form-text'>" . __('Enter the font size for the PDF', 'responsivas') . "</div>";
 echo "</div>";
 
 echo "</div>"; // row
@@ -1283,7 +1283,7 @@ echo "<div class='tab-pane fade' id='tab-pho' role='tabpanel'>";
  * SUB-CARD – Ajustes Teléfonos
  * ========================= */
 echo "<div class='card mt-2 rounded-0'>";
-responsivasRibbonSubHeader('ti-device-mobile', 'Ajustes responsiva teléfonos');
+responsivasRibbonSubHeader('ti-device-mobile', 'Phone responsibility document settings');
 
 echo "<div class='card-body'>";
 
@@ -1298,7 +1298,7 @@ echo "<div class='row mt-3'>";
 echo "<div class='col-md-6 mb-3'>";
 
 echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
-        <i class='ti ti-list-details'></i> Tipo de teléfono para responsiva
+        <i class='ti ti-list-details'></i> " . __('Phone type for responsibility', 'responsivas') . "
       </label>";
 
 echo "<div class='input-group'>";
@@ -1316,7 +1316,7 @@ echo "</div>";
 echo "</div>";
 
 echo "<div class='form-text'>
-        Selecciona el tipo de teléfono que será considerado para generar responsivas.
+        " . __('Select the phone type that will be considered for generating responsibility documents.', 'responsivas') . "
       </div>";
 
 echo "</div>";
@@ -1326,7 +1326,7 @@ echo "</div>";
 // -------------------------
 echo "<div class='col-md-6 mb-3'>";
 echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
-        <i class='ti ti-arrows-vertical'></i> Tamaño de la fuente (pt)
+        <i class='ti ti-arrows-vertical'></i> " . __('Font size (pt)', 'responsivas') . "
       </label>";
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-text-size'></i></span>
@@ -1337,7 +1337,7 @@ echo "<div class='input-group'>
                min='6'
                max='24'>
       </div>";
-echo "<div class='form-text'>Ingresa el tamaño de fuente para el PDF</div>";
+echo "<div class='form-text'>" . __('Enter the font size for the PDF', 'responsivas') . "</div>";
 echo "</div>";
 
 echo "</div>"; // row

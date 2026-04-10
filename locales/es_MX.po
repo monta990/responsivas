@@ -31,6 +31,9 @@ msgstr ""
 "No se pudo crear el directorio de archivos del plugin Responsivas. Verifique"
 " permisos."
 
+msgid "Responsibility Forms"
+msgstr "Responsivas"
+
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr "Plugin Responsivas desinstalado. Configuración eliminada."
 
@@ -724,3 +727,85 @@ msgstr "Empleado No.: "
 
 msgid "%d responsibility PDFs attached."
 msgstr "Se adjuntan %d responsivas PDF."
+
+msgid "Footer left text"
+msgstr "Superior izquierda"
+
+msgid "Example: Original: Company"
+msgstr "Ejemplo: Original: Empresa"
+
+msgid "Top right"
+msgstr "Superior derecha"
+
+msgid "Example: Copy: Employee"
+msgstr "Ejemplo: Copia: Colaborador"
+
+msgid "Bottom left"
+msgstr "Inferior izquierda"
+
+msgid "Bottom right"
+msgstr "Inferior derecha"
+
+msgid "Example: SIS-RESP-001"
+msgstr "Ejemplo: SIS-RESP-001"
+
+msgid "Example: Rev 1.4 08/01/2026"
+msgstr "Ejemplo: Rev 1.4 08/01/2026"
+
+msgid "Document footer"
+msgstr "Pie de página del documento"
+
+msgid "These lines will appear in the footer of the responsibility document."
+msgstr "Estas líneas aparecerán en el pie de página de la responsiva."
+
+msgid "Bold — **text**"
+msgstr "Negrita — **texto**"
+
+msgid "Italic — *text*"
+msgstr "Cursiva — *texto*"
+
+msgid "Underline — __text__"
+msgstr "Subrayado — __texto__"
+
+msgid "Preview dimensions: "
+msgstr "Dimensiones de la vista previa: "
+
+msgid "Save active tab when changing"
+msgstr "Guardar tab activo al cambiar"
+
+msgid "Restore active tab on load"
+msgstr "Restaurar tab activo al cargar"
+
+msgid "Responsibility document options"
+msgstr "Opciones de la responsiva"
+
+msgid "Institutional logo"
+msgstr "Logo institucional"
+
+msgid "Computer responsibility document settings"
+msgstr "Ajustes responsiva computadoras"
+
+msgid "Font used in PDFs, can be changed in GLPI settings"
+msgstr "Fuente usada en PDFs, se puede cambiar en ajustes de GLPI"
+
+msgid "Font size (pt)"
+msgstr "Tamaño de la fuente (pt)"
+
+msgid "Enter the font size for the PDF"
+msgstr "Ingresa el tamaño de fuente para el PDF"
+
+msgid "Printer responsibility document settings"
+msgstr "Ajustes responsiva impresoras"
+
+msgid "Font used"
+msgstr "Fuente usada"
+
+msgid "Phone responsibility document settings"
+msgstr "Ajustes responsiva teléfonos"
+
+msgid "Phone type for responsibility"
+msgstr "Tipo de teléfono para responsiva"
+
+msgid "Select the phone type that will be considered for generating responsibility documents."
+msgstr "Selecciona el tipo de teléfono que será considerado para generar responsivas."
+

@@ -202,9 +202,9 @@ function responsivasTemplateEditor(string $label, string $name, string $value, s
          <i class='ti ti-file-pencil me-1'></i>{$label}
       </label>";
    echo "<div class='d-flex gap-1 mb-1'>"
-      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='Negrita — **texto**'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>"
-      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*' title='Cursiva — *texto*'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>"
-      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='Subrayado — __texto__'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>"
+      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='" . __('Bold — **text**', 'responsivas') . "'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>"
+      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*' title='" . __('Italic — *text*', 'responsivas') . "'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>"
+      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='" . __('Underline — __text__', 'responsivas') . "'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>"
       . "</div>";
    echo "<textarea class='form-control font-monospace'
                 name='{$name}'

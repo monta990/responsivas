@@ -6,6 +6,30 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.3] — 2026-04-10
+
+### Changed
+- **English locale files removed** — `en_US.po`, `en_US.mo`, `en_GB.po`, and `en_GB.mo` removed from the locales directory. Since English is the base language (msgid strings), these files were redundant. GLPI's gettext fallback automatically uses the English msgid when no translation exists.
+- **Hardcoded Spanish strings in config form replaced with translatable English** — all UI strings in `config.class.php` and `helpers.php` that were hardcoded in Spanish are now wrapped with `__('string', 'responsivas')` in English. This includes: section headers, footer field labels, font size labels, button tooltips (Bold, Italic, Underline), help texts, and JavaScript comments.
+
+### Added
+- **22 new translatable strings** for configuration form UI elements, fully translated in all non-English locales (`es_MX`, `fr_FR`, `de_DE`, `it_IT`).
+
+### Fixed
+- **Config form UI now respects user locale** — previously, some labels and tooltips in the configuration form were hardcoded in Spanish and would not translate even for users with English, French, German, or Italian locales. All strings are now properly translatable.
+
+### Removed
+- `locales/en_US.po` / `locales/en_US.mo`
+- `locales/en_GB.po` / `locales/en_GB.mo`
+- References to English locales from `plugin.xml` and `README.md` (both EN and ES sections)
+
+### Locales
+- **4 active locales**: `es_MX`, `fr_FR`, `de_DE`, `it_IT` (English is the base language, no `.po` files needed).
+- Total: **233 strings** per locale.
+- All locales fully translated (0 empty msgstr).
+
+---
+
 ## [1.3.2] — 2026-04-06
 
 ### Fixed
