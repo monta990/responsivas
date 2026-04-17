@@ -84,7 +84,7 @@ if (($_POST['mode'] ?? '') === 'test') {
    ];
 
    // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-   $email_subject = '[PRUEBA] ' . responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+   $email_subject = '[PRUEBA] ' . strip_tags(responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars));
    $body_safe     = nl2br(responsivasApplyTemplate(htmlspecialchars($email_body_tpl,    ENT_QUOTES, 'UTF-8'), $vars));
    $footer_raw    = responsivasApplyTemplate(htmlspecialchars($email_footer_tpl, ENT_QUOTES, 'UTF-8'), $vars);
    $footer_safe   = !empty(trim($email_footer_tpl))
@@ -219,7 +219,7 @@ $vars = [
 ];
 
 // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-$email_subject = responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+$email_subject = strip_tags(responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars));
 
 /* ============================
  * Generar PDFs

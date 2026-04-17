@@ -821,3 +821,21 @@ msgstr "Mostrar las líneas de firma del comodante y comodatario en la carta res
 
 msgid "Uses the legal representative configured in General settings."
 msgstr "Usa el representante legal configurado en los ajustes generales."
+
+msgid "Computer Responsibility - "
+msgstr "Responsiva Computadora - "
+
+msgid "Printer Responsibility - "
+msgstr "Responsiva Impresora - "
+
+msgid "Phone Loan - "
+msgstr "Comodato Teléfono - "
+
+msgid "Preview - Computer Responsibility - "
+msgstr "Vista Previa - Responsiva Computadora - "
+
+msgid "Preview - Printer Responsibility - "
+msgstr "Vista Previa - Responsiva Impresora - "
+
+msgid "Preview - Phone Loan - "
+msgstr "Vista Previa - Comodato Teléfono - "

@@ -190,8 +190,7 @@ HTML;
       $employee_number = e($user->fields['registration_number'] ?? '');
       $show_employee   = (int)($config['show_employee_number'] ?? 0);
       $company_name    = e($config['company_name'] ?? '');
-      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . $employee_number . "<br>") : '';
-      $creator         = self::getCreator();
+      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . $employee_number) : '';
 
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
@@ -204,7 +203,7 @@ HTML;
       }
 
       $pdf = self::makePdf('pc',
-         'Responsiva Computadora - ' . $full_name,
+         __('Computer Responsibility - ', 'responsivas') . $full_name,
          'Responsiva de computadora',
          'responsiva, computadora, activos, TI',
          $location,
@@ -385,8 +384,7 @@ HTML;
       $employee_number = !empty($user->fields['registration_number']) ? $user->fields['registration_number'] : '';
       $show_employee   = (int)($config['show_employee_number'] ?? 0);
       $company_name    = e($config['company_name'] ?? '');
-      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . e($employee_number) . "<br>") : '';
-      $creator         = self::getCreator();
+      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . e($employee_number)) : '';
 
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
@@ -399,7 +397,7 @@ HTML;
       }
 
       $pdf = self::makePdf('pri',
-         'Responsiva Impresora - ' . $full_name,
+         __('Printer Responsibility - ', 'responsivas') . $full_name,
          'Responsiva de impresora',
          'responsiva, impresora, activos, TI',
          $location,
@@ -535,7 +533,7 @@ HTML;
       $show_employee = (int)($config['show_employee_number'] ?? 1);
       $company_name  = e($config['company_name'] ?? '');
       $emp_safe      = e($employee_number);
-      $employee_line = ($show_employee && !empty($emp_safe)) ? (__("Employee No.: ", "responsivas") . $emp_safe . "<br>") : '';
+      $employee_line = ($show_employee && !empty($emp_safe)) ? (__("Employee No.: ", "responsivas") . $emp_safe) : '';
 
       // Pre-validar precios ANTES de crear el PDF
       foreach ($phones as $phone) {
@@ -558,14 +556,13 @@ HTML;
          }
       }
 
-      $currency   = !empty($config['currency']) ? $config['currency'] : '$';
-      $dt         = new DateTime('now', new DateTimeZone($config['timezone']));
-      $hora_texto = $dt->format('H') . ':00';
+      $currency    = !empty($config['currency']) ? $config['currency'] : '$';
+      $dt          = new DateTime('now', new DateTimeZone($config['timezone']));
+      $hora_texto  = $dt->format('H') . ':00';
       $fecha_texto = fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']);
-      $creator    = self::getCreator();
 
       $pdf = self::makePdf('pho',
-         'Comodato Teléfono - ' . $full_name,
+         __('Phone Loan - ', 'responsivas') . $full_name,
          'Comodato de teléfono',
          'comodato, teléfono, activos, TI',
          $location,
@@ -826,14 +823,15 @@ HTML;
    ): string {
       $l = self::lbl();
 
+      $emp_sep   = $employee_line !== '' ? '<br>' . $employee_line : '';
       $sig_block = $show_both_sigs
          ? '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
            . '<tr>'
            . '<td width="50%"><strong>' . $l['lender'] . '</strong><br><br>_______________________________<br>' . $representante . '</td>'
-           . '<td width="50%"><strong>' . $l['borrower'] . '</strong><br><br>_______________________________<br>' . $full_safe . '<br>' . $employee_line . '</td>'
+           . '<td width="50%"><strong>' . $l['borrower'] . '</strong><br><br>_______________________________<br>' . $full_safe . $emp_sep . '</td>'
            . '</tr></table>'
          : '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
-           . '<tr><td><strong>_________________________________<br>' . $full_safe . '<br>' . $employee_line . '</strong></td></tr>'
+           . '<tr><td><strong>_________________________________<br>' . $full_safe . $emp_sep . '</strong></td></tr>'
            . '</table>';
 
       return <<<HTML
@@ -871,7 +869,8 @@ HTML;
       string $representante, string $full_name_safe, string $employee_line,
       string $testigo1, string $testigo2
    ): string {
-      $l = self::lbl();
+      $l       = self::lbl();
+      $emp_tag = $employee_line !== '' ? '<br>' . $employee_line : '';
       return <<<HTML
 <p style="text-align:center;"><strong>{$titulo}</strong></p>
 <table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.15;">{$apertura}</td></tr></table>
@@ -881,7 +880,7 @@ HTML;
 <table nobr="true" width="100%" style="text-align:center;margin-top:10pt;">
 <tr>
   <td width="50%"><strong>{$l['lender']}</strong><br><br>_______________________________<br>{$representante}</td>
-  <td width="50%"><strong>{$l['borrower']}</strong><br><br>_______________________________<br>{$full_name_safe}<br>{$employee_line}</td>
+  <td width="50%"><strong>{$l['borrower']}</strong><br><br>_______________________________<br>{$full_name_safe}{$emp_tag}</td>
 </tr>
 </table>
 <table nobr="true" width="100%" style="text-align:center;margin-top:10pt;">
@@ -929,9 +928,14 @@ HTML;
             PluginResponsivasPDF::$global_watermark_text = $wm_text !== '' ? $wm_text : __('PREVIEW', 'responsivas');
             $result = self::$method($user_id);
             PluginResponsivasPDF::$global_watermark = false; // reset
+            $result['pdf']->SetTitle(match ($type) {
+               'pc'  => __('Preview - Computer Responsibility - ', 'responsivas') . $user->getFriendlyName(),
+               'pri' => __('Preview - Printer Responsibility - ',  'responsivas') . $user->getFriendlyName(),
+               'pho' => __('Preview - Phone Loan - ',              'responsivas') . $user->getFriendlyName(),
+            });
             return $result;
-         } catch (Throwable) {
-            // Caída silenciosa → usar demo
+         } catch (RuntimeException) {
+            // Caída silenciosa solo en errores esperados (activos faltantes, plantilla vacía) → usar demo
          }
       }
 
@@ -1000,7 +1004,7 @@ HTML;
       // ── Computadora ─────────────────────────────────────────────────
       if ($type === 'pc') {
          $pdf = self::makePdf('pc',
-            'Vista Previa - Responsiva Computadora - ' . $full_name,
+            __('Preview - Computer Responsibility - ', 'responsivas') . $full_name,
             'Vista previa responsiva de computadora',
             'vista previa, responsiva, computadora, activos, TI',
             $location, $fecha_header, $config, 30.0, true
@@ -1008,7 +1012,7 @@ HTML;
          $pdf->AddPage();
          $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
 
-         $employee_line      = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp . "<br>") : '';
+         $employee_line      = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp) : '';
          $employee_line_html = $employee_line ? "<br>{$employee_line}" : '';
 
          $pc_vars = [
@@ -1042,7 +1046,7 @@ HTML;
       // ── Impresora ────────────────────────────────────────────────────
       if ($type === 'pri') {
          $pdf = self::makePdf('pri',
-            'Vista Previa - Responsiva Impresora - ' . $full_name,
+            __('Preview - Printer Responsibility - ', 'responsivas') . $full_name,
             'Vista previa responsiva de impresora',
             'vista previa, responsiva, impresora, activos, TI',
             $location, $fecha_header, $config, 40.0, true
@@ -1050,7 +1054,7 @@ HTML;
          $pdf->AddPage();
          $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
 
-         $employee_line = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp . "<br>") : '';
+         $employee_line = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp) : '';
          $full_safe     = $full_name_safe;
 
          $pri_vars = [
@@ -1081,7 +1085,7 @@ HTML;
 
       // ── Teléfono ─────────────────────────────────────────────────────
       $pdf = self::makePdf('pho',
-         'Vista Previa - Comodato Teléfono - ' . $full_name,
+         __('Preview - Phone Loan - ', 'responsivas') . $full_name,
          'Vista previa comodato de teléfono',
          'vista previa, comodato, teléfono, activos, TI',
          $location, $fecha_header, $config, 25.0, true

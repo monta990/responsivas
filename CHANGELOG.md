@@ -6,6 +6,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.1] — 2026-04-16
+
+### Fixed
+- **Extra blank line below employee number in signature block** — `$employee_line` was built with a trailing `<br>` that leaked into the signature cell. The `<br>` separator is now added conditionally only when the employee line is non-empty, in PC, printer, and phone documents.
+- **Preview PDF title missing "Vista Previa" prefix when user has real assets** — `buildPreview` was calling `buildComputerPdf` (title: `"Responsiva Computadora - Name"`) instead of overriding it. Title is now updated to `"Vista Previa - Responsiva Computadora - Name"` after building, consistent with the printer and phone previews.
+- **Dead markdown processing in `responsivasRenderTemplate`** — `**bold**`, `*italic*`, and `__underline__` markers were processed a second time inside the template renderer, but `responsivasApplyTemplate` already converts them to `<span>` tags before `renderTemplate` runs, making the regex unreachable. Removed the dead code.
+- **Silent swallowing of unexpected errors in `buildPreview`** — the try/catch around real-asset PDF builds caught all `Throwable`, hiding DB failures and PHP errors. Now catches only `RuntimeException` (the expected errors from build methods) and lets other exceptions propagate.
+- **Open redirect via unvalidated `HTTP_REFERER` in `responsivasErrorAndBack`** — referer is now validated against `$CFG_GLPI['url_base']`; if it does not start with the configured base URL, the redirect falls back to `root_doc`.
+- **Dead `$creator` variable in three build methods** — `$creator = self::getCreator()` was assigned but never used in `buildComputerPdf`, `buildPrinterPdf`, and `buildPhonePdf`. Removed.
+
+---
+
 ## [1.4.0] — 2026-04-16
 
 ### Added

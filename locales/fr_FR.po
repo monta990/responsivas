@@ -829,3 +829,21 @@ msgstr "Afficher les lignes de signature du prêteur et de l'emprunteur dans le 
 
 msgid "Uses the legal representative configured in General settings."
 msgstr "Utilise le représentant légal configuré dans les paramètres généraux."
+
+msgid "Computer Responsibility - "
+msgstr "Responsabilité Ordinateur - "
+
+msgid "Printer Responsibility - "
+msgstr "Responsabilité Imprimante - "
+
+msgid "Phone Loan - "
+msgstr "Prêt Téléphone - "
+
+msgid "Preview - Computer Responsibility - "
+msgstr "Aperçu - Responsabilité Ordinateur - "
+
+msgid "Preview - Printer Responsibility - "
+msgstr "Aperçu - Responsabilité Imprimante - "
+
+msgid "Preview - Phone Loan - "
+msgstr "Aperçu - Prêt Téléphone - "

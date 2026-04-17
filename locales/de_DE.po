@@ -828,3 +828,21 @@ msgstr "Unterschriftszeilen für Verleiher und Entleiher im Drucker-Verantwortun
 
 msgid "Uses the legal representative configured in General settings."
 msgstr "Verwendet den in den allgemeinen Einstellungen konfigurierten gesetzlichen Vertreter."
+
+msgid "Computer Responsibility - "
+msgstr "Verantwortung Computer - "
+
+msgid "Printer Responsibility - "
+msgstr "Verantwortung Drucker - "
+
+msgid "Phone Loan - "
+msgstr "Leihvertrag Telefon - "
+
+msgid "Preview - Computer Responsibility - "
+msgstr "Vorschau - Verantwortung Computer - "
+
+msgid "Preview - Printer Responsibility - "
+msgstr "Vorschau - Verantwortung Drucker - "
+
+msgid "Preview - Phone Loan - "
+msgstr "Vorschau - Leihvertrag Telefon - "

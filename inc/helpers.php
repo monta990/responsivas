@@ -11,7 +11,11 @@ if (!defined('GLPI_ROOT')) {
 function responsivasErrorAndBack(string $message): void {
    global $CFG_GLPI;
    Session::addMessageAfterRedirect($message, false, ERROR);
-   Html::redirect($_SERVER['HTTP_REFERER'] ?? $CFG_GLPI['root_doc']);
+   $referer  = $_SERVER['HTTP_REFERER'] ?? '';
+   $base     = $CFG_GLPI['url_base'] ?? '';
+   $fallback = $CFG_GLPI['root_doc'] ?? '/';
+   $target   = ($base !== '' && str_starts_with($referer, $base)) ? $referer : $fallback;
+   Html::redirect($target);
    exit;
 }
 
@@ -125,10 +129,6 @@ function responsivasRenderTemplate(string $escaped_text): string
 
    foreach ($lines as $line) {
       $line = rtrim($line);
-      // Orden: ** primero para que * no capture dentro de **texto**
-      $line = preg_replace_callback('/\*\*(.+?)\*\*/s', static fn($m) => '<strong>' . $m[1] . '</strong>', $line);
-      $line = preg_replace_callback('/\*(.+?)\*/s',       static fn($m) => '<em>'     . $m[1] . '</em>',     $line);
-      $line = preg_replace_callback('/__(.+?)__/s',        static fn($m) => '<u>'      . $m[1] . '</u>',      $line);
 
       // Línea de lista: empieza con uno o más dígitos + punto + espacio
       if (preg_match('/^\d+\.\s+(.+)$/', $line, $m)) {

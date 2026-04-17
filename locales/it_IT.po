@@ -832,3 +832,21 @@ msgstr "Mostra le righe di firma del prestatore e del mutuatario nel documento d
 
 msgid "Uses the legal representative configured in General settings."
 msgstr "Utilizza il rappresentante legale configurato nelle impostazioni generali."
+
+msgid "Computer Responsibility - "
+msgstr "Responsabilità Computer - "
+
+msgid "Printer Responsibility - "
+msgstr "Responsabilità Stampante - "
+
+msgid "Phone Loan - "
+msgstr "Prestito Telefono - "
+
+msgid "Preview - Computer Responsibility - "
+msgstr "Anteprima - Responsabilità Computer - "
+
+msgid "Preview - Printer Responsibility - "
+msgstr "Anteprima - Responsabilità Stampante - "
+
+msgid "Preview - Phone Loan - "
+msgstr "Anteprima - Prestito Telefono - "
