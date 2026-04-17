@@ -816,3 +816,15 @@ msgstr "Telefontyp für Verantwortung"
 msgid "Select the phone type that will be considered for generating responsibility documents."
 msgstr "Wählen Sie den Telefontyp, der für die Erstellung von Verantwortungsdokumenten berücksichtigt wird."
 
+
+msgid "Show lender/borrower signatures"
+msgstr "Verleiher-/Entleiher-Unterschriften anzeigen"
+
+msgid "Show both lender and borrower signature lines in computer responsibility document"
+msgstr "Unterschriftszeilen für Verleiher und Entleiher im Computer-Verantwortungsdokument anzeigen"
+
+msgid "Show both lender and borrower signature lines in printer responsibility document"
+msgstr "Unterschriftszeilen für Verleiher und Entleiher im Drucker-Verantwortungsdokument anzeigen"
+
+msgid "Uses the legal representative configured in General settings."
+msgstr "Verwendet den in den allgemeinen Einstellungen konfigurierten gesetzlichen Vertreter."

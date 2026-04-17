@@ -820,3 +820,15 @@ msgstr "Tipo di telefono per la responsabilità"
 msgid "Select the phone type that will be considered for generating responsibility documents."
 msgstr "Seleziona il tipo di telefono che verrà considerato per generare i documenti di responsabilità."
 
+
+msgid "Show lender/borrower signatures"
+msgstr "Mostra firme prestatore/mutuatario"
+
+msgid "Show both lender and borrower signature lines in computer responsibility document"
+msgstr "Mostra le righe di firma del prestatore e del mutuatario nel documento di responsabilità computer"
+
+msgid "Show both lender and borrower signature lines in printer responsibility document"
+msgstr "Mostra le righe di firma del prestatore e del mutuatario nel documento di responsabilità stampante"
+
+msgid "Uses the legal representative configured in General settings."
+msgstr "Utilizza il rappresentante legale configurato nelle impostazioni generali."

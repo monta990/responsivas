@@ -118,7 +118,7 @@ function responsivasRenderTemplate(string $escaped_text): string
          $in_list  = false;
       }
       if (!empty($p_lines)) {
-         $html    .= '<p style="text-align:justify;line-height:1.2;">' . implode('<br>', $p_lines) . '</p>';
+         $html    .= '<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.2;padding-bottom:3pt;">' . implode('<br>', $p_lines) . '</td></tr></table>';
          $p_lines  = [];
       }
    };

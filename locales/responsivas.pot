@@ -756,3 +756,15 @@ msgstr ""
 
 msgid "Select the phone type that will be considered for generating responsibility documents."
 msgstr ""
+
+msgid "Show lender/borrower signatures"
+msgstr ""
+
+msgid "Show both lender and borrower signature lines in computer responsibility document"
+msgstr ""
+
+msgid "Show both lender and borrower signature lines in printer responsibility document"
+msgstr ""
+
+msgid "Uses the legal representative configured in General settings."
+msgstr ""

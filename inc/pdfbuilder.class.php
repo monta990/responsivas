@@ -196,6 +196,13 @@ HTML;
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
 
+      $show_both_sigs_pc  = (int)($config['pc_show_comodato_sigs'] ?? 0) === 1;
+      $representante_pc   = '';
+      if ($show_both_sigs_pc) {
+         $rep_id = (int)($config['representante'] ?? 0);
+         $representante_pc = $rep_id > 0 ? (nombreUsuario($rep_id) ?? '') : '';
+      }
+
       $pdf = self::makePdf('pc',
          'Responsiva Computadora - ' . $full_name,
          'Responsiva de computadora',
@@ -332,7 +339,8 @@ HTML;
             $ram_texto, $os_texto, $disco, $tipo, $estado_nombre,
             $comentarios, $dispositivos_html,
             $full_name_safe, $employee_line_html,
-            $th_bg, $td_bg
+            $th_bg, $td_bg,
+            $show_both_sigs_pc, $representante_pc
          ), true, false, true, false, '');
       }
 
@@ -382,6 +390,13 @@ HTML;
 
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
+
+      $show_both_sigs_pri = (int)($config['pri_show_comodato_sigs'] ?? 0) === 1;
+      $representante_pri  = '';
+      if ($show_both_sigs_pri) {
+         $rep_id = (int)($config['representante'] ?? 0);
+         $representante_pri = $rep_id > 0 ? (nombreUsuario($rep_id) ?? '') : '';
+      }
 
       $pdf = self::makePdf('pri',
          'Responsiva Impresora - ' . $full_name,
@@ -437,7 +452,8 @@ HTML;
             $pri_titulo, $pri_intro, $pri_cuerpo,
             $marca, $modelo, $serie, $tipo, $estado_nombre, $comentarios,
             $full_safe, $employee_line,
-            $th_bg, $td_bg
+            $th_bg, $td_bg,
+            $show_both_sigs_pri, $representante_pri
          ), true, false, true, false, '');
          $i++;
       }
@@ -766,12 +782,25 @@ HTML;
       string $tipo, string $estado, string $comentarios,
       string $dispositivos_html,
       string $full_name_safe, string $employee_line_html,
-      string $th_bg, string $td_bg
+      string $th_bg, string $td_bg,
+      bool   $show_both_sigs = false,
+      string $representante = ''
    ): string {
       $l = self::lbl();
+
+      $sig_block = $show_both_sigs
+         ? '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+           . '<tr>'
+           . '<td width="50%"><strong>' . $l['lender'] . '</strong><br><br>_______________________________<br>' . $representante . '</td>'
+           . '<td width="50%"><strong>' . $l['borrower'] . '</strong><br><br>_______________________________<br>' . $full_name_safe . $employee_line_html . '</td>'
+           . '</tr></table>'
+         : '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+           . '<tr><td><strong>_________________________________<br>' . $full_name_safe . $employee_line_html . '</strong></td></tr>'
+           . '</table>';
+
       return <<<HTML
 <h2 style="text-align:center;">{$titulo}</h2>
-<p style="text-align:justify;">{$intro}</p>
+<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.2;">{$intro}</td></tr></table>
 <table border="1" cellpadding="3" cellspacing="0" width="100%">
 <tr style="background-color:{$th_bg};"><td width="20%"><strong>{$l['brand']}</strong></td><td width="20%"><strong>{$l['model']}</strong></td><td width="20%"><strong>{$l['serial']}</strong></td><td width="20%"><strong>{$l['processor']}</strong></td><td width="20%"><strong>{$l['speed']}</strong></td></tr>
 <tr style="background-color:{$td_bg};"><td>{$marca}</td><td>{$modelo}</td><td>{$serie}</td><td>{$cpu_name}</td><td>{$cpu_freq}</td></tr>
@@ -782,8 +811,7 @@ HTML;
 <tr style="background-color:{$td_bg};"><td width="100%">{$comentarios}</td></tr>
 </table>
 {$cuerpo}
-<table><tr><td height="30"></td></tr></table>
-<div style="text-align:center;"><strong>_________________________________<br>{$full_name_safe}{$employee_line_html}</strong></div>
+{$sig_block}
 HTML;
    }
 
@@ -792,12 +820,25 @@ HTML;
       string $marca, string $modelo, string $serie,
       string $tipo, string $estado, string $comentarios,
       string $full_safe, string $employee_line,
-      string $th_bg, string $td_bg
+      string $th_bg, string $td_bg,
+      bool   $show_both_sigs = false,
+      string $representante = ''
    ): string {
       $l = self::lbl();
+
+      $sig_block = $show_both_sigs
+         ? '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+           . '<tr>'
+           . '<td width="50%"><strong>' . $l['lender'] . '</strong><br><br>_______________________________<br>' . $representante . '</td>'
+           . '<td width="50%"><strong>' . $l['borrower'] . '</strong><br><br>_______________________________<br>' . $full_safe . '<br>' . $employee_line . '</td>'
+           . '</tr></table>'
+         : '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+           . '<tr><td><strong>_________________________________<br>' . $full_safe . '<br>' . $employee_line . '</strong></td></tr>'
+           . '</table>';
+
       return <<<HTML
 <h2 style="text-align:center;">{$titulo}</h2>
-<p style="text-align:justify;">{$intro}</p>
+<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.2;">{$intro}</td></tr></table>
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
   <tr style="background-color:{$th_bg};">
     <td width="20%"><strong>{$l['brand']}</strong></td>
@@ -821,14 +862,7 @@ HTML;
   </tr>
 </table>
 {$cuerpo}
-<table><tr><td height="40"></td></tr></table>
-<div style="text-align:center;">
-<strong>
-_________________________________<br>
-{$full_safe}<br>
-{$employee_line}
-</strong>
-</div>
+{$sig_block}
 HTML;
    }
 
@@ -840,19 +874,17 @@ HTML;
       $l = self::lbl();
       return <<<HTML
 <p style="text-align:center;"><strong>{$titulo}</strong></p>
-<p style="text-align:justify; line-height:1.15;">{$apertura}</p>
+<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.15;">{$apertura}</td></tr></table>
 <p style="text-align:center;"><strong>{$l['clauses']}</strong></p>
 {$clausulas}
-<p style="text-align:justify; line-height:1.15;">{$testigos}</p>
-<br>
-<table width="100%" style="text-align:center;">
+<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.15;">{$testigos}</td></tr></table>
+<table nobr="true" width="100%" style="text-align:center;margin-top:10pt;">
 <tr>
   <td width="50%"><strong>{$l['lender']}</strong><br><br>_______________________________<br>{$representante}</td>
   <td width="50%"><strong>{$l['borrower']}</strong><br><br>_______________________________<br>{$full_name_safe}<br>{$employee_line}</td>
 </tr>
 </table>
-<br>
-<table width="100%" style="text-align:center;">
+<table nobr="true" width="100%" style="text-align:center;margin-top:10pt;">
 <tr>
   <td width="50%"><strong>{$l['witness']}</strong><br><br>_______________________________<br>{$testigo1}</td>
   <td width="50%"><strong>{$l['witness']}</strong><br><br>_______________________________<br>{$testigo2}</td>
@@ -992,6 +1024,8 @@ HTML;
          $pc_intro  = responsivasApplyTemplate($config['pc_intro']  ?? '', $pc_vars);
          $pc_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pc_cuerpo'] ?? '', $pc_vars));
 
+         $show_demo_pc_sigs = (int)($config['pc_show_comodato_sigs'] ?? 0) === 1;
+         $demo_pc_rep       = $show_demo_pc_sigs ? $rep : '';
          $pdf->writeHTML(self::renderPcPage(
             $pc_titulo, $pc_intro, $pc_cuerpo,
             'Dell', 'Latitude 5540', 'SN-DEMO-123456',
@@ -999,7 +1033,8 @@ HTML;
             '16 GB DDR4', 'Windows 11 Pro', 'SSD 512 GB',
             'Laptop', $demo_state,
             e(__('Demo equipment for template preview', 'responsivas')),
-            '', $full_name_safe, $employee_line_html, $th_bg, $td_bg
+            '', $full_name_safe, $employee_line_html, $th_bg, $td_bg,
+            $show_demo_pc_sigs, $demo_pc_rep
          ), true, false, true, false, '');
          return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Computo_DEMO', $full_name)];
       }
@@ -1031,12 +1066,15 @@ HTML;
          $pri_intro  = responsivasApplyTemplate($config['pri_intro']  ?? '', $pri_vars);
          $pri_cuerpo = responsivasRenderTemplate(responsivasApplyTemplate($config['pri_cuerpo'] ?? '', $pri_vars));
 
+         $show_demo_pri_sigs = (int)($config['pri_show_comodato_sigs'] ?? 0) === 1;
+         $demo_pri_rep       = $show_demo_pri_sigs ? $rep : '';
          $pdf->writeHTML(self::renderPriPage(
             $pri_titulo, $pri_intro, $pri_cuerpo,
             'HP', 'LaserJet Pro M404n', 'SN-IMP-789012',
             'Impresora', $demo_state,
             e(__('Demo printer for template preview', 'responsivas')),
-            $full_safe, $employee_line, $th_bg, $td_bg
+            $full_safe, $employee_line, $th_bg, $td_bg,
+            $show_demo_pri_sigs, $demo_pri_rep
          ), true, false, true, false, '');
          return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DEMO', $full_name)];
       }

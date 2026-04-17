@@ -39,6 +39,8 @@
 - 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Phones tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
 - 📬 **Selective email sending** — the send confirmation modal lets you choose which document types to include (Computers, Printers, Phones). Only asset types with at least one assigned asset are shown, each with its count. All available types are pre-checked; uncheck any to exclude it.
 - ✅ **Template validation** — warns before generating if required fields are empty
+- ✍️ **Optional lender/borrower dual-signature block** on computer and printer documents — configurable toggle per document type in settings; uses the legal representative already configured in General
+- 📄 **Page-break prevention** — signature blocks and body paragraphs use TCPDF `nobr` to ensure clauses and signatures are never split across pages
 
 ---
 
@@ -139,6 +141,7 @@ Each asset type has its own set of template fields:
 | Useful-life clause (without invoice) | *(Phone only)* Template when phone has no invoice or supplier |
 | Footer fields | Left/right text on PDF page footer |
 | Font size | PDF body font size |
+| Show lender/borrower signatures | *(Computer and Printer)* Show two-column LENDER / BORROWER signature block instead of single borrower line. Uses the legal representative from General settings. |
 
 **Text formatting in templates:** Use Markdown-style syntax — HTML tags are not supported because GLPI sanitizes them automatically.
 
@@ -314,6 +317,8 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 - 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones
 - 📬 **Envío selectivo por correo** — el modal de confirmación de envío permite elegir qué tipos de documentos incluir (Computadoras, Impresoras, Teléfonos). Solo se muestran los tipos con al menos un activo asignado, con su conteo. Todos los tipos disponibles vienen pre-seleccionados; desmarca los que no quieras enviar.
 - ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
+- ✍️ **Bloque de firmas comodante/comodatario opcional** en computadoras e impresoras — toggle configurable por tipo de documento en la pestaña correspondiente; usa el representante legal ya configurado en General
+- 📄 **Prevención de cortes de página** — bloques de firmas y párrafos del cuerpo usan `nobr` de TCPDF para que cláusulas y firmas nunca queden partidas entre páginas
 
 ---
 
@@ -414,6 +419,7 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 | Cláusula de vida útil (sin factura) | *(Solo teléfono)* Plantilla cuando el teléfono no tiene factura o proveedor registrado |
 | Campos del pie de página | Texto izquierdo/derecho en el pie del PDF |
 | Tamaño de fuente | Tamaño de letra del cuerpo del PDF |
+| Mostrar firmas comodante/comodatario | *(Computadora e Impresora)* Muestra un bloque de dos columnas COMODANTE / COMODATARIO en lugar de una sola firma. Usa el representante legal de la configuración General. |
 
 **Formato de texto en las plantillas:** Usa sintaxis estilo Markdown — las etiquetas HTML no funcionan porque GLPI las sanitiza automáticamente.
 

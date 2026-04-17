@@ -99,16 +99,18 @@ if (isset($_POST['update'])) {
         'cellphone_type_id'    => (int)($_POST['cellphone_type_id'] ?? 0),
         
         // Computer templates
-        'pc_font_size'         => max(6, min(72, (int)($_POST['pc_font_size'] ?? 10))),
-        'pc_titulo'            => Html::cleanInputText(trim($_POST['pc_titulo']  ?? '')),
-        'pc_intro'             => trim($_POST['pc_intro']  ?? ''),
-        'pc_cuerpo'            => trim($_POST['pc_cuerpo'] ?? ''),
-        
+        'pc_font_size'          => max(6, min(72, (int)($_POST['pc_font_size'] ?? 10))),
+        'pc_titulo'             => Html::cleanInputText(trim($_POST['pc_titulo']  ?? '')),
+        'pc_intro'              => trim($_POST['pc_intro']  ?? ''),
+        'pc_cuerpo'             => trim($_POST['pc_cuerpo'] ?? ''),
+        'pc_show_comodato_sigs' => isset($_POST['pc_show_comodato_sigs']) ? 1 : 0,
+
         // Printer templates
-        'pri_font_size'        => (int)($_POST['pri_font_size'] ?? 0),
-        'pri_titulo'           => Html::cleanInputText(trim($_POST['pri_titulo']  ?? '')),
-        'pri_intro'            => trim($_POST['pri_intro']  ?? ''),
-        'pri_cuerpo'           => trim($_POST['pri_cuerpo'] ?? ''),
+        'pri_font_size'          => (int)($_POST['pri_font_size'] ?? 0),
+        'pri_titulo'             => Html::cleanInputText(trim($_POST['pri_titulo']  ?? '')),
+        'pri_intro'              => trim($_POST['pri_intro']  ?? ''),
+        'pri_cuerpo'             => trim($_POST['pri_cuerpo'] ?? ''),
+        'pri_show_comodato_sigs' => isset($_POST['pri_show_comodato_sigs']) ? 1 : 0,
         
         // Phone templates        
         'pho_font_size'        => (int)($_POST['pho_font_size'] ?? 0),
@@ -1074,6 +1076,25 @@ echo "</div>";
 
 echo "</div>"; // row
 
+/* ===== Firmas comodante/comodatario en PC ===== */
+echo "<div class='col-md-6 mb-3'>
+        <label class='form-label fw-bold d-flex align-items-center'>
+          <i class='ti ti-writing-sign me-2'></i>
+          " . __('Show lender/borrower signatures', 'responsivas') . "
+        </label>
+        <div class='form-check form-switch'>
+          <input class='form-check-input'
+                 type='checkbox'
+                 id='pc_show_comodato_sigs'
+                 name='pc_show_comodato_sigs'
+                 value='1' " . ($config['pc_show_comodato_sigs'] ? 'checked' : '') . ">
+          <label class='form-check-label' for='pc_show_comodato_sigs'>";
+echo      __('Show both lender and borrower signature lines in computer responsibility document', 'responsivas');
+echo     "</label>
+        </div>
+        <div class='form-text'>" . __('Uses the legal representative configured in General settings.', 'responsivas') . "</div>
+      </div>";
+
 echo "<div class='row'>";
 responsivasFooterFields('pc', $config);
 
@@ -1201,6 +1222,25 @@ echo "<div class='form-text'>" . __('Enter the font size for the PDF', 'responsi
 echo "</div>";
 
 echo "</div>"; // row
+
+/* ===== Firmas comodante/comodatario en Impresora ===== */
+echo "<div class='col-md-6 mb-3'>
+        <label class='form-label fw-bold d-flex align-items-center'>
+          <i class='ti ti-writing-sign me-2'></i>
+          " . __('Show lender/borrower signatures', 'responsivas') . "
+        </label>
+        <div class='form-check form-switch'>
+          <input class='form-check-input'
+                 type='checkbox'
+                 id='pri_show_comodato_sigs'
+                 name='pri_show_comodato_sigs'
+                 value='1' " . ($config['pri_show_comodato_sigs'] ? 'checked' : '') . ">
+          <label class='form-check-label' for='pri_show_comodato_sigs'>";
+echo      __('Show both lender and borrower signature lines in printer responsibility document', 'responsivas');
+echo     "</label>
+        </div>
+        <div class='form-text'>" . __('Uses the legal representative configured in General settings.', 'responsivas') . "</div>
+      </div>";
 
 echo "<div class='row'>";
 responsivasFooterFields('pri', $config);

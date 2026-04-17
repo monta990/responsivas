@@ -809,3 +809,15 @@ msgstr "Tipo de teléfono para responsiva"
 msgid "Select the phone type that will be considered for generating responsibility documents."
 msgstr "Selecciona el tipo de teléfono que será considerado para generar responsivas."
 
+
+msgid "Show lender/borrower signatures"
+msgstr "Mostrar firmas comodante/comodatario"
+
+msgid "Show both lender and borrower signature lines in computer responsibility document"
+msgstr "Mostrar las líneas de firma del comodante y comodatario en la carta responsiva de computadora"
+
+msgid "Show both lender and borrower signature lines in printer responsibility document"
+msgstr "Mostrar las líneas de firma del comodante y comodatario en la carta responsiva de impresora"
+
+msgid "Uses the legal representative configured in General settings."
+msgstr "Usa el representante legal configurado en los ajustes generales."
