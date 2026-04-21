@@ -117,9 +117,10 @@ HTML;
     * ===================================================== */
    private static function lbl(): array
    {
-      static $cache = null;
-      if ($cache !== null) return $cache;
-      return $cache = [
+      static $cache = [];
+      $locale = $_SESSION['glpilanguage'] ?? 'en';
+      if (isset($cache[$locale])) return $cache[$locale];
+      return $cache[$locale] = [
          // Table headers
          'brand'       => __('Brand',        'responsivas'),
          'model'       => __('Model',        'responsivas'),
@@ -1101,7 +1102,7 @@ HTML;
          '{num_empleado}'       => $demo_emp,         '{activo}'        => 'CEL-DEMO-001',
          '{serie_uuid}'         => 'UUID-DEMO-001',   '{imei}'          => '352999DEMO0001',
          '{marca}'              => 'Samsung',          '{modelo}'        => 'Galaxy A54 5G',
-         '{condicion}'          => $demo_state,        '{estado}'        => $demo_state,
+         '{estado}'             => $demo_state,
          '{almacenamiento}'     => '128 GB',           '{ram}'           => '6 GB',
          '{linea}'              => '662-100-0001',     '{precio}'        => '$ 7,500.00',
          '{fecha}'              => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),

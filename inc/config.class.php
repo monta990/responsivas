@@ -106,14 +106,14 @@ if (isset($_POST['update'])) {
         'pc_show_comodato_sigs' => isset($_POST['pc_show_comodato_sigs']) ? 1 : 0,
 
         // Printer templates
-        'pri_font_size'          => (int)($_POST['pri_font_size'] ?? 0),
+        'pri_font_size'          => max(6, min(72, (int)($_POST['pri_font_size'] ?? 10))),
         'pri_titulo'             => Html::cleanInputText(trim($_POST['pri_titulo']  ?? '')),
         'pri_intro'              => trim($_POST['pri_intro']  ?? ''),
         'pri_cuerpo'             => trim($_POST['pri_cuerpo'] ?? ''),
         'pri_show_comodato_sigs' => isset($_POST['pri_show_comodato_sigs']) ? 1 : 0,
         
         // Phone templates        
-        'pho_font_size'        => (int)($_POST['pho_font_size'] ?? 0),
+        'pho_font_size'        => max(6, min(72, (int)($_POST['pho_font_size'] ?? 9))),
         'pho_titulo'           => Html::cleanInputText(trim($_POST['pho_titulo']    ?? '')),
         'pho_apertura'         => trim($_POST['pho_apertura']   ?? ''),
         'pho_clausulas'        => trim($_POST['pho_clausulas']  ?? ''),
@@ -298,11 +298,7 @@ function responsivasFooterFields(string $prefix, array $config): void {
                 {$field['label']}
               </label>
 
-              <div class='d-flex gap-1 mb-1'>
-                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='" . __('Bold — **text**', 'responsivas') . "'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>
-                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*'  title='" . __('Italic — *text*', 'responsivas') . "'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>
-                <button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='" . __('Underline — __text__', 'responsivas') . "'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>
-              </div>
+              " . (function(){ ob_start(); responsivasFormatToolbar(); return ob_get_clean(); })() . "
 
               <div class='input-group'>
                 <span class='input-group-text'>
@@ -334,7 +330,7 @@ function dropdownUser($name, $config) {
 
 ?>
 <script>
-// Vista precia de logo
+// Vista previa de logo
 function previewLogo(input) {
     const preview     = document.getElementById('logo-preview');
     const infoLabel   = document.getElementById('preview-size');
@@ -822,7 +818,7 @@ if ($hasLogo) {
     echo "</a>";
 
     echo "<div class='form-text mt-1'>";
-    echo "Dimensiones: {$logoWidth} × {$logoHeight} px · ";
+    echo __('Preview dimensions: ', 'responsivas') . "{$logoWidth} × {$logoHeight} px · ";
     echo __('Size: ', 'responsivas') . "<strong>{$logoSizeKB} KB</strong>";
     echo "</div>";
 
@@ -1043,7 +1039,7 @@ echo "<div class='row mt-3'>";
 // -------------------------
 echo "<div class='col-md-6 mb-3'>";
 echo "<label class='form-label fw-bold d-flex align-items-center gap-1'>
-        <i class='ti ti-text-wrap'></i> Fuente usada
+        <i class='ti ti-text-wrap'></i> " . __('Font used', 'responsivas') . "
       </label>";
 echo "<div class='input-group'>
         <span class='input-group-text'><i class='ti ti-typography'></i></span>

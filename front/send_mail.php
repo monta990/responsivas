@@ -117,8 +117,8 @@ HTML;
       global $CFG_GLPI;
       $fromName  = trim($CFG_GLPI['from_email_name']  ?? $CFG_GLPI['admin_email_name'] ?? '');
       $fromEmail = trim($CFG_GLPI['from_email']        ?? $CFG_GLPI['admin_email']      ?? '');
-      if ($fromEmail !== '' && $fromName !== '' && method_exists($mailer, 'getEmail')) {
-         $mailer->getEmail()->from(new \Symfony\Component\Mime\Address($fromEmail, $fromName));
+      if ($fromEmail !== '' && $fromName !== '') {
+         $email->from(new \Symfony\Component\Mime\Address($fromEmail, $fromName));
       }
       $email->subject($email_subject);
       $email->to($test_email);
@@ -289,8 +289,8 @@ try {
    global $CFG_GLPI;
    $fromName  = trim($CFG_GLPI['from_email_name']  ?? $CFG_GLPI['admin_email_name'] ?? '');
    $fromEmail = trim($CFG_GLPI['from_email']        ?? $CFG_GLPI['admin_email']      ?? '');
-   if ($fromEmail !== '' && $fromName !== '' && method_exists($mailer, 'getEmail')) {
-      $mailer->getEmail()->from(new \Symfony\Component\Mime\Address($fromEmail, $fromName));
+   if ($fromEmail !== '' && $fromName !== '') {
+      $email->from(new \Symfony\Component\Mime\Address($fromEmail, $fromName));
    }
    $email->subject($email_subject);
    $email->to($user_email);

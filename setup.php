@@ -32,7 +32,7 @@ function plugin_init_responsivas() {
 function plugin_version_responsivas() {
    return [
       'name'          => 'Responsivas',
-      'version'       => '1.4.1',
+      'version'       => '1.4.2',
       'author'        => 'Edwin Elias Alvarez',
       'license'       => 'GPLv3+',
       'homepage'      => 'https://sontechs.com',
@@ -50,7 +50,7 @@ function plugin_version_responsivas() {
  * Verifica prerrequisitos antes de activar el plugin.
  * GLPI llama esta función automáticamente.
  */
-function plugin_responsivas_check() {
+function plugin_responsivas_check_prerequisites() {
 
    // PHP minimum 8.2
    if (version_compare(PHP_VERSION, '8.2', '<')) {
@@ -108,28 +108,34 @@ function plugin_responsivas_getSchemaFields(): array {
 
    return [
       // ── General ──────────────────────────────────────── since v1, keep
-      'timezone'             => ['default'=>date_default_timezone_get(), 'type'=>'string', 'since'=>'1', 'group'=>'general',   'migrate'=>'keep'],
-      'show_employee_number' => ['default'=>1,                           'type'=>'bool',   'since'=>'1', 'group'=>'general',   'migrate'=>'keep'],
-      'show_qr'              => ['default'=>1,                           'type'=>'bool',   'since'=>'1', 'group'=>'general',   'migrate'=>'keep'],
-      'company_name'         => ['default'=>'Sontechs',                  'type'=>'string', 'since'=>'1', 'group'=>'general',   'migrate'=>'keep'],
-      'currency'             => ['default'=>'$',                         'type'=>'string', 'since'=>'1', 'group'=>'general',   'migrate'=>'keep'],
+      'timezone'             => ['default'=>date_default_timezone_get(), 'type'=>'string', 'since'=>'1',     'group'=>'general',   'migrate'=>'keep'],
+      'show_employee_number' => ['default'=>1,                           'type'=>'bool',   'since'=>'1',     'group'=>'general',   'migrate'=>'keep'],
+      'show_qr'              => ['default'=>1,                           'type'=>'bool',   'since'=>'1',     'group'=>'general',   'migrate'=>'keep'],
+      'company_name'         => ['default'=>'Sontechs',                  'type'=>'string', 'since'=>'1',     'group'=>'general',   'migrate'=>'keep'],
+      'currency'             => ['default'=>'$',                         'type'=>'string', 'since'=>'1',     'group'=>'general',   'migrate'=>'keep'],
+      'pdf_compression'      => ['default'=>1,                           'type'=>'bool',   'since'=>'1.4.2', 'group'=>'general',   'migrate'=>'keep'],
+      'pdf_protection'       => ['default'=>1,                           'type'=>'bool',   'since'=>'1.4.2', 'group'=>'general',   'migrate'=>'keep'],
+      'watermark_text'       => ['default'=>'',                          'type'=>'string', 'since'=>'1.4.2', 'group'=>'general',   'migrate'=>'keep'],
+      'watermark_opacity'    => ['default'=>25,                          'type'=>'int',    'since'=>'1.4.2', 'group'=>'general',   'migrate'=>'keep'],
       // ── Testigos / representante ──────────────────────── since v1, keep
       'testigo_1'            => ['default'=>2,                           'type'=>'int',    'since'=>'1', 'group'=>'witnesses', 'migrate'=>'keep'],
       'testigo_2'            => ['default'=>3,                           'type'=>'int',    'since'=>'1', 'group'=>'witnesses', 'migrate'=>'keep'],
       'representante'        => ['default'=>3,                           'type'=>'int',    'since'=>'1', 'group'=>'witnesses', 'migrate'=>'keep'],
       'cellphone_type_id'    => ['default'=>'',                          'type'=>'int',    'since'=>'1', 'group'=>'witnesses', 'migrate'=>'keep'],
       // ── Footer PC ────────────────────────────────────── since v1, keep
-      'pc_footer_left_1'     => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1', 'group'=>'footer_pc', 'migrate'=>'keep'],
-      'pc_footer_right_1'    => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pc', 'migrate'=>'keep'],
-      'pc_footer_left_2'     => ['default'=>'SIS-RESP-001',              'type'=>'string', 'since'=>'1', 'group'=>'footer_pc', 'migrate'=>'keep'],
-      'pc_footer_right_2'    => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pc', 'migrate'=>'keep'],
-      'pc_font_size'         => ['default'=>10,                          'type'=>'int',    'since'=>'1', 'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_footer_left_1'     => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_footer_right_1'    => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_footer_left_2'     => ['default'=>'SIS-RESP-001',              'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_footer_right_2'    => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_font_size'         => ['default'=>10,                          'type'=>'int',    'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_show_comodato_sigs'=> ['default'=>0,                           'type'=>'bool',   'since'=>'1.4.2', 'group'=>'footer_pc', 'migrate'=>'keep'],
       // ── Footer Impresoras ─────────────────────────────── since v1, keep
-      'pri_footer_left_1'    => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1', 'group'=>'footer_pri','migrate'=>'keep'],
-      'pri_footer_right_1'   => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pri','migrate'=>'keep'],
-      'pri_footer_left_2'    => ['default'=>'SIS-RESP-003',              'type'=>'string', 'since'=>'1', 'group'=>'footer_pri','migrate'=>'keep'],
-      'pri_footer_right_2'   => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pri','migrate'=>'keep'],
-      'pri_font_size'        => ['default'=>10,                          'type'=>'int',    'since'=>'1', 'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_footer_left_1'    => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_footer_right_1'   => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_footer_left_2'    => ['default'=>'SIS-RESP-003',              'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_footer_right_2'   => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_font_size'        => ['default'=>10,                          'type'=>'int',    'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_show_comodato_sigs'=> ['default'=>0,                          'type'=>'bool',   'since'=>'1.4.2', 'group'=>'footer_pri','migrate'=>'keep'],
       // ── Footer Teléfonos ──────────────────────────────── since v1, keep
       'pho_footer_left_1'    => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
       'pho_footer_right_1'   => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],

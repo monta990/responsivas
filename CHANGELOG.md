@@ -6,6 +6,29 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.2] — 2026-04-21
+
+### Fixed
+- **Missing schema fields caused undefined defaults on fresh install** — `pc_show_comodato_sigs`, `pri_show_comodato_sigs`, `watermark_text`, `watermark_opacity`, `pdf_compression`, and `pdf_protection` were saved and read by the plugin but never declared in `plugin_responsivas_getSchemaFields()`. Fresh installations would have no default values for these fields until the admin manually saved the config form. All six are now registered in the schema with `migrate=keep`.
+- **`pri_font_size` and `pho_font_size` not clamped on save** — printer and phone font sizes were stored raw from POST (`(int)$_POST[...]`) with no bounds check. A value of `0` would crash TCPDF on the next PDF generation. Now clamped to `6–72 pt` matching the existing computer font size guard.
+- **`lbl()` static cache frozen on early call** — the shared label cache used `static $cache = null` keyed to nothing. If called before GLPI loaded the user's locale (e.g. from a background job or early hook), all PDF labels (CLAUSES, LENDER, BORROWER, WITNESS, table headers) would freeze as English for the entire request. Cache now keyed on `$_SESSION['glpilanguage']`.
+- **Hardcoded Spanish "Fuente usada" in Computer tab** — the font-name display field in the Computers settings tab used a hardcoded Spanish label. Now uses `__('Font used', 'responsivas')` matching the identical label already translated in the Printers and Phones tabs.
+- **Hardcoded Spanish "Dimensiones:" on logo display** — the logo dimensions line in the General tab used the hardcoded Spanish word. Now uses the existing translatable string `__('Preview dimensions: ', 'responsivas')`.
+- **`plugin_responsivas_check()` wrong function name for GLPI 11** — GLPI 11 calls `plugin_{name}_check_prerequisites()` to verify install requirements. The plugin defined `plugin_responsivas_check()` which GLPI silently ignores, meaning PHP version and TCPDF checks were never executed. Renamed to `plugin_responsivas_check_prerequisites()`.
+- **Redundant `method_exists($mailer, 'getEmail')` guard in `send_mail.php`** — `$mailer->getEmail()` was already called unconditionally two lines earlier; if the method didn't exist, PHP would have thrown before reaching the guard. Removed the dead check and simplified the sender assignment to call `$email->from(...)` directly.
+- **Dead `{condicion}` variable in phone demo PDF** — `buildDemoPdf()` defined `'{condicion}' => $demo_state` in `$pho_vars` but no template references `{condicion}` (templates use `{estado}`). Removed.
+- **Typo in comment** — `config.class.php`: `Vista precia de logo` → `Vista previa de logo`.
+- **`user.class.php` missing `declare(strict_types=1)`** — all other PHP files in the plugin declare strict types; `user.class.php` was the only exception.
+
+### Changed
+- **`responsivasFooterFields()` now calls `responsivasFormatToolbar()`** — the three-button Bold/Italic/Underline toolbar HTML was duplicated inline inside `responsivasFooterFields()` despite the dedicated `responsivasFormatToolbar()` function existing. Footer fields now call the shared function.
+
+### Locales
+- All 4 `.mo` binaries recompiled (`es_MX`, `fr_FR`, `de_DE`, `it_IT`).
+- Total: **250 strings** per locale. No new strings added.
+
+---
+
 ## [1.4.1] — 2026-04-16
 
 ### Fixed
@@ -282,6 +305,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+[1.4.2]: ../../compare/v1.4.1...v1.4.2
+[1.4.1]: ../../compare/v1.4.0...v1.4.1
 [1.4.0]: ../../compare/v1.3.3...v1.4.0
 [1.3.2]: ../../compare/v1.3.1...v1.3.2
 [1.3.1]: ../../compare/v1.3.0...v1.3.1
