@@ -6,6 +6,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.3] — 2026-05-02
+
+### Changed
+- **(BREAKING CHANGE) Phone PDF used user profile mobile instead of assigned phone line** — `buildPhonePdf()` was sourcing `{linea}` from `$user->fields['mobile']` (the user's personal mobile number). Now queries GLPI's `Item_Line` / `Line` ORM to find the phone line actually linked to the phone asset (`caller_num`, falling back to `name`). If no line is linked the build fails with a clear error naming the phone.
+- **Stale `.mo` binaries for es_MX, fr_FR, it_IT** — `.po` files had been updated after the last compile, so translated strings (including the PDF attachment string) were not applied at runtime. All four locale `.mo` files recompiled.
+
+### Added
+- **Validation: phone must have a linked line before PDF is generated** — a pre-validation loop now runs before any PDF object is created. If a phone asset has no `Item_Line` record it throws `RuntimeException` with the phone name, consistent with the existing price-validation pattern.
+- **New error string** — `'Phone "%s" has no phone line linked.'` added to all 4 locales (`es_MX`, `fr_FR`, `de_DE`, `it_IT`) and `.mo` files recompiled.
+
+---
+
 ## [1.4.2] — 2026-04-21
 
 ### Fixed
@@ -17,7 +29,6 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - **`plugin_responsivas_check()` wrong function name for GLPI 11** — GLPI 11 calls `plugin_{name}_check_prerequisites()` to verify install requirements. The plugin defined `plugin_responsivas_check()` which GLPI silently ignores, meaning PHP version and TCPDF checks were never executed. Renamed to `plugin_responsivas_check_prerequisites()`.
 - **Redundant `method_exists($mailer, 'getEmail')` guard in `send_mail.php`** — `$mailer->getEmail()` was already called unconditionally two lines earlier; if the method didn't exist, PHP would have thrown before reaching the guard. Removed the dead check and simplified the sender assignment to call `$email->from(...)` directly.
 - **Dead `{condicion}` variable in phone demo PDF** — `buildDemoPdf()` defined `'{condicion}' => $demo_state` in `$pho_vars` but no template references `{condicion}` (templates use `{estado}`). Removed.
-- **Typo in comment** — `config.class.php`: `Vista precia de logo` → `Vista previa de logo`.
 - **`user.class.php` missing `declare(strict_types=1)`** — all other PHP files in the plugin declare strict types; `user.class.php` was the only exception.
 
 ### Changed
@@ -305,6 +316,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+[1.4.3]: ../../compare/v1.4.2...v1.4.3
 [1.4.2]: ../../compare/v1.4.1...v1.4.2
 [1.4.1]: ../../compare/v1.4.0...v1.4.1
 [1.4.0]: ../../compare/v1.3.3...v1.4.0

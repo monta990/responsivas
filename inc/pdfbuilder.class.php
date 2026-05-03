@@ -507,7 +507,6 @@ HTML;
 
       $full_name       = $user->getFriendlyName();
       $employee_number = $user->fields['registration_number'] ?? '';
-      $user_mobile     = !empty($user->fields['mobile']) ? $user->fields['mobile'] : 'N/A';
 
       $testigo1_id      = (int)($config['testigo_1']     ?? 0);
       $testigo2_id      = (int)($config['testigo_2']     ?? 0);
@@ -557,6 +556,19 @@ HTML;
          }
       }
 
+      // Pre-validar líneas ANTES de crear el PDF
+      foreach ($phones as $phone) {
+         if (empty((new Item_Line())->find(['itemtype' => 'Phone', 'items_id' => (int)$phone['id']], [], 1))) {
+            $nombre_tel    = trim(ddn($phone['manufacturers_id'] ?? 0, 'glpi_manufacturers', '') . ' ' . ddn($phone['phonemodels_id'] ?? 0, 'glpi_phonemodels', ''));
+            $nombre_activo = trim($phone['name'] ?? '');
+            $identificador = $nombre_activo !== '' ? $nombre_activo . ($nombre_tel !== '' ? " ({$nombre_tel})" : '') : ($nombre_tel ?: 'IMEI: ' . ($phone['serial'] ?? 'N/A'));
+            throw new RuntimeException(sprintf(
+               __('Phone "%s" has no line assigned. Assign a line in the phone\'s record before generating the PDF.', 'responsivas'),
+               $identificador
+            ));
+         }
+      }
+
       $currency    = !empty($config['currency']) ? $config['currency'] : '$';
       $dt          = new DateTime('now', new DateTimeZone($config['timezone']));
       $hora_texto  = $dt->format('H') . ':00';
@@ -584,7 +596,15 @@ HTML;
          $imei   = $phone['serial'] ?? 'N/A';
          $activo = $phone['otherserial'] ?? 'N/A';
          $serie  = $phone['uuid'] ?? 'N/A';
-         $linea  = $user_mobile;
+         $item_lines = (new Item_Line())->find(['itemtype' => 'Phone', 'items_id' => (int)$phone['id']], [], 1);
+         $line_row   = reset($item_lines);
+         $line_obj   = new Line();
+         $linea      = 'N/A';
+         if ($line_obj->getFromDB((int)$line_row['lines_id'])) {
+            $linea = !empty($line_obj->fields['caller_num'])
+               ? $line_obj->fields['caller_num']
+               : ($line_obj->fields['name'] ?? 'N/A');
+         }
          $estado = ddn($phone['states_id'] ?? 0, 'glpi_states');
 
          // Infocoms

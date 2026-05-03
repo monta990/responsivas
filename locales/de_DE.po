@@ -846,3 +846,6 @@ msgstr "Vorschau - Verantwortung Drucker - "
 
 msgid "Preview - Phone Loan - "
 msgstr "Vorschau - Leihvertrag Telefon - "
+
+msgid "Phone \"%s\" has no line assigned. Assign a line in the phone's record before generating the PDF."
+msgstr "Das Telefon \"%s\" hat keine zugewiesene Leitung. Weisen Sie im Telefonformular eine Leitung zu, bevor Sie das PDF generieren."

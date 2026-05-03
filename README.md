@@ -193,8 +193,6 @@ Formats can be combined and nested: `*__**text**__*` renders as bold + italic + 
 | Footer | Optional footer below a separator line. Same formatting support |
 | Test email button | Sends a test email (no PDFs attached) to your own GLPI registered address |
 
-> The email test button uses a completely independent form from the Save button — no CSRF conflicts.
-
 ---
 
 ## Usage
@@ -470,8 +468,6 @@ Los formatos se pueden combinar y anidar: `*__**texto**__*` produce negrita + cu
 | Cuerpo | Cuerpo del correo. Soporta `{nombre}`, `{empresa}`, `{fecha}` y `**negrita**`, `*cursiva*`, `__subrayado__` |
 | Pie de correo | Texto opcional bajo una línea separadora. Mismo soporte de formato |
 | Botón de correo de prueba | Envía un correo de prueba (sin PDFs adjuntos) a tu propio correo registrado en GLPI |
-
-> El botón de correo de prueba usa un formulario completamente independiente del botón Guardar, sin conflictos de token CSRF.
 
 ---
 
