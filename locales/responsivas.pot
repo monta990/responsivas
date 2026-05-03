@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.4.2\n"
+"Project-Id-Version: Responsivas 1.4.4\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
@@ -464,7 +464,7 @@ msgstr ""
 msgid "Email successfully sent to %s."
 msgstr ""
 
-msgid "Error sending email: %s"
+msgid "Error sending email. Check the GLPI error log for details."
 msgstr ""
 
 msgid "The mail server rejected the sending."

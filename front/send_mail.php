@@ -137,8 +137,9 @@ HTML;
          );
       }
    } catch (Throwable $e) {
+      Toolbox::logError('[responsivas] test email error: ' . $e->getMessage());
       Session::addMessageAfterRedirect(
-         sprintf(__('Error sending email: %s', 'responsivas'), $e->getMessage()),
+         __('Error sending email. Check the GLPI error log for details.', 'responsivas'),
          false, ERROR
       );
    }
@@ -332,8 +333,9 @@ try {
    }
 
 } catch (Throwable $e) {
+   Toolbox::logError('[responsivas] send_mail error: ' . $e->getMessage());
    Session::addMessageAfterRedirect(
-      sprintf(__('Error sending email: %s', 'responsivas'), $e->getMessage()),
+      __('Error sending email. Check the GLPI error log for details.', 'responsivas'),
       false,
       ERROR
    );

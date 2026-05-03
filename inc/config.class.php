@@ -56,6 +56,11 @@ if ($hasLogo) {
  * ============================= */
 if (isset($_POST['delete_logo'])) {
 
+    if (!Session::haveRight('config', UPDATE)) {
+        Html::displayRightError();
+        return;
+    }
+
     if (is_file($logoPath) && !@unlink($logoPath)) {
         Session::addMessageAfterRedirect(
             __('Could not delete the logo.', 'responsivas'),

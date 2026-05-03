@@ -6,6 +6,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.4] — 2026-05-03
+
+### Security - OWASP
+- **A01 — `delete_logo` missing permission check** — added `Session::haveRight('config', UPDATE)` guard; unauthorized callers get GLPI's standard rights error instead of silently deleting the file.
+- **A01 — PDF direct download bypasses per-user authorization** — `front/computer.php`, `front/phone.php`, and `front/printer.php` checked only the global `user.READ` right, not whether the caller can view the target user. Added `$user->getFromDB()` + `$user->canView()` check matching the existing pattern in `send_mail.php`.
+- **A05 — Exception messages exposed to end users in `send_mail.php`** — raw `$e->getMessage()` (which can contain mail server hostnames, internal paths, or DB errors) was shown directly in the UI. Both catch blocks now show a generic translated message; the real exception is logged via `Toolbox::logError()` to the GLPI error log.
+- **A09 — No audit trail on direct PDF downloads** — `front/computer.php`, `front/phone.php`, and `front/printer.php` now call `Log::history()` on successful PDF generation, recording the download in GLPI's standard item history for the target user.
+
+---
+
 ## [1.4.3] — 2026-05-02
 
 ### Changed
