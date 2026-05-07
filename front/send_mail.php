@@ -41,7 +41,7 @@ if (($_POST['mode'] ?? '') === 'test') {
       exit;
    }
 
-   $redirect_url = Plugin::getWebDir('responsivas') . '/front/config.form.php';
+   $redirect_url = PluginResponsivasPaths::webDir() . '/front/config.form.php';
    $admin_id     = Session::getLoginUserID();
    global $DB;
    $email_row  = $DB->request([

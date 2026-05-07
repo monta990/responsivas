@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.4.4\n"
+"Project-Id-Version: Responsivas 1.4.5\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
@@ -767,4 +767,7 @@ msgid "Show both lender and borrower signature lines in printer responsibility d
 msgstr ""
 
 msgid "Uses the legal representative configured in General settings."
+msgstr ""
+
+msgid "The uploaded file is not a valid image."
 msgstr ""

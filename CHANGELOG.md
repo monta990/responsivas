@@ -6,6 +6,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.5] — 2026-05-07
+
+### Changed
+- **Updated plugin web directory retrieval** — Replaced `Plugin::getWebDir('responsivas')` with `PLUGINS_WEB_DIR . '/responsivas'` for better GLPI 11/12 compatibility.
+- **Replace deprecated `Html::cleanInputText()`** — Use `cleanerEscape()` for better GLPI 11/12 and PHP compatibility.
+- **Replace deprecated `finfo_open()` and `finfo_close()`** — Use the `finfo` class (OOP style) for better GLPI 11/12 and PHP compatibility.
+- **Replace deprecated `imagedestroy()`** — Use `unset()` for better GLPI 11/12 and PHP compatibility.
+- **Replace removed `Html::displayRightError()`** — Throw `\Glpi\Exception\Http\AccessDeniedHttpException` instead; compatible with GLPI 11/12.
+
+### Fixed
+- **Preview upload logo** — Not showed in configuration page`on new logo upload.
+
 ## [1.4.4] — 2026-05-03
 
 ### Security - OWASP

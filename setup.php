@@ -32,15 +32,15 @@ function plugin_init_responsivas() {
 function plugin_version_responsivas() {
    return [
       'name'          => 'Responsivas',
-      'version'       => '1.4.4',
+      'version'       => '1.4.5',
       'author'        => 'Edwin Elias Alvarez',
       'license'       => 'GPLv3+',
-      'homepage'      => 'https://sontechs.com',
+      'homepage'      => 'https://github.com/monta990/responsivas',
       'minphpversion' => '8.2',
       'requirements'  => [
          'glpi' => [
             'min' => '11.0',
-            'max' => '11.99',
+            'max' => '12.99',
          ],
       ],
    ];

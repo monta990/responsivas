@@ -7,41 +7,62 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Centraliza rutas físicas y URLs del plugin Responsivas.
- * Usa GLPI_PLUGINS_DIRECTORIES para localizar el plugin sin asumir
- * profundidad de directorio (funciona tanto en /plugins como en /marketplace).
+ * Compatible con:
+ * - GLPI 10
+ * - GLPI 11
+ * - GLPI 12
+ * - Marketplace
+ * - /plugins clásico
  */
 class PluginResponsivasPaths
 {
    /**
     * Directorio físico raíz del plugin.
-    * Busca en todos los directorios registrados por GLPI.
     *
-    * @throws RuntimeException si no se encuentra el directorio.
+    * @throws RuntimeException
     */
    public static function pluginDir(): string
    {
-      foreach (GLPI_PLUGINS_DIRECTORIES as $dir) {
-         $path = $dir . '/responsivas';
-         if (is_dir($path)) {
-            return $path;
+      if (defined('GLPI_PLUGINS_DIRECTORIES')) {
+         foreach (GLPI_PLUGINS_DIRECTORIES as $dir) {
+            $path = $dir . '/responsivas';
+            if (is_dir($path)) {
+               return $path;
+            }
          }
       }
-      // Fallback seguro: directorio del archivo actual
+
       return dirname(__DIR__);
    }
 
    /**
-    * Directorio de archivos generados (logos, temporales).
-    * Usa la constante GLPI_PLUGIN_DOC_DIR, que GLPI define correctamente
-    * independientemente de dónde esté instalado el servidor.
+    * URL pública base del plugin.
     */
-   public static function filesDir(): string
+   public static function webDir(): string
    {
-      return GLPI_PLUGIN_DOC_DIR . '/responsivas';
+      if (defined('PLUGINS_WEB_DIR')) {
+         return PLUGINS_WEB_DIR . '/responsivas';
+      }
+
+      global $CFG_GLPI;
+
+      return rtrim($CFG_GLPI['root_doc'] ?? '', '/') . '/plugins/responsivas';
    }
 
    /**
-    * Ruta física del logo del plugin.
+    * Directorio de documentos / archivos persistentes.
+    */
+   public static function filesDir(): string
+   {
+      if (defined('GLPI_PLUGIN_DOC_DIR')) {
+         return GLPI_PLUGIN_DOC_DIR . '/responsivas';
+      }
+
+      return GLPI_ROOT . '/files/_plugins/responsivas';
+   }
+
+   /**
+    * Ruta física del logo.
     */
    public static function logoPath(): string
    {
@@ -49,10 +70,10 @@ class PluginResponsivasPaths
    }
 
    /**
-    * URL pública del logo (servida a través del front seguro).
+    * URL pública del logo.
     */
    public static function logoUrl(): string
    {
-      return Plugin::getWebDir('responsivas') . '/front/resource.send.php?resource=logo';
+      return self::webDir() . '/front/resource.send.php?resource=logo';
    }
 }
