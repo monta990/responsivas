@@ -8,7 +8,7 @@ require_once dirname(__DIR__) . '/inc/paths.class.php';
 require_once dirname(__DIR__) . '/inc/helpers.php';
 Session::checkRight('config', UPDATE);
 
-$self = Plugin::getWebDir('responsivas') . '/front/config.form.php';
+$self = PluginResponsivasPaths::webDir() . '/front/config.form.php';
 $config = Config::getConfigurationValues('plugin_responsivas');
 
 /**
@@ -57,8 +57,7 @@ if ($hasLogo) {
 if (isset($_POST['delete_logo'])) {
 
     if (!Session::haveRight('config', UPDATE)) {
-        Html::displayRightError();
-        return;
+        throw new \Glpi\Exception\Http\AccessDeniedHttpException();
     }
 
     if (is_file($logoPath) && !@unlink($logoPath)) {
@@ -87,17 +86,17 @@ if (isset($_POST['update'])) {
     // Save general configuration
     $values = [
         'timezone'             => (function() {
-            $tz = Html::cleanInputText($_POST['timezone'] ?? '');
+            $tz = cleanerEscape($_POST['timezone'] ?? '');
             return in_array($tz, \DateTimeZone::listIdentifiers(), true) ? $tz : 'America/Hermosillo';
          })(),
         'show_employee_number' => isset($_POST['show_employee_number']),
         'show_qr'              => isset($_POST['show_qr']),
         'pdf_compression'      => isset($_POST['pdf_compression']) ? 1 : 0,
         'pdf_protection'       => isset($_POST['pdf_protection'])  ? 1 : 0,
-        'watermark_text'       => mb_substr(Html::cleanInputText(trim($_POST['watermark_text'] ?? '')), 0, 40),
+        'watermark_text'       => mb_substr(cleanerEscape(trim($_POST['watermark_text'] ?? '')), 0, 40),
         'watermark_opacity'    => max(5, min(100, (int)($_POST['watermark_opacity'] ?? 25))),
-        'company_name'         => Html::cleanInputText(trim($_POST['company_name'] ?? '')),
-        'currency'             => Html::cleanInputText(trim($_POST['currency'] ?? '$')),
+        'company_name'         => cleanerEscape(trim($_POST['company_name'] ?? '')),
+        'currency'             => cleanerEscape(trim($_POST['currency'] ?? '$')),
         'testigo_1'            => (int)($_POST['testigo_1'] ?? 0),
         'testigo_2'            => (int)($_POST['testigo_2'] ?? 0),
         'representante'        => (int)($_POST['representante'] ?? 0),
@@ -105,21 +104,21 @@ if (isset($_POST['update'])) {
         
         // Computer templates
         'pc_font_size'          => max(6, min(72, (int)($_POST['pc_font_size'] ?? 10))),
-        'pc_titulo'             => Html::cleanInputText(trim($_POST['pc_titulo']  ?? '')),
+        'pc_titulo'             => cleanerEscape(trim($_POST['pc_titulo']  ?? '')),
         'pc_intro'              => trim($_POST['pc_intro']  ?? ''),
         'pc_cuerpo'             => trim($_POST['pc_cuerpo'] ?? ''),
         'pc_show_comodato_sigs' => isset($_POST['pc_show_comodato_sigs']) ? 1 : 0,
 
         // Printer templates
         'pri_font_size'          => max(6, min(72, (int)($_POST['pri_font_size'] ?? 10))),
-        'pri_titulo'             => Html::cleanInputText(trim($_POST['pri_titulo']  ?? '')),
+        'pri_titulo'             => cleanerEscape(trim($_POST['pri_titulo']  ?? '')),
         'pri_intro'              => trim($_POST['pri_intro']  ?? ''),
         'pri_cuerpo'             => trim($_POST['pri_cuerpo'] ?? ''),
         'pri_show_comodato_sigs' => isset($_POST['pri_show_comodato_sigs']) ? 1 : 0,
         
         // Phone templates        
         'pho_font_size'        => max(6, min(72, (int)($_POST['pho_font_size'] ?? 9))),
-        'pho_titulo'           => Html::cleanInputText(trim($_POST['pho_titulo']    ?? '')),
+        'pho_titulo'           => cleanerEscape(trim($_POST['pho_titulo']    ?? '')),
         'pho_apertura'         => trim($_POST['pho_apertura']   ?? ''),
         'pho_clausulas'        => trim($_POST['pho_clausulas']  ?? ''),
         'pho_testigos'         => trim($_POST['pho_testigos']   ?? ''),
@@ -127,7 +126,7 @@ if (isset($_POST['update'])) {
         'pho_vida_util_sin'     => trim($_POST['pho_vida_util_sin']     ?? ''),
          
          // Email configuration
-        'email_subject'        => Html::cleanInputText(trim($_POST['email_subject'] ?? '')),
+        'email_subject'        => cleanerEscape(trim($_POST['email_subject'] ?? '')),
         'email_body'           => trim($_POST['email_body']   ?? ''),
         'email_footer'         => trim($_POST['email_footer'] ?? ''),
     ];
@@ -141,7 +140,7 @@ if (isset($_POST['update'])) {
     foreach ($types as $type) {
         foreach ($positions as $pos) {
             $key = "{$type}_footer_{$pos}";
-            $values[$key] = Html::cleanInputText($_POST[$key] ?? '');
+            $values[$key] = cleanerEscape($_POST[$key] ?? '');
         }
     }
     
@@ -165,9 +164,8 @@ if (isset($_POST['update'])) {
 
         $tmpFile = $_FILES['logo']['tmp_name'];
         $size    = $_FILES['logo']['size'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime  = finfo_file($finfo, $tmpFile);
-        finfo_close($finfo);
+        $finfo   = new finfo(FILEINFO_MIME_TYPE);
+        $mime    = $finfo->file($tmpFile);
 
         if ($size > $maxSize) {
 
@@ -195,11 +193,34 @@ if (isset($_POST['update'])) {
                 $img = @imagecreatefromjpeg($tmpFile);
                 if ($img !== false) {
                     imagepng($img, $logoPath);
-                    imagedestroy($img);
+                    unset($img);
                 } else {
                     Session::addMessageAfterRedirect(__('Error processing JPG image', 'responsivas'), false, ERROR);
                 }
             } else {
+                $image_info = @getimagesize($_FILES['logo']['tmp_name']);
+
+            if ($image_info === false) {
+               Session::addMessageAfterRedirect(
+                  __('The uploaded file is not a valid image.', 'responsivas'),
+                  true,
+                  ERROR
+               );
+               return false;
+            }
+            $allowed_mimes = [
+               'image/png',
+               'image/jpeg'
+            ];
+            
+            if (!in_array($image_info['mime'], $allowed_mimes, true)) {
+               Session::addMessageAfterRedirect(
+                  __('Unsupported image format.', 'responsivas'),
+                  true,
+                  ERROR
+               );
+               return false;
+            }
                 move_uploaded_file($tmpFile, $logoPath);
             }
 
@@ -293,7 +314,7 @@ function responsivasFooterFields(string $prefix, array $config): void {
         foreach ($row as $field) {
 
             $name  = "{$prefix}_footer_{$field['key']}";
-            $value = Html::cleanInputText($config[$name] ?? '');
+            $value = cleanerEscape($config[$name] ?? '');
 
             echo "
             <div class='col-md-6 mb-3'>
@@ -336,9 +357,15 @@ function dropdownUser($name, $config) {
 ?>
 <script>
 // Vista previa de logo
-function previewLogo(input) {
-    const preview     = document.getElementById('logo-preview');
-    const infoLabel   = document.getElementById('preview-size');
+window.previewLogo = function(input) {
+
+    const preview   = document.getElementById('logo-preview');
+    const infoLabel = document.getElementById('preview-size');
+
+    if (!preview || !infoLabel) {
+        return;
+    }
+
     const file = input.files[0];
 
     if (!file || !file.type.match('image.*')) {
@@ -348,10 +375,13 @@ function previewLogo(input) {
     }
 
     const reader = new FileReader();
-    reader.onload = e => {
+
+    reader.onload = function(e) {
 
         const img = new Image();
-        img.onload = () => {
+
+        img.onload = function() {
+
             const width  = img.width;
             const height = img.height;
             const sizeKB = (file.size / 1024).toFixed(2);
@@ -359,18 +389,20 @@ function previewLogo(input) {
             preview.src = e.target.result;
             preview.classList.remove('d-none');
 
-            infoLabel.innerHTML =
-                " . __('Preview dimensions: ', 'responsivas') . "' +
+            infoLabel.textContent =
+                <?= json_encode(__('Preview dimensions: ', 'responsivas')) ?> +
                 width + ' × ' + height + ' px · ' +
-                '" . __('Size: ', 'responsivas') . "<strong>' + sizeKB + ' KB</strong>';
+                <?= json_encode(__('Size: ', 'responsivas')) ?> +
+                 sizeKB + ' KB';
 
             infoLabel.classList.remove('d-none');
         };
+
         img.src = e.target.result;
     };
 
     reader.readAsDataURL(file);
-}
+};
 </script>
 
 <script>
@@ -397,6 +429,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+   var input = document.getElementById('responsivas_logo_input');
+
+   if (input) {
+      input.addEventListener('change', function () {
+         window.previewLogo(this);
+      });
+   }
 });
 </script>
 
@@ -645,7 +690,7 @@ echo "<div class='row mt-3'>
              name='watermark_text'
              maxlength='40'
              placeholder='" . __('PREVIEW', 'responsivas') . "'
-             value='" . Html::cleanInputText($config['watermark_text'] ?? '') . "'>
+             value='" . cleanerEscape($config['watermark_text'] ?? '') . "'>
     </div>
     <div class='form-text'>" . __('Diagonal text shown on previews. Leave empty for the default.', 'responsivas') . "</div>
   </div>
@@ -683,7 +728,7 @@ echo "<div class='input-group'>
         <input type='text'
                name='company_name'
                class='form-control'
-               value=\"" . Html::cleanInputText($config['company_name'] ?? '') . "\"
+               value=\"" . cleanerEscape($config['company_name'] ?? '') . "\"
                required>
       </div>";
 
@@ -708,7 +753,7 @@ echo "<div class='input-group' style='max-width:200px;'>
                class='form-control'
                maxlength='10'
                placeholder='$'
-               value=\"" . Html::cleanInputText($config['currency'] ?? '$') . "\">
+               value=\"" . cleanerEscape($config['currency'] ?? '$') . "\">
       </div>";
 echo "<div class='form-text'>" . __('Symbol or code that appears before the price in phone loan agreements (e.g.: $, USD, MXN, €).', 'responsivas') . "</div>";
 echo "</div>";
@@ -878,11 +923,7 @@ echo "<label class='form-label fw-bold d-flex align-items-center'>
         <i class='ti ti-upload me-2' aria-hidden='true'></i>
         <span>" . __('Upload new logo', 'responsivas') . "</span>
       </label>";
-echo "<input type='file'
-             name='logo'
-             class='form-control mt-1'
-             accept='image/png,image/jpeg'
-             onchange='previewLogo(this)'>";
+echo "<input type='file' name='logo' class='form-control mt-1' accept='image/png,image/jpeg' id='responsivas_logo_input'>";
 echo "<div class='form-text'>";
 echo __('PNG / JPG · Max 500 KB · Will be saved as <b>logo.png</b>.', 'responsivas');
 echo "</div>";
@@ -992,7 +1033,7 @@ $core_cfg = Config::getConfigurationValues('core');
 $mail_ok  = ($core_cfg['use_notifications']    ?? 0) == 1
          && ($core_cfg['notifications_mailing'] ?? 0) == 1;
 
-$test_action  = Plugin::getWebDir('responsivas') . '/front/send_mail.php';
+$test_action  = PluginResponsivasPaths::webDir() . '/front/send_mail.php';
 $has_config   = !empty(trim($config['email_subject'] ?? '')) && !empty(trim($config['email_body'] ?? ''));
 $btn_disabled = (!$mail_ok || !$has_config);
 $btn_tooltip  = !$mail_ok
@@ -1155,7 +1196,7 @@ echo "</div>"; //card
 
 
 // ── Botón Vista Previa ─────────────────────────────────────────────────────
-$_preview_url = Plugin::getWebDir('responsivas') . '/front/preview.php?type=pc';
+$_preview_url = PluginResponsivasPaths::webDir() . '/front/preview.php?type=pc';
 echo "
 <div class='card mt-3 rounded-0 border-primary'>
   <div class='card-body py-3 d-flex align-items-center justify-content-between'>
@@ -1301,7 +1342,7 @@ echo "</div>"; //card
 
 
 // ── Botón Vista Previa ─────────────────────────────────────────────────────
-$_preview_url = Plugin::getWebDir('responsivas') . '/front/preview.php?type=pri';
+$_preview_url = PluginResponsivasPaths::webDir() . '/front/preview.php?type=pri';
 echo "
 <div class='card mt-3 rounded-0 border-primary'>
   <div class='card-body py-3 d-flex align-items-center justify-content-between'>
@@ -1477,7 +1518,7 @@ echo "</div>"; //card
 
 
 // ── Botón Vista Previa ─────────────────────────────────────────────────────
-$_preview_url = Plugin::getWebDir('responsivas') . '/front/preview.php?type=pho';
+$_preview_url = PluginResponsivasPaths::webDir() . '/front/preview.php?type=pho';
 echo "
 <div class='card mt-3 rounded-0 border-primary'>
   <div class='card-body py-3 d-flex align-items-center justify-content-between'>

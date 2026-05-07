@@ -296,7 +296,7 @@ class PluginResponsivasUser extends CommonGLPI {
 
       $id     = $user->getID();
       $data   = self::getCounts($id);
-      $base   = Plugin::getWebDir('responsivas') . '/front';
+      $base   = PluginResponsivasPaths::webDir() . '/front';
       $config = Config::getConfigurationValues('plugin_responsivas');
 
       // Datos para el botón de correo

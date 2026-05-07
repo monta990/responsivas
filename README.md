@@ -7,6 +7,7 @@
 </p>
 <p align="center">
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-12.0%2B-blue" alt="GLPI compatibility"></a>
   <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
@@ -25,6 +26,7 @@
 - 📄 **Automatic PDF generation** for computers, printers, and mobile phones
 - 📧 **Email delivery** — sends all PDFs as attachments to the assigned user's email
 - 🖊️ **Fully customizable templates** — title, introduction, body/clauses, witnesses, footer, per asset type
+- 🖼️ **Institutional logo** — In the header of each generated PDF, only JPG or PNG.
 - 🎨 **Text formatting** — `**bold**`, `*italic*`, `__underline__` in all template and email fields, combinable and nestable
 - ✏️ **Format toolbar (B / I / U)** — toggle buttons above every text field with smart selection wrapping
 - 🔤 **Clickable variable tags** — click any `{variable}` in the hints panel to insert it at the cursor
@@ -48,7 +50,7 @@
 
 | Component | Minimum version |
 |-----------|----------------|
-| GLPI | ≥ 11.0.0 |
+| GLPI | ≥ 11.0.0 / 12.0.0 |
 | PHP | ≥ 8.2 |
 | TCPDF | included with GLPI |
 
@@ -96,7 +98,7 @@ responsivas/
 ├── CHANGELOG.md
 ├── hook.php                  # Install / uninstall hooks
 ├── LICENSE                   # GNU General Public License v3
-├── logo.png                  # Plugin icon (128×128) — read by GLPI Marketplace
+├── logo.png                  # Plugin icon (128×128)
 ├── plugin.xml                # GLPI catalog metadata
 ├── README.md
 └── setup.php                 # Plugin registration and schema migration
@@ -117,9 +119,10 @@ Navigate to **Setup → Plugins → Responsivas** (or **Administration → Plugi
 | Show QR code | Toggle QR code on documents |
 | Compress PDF | Enable/disable PDF file compression |
 | Protect PDF | Enable/disable copy and edit restrictions on the PDF |
-| Watermark text | Diagonal text shown on preview PDFs (default: `VISTA PREVIA`) |
+| Watermark text | Diagonal text shown on preview PDFs (default: `PREVIEW`) |
 | Watermark opacity | Opacity percentage for the watermark (5–100, default: 25) |
 | Currency symbol | Used in phone loan contract price display |
+| Institutional logo | In the header of each generated PDF, only JPG or PNG |
 
 ### Witnesses tab
 | Field | Description |
@@ -282,7 +285,8 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
   <strong>Plugin para GLPI — Genera automáticamente cartas responsivas y contratos de comodato en PDF para activos de TI asignados a usuarios</strong>
 </p>
 <p align="center">
-  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI 11 compatibility"></a>
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-12.0%2B-blue" alt="GLPI 12 compatibility"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
@@ -290,7 +294,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 ---
 
-## Overview
+## Inducción
 
 **Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
 
@@ -298,25 +302,26 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 ## Características
 
-- 📄 **Generación automática de PDFs** para computadoras, impresoras y teléfonos celulares
-- 📧 **Envío por correo** — adjunta todos los PDFs al correo registrado del usuario en GLPI
-- 🖊️ **Plantillas completamente configurables** — título, introducción, cuerpo/cláusulas, testigos y pie de página, por tipo de activo
-- 🎨 **Formato de texto** — `**negrita**`, `*cursiva*`, `__subrayado__` en todos los campos, combinables y anidables
-- ✏️ **Barra de formato (B / I / U)** — botones toggle sobre cada campo de texto
-- 🔤 **Variables clicleables** — haz clic en cualquier `{variable}` para insertarla en el cursor
-- 🔢 **Códigos QR** en cada documento con enlace directo al activo en GLPI
-- 👷 **Testigos y representante legal** — usuarios de GLPI configurables
-- 📱 **Contratos de comodato** para teléfonos con set completo de cláusulas legales
-- 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán, Italiano
-- 🔒 **Protección CSRF** y modelo de permisos de GLPI
-- ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin
+- 📄 **Generación automática de PDFs** para computadoras, impresoras y teléfonos celulares.
+- 📧 **Envío por correo** — adjunta todos los PDFs al correo registrado del usuario en GLPI.
+- 🖊️ **Plantillas completamente configurables** — título, introducción, cuerpo/cláusulas, testigos y pie de página, por tipo de activo.
+- 🖼️ **Logo institucional** — En encabezado de cada PDF generado, solo JPG o PNG.
+- 🎨 **Formato de texto** — `**negrita**`, `*cursiva*`, `__subrayado__` en todos los campos, combinables y anidables.
+- ✏️ **Barra de formato (B / I / U)** — botones toggle sobre cada campo de texto.
+- 🔤 **Variables clicleables** — haz clic en cualquier `{variable}` para insertarla en el cursor.
+- 🔢 **Códigos QR** en cada documento con enlace directo al activo en GLP.I
+- 👷 **Testigos y representante legal** — usuarios de GLPI configurables.
+- 📱 **Contratos de comodato** para teléfonos con set completo de cláusulas legales.
+- 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán, Italiano.
+- 🔒 **Protección CSRF** y modelo de permisos de GLPI.
+- ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin.
 - 👁️ **Vista previa con marca de agua** — cada pestaña de activo tiene un botón "Vista previa" que genera un PDF completo con los datos actuales (o datos demo si el admin no tiene activos de ese tipo)
 - 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
-- 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones
+- 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones.
 - 📬 **Envío selectivo por correo** — el modal de confirmación de envío permite elegir qué tipos de documentos incluir (Computadoras, Impresoras, Teléfonos). Solo se muestran los tipos con al menos un activo asignado, con su conteo. Todos los tipos disponibles vienen pre-seleccionados; desmarca los que no quieras enviar.
-- ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío
-- ✍️ **Bloque de firmas comodante/comodatario opcional** en computadoras e impresoras — toggle configurable por tipo de documento en la pestaña correspondiente; usa el representante legal ya configurado en General
-- 📄 **Prevención de cortes de página** — bloques de firmas y párrafos del cuerpo usan `nobr` de TCPDF para que cláusulas y firmas nunca queden partidas entre páginas
+- ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío.
+- ✍️ **Bloque de firmas comodante/comodatario opcional** en computadoras e impresoras — toggle configurable por tipo de documento en la pestaña correspondiente; usa el representante legal ya configurado en General.
+- 📄 **Prevención de cortes de página** — bloques de firmas y párrafos del cuerpo usan `nobr` de TCPDF para que cláusulas y firmas nunca queden partidas entre páginas.
 
 ---
 
@@ -324,7 +329,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 | Componente | Versión mínima |
 |------------|---------------|
-| GLPI | ≥ 11.0.0 |
+| GLPI | ≥ 11.0.0 /12.0.0 |
 | PHP | ≥ 8.2 |
 | TCPDF | incluido con GLPI |
 
@@ -372,7 +377,7 @@ responsivas/
 ├── CHANGELOG.md
 ├── hook.php                  # Hooks de instalación / desinstalación
 ├── LICENSE                   # Licencia Pública General GNU v3
-├── logo.png                  # Ícono del plugin (128×128) — leído por el Marketplace de GLPI
+├── logo.png                  # Ícono del plugin (128×128)
 ├── plugin.xml                # Metadatos del catálogo de GLPI
 ├── README.md
 └── setup.php                 # Registro del plugin y migración de schema
@@ -396,6 +401,8 @@ Navega a **Configuración → Complementos → Responsivas** (o **Administració
 | Texto de marca de agua | Texto diagonal en las vistas previas (predeterminado: `VISTA PREVIA`) |
 | Opacidad de marca de agua | Porcentaje de opacidad de la marca de agua (5–100, predeterminado: 25) |
 | Símbolo de moneda | Se usa en los comodatos de teléfono para mostrar el precio |
+| Logo institucional| En encabezado de cada PDF generado, solo JPG o PNG |
+
 
 ### Pestaña Testigos
 | Campo | Descripción |

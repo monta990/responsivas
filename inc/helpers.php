@@ -22,7 +22,7 @@ function responsivasErrorAndBack(string $message): void {
 /* ============================
  * Escape HTML seguro
  * ============================ */
-function e(string $value): string {
+function cleanerEscape(string $value): string {
    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
 
@@ -94,7 +94,7 @@ function nombreUsuario(int $uid): ?string {
    }
 
    $nombre = User::getFriendlyNameById($uid);
-   return $nombre !== '' ? e($nombre) : null;
+   return $nombre !== '' ? cleanerEscape($nombre) : null;
 }
 /* ============================
  * Renderiza un texto de plantilla como HTML para TCPDF.
@@ -104,7 +104,7 @@ function nombreUsuario(int $uid): ?string {
  *   - Línea en blanco → separador de párrafo
  *   - Resto → párrafo continuo (texto ya HTML-safe)
  *
- * El texto de entrada debe estar ya HTML-escapado (use e() en variables
+ * El texto de entrada debe estar ya HTML-escapado (use cleanerEscape() en variables
  * antes de pasarlas a strtr, luego htmlspecialchars en el texto base).
  * ============================ */
 function responsivasRenderTemplate(string $escaped_text): string

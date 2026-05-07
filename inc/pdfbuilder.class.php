@@ -32,7 +32,7 @@ class PluginResponsivasPdfBuilder
    }
 
    /* =====================================================
-    * HELPER: usuario creador
+    * HELPER: user creator
     * ===================================================== */
    private static function getCreator(): string
    {
@@ -65,7 +65,7 @@ HTML;
    }
 
    /* =====================================================
-    * PDF DE COMPUTADORAS
+    * PDF FOR COMPUTERS
     * ===================================================== */
 
    /* =====================================================
@@ -181,16 +181,16 @@ HTML;
          throw new RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
-      $location = e(implode(', ', array_filter([
+      $location = cleanerEscape(implode(', ', array_filter([
          $entity->fields['town'],
          $entity->fields['state'],
          $entity->fields['country'],
       ])));
 
       $full_name       = $user->getFriendlyName();
-      $employee_number = e($user->fields['registration_number'] ?? '');
+      $employee_number = cleanerEscape($user->fields['registration_number'] ?? '');
       $show_employee   = (int)($config['show_employee_number'] ?? 0);
-      $company_name    = e($config['company_name'] ?? '');
+      $company_name    = cleanerEscape($config['company_name'] ?? '');
       $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . $employee_number) : '';
 
       $th_bg = '#E6E6E6';
@@ -212,20 +212,20 @@ HTML;
          $config, 30.0
       );
 
-      $full_name_safe = e($full_name);
+      $full_name_safe = cleanerEscape($full_name);
 
       foreach ($computers as $comp) {
          $pdf->AddPage();
          $page = $pdf->getPage();
          $pdf->setQrForPage($page, $CFG_GLPI['url_base'] . '/front/computer.form.php?id=' . $comp->getID());
 
-         $marca         = e(ddn($comp->fields['manufacturers_id'], 'glpi_manufacturers'));
-         $modelo        = e(ddn($comp->fields['computermodels_id'], 'glpi_computermodels'));
-         $serie         = e($comp->fields['serial'] ?: 'N/A');
-         $activo        = e($comp->fields['otherserial'] ?: 'N/A');
-         $comentarios   = e($comp->fields['comment'] ?: __('No comments', 'responsivas'));
-         $tipo          = e(ddn($comp->fields['computertypes_id'], 'glpi_computertypes', __('Not specified', 'responsivas')));
-         $estado_nombre = e(ddn($comp->fields['states_id'], 'glpi_states'));
+         $marca         = cleanerEscape(ddn($comp->fields['manufacturers_id'], 'glpi_manufacturers'));
+         $modelo        = cleanerEscape(ddn($comp->fields['computermodels_id'], 'glpi_computermodels'));
+         $serie         = cleanerEscape($comp->fields['serial'] ?: 'N/A');
+         $activo        = cleanerEscape($comp->fields['otherserial'] ?: 'N/A');
+         $comentarios   = cleanerEscape($comp->fields['comment'] ?: __('No comments', 'responsivas'));
+         $tipo          = cleanerEscape(ddn($comp->fields['computertypes_id'], 'glpi_computertypes', __('Not specified', 'responsivas')));
+         $estado_nombre = cleanerEscape(ddn($comp->fields['states_id'], 'glpi_states'));
 
          // CPU
          $cpu_name = __('Not specified', 'responsivas');
@@ -234,9 +234,9 @@ HTML;
             $device = new DeviceProcessor();
             if ($device->getFromDB($row['deviceprocessors_id'])) {
                $mfr      = ddn($device->fields['manufacturers_id'], 'glpi_manufacturers', '');
-               $cpu_name = e(trim($device->fields['designation'] ? $mfr . ' ' . $device->fields['designation'] : $cpu_name));
+               $cpu_name = cleanerEscape(trim($device->fields['designation'] ? $mfr . ' ' . $device->fields['designation'] : $cpu_name));
                $cpu_freq = !empty($device->fields['frequence'])
-                  ? e(number_format($device->fields['frequence'] / 1000, 2) . ' GHz')
+                  ? cleanerEscape(number_format($device->fields['frequence'] / 1000, 2) . ' GHz')
                   : $cpu_freq;
             }
          }
@@ -249,7 +249,7 @@ HTML;
                $ram_parts[] = $device->fields['designation'];
             }
          }
-         $ram_texto = e($ram_parts ? implode(' + ', $ram_parts) : __('Not specified', 'responsivas'));
+         $ram_texto = cleanerEscape($ram_parts ? implode(' + ', $ram_parts) : __('Not specified', 'responsivas'));
 
          // SO
          $os_texto = __('Not specified', 'responsivas');
@@ -258,7 +258,7 @@ HTML;
             if ($so = ddn($row['operatingsystems_id'] ?? 0, 'glpi_operatingsystems', ''))         $partes[] = $so;
             if ($v  = ddn($row['operatingsystemversions_id'] ?? 0, 'glpi_operatingsystemversions', '')) $partes[] = $v;
             if ($ed = ddn($row['operatingsystemeditions_id'] ?? 0, 'glpi_operatingsystemeditions', '')) $partes[] = $ed;
-            if ($partes) $os_texto = e(implode(' ', $partes));
+            if ($partes) $os_texto = cleanerEscape(implode(' ', $partes));
          }
 
          // Disco
@@ -269,7 +269,7 @@ HTML;
                $disk_names[] = $device->fields['designation'];
             }
          }
-         $disco = $disk_names ? e(implode(', ', array_unique($disk_names))) : __('Not specified', 'responsivas');
+         $disco = $disk_names ? cleanerEscape(implode(', ', array_unique($disk_names))) : __('Not specified', 'responsivas');
 
          // Periféricos (monitores y accesorios)
          $dispositivos_html    = '';
@@ -285,10 +285,10 @@ HTML;
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
             $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
 <td width='20%'>Monitor</td>
-<td width='20%'>" . e(ddn($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
-<td width='20%'>" . e(ddn($row['monitormodels_id'], 'glpi_monitormodels')) . "</td>
-<td width='20%'>" . e($row['serial'] ?: 'N/A') . " / " . e($row['otherserial'] ?: 'N/A') . "</td>
-<td width='20%'>" . e(ddn($row['states_id'], 'glpi_states')) . "</td>
+<td width='20%'>" . cleanerEscape(ddn($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
+<td width='20%'>" . cleanerEscape(ddn($row['monitormodels_id'], 'glpi_monitormodels')) . "</td>
+<td width='20%'>" . cleanerEscape($row['serial'] ?: 'N/A') . " / " . cleanerEscape($row['otherserial'] ?: 'N/A') . "</td>
+<td width='20%'>" . cleanerEscape(ddn($row['states_id'], 'glpi_states')) . "</td>
 </tr>";
          }
 
@@ -305,11 +305,11 @@ HTML;
          foreach ($result as $row) {
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
             $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
-<td width='20%'>" . e($row['tipo'] ?? 'N/A') . "</td>
-<td width='20%'>" . e(ddn($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
-<td width='20%'>" . e(!empty($row['modelo']) ? $row['modelo'] : 'N/A') . "</td>
-<td width='20%'>" . e($row['serial'] ?: 'N/A') . " / " . e($row['otherserial'] ?: 'N/A') . "</td>
-<td width='20%'>" . e(ddn($row['states_id'], 'glpi_states')) . "</td>
+<td width='20%'>" . cleanerEscape($row['tipo'] ?? 'N/A') . "</td>
+<td width='20%'>" . cleanerEscape(ddn($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
+<td width='20%'>" . cleanerEscape(!empty($row['modelo']) ? $row['modelo'] : 'N/A') . "</td>
+<td width='20%'>" . cleanerEscape($row['serial'] ?: 'N/A') . " / " . cleanerEscape($row['otherserial'] ?: 'N/A') . "</td>
+<td width='20%'>" . cleanerEscape(ddn($row['states_id'], 'glpi_states')) . "</td>
 </tr>";
          }
 
@@ -317,7 +317,7 @@ HTML;
 
          // ── Plantillas editables ──
          $pc_vars = [
-            '{nombre}'      => e($full_name),
+            '{nombre}'      => cleanerEscape($full_name),
             '{empresa}'     => $company_name,
             '{num_empleado}'=> $employee_number,
             '{activo}'      => $activo,
@@ -326,7 +326,7 @@ HTML;
             '{modelo}'      => $modelo,
             '{tipo}'        => $tipo,
             '{estado}'      => $estado_nombre,
-            '{fecha}'       => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+            '{fecha}'       => cleanerEscape(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}'       => $location,
          ];
          $pc_titulo = responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
@@ -375,7 +375,7 @@ HTML;
          throw new RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
-      $location = e(implode(', ', array_filter([
+      $location = cleanerEscape(implode(', ', array_filter([
          $entity->fields['town'],
          $entity->fields['state'],
          $entity->fields['country'],
@@ -384,8 +384,8 @@ HTML;
       $full_name       = $user->getFriendlyName();
       $employee_number = !empty($user->fields['registration_number']) ? $user->fields['registration_number'] : '';
       $show_employee   = (int)($config['show_employee_number'] ?? 0);
-      $company_name    = e($config['company_name'] ?? '');
-      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . e($employee_number)) : '';
+      $company_name    = cleanerEscape($config['company_name'] ?? '');
+      $employee_line   = ($show_employee && $employee_number) ? (__("Employee No.: ", "responsivas") . cleanerEscape($employee_number)) : '';
 
       $th_bg = '#E6E6E6';
       $td_bg = '#FFFFFF';
@@ -408,14 +408,14 @@ HTML;
       $pdf->AddPage();
 
       $i          = 0;
-      $full_safe  = e($full_name);
+      $full_safe  = cleanerEscape($full_name);
 
       // ── Plantillas editables ──
       $pri_base_vars = [
-         '{nombre}'       => e($full_name),
+         '{nombre}'       => cleanerEscape($full_name),
          '{empresa}'      => $company_name,
-         '{num_empleado}' => e($employee_number),
-         '{fecha}'        => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+         '{num_empleado}' => cleanerEscape($employee_number),
+         '{fecha}'        => cleanerEscape(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
          '{lugar}'        => $location,
       ];
 
@@ -427,13 +427,13 @@ HTML;
          $asset_url = $CFG_GLPI['url_base'] . '/front/printer.form.php?id=' . (int)$printer['id'];
          $pdf->setQrForPage($page, $asset_url);
 
-         $marca         = e(ddn($printer['manufacturers_id'] ?? 0, 'glpi_manufacturers', __('Not specified', 'responsivas')));
-         $modelo        = e(ddn($printer['printermodels_id'] ?? 0, 'glpi_printermodels', __('Not specified', 'responsivas')));
-         $tipo          = e(ddn($printer['printertypes_id'] ?? 0, 'glpi_printertypes', __('Not specified', 'responsivas')));
-         $estado_nombre = e(ddn($printer['states_id'] ?? 0, 'glpi_states'));
-         $serie         = e(!empty($printer['serial'])      ? $printer['serial']      : 'N/A');
-         $activo        = e(!empty($printer['otherserial']) ? $printer['otherserial'] : 'N/A');
-         $comentarios   = e(!empty($printer['comment'])     ? $printer['comment']     : __('No comments', 'responsivas'));
+         $marca         = cleanerEscape(ddn($printer['manufacturers_id'] ?? 0, 'glpi_manufacturers', __('Not specified', 'responsivas')));
+         $modelo        = cleanerEscape(ddn($printer['printermodels_id'] ?? 0, 'glpi_printermodels', __('Not specified', 'responsivas')));
+         $tipo          = cleanerEscape(ddn($printer['printertypes_id'] ?? 0, 'glpi_printertypes', __('Not specified', 'responsivas')));
+         $estado_nombre = cleanerEscape(ddn($printer['states_id'] ?? 0, 'glpi_states'));
+         $serie         = cleanerEscape(!empty($printer['serial'])      ? $printer['serial']      : 'N/A');
+         $activo        = cleanerEscape(!empty($printer['otherserial']) ? $printer['otherserial'] : 'N/A');
+         $comentarios   = cleanerEscape(!empty($printer['comment'])     ? $printer['comment']     : __('No comments', 'responsivas'));
 
          $pri_vars = array_merge($pri_base_vars, [
             '{activo}'  => $activo,
@@ -497,9 +497,9 @@ HTML;
          throw new RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
-      $address  = e($entity->fields['address']  ?? '');
-      $postcode = e($entity->fields['postcode'] ?? '');
-      $location = e(implode(', ', array_filter([
+      $address  = cleanerEscape($entity->fields['address']  ?? '');
+      $postcode = cleanerEscape($entity->fields['postcode'] ?? '');
+      $location = cleanerEscape(implode(', ', array_filter([
          $entity->fields['town'],
          $entity->fields['state'],
          $entity->fields['country'],
@@ -531,8 +531,8 @@ HTML;
       }
 
       $show_employee = (int)($config['show_employee_number'] ?? 1);
-      $company_name  = e($config['company_name'] ?? '');
-      $emp_safe      = e($employee_number);
+      $company_name  = cleanerEscape($config['company_name'] ?? '');
+      $emp_safe      = cleanerEscape($employee_number);
       $employee_line = ($show_employee && !empty($emp_safe)) ? (__("Employee No.: ", "responsivas") . $emp_safe) : '';
 
       // Pre-validar precios ANTES de crear el PDF
@@ -583,7 +583,7 @@ HTML;
          $config, 25.0
       );
 
-      $full_name_safe = e($full_name);
+      $full_name_safe = cleanerEscape($full_name);
 
       foreach ($phones as $phone) {
          $pdf->AddPage();
@@ -659,20 +659,20 @@ HTML;
          }
 
          // Escape seguro
-         $marca    = e($marca);
-         $modelo   = e($modelo);
-         $serie    = e($serie);
-         $activo   = e($activo);
-         $imei     = e($imei);
-         $linea    = e($linea);
-         $estado   = e($estado);
+         $marca    = cleanerEscape($marca);
+         $modelo   = cleanerEscape($modelo);
+         $serie    = cleanerEscape($serie);
+         $activo   = cleanerEscape($activo);
+         $imei     = cleanerEscape($imei);
+         $linea    = cleanerEscape($linea);
+         $estado   = cleanerEscape($estado);
 
          // ── Plantillas editables ──
          // Cláusula de vida útil — usa plantilla configurable, cae a texto predeterminado si vacío
          $vu_vars = [
-            '{fecha_compra}' => $fecha_compra !== 'N/A' ? e($fecha_compra) : '',
-            '{factura}'      => e($factura),
-            '{proveedor}'    => e($proveedor),
+            '{fecha_compra}' => $fecha_compra !== 'N/A' ? cleanerEscape($fecha_compra) : '',
+            '{factura}'      => cleanerEscape($factura),
+            '{proveedor}'    => cleanerEscape($proveedor),
          ];
          if ($factura !== 'N/A' && $proveedor !== 'N/A') {
             $vu_tpl = trim($config['pho_vida_util_factura'] ?? '');
@@ -680,8 +680,8 @@ HTML;
                $clausula_vida_util_text = responsivasApplyTemplate($vu_tpl, $vu_vars);
             } else {
                $partes_cu = [];
-               if ($fecha_compra !== 'N/A') $partes_cu[] = 'contados a partir del ' . e($fecha_compra);
-               $partes_cu[]             = 'con base en la factura ' . e($factura) . ' emitida por ' . e($proveedor);
+               if ($fecha_compra !== 'N/A') $partes_cu[] = 'contados a partir del ' . cleanerEscape($fecha_compra);
+               $partes_cu[]             = 'con base en la factura ' . cleanerEscape($factura) . ' emitida por ' . cleanerEscape($proveedor);
                $clausula_vida_util_text = 'Se establece como <strong>vida útil</strong> un periodo de 24 meses ' . implode(', ', $partes_cu) . '.';
             }
          } else {
@@ -692,21 +692,21 @@ HTML;
          }
 
          $pho_vars = [
-            '{nombre}'            => e($full_name),
+            '{nombre}'            => cleanerEscape($full_name),
             '{empresa}'           => $company_name,
-            '{num_empleado}'      => e($employee_number),
+            '{num_empleado}'      => cleanerEscape($employee_number),
             '{activo}'            => $activo,
             '{serie_uuid}'        => $serie,
             '{imei}'              => $imei,
             '{marca}'             => $marca,
             '{modelo}'            => $modelo,
             '{estado}'            => $estado,
-            '{precio}'            => e($precio_compra),
+            '{precio}'            => cleanerEscape($precio_compra),
             '{linea}'             => $linea,
-            '{ram}'               => e($ram_texto),
-            '{almacenamiento}'    => e($disco),
-            '{fecha}'             => e($fecha_texto),
-            '{hora}'              => e($hora_texto),
+            '{ram}'               => cleanerEscape($ram_texto),
+            '{almacenamiento}'    => cleanerEscape($disco),
+            '{fecha}'             => cleanerEscape($fecha_texto),
+            '{hora}'              => cleanerEscape($hora_texto),
             '{lugar}'             => $location,
             '{direccion}'         => $address,
             '{cp}'                => $postcode,
@@ -986,10 +986,10 @@ HTML;
       global $CFG_GLPI;
 
       $full_name         = $user->getFriendlyName();
-      $full_name_safe    = e($full_name);
-      $company_name      = e($config['company_name'] ?? 'Mi Empresa');
+      $full_name_safe    = cleanerEscape($full_name);
+      $company_name      = cleanerEscape($config['company_name'] ?? 'Mi Empresa');
       $real_employee     = trim($user->fields['registration_number'] ?? '');
-      $demo_emp          = $real_employee !== '' ? e($real_employee) : 'EMP-001';
+      $demo_emp          = $real_employee !== '' ? cleanerEscape($real_employee) : 'EMP-001';
       $show_employee     = (int)($config['show_employee_number'] ?? 0);
       $th_bg             = '#E6E6E6';
       $td_bg             = '#FFFFFF';
@@ -997,7 +997,7 @@ HTML;
       // Ubicación desde la entidad activa (igual que los builds reales)
       $entity = new Entity();
       $entity->getFromDB(Session::getActiveEntity());
-      $location = e(implode(', ', array_filter([
+      $location = cleanerEscape(implode(', ', array_filter([
          $entity->fields['town']    ?? '',
          $entity->fields['state']   ?? '',
          $entity->fields['country'] ?? '',
@@ -1012,13 +1012,13 @@ HTML;
       $rep      = ($rep_id > 0 && ($n = nombreUsuario($rep_id)) !== '') ? $n : __('Demo Representative', 'responsivas');
 
       // Entity address/postcode (igual que el build real de teléfono)
-      $address  = e($entity->fields['address']  ?? '');
-      $postcode = e($entity->fields['postcode']  ?? '');
+      $address  = cleanerEscape($entity->fields['address']  ?? '');
+      $postcode = cleanerEscape($entity->fields['postcode']  ?? '');
 
       // Estado al azar de los existentes en GLPI
       global $DB;
       $states     = iterator_to_array($DB->request(['SELECT' => ['name'], 'FROM' => 'glpi_states', 'LIMIT' => 10]));
-      $demo_state = !empty($states) ? e(reset($states)['name']) : 'En uso';
+      $demo_state = !empty($states) ? cleanerEscape(reset($states)['name']) : 'En uso';
 
       $fecha_header = fechaATexto($_SESSION['glpi_currenttime'], $config['timezone']);
 
@@ -1037,12 +1037,12 @@ HTML;
          $employee_line_html = $employee_line ? "<br>{$employee_line}" : '';
 
          $pc_vars = [
-            '{nombre}' => e($full_name), '{empresa}' => $company_name,
+            '{nombre}' => cleanerEscape($full_name), '{empresa}' => $company_name,
             '{num_empleado}' => $demo_emp,   '{activo}' => 'PC-DEMO-001',
             '{serie}' => 'SN-DEMO-123456',   '{marca}'  => 'Dell',
             '{modelo}' => 'Latitude 5540',   '{tipo}'   => 'Laptop',
             '{estado}' => $demo_state,
-            '{fecha}' => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+            '{fecha}' => cleanerEscape(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}' => $location,
          ];
          $pc_titulo = responsivasApplyTemplate($config['pc_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pc_vars);
@@ -1057,7 +1057,7 @@ HTML;
             'Intel Core i5-1345U', '1.60 GHz',
             '16 GB DDR4', 'Windows 11 Pro', 'SSD 512 GB',
             'Laptop', $demo_state,
-            e(__('Demo equipment for template preview', 'responsivas')),
+            cleanerEscape(__('Demo equipment for template preview', 'responsivas')),
             '', $full_name_safe, $employee_line_html, $th_bg, $td_bg,
             $show_demo_pc_sigs, $demo_pc_rep
          ), true, false, true, false, '');
@@ -1079,12 +1079,12 @@ HTML;
          $full_safe     = $full_name_safe;
 
          $pri_vars = [
-            '{nombre}' => e($full_name), '{empresa}' => $company_name,
+            '{nombre}' => cleanerEscape($full_name), '{empresa}' => $company_name,
             '{num_empleado}' => $demo_emp,   '{activo}' => 'IMP-DEMO-001',
             '{serie}' => 'SN-IMP-789012',    '{marca}'  => 'HP',
             '{modelo}' => 'LaserJet Pro M404n', '{tipo}' => 'Impresora',
             '{estado}' => $demo_state,
-            '{fecha}' => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+            '{fecha}' => cleanerEscape(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
             '{lugar}' => $location,
          ];
          $pri_titulo = responsivasApplyTemplate($config['pri_titulo'] ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO', $pri_vars);
@@ -1097,7 +1097,7 @@ HTML;
             $pri_titulo, $pri_intro, $pri_cuerpo,
             'HP', 'LaserJet Pro M404n', 'SN-IMP-789012',
             'Impresora', $demo_state,
-            e(__('Demo printer for template preview', 'responsivas')),
+            cleanerEscape(__('Demo printer for template preview', 'responsivas')),
             $full_safe, $employee_line, $th_bg, $td_bg,
             $show_demo_pri_sigs, $demo_pri_rep
          ), true, false, true, false, '');
@@ -1118,20 +1118,20 @@ HTML;
       $employee_line = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp) : '';
 
       $pho_vars = [
-         '{nombre}'             => e($full_name),    '{empresa}'       => $company_name,
+         '{nombre}'             => cleanerEscape($full_name),    '{empresa}'       => $company_name,
          '{num_empleado}'       => $demo_emp,         '{activo}'        => 'CEL-DEMO-001',
          '{serie_uuid}'         => 'UUID-DEMO-001',   '{imei}'          => '352999DEMO0001',
          '{marca}'              => 'Samsung',          '{modelo}'        => 'Galaxy A54 5G',
          '{estado}'             => $demo_state,
          '{almacenamiento}'     => '128 GB',           '{ram}'           => '6 GB',
          '{linea}'              => '662-100-0001',     '{precio}'        => '$ 7,500.00',
-         '{fecha}'              => e(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
+         '{fecha}'              => cleanerEscape(fechaATexto($_SESSION['glpi_currenttime'], $config['timezone'])),
          '{lugar}'              => $location,
          '{direccion}'          => $address,
          '{cp}'                 => $postcode,
          '{hora}'               => (new DateTime('now', new DateTimeZone($config['timezone'])))->format('H') . ':00',
-         '{testigo1}'           => e($testigo1),       '{testigo2}'      => e($testigo2),
-         '{representante}'      => e($rep),
+         '{testigo1}'           => cleanerEscape($testigo1),       '{testigo2}'      => cleanerEscape($testigo2),
+         '{representante}'      => cleanerEscape($rep),
          '{clausula_vida_util}' => 'Se establece como <strong>vida útil</strong> un periodo de 24 meses desde la fecha de asignación.',
       ];
       $pho_titulo    = responsivasApplyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
@@ -1141,8 +1141,8 @@ HTML;
 
       $pdf->writeHTML(self::renderPhoPage(
          $pho_titulo, $pho_apertura, $pho_clausulas, $pho_testigos,
-         e($rep), $full_name_safe, $employee_line,
-         e($testigo1), e($testigo2)
+         cleanerEscape($rep), $full_name_safe, $employee_line,
+         cleanerEscape($testigo1), cleanerEscape($testigo2)
       ), true, false, true, false, '');
       return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
    }
