@@ -246,6 +246,7 @@ echo PluginResponsivasTwig::env()->render('config/page.html.twig', [
     'pdf_font'             => Config::getConfigurationValue('core', 'pdffont'),
     'mail_ok'              => $mail_ok,
     'has_email_config'     => $has_email_config,
+    'csrf_token'           => Session::getNewCSRFToken(),
     'test_action'          => $web . '/front/send_mail.php',
     'test_csrf_token'      => Session::getNewCSRFToken(),
     'widget_testigo1'      => $widget_testigo1,

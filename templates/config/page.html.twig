@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <form id="responsivas-config-form" method="post" action="{{ self }}" enctype="multipart/form-data">
+<input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
 
 <div class="card mt-2 shadow-sm">
 
