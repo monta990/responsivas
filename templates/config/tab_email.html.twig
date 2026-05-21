@@ -1,0 +1,77 @@
+<div class="card mt-2 rounded-0">
+    {% include 'partials/ribbon_header.html.twig' with {icon: 'ti-mail', title: trans('Email options')} %}
+    <div class="card-body">
+
+        {% if not mail_ok %}
+            <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                <i class="ti ti-alert-triangle me-2 fs-5"></i>
+                <div>{{ trans('The GLPI mail server is not configured or email notifications are disabled. The send button will fail until you configure it in <strong>Configuration → Notifications → Email configuration</strong>.')|raw }}</div>
+            </div>
+        {% endif %}
+
+        {% include 'partials/variable_hints.html.twig' with {vars: {
+            '{nombre}':  trans('Full name of the assigned user'),
+            '{empresa}': trans('Company name (configured in General)'),
+            '{fecha}':   trans('Document date in dd/mm/yyyy format')
+        }} %}
+
+        <div class="row mt-3 mb-3">
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    <i class="ti ti-pencil me-1"></i>{{ trans('Email subject') }}
+                </label>
+                <input type="text" class="form-control" name="email_subject" maxlength="255"
+                       placeholder="{{ trans('Email subject') }}" value="{{ config.email_subject ?? '' }}">
+                <div class="form-text">{{ trans('You can use the variables {nombre}, {empresa} and {fecha}.') }}</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    <i class="ti ti-align-left me-1"></i>{{ trans('Email body') }}
+                </label>
+                {% include 'partials/format_toolbar.html.twig' %}
+                <textarea class="form-control" name="email_body" rows="5"
+                          placeholder="{{ trans('Email body') }}">{{ config.email_body ?? '' }}</textarea>
+                <div class="form-text">{{ trans('You can use the variables {nombre}, {empresa} and {fecha}.') }}</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    <i class="ti ti-align-bottom me-1"></i>{{ trans('Email footer') }}
+                </label>
+                {% include 'partials/format_toolbar.html.twig' %}
+                <textarea class="form-control" name="email_footer" rows="3"
+                          placeholder="{{ trans('Email footer (optional)') }}">{{ config.email_footer ?? '' }}</textarea>
+                <div class="form-text">{{ trans('Optional. Appears at the bottom of the email, separated by a line. You can use {nombre}, {empresa} and {fecha}.') }}</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{# Test email card #}
+{% set btn_disabled = not mail_ok or not has_email_config %}
+{% set btn_tooltip = not mail_ok
+    ? trans('GLPI mail server not configured')
+    : (not has_email_config
+        ? trans('Configure the email subject and body first')
+        : trans('Sends a test email to your registered GLPI address')) %}
+<div class="card mt-2 rounded-0">
+    <div class="card-body d-flex align-items-center gap-3 flex-wrap">
+        <span data-bs-toggle="tooltip" title="{{ btn_tooltip }}" class="d-inline-block">
+            <button type="submit" form="test-mail-form"
+                    class="btn btn-warning{{ btn_disabled ? ' disabled' : '' }}"
+                    {{ btn_disabled ? 'aria-disabled="true" style="pointer-events:none;opacity:.65"' : '' }}>
+                <i class="ti ti-send me-2"></i>{{ trans('Send test email') }}
+            </button>
+        </span>
+        <span class="text-muted" style="font-size:0.85em;">
+            <i class="ti ti-info-circle me-1"></i>
+            {{ trans('The email will be sent to the address registered in your GLPI profile.') }}
+        </span>
+    </div>
+</div>

@@ -11,6 +11,7 @@ if (!defined('GLPI_ROOT')) {
  * Inicialización del plugin
  */
 include_once __DIR__ . '/inc/paths.class.php';
+include_once __DIR__ . '/inc/twig.class.php';
     
 function plugin_init_responsivas() {
     global $PLUGIN_HOOKS;
@@ -32,7 +33,7 @@ function plugin_init_responsivas() {
 function plugin_version_responsivas() {
    return [
       'name'          => 'Responsivas',
-      'version'       => '1.4.5',
+      'version'       => '1.4.6',
       'author'        => 'Edwin Elias Alvarez',
       'license'       => 'GPLv3+',
       'homepage'      => 'https://github.com/monta990/responsivas',

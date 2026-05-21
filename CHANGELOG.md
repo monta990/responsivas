@@ -6,6 +6,19 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.6] — 2026-05-20
+
+### Changed
+- **Twig templating — config form** — `inc/config.class.php` (1 598 lines of inline `echo` HTML) replaced with a standalone `Twig\Environment` rendering 6 tab templates under `templates/config/`. PHP file reduced to ~230 lines of POST handlers and data prep.
+- **Twig templating — user tab** — `inc/user.class.php` `showTab()` and `emailButton()` (~170 lines of inline HTML) replaced with `templates/user/tab.html.twig`. Private `button()` and `emailButton()` methods removed.
+- **Twig templating — partials** — Five reusable HTML helpers (`responsivasFormatToolbar`, `responsivasRibbonSubHeader`, `responsivasTemplateEditor`, `responsivasVariableHints`, `responsivasFooterFields`) converted to Twig partials in `templates/partials/`. PHP wrappers now call `render()` instead of echoing HTML.
+- **Twig bootstrap** — New `inc/twig.class.php` provides a singleton `PluginResponsivasTwig::env()` backed by `Twig\Loader\FilesystemLoader` rooted at `templates/`. Cache written to `GLPI_CACHE_DIR/responsivas_twig`. Uses Twig bundled in GLPI vendor — no extra dependency.
+- **`front/config.form.php` simplified** — CSS/JS moved into `templates/config/page.html.twig`; entry-point file reduced to 6 lines.
+- **Delete-logo modal fixed** — Modal moved inside the main `<form>` so the submit button correctly triggers a POST (was outside the form in previous versions).
+- **XSS surface reduced** — All dynamic values in converted templates are auto-escaped by Twig. Manual `htmlspecialchars()` calls removed from converted code paths.
+
+---
+
 ## [1.4.5] — 2026-05-07
 
 ### Changed
