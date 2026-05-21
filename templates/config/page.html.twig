@@ -1,0 +1,193 @@
+<style>
+.form-text { color: var(--bs-secondary-color, var(--bs-body-color)); opacity: 0.80; }
+.resp-fmt-btn { padding: 1px 7px; font-size: 0.82em; line-height: 1.4; }
+</style>
+<script>
+window._respLastField = null;
+document.addEventListener('focusin', function (e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) {
+        window._respLastField = e.target;
+    }
+});
+window.responsivasInsertVar = function (tag) {
+    var a = window._respLastField;
+    if (a && a.isConnected) {
+        var s = a.selectionStart !== undefined ? a.selectionStart : a.value.length;
+        var e = a.selectionEnd   !== undefined ? a.selectionEnd   : a.value.length;
+        a.value = a.value.substring(0, s) + tag + a.value.substring(e);
+        a.selectionStart = a.selectionEnd = s + tag.length;
+        a.focus();
+        a.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+        navigator.clipboard.writeText(tag).catch(function () {});
+    }
+};
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.resp-fmt-btn');
+    if (!btn) return;
+    var wrap = btn.dataset.wrap, wLen = wrap.length;
+    var ae = document.activeElement;
+    var ta = (ae && (ae.tagName === 'TEXTAREA' || ae.tagName === 'INPUT')) ? ae : window._respLastField;
+    if (!ta) return;
+    ta.focus();
+    var start = ta.selectionStart, end = ta.selectionEnd;
+    var sel = ta.value.substring(start, end);
+    var before = ta.value.substring(start - wLen, start);
+    var after  = ta.value.substring(end, end + wLen);
+    var wrappedInside  = sel.startsWith(wrap) && sel.endsWith(wrap) && sel.length >= wLen * 2 + 1;
+    var wrappedOutside = before === wrap && after === wrap;
+    var newStart, newEnd;
+    if (wrappedInside) {
+        var inner = sel.slice(wLen, sel.length - wLen);
+        ta.setRangeText(inner, start, end, 'preserve');
+        newStart = start; newEnd = start + inner.length;
+    } else if (wrappedOutside) {
+        ta.setRangeText(sel, start - wLen, end + wLen, 'preserve');
+        newStart = start - wLen; newEnd = newStart + sel.length;
+    } else {
+        var placeholder = sel || 'texto';
+        ta.setRangeText(wrap + placeholder + wrap, start, end, 'preserve');
+        newStart = start + wLen; newEnd = newStart + placeholder.length;
+    }
+    ta.setSelectionRange(newStart, newEnd);
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+});
+window.previewLogo = function (input) {
+    var preview = document.getElementById('logo-preview');
+    var infoLabel = document.getElementById('preview-size');
+    if (!preview || !infoLabel) return;
+    var file = input.files[0];
+    if (!file || !file.type.match('image.*')) {
+        preview.classList.add('d-none'); infoLabel.classList.add('d-none'); return;
+    }
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+            preview.src = e.target.result;
+            preview.classList.remove('d-none');
+            infoLabel.textContent = {{ trans('Preview dimensions: ')|json_encode|raw }} + img.width + ' × ' + img.height + ' px · ' + {{ trans('Size: ')|json_encode|raw }} + (file.size / 1024).toFixed(2) + ' KB';
+            infoLabel.classList.remove('d-none');
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+};
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('#responsivasTabs button[data-bs-toggle="tab"]').forEach(function (tab) {
+        tab.addEventListener('shown.bs.tab', function (event) {
+            var target = event.target.getAttribute('data-bs-target');
+            if (target) localStorage.setItem('responsivas_active_tab', target);
+        });
+    });
+    var activeTab = localStorage.getItem('responsivas_active_tab');
+    if (activeTab) {
+        var trigger = document.querySelector('#responsivasTabs button[data-bs-target="' + activeTab + '"]');
+        if (trigger && typeof bootstrap !== 'undefined') new bootstrap.Tab(trigger).show();
+    }
+    var logoInput = document.getElementById('responsivas_logo_input');
+    if (logoInput) logoInput.addEventListener('change', function () { window.previewLogo(this); });
+});
+</script>
+
+<form id="responsivas-config-form" method="post" action="{{ self }}" enctype="multipart/form-data">
+
+<div class="card mt-2 shadow-sm">
+
+    <div class="card-header mb-3 py-1 border-top rounded-0 position-relative">
+        <div class="ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1">
+            <i class="fs-2x ti ti-settings"></i>
+        </div>
+        <h4 class="card-title ms-5 mb-0">{{ trans('Responsivas Settings') }}</h4>
+    </div>
+
+    <ul class="nav nav-tabs mb-3" id="responsivasTabs" role="tablist">
+        {% set tabs = [
+            {id: 'general', icon: 'ti-settings',       label: trans('General')},
+            {id: 'email',   icon: 'ti-mail',            label: trans('Email')},
+            {id: 'pc',      icon: 'ti-device-desktop',  label: trans('Computers')},
+            {id: 'pri',     icon: 'ti-printer',         label: trans('Printers')},
+            {id: 'pho',     icon: 'ti-device-mobile',   label: trans('Phones')}
+        ] %}
+        {% for tab in tabs %}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ loop.first ? 'active' : '' }}"
+                    id="tab-{{ tab.id }}-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#tab-{{ tab.id }}"
+                    type="button" role="tab">
+                <i class="ti {{ tab.icon }} me-1"></i> {{ tab.label }}
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if not config.cellphone_type_id %}
+        <div class="alert alert-warning d-flex align-items-start mb-4">
+            <i class="ti ti-alert-triangle me-2"></i>
+            {{ trans('The phone type for responsibility documents has not been configured. Contact the administrator.') }}
+        </div>
+    {% endif %}
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-general" role="tabpanel">
+            {% include 'config/tab_general.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="tab-email" role="tabpanel">
+            {% include 'config/tab_email.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="tab-pc" role="tabpanel">
+            {% include 'config/tab_pc.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="tab-pri" role="tabpanel">
+            {% include 'config/tab_pri.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="tab-pho" role="tabpanel">
+            {% include 'config/tab_pho.html.twig' %}
+        </div>
+    </div>
+
+    <div class="card-footer bg-light d-flex justify-content-end gap-2">
+        <button type="submit" name="update" class="btn btn-primary d-flex align-items-center gap-2">
+            <i class="ti ti-device-floppy" aria-hidden="true"></i> {{ trans('Save') }}
+        </button>
+    </div>
+
+    {# Delete logo modal — inside form so submit button works #}
+    <div class="modal fade" id="deleteLogoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti ti-alert-triangle text-warning me-2"></i>
+                        {{ trans('Confirm deletion') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2">{{ trans('Are you sure you want to delete the current logo?') }}</p>
+                    <div class="alert alert-warning d-flex align-items-center">
+                        <i class="ti ti-info-circle me-2"></i>
+                        {{ trans('This action cannot be undone.') }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="ti ti-x"></i> {{ trans('Cancel') }}
+                    </button>
+                    <button type="submit" name="delete_logo" value="1"
+                            class="btn btn-danger d-flex align-items-center gap-2">
+                        <i class="ti ti-trash"></i> {{ trans('Delete logo') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</form>
+
+<form id="test-mail-form" method="post" action="{{ test_action }}" style="display:none;">
+    <input type="hidden" name="_glpi_csrf_token" value="{{ test_csrf_token }}">
+    <input type="hidden" name="mode" value="test">
+</form>

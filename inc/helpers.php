@@ -184,7 +184,6 @@ function responsivasApplyTemplate(string $template, array $vars): string
  * ============================ */
 function responsivasTemplateEditor(string $label, string $name, string $value, string $hint, int $rows = 5): void
 {
-   // Normalizar \n literal → salto real, y <strong> → **text** para visualización en textarea
    $value = str_replace('\\n', "\n", $value);
    $value = preg_replace('/<strong>(.*?)<\/strong>/i', '**$1**', $value);
    $value = preg_replace('/<em>(.*?)<\/em>/i', '*$1*', $value);
@@ -192,27 +191,15 @@ function responsivasTemplateEditor(string $label, string $name, string $value, s
    $value = preg_replace('/<span style=["\']font-weight:bold["\']>(.*?)<\/span>/i', '**$1**', $value);
    $value = preg_replace('/<span style=["\']font-style:italic["\']>(.*?)<\/span>/i', '*$1*', $value);
    $value = preg_replace('/<span style=["\']text-decoration:underline["\']>(.*?)<\/span>/i', '__$1__', $value);
-   // Limpiar cualquier otra etiqueta HTML que haya quedado
    $value = strip_tags($value);
-   $value_esc = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-   $hint_esc  = htmlspecialchars($hint, ENT_QUOTES, 'UTF-8');
-   echo "
-   <div class='mb-3'>
-      <label class='form-label fw-bold'>
-         <i class='ti ti-file-pencil me-1'></i>{$label}
-      </label>";
-   echo "<div class='d-flex gap-1 mb-1'>"
-      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='**' title='" . __('Bold — **text**', 'responsivas') . "'><b>B</b>&nbsp;<small class='fw-normal opacity-75'>**</small></button>"
-      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='*' title='" . __('Italic — *text*', 'responsivas') . "'><i>I</i>&nbsp;<small class='fw-normal opacity-75'>*</small></button>"
-      . "<button type='button' class='btn btn-sm btn-outline-secondary resp-fmt-btn' data-wrap='__' title='" . __('Underline — __text__', 'responsivas') . "'><u>U</u>&nbsp;<small class='fw-normal opacity-75'>__</small></button>"
-      . "</div>";
-   echo "<textarea class='form-control font-monospace'
-                name='{$name}'
-                rows='{$rows}'
-                spellcheck='false'
-                style='font-size:0.82rem;resize:vertical;'>{$value_esc}</textarea>
-      <div class='form-text'>{$hint_esc}</div>
-   </div>";
+
+   echo PluginResponsivasTwig::env()->render('partials/template_editor.html.twig', [
+      'label' => $label,
+      'name'  => $name,
+      'value' => $value,
+      'hint'  => $hint,
+      'rows'  => $rows,
+   ]);
 }
 
 /* ============================
@@ -220,29 +207,7 @@ function responsivasTemplateEditor(string $label, string $name, string $value, s
  * ============================ */
 function responsivasVariableHints(array $vars): void
 {
-   echo '<div class="alert alert-info d-flex align-items-start mb-3" role="alert">';
-   echo '<i class="ti ti-tags me-2 fs-5 mt-1"></i>';
-   echo '<div style="font-size:0.85rem;">';
-   echo '<strong>' . __('Available tags', 'responsivas') . ':</strong> '
-      . '<span class="text-muted">' . '<b>**' . __('bold', 'responsivas') . '**</b>' . ' &nbsp;&bull;&nbsp; <i>*' . __('italic', 'responsivas') . '*</i>' . ' &nbsp;&bull;&nbsp; <u>__' . __('underline', 'responsivas') . '__</u>' . '</span><br>';
-   echo '<span class="text-muted d-block mt-1" style="font-size:0.82em;"><i class="ti ti-hand-click me-1"></i>' . __('Click a variable to insert it at the cursor position.', 'responsivas') . '</span>';
-   $first = true;
-   foreach ($vars as $tag => $desc) {
-      $tag_safe  = htmlspecialchars($tag,  ENT_QUOTES, 'UTF-8');
-      $desc_safe = htmlspecialchars($desc, ENT_QUOTES, 'UTF-8');
-      if (!$first) {
-         echo '<br>';
-      }
-      // data-resp-var evita todo escapado de comillas en el onclick
-      echo '<code'
-         . ' class="me-1"'
-         . ' style="cursor:pointer;"'
-         . ' title="' . $desc_safe . '"'
-         . ' data-resp-var="' . $tag_safe . '"'
-         . ' onclick="responsivasInsertVar(this.dataset.respVar)">'
-         . $tag_safe
-         . '</code> &mdash; ' . $desc_safe;
-      $first = false;
-   }
-   echo '</div></div>';
+   echo PluginResponsivasTwig::env()->render('partials/variable_hints.html.twig', [
+      'vars' => $vars,
+   ]);
 }

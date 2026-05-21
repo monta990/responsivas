@@ -1,0 +1,35 @@
+<label class="form-label fw-bold">
+    <i class="ti ti-receipt me-1"></i>{{ trans('Document footer') }}
+</label>
+<div class="form-text text-muted mt-2 mb-3">
+    {{ trans('These lines will appear in the footer of the responsibility document.') }}
+</div>
+{% set positions = [
+    [
+        { key: 'left_1',  icon: 'corner-up-left',   label: trans('Footer left text'), help: trans('Example: Original: Company') },
+        { key: 'right_1', icon: 'corner-up-right',  label: trans('Top right'),        help: trans('Example: Copy: Employee') }
+    ],
+    [
+        { key: 'left_2',  icon: 'corner-down-left',  label: trans('Bottom left'),  help: trans('Example: SIS-RESP-001') },
+        { key: 'right_2', icon: 'corner-down-right', label: trans('Bottom right'), help: trans('Example: Rev 1.4 08/01/2026') }
+    ]
+] %}
+{% for row in positions %}
+    {% for field in row %}
+        {% set fname = prefix ~ '_footer_' ~ field.key %}
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold d-flex align-items-center gap-1">
+                <i class="ti ti-{{ field.icon }}" aria-hidden="true"></i>
+                {{ field.label }}
+            </label>
+            {% include 'partials/format_toolbar.html.twig' %}
+            <div class="input-group">
+                <span class="input-group-text"><i class="ti ti-edit"></i></span>
+                <input type="text" class="form-control"
+                       name="{{ fname }}"
+                       value="{{ config[fname] ?? '' }}">
+            </div>
+            <div class="form-text">{{ field.help }}</div>
+        </div>
+    {% endfor %}
+{% endfor %}
