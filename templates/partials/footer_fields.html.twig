@@ -1,6 +1,6 @@
-<label class="form-label fw-bold">
+<div class="form-label fw-bold">
     <i class="ti ti-receipt me-1"></i>{{ trans('Document footer') }}
-</label>
+</div>
 <div class="form-text text-muted mt-2 mb-3">
     {{ trans('These lines will appear in the footer of the responsibility document.') }}
 </div>
@@ -18,7 +18,7 @@
     {% for field in row %}
         {% set fname = prefix ~ '_footer_' ~ field.key %}
         <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold d-flex align-items-center gap-1">
+            <label class="form-label fw-bold d-flex align-items-center gap-1" for="{{ fname }}">
                 <i class="ti ti-{{ field.icon }}" aria-hidden="true"></i>
                 {{ field.label }}
             </label>
@@ -26,7 +26,7 @@
             <div class="input-group">
                 <span class="input-group-text"><i class="ti ti-edit"></i></span>
                 <input type="text" class="form-control"
-                       name="{{ fname }}"
+                       id="{{ fname }}" name="{{ fname }}"
                        value="{{ config[fname] ?? '' }}">
             </div>
             <div class="form-text">{{ field.help }}</div>

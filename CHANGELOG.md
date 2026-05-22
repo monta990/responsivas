@@ -6,6 +6,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.7] — 2026-05-22
+
+### Fixed
+- **Accessibility — `<label>` without associated control** — 55 browser console warnings eliminated. Labels for actual form fields (`timezone`, `watermark_text`, `watermark_opacity`, `company_name`, `currency`, `email_subject`, `email_body`, `email_footer`, font-size inputs in PC/Printer/Phone tabs, template editors, and footer fields) now carry matching `for` / `id` pairs. Section headings and labels adjacent to raw GLPI widgets or read-only display inputs (font display, logo preview, witness/representative dropdowns) converted to `<div class="form-label">` since they have no controllable input target. Affects config page and user tab.
+
+---
+
 ## [1.4.6] — 2026-05-20
 
 ### Changed

@@ -17,10 +17,10 @@
 
         <div class="row mt-3 mb-3">
             <div class="col-12">
-                <label class="form-label fw-semibold">
+                <label class="form-label fw-semibold" for="email_subject">
                     <i class="ti ti-pencil me-1"></i>{{ trans('Email subject') }}
                 </label>
-                <input type="text" class="form-control" name="email_subject" maxlength="255"
+                <input type="text" class="form-control" id="email_subject" name="email_subject" maxlength="255"
                        placeholder="{{ trans('Email subject') }}" value="{{ config.email_subject ?? '' }}">
                 <div class="form-text">{{ trans('You can use the variables {nombre}, {empresa} and {fecha}.') }}</div>
             </div>
@@ -28,11 +28,11 @@
 
         <div class="row mb-3">
             <div class="col-12">
-                <label class="form-label fw-semibold">
+                <label class="form-label fw-semibold" for="email_body">
                     <i class="ti ti-align-left me-1"></i>{{ trans('Email body') }}
                 </label>
                 {% include 'partials/format_toolbar.html.twig' %}
-                <textarea class="form-control" name="email_body" rows="5"
+                <textarea class="form-control" id="email_body" name="email_body" rows="5"
                           placeholder="{{ trans('Email body') }}">{{ config.email_body ?? '' }}</textarea>
                 <div class="form-text">{{ trans('You can use the variables {nombre}, {empresa} and {fecha}.') }}</div>
             </div>
@@ -40,11 +40,11 @@
 
         <div class="row mb-3">
             <div class="col-12">
-                <label class="form-label fw-semibold">
+                <label class="form-label fw-semibold" for="email_footer">
                     <i class="ti ti-align-bottom me-1"></i>{{ trans('Email footer') }}
                 </label>
                 {% include 'partials/format_toolbar.html.twig' %}
-                <textarea class="form-control" name="email_footer" rows="3"
+                <textarea class="form-control" id="email_footer" name="email_footer" rows="3"
                           placeholder="{{ trans('Email footer (optional)') }}">{{ config.email_footer ?? '' }}</textarea>
                 <div class="form-text">{{ trans('Optional. Appears at the bottom of the email, separated by a line. You can use {nombre}, {empresa} and {fecha}.') }}</div>
             </div>
