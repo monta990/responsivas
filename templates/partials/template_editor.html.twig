@@ -1,10 +1,10 @@
 <div class="mb-3">
-    <label class="form-label fw-bold">
+    <label class="form-label fw-bold" for="{{ name }}">
         <i class="ti ti-file-pencil me-1"></i>{{ label }}
     </label>
     {% include 'partials/format_toolbar.html.twig' %}
     <textarea class="form-control font-monospace"
-              name="{{ name }}"
+              id="{{ name }}" name="{{ name }}"
               rows="{{ rows }}"
               spellcheck="false"
               style="font-size:0.82rem;resize:vertical;">{{ value }}</textarea>

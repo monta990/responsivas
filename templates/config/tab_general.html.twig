@@ -5,13 +5,13 @@
 
         {# Timezone #}
         <div class="mb-4">
-            <label class="form-label fw-bold d-flex align-items-center mb-2">
+            <label class="form-label fw-bold d-flex align-items-center mb-2" for="timezone">
                 <i class="ti ti-world me-2"></i>
                 <span>{{ trans('Timezone for PDFs') }}</span>
             </label>
             <div class="input-group">
                 <span class="input-group-text"><i class="ti ti-clock" aria-hidden="true"></i></span>
-                <select name="timezone" class="form-select">
+                <select id="timezone" name="timezone" class="form-select">
                     {% for tz in timezone_list %}
                         <option value="{{ tz }}"{{ tz == config.timezone ? ' selected' : '' }}>{{ tz }}</option>
                     {% endfor %}
@@ -33,9 +33,9 @@
                 ] %}
                 {% for sw in switches %}
                 <div class="col-md-6">
-                    <label class="form-label fw-bold d-flex align-items-center">
+                    <div class="form-label fw-bold d-flex align-items-center">
                         <i class="ti {{ sw.icon }} me-2"></i>{{ sw.label }}
-                    </label>
+                    </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox"
                                id="{{ sw.name }}" name="{{ sw.name }}" value="1"
@@ -50,23 +50,23 @@
         {# Watermark #}
         <div class="row mt-3">
             <div class="col-md-8">
-                <label class="form-label fw-bold d-flex align-items-center">
+                <label class="form-label fw-bold d-flex align-items-center" for="watermark_text">
                     <i class="ti ti-watermark me-2"></i>{{ trans('Watermark text') }}
                 </label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="ti ti-eye"></i></span>
-                    <input type="text" class="form-control" name="watermark_text" maxlength="40"
+                    <input type="text" class="form-control" id="watermark_text" name="watermark_text" maxlength="40"
                            placeholder="{{ trans('PREVIEW') }}" value="{{ config.watermark_text ?? '' }}">
                 </div>
                 <div class="form-text">{{ trans('Diagonal text shown on previews. Leave empty for the default.') }}</div>
             </div>
             <div class="col-md-4">
-                <label class="form-label fw-bold d-flex align-items-center">
+                <label class="form-label fw-bold d-flex align-items-center" for="watermark_opacity">
                     <i class="ti ti-adjustments me-2"></i>{{ trans('Watermark opacity (%)') }}
                 </label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="ti ti-percentage"></i></span>
-                    <input type="number" class="form-control" name="watermark_opacity"
+                    <input type="number" class="form-control" id="watermark_opacity" name="watermark_opacity"
                            min="5" max="100" step="5" value="{{ config.watermark_opacity ?? 25 }}">
                 </div>
                 <div class="form-text">{{ trans('5–100. Default: 25.') }}</div>
@@ -75,12 +75,12 @@
 
         {# Company name #}
         <div class="mb-4">
-            <label class="form-label fw-bold">
+            <label class="form-label fw-bold" for="company_name">
                 <i class="ti ti-briefcase me-2"></i>{{ trans('Company name in responsibility documents') }}
             </label>
             <div class="input-group">
                 <span class="input-group-text"><i class="ti ti-building" aria-hidden="true"></i></span>
-                <input type="text" name="company_name" class="form-control"
+                <input type="text" id="company_name" name="company_name" class="form-control"
                        value="{{ config.company_name ?? '' }}" required>
             </div>
             <div class="form-text">{{ trans('This name will appear in the responsibility document text.') }}</div>
@@ -88,12 +88,12 @@
 
         {# Currency #}
         <div class="mb-3">
-            <label class="form-label fw-bold">
+            <label class="form-label fw-bold" for="currency">
                 <i class="ti ti-currency-dollar me-1"></i>{{ trans('Currency symbol') }}
             </label>
             <div class="input-group" style="max-width:200px;">
                 <span class="input-group-text"><i class="ti ti-coin" aria-hidden="true"></i></span>
-                <input type="text" name="currency" class="form-control" maxlength="10"
+                <input type="text" id="currency" name="currency" class="form-control" maxlength="10"
                        placeholder="$" value="{{ config.currency ?? '$' }}">
             </div>
             <div class="form-text">{{ trans('Symbol or code that appears before the price in phone loan agreements (e.g.: $, USD, MXN, €).') }}</div>
@@ -101,17 +101,17 @@
 
         {# Witnesses #}
         <div class="mb-2">
-            <label class="form-label fw-bold">
+            <div class="form-label fw-bold">
                 <i class="ti ti-users me-1"></i>{{ trans('Witnesses for phone loan agreements') }}
-            </label>
+            </div>
             <div class="form-text mb-3">{{ trans('Select two witnesses for the phone loan agreement.') }}</div>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label"><i class="ti ti-user me-1"></i>{{ trans('Witness 1') }}</label>
+                    <div class="form-label"><i class="ti ti-user me-1"></i>{{ trans('Witness 1') }}</div>
                     {{ widget_testigo1|raw }}
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label"><i class="ti ti-user me-1"></i>{{ trans('Witness 2') }}</label>
+                    <div class="form-label"><i class="ti ti-user me-1"></i>{{ trans('Witness 2') }}</div>
                     {{ widget_testigo2|raw }}
                 </div>
             </div>
@@ -119,12 +119,12 @@
 
         {# Legal representative #}
         <div class="mb-2">
-            <label class="form-label fw-bold">
+            <div class="form-label fw-bold">
                 <i class="ti ti-user-shield me-1"></i>{{ trans('Legal representative for phone loan agreements') }}
-            </label>
+            </div>
             <div class="form-text mb-3">{{ trans('Select the legal representative for the phone loan agreement.') }}</div>
             <div class="mb-3">
-                <label class="form-label"><i class="ti ti-user me-1"></i>{{ trans('Legal representative') }}</label>
+                <div class="form-label"><i class="ti ti-user me-1"></i>{{ trans('Legal representative') }}</div>
                 {{ widget_representante|raw }}
             </div>
         </div>
@@ -152,10 +152,10 @@
                 {% if has_logo %}
                     <div class="mb-4">
                         <div class="form-text mb-1">{{ trans('Click the image to download a backup copy.') }}</div>
-                        <label class="form-label fw-bold d-flex align-items-center">
+                        <div class="form-label fw-bold d-flex align-items-center">
                             <i class="ti ti-photo-check me-2" aria-hidden="true"></i>
                             <span>{{ trans('Current logo') }}</span>
-                        </label>
+                        </div>
                         <a href="{{ logo_url }}" download="logo.png" title="{{ trans('Download logo') }}">
                             <img src="{{ logo_url_cached }}" class="img-fluid"
                                  style="max-height:80px;padding:8px;border-radius:6px;border:1px solid var(--tblr-border-color);cursor:pointer">
@@ -174,10 +174,10 @@
             </div>
             <div class="col-md-6">
                 <div class="mb-4">
-                    <label class="form-label fw-bold d-flex align-items-center">
+                    <div class="form-label fw-bold d-flex align-items-center">
                         <i class="ti ti-eye me-2" aria-hidden="true"></i>
                         <span>{{ trans('Preview') }}</span>
-                    </label>
+                    </div>
                     <img id="logo-preview" class="img-fluid d-none"
                          style="max-height:80px;padding:8px;border-radius:6px;border:1px dashed var(--tblr-border-color)">
                     <div id="preview-size" class="form-text d-none mt-1"></div>
@@ -187,7 +187,7 @@
         </div>
 
         <div class="mb-4">
-            <label class="form-label fw-bold d-flex align-items-center">
+            <label class="form-label fw-bold d-flex align-items-center" for="responsivas_logo_input">
                 <i class="ti ti-upload me-2" aria-hidden="true"></i>
                 <span>{{ trans('Upload new logo') }}</span>
             </label>
