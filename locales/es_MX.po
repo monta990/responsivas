@@ -289,6 +289,9 @@ msgstr "El archivo excede el tamaño máximo permitido (500 KB)."
 msgid "Error processing JPG image"
 msgstr "Error al procesar imagen JPG"
 
+msgid "Error processing PNG image"
+msgstr "Error al procesar imagen PNG"
+
 msgid "Email options"
 msgstr "Opciones del correo electrónico"
 

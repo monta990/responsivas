@@ -144,37 +144,35 @@ if (isset($_POST['update'])) {
             if (!is_dir(PluginResponsivasPaths::filesDir())) {
                 mkdir(PluginResponsivasPaths::filesDir(), 0755, true);
             }
+            $imageWritten = false;
             if ($mime === 'image/jpeg') {
                 $img = @imagecreatefromjpeg($tmpFile);
                 if ($img !== false) {
                     imagepng($img, $logoPath);
                     unset($img);
+                    $imageWritten = true;
                 } else {
                     Session::addMessageAfterRedirect(
                         __('Error processing JPG image', 'responsivas'), false, ERROR
                     );
                 }
             } else {
-                $image_info = @getimagesize($_FILES['logo']['tmp_name']);
-                if ($image_info === false) {
+                if (@getimagesize($tmpFile) !== false) {
+                    move_uploaded_file($tmpFile, $logoPath);
+                    $imageWritten = true;
+                } else {
                     Session::addMessageAfterRedirect(
-                        __('The uploaded file is not a valid image.', 'responsivas'), true, ERROR
+                        __('Error processing PNG image', 'responsivas'), false, ERROR
                     );
-                    return false;
                 }
-                if (!in_array($image_info['mime'], $allowedMime, true)) {
-                    Session::addMessageAfterRedirect(
-                        __('Unsupported image format.', 'responsivas'), true, ERROR
-                    );
-                    return false;
-                }
-                move_uploaded_file($tmpFile, $logoPath);
             }
-            chmod($logoPath, 0644);
-            Session::addMessageAfterRedirect(
-                __('Logo updated successfully.', 'responsivas'), false, INFO
-            );
-            $logo_uploaded = true;
+            if ($imageWritten) {
+                chmod($logoPath, 0644);
+                Session::addMessageAfterRedirect(
+                    __('Logo updated successfully.', 'responsivas'), false, INFO
+                );
+                $logo_uploaded = true;
+            }
         }
     }
 

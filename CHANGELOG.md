@@ -6,10 +6,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.8] — 2026-05-23
+
+### Fixed
+- **Logo upload — JPEG failure falls through to success** — When `imagecreatefromjpeg()` failed, execution continued past the error block into `chmod()`, "Logo updated successfully." message, and `$logo_uploaded = true`. Introduced `$imageWritten` flag so success path only runs when file was actually written.
+- **Logo upload — redundant mime re-validation removed** — Non-JPEG branch re-checked MIME via `getimagesize()` after `finfo` already validated it, and used `return false` (skipping `Html::redirect`) on failure. Removed dead double-check; `move_uploaded_file` now runs directly since MIME is already confirmed valid.
+
+---
+
 ## [1.4.7] — 2026-05-22
 
 ### Fixed
-- **Accessibility — `<label>` without associated control** — 55 browser console warnings eliminated. Labels for actual form fields (`timezone`, `watermark_text`, `watermark_opacity`, `company_name`, `currency`, `email_subject`, `email_body`, `email_footer`, font-size inputs in PC/Printer/Phone tabs, template editors, and footer fields) now carry matching `for` / `id` pairs. Section headings and labels adjacent to raw GLPI widgets or read-only display inputs (font display, logo preview, witness/representative dropdowns) converted to `<div class="form-label">` since they have no controllable input target. Affects config page and user tab.
+- **Accessibility — `<label>` without associated control** — Labels for actual form fields (`timezone`, `watermark_text`, `watermark_opacity`, `company_name`, `currency`, `email_subject`, `email_body`, `email_footer`, font-size inputs in PC/Printer/Phone tabs, template editors, and footer fields) now carry matching `for` / `id` pairs. Section headings and labels adjacent to raw GLPI widgets or read-only display inputs (font display, logo preview, witness/representative dropdowns) converted to `<div class="form-label">` since they have no controllable input target. Affects config page and user tab.
 
 ---
 
