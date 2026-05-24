@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.4.7\n"
+"Project-Id-Version: Responsivas 1.4.8\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
@@ -264,6 +264,9 @@ msgid "The file exceeds the maximum allowed size (500 KB)."
 msgstr ""
 
 msgid "Error processing JPG image"
+msgstr ""
+
+msgid "Error processing PNG image"
 msgstr ""
 
 msgid "Email options"

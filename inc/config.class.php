@@ -157,8 +157,14 @@ if (isset($_POST['update'])) {
                     );
                 }
             } else {
-                move_uploaded_file($tmpFile, $logoPath);
-                $imageWritten = true;
+                if (@getimagesize($tmpFile) !== false) {
+                    move_uploaded_file($tmpFile, $logoPath);
+                    $imageWritten = true;
+                } else {
+                    Session::addMessageAfterRedirect(
+                        __('Error processing PNG image', 'responsivas'), false, ERROR
+                    );
+                }
             }
             if ($imageWritten) {
                 chmod($logoPath, 0644);
