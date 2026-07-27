@@ -803,3 +803,7 @@ msgstr ""
 
 msgid "Error generating the preview. Check the GLPI error log for details."
 msgstr ""
+
+#: templates/config/tab_general.html.twig
+msgid "Releases"
+msgstr ""

@@ -7,7 +7,6 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ---
 
 ## [1.4.9] — 2026-07-27
-
 ### Added
 - **GitHub version status in General settings** — Added installed/latest version badges, a permanent button to open the GitHub releases page, and clear status messages for update available, up to date, or GitHub check unavailable. The release check remains cached for 6 hours.
 - **Localization for version checker UI** — Added translations for all new version-status labels/messages and compiled `.mo` catalogs for every bundled locale.

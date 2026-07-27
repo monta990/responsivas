@@ -1,40 +1,35 @@
 {# ── Plugin version / GitHub releases ───────────────────── #}
 <div class="card mt-2 rounded-0">
     {% include 'partials/ribbon_header.html.twig' with {icon: 'ti-brand-github', title: trans('Plugin version')} %}
-    <div class="card-body">
-        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-            <span class="text-muted">{{ trans('Installed version') }}</span>
+    <div class="card-body py-2">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <span class="text-muted small">{{ trans('Installed version') }}</span>
             <span class="badge bg-blue-lt text-blue">v{{ currentPluginVersion }}</span>
-            <span class="text-muted ms-md-2">{{ trans('Latest version on GitHub') }}</span>
+
+            <span class="text-muted small ms-md-2">{{ trans('Latest version on GitHub') }}</span>
             {% if latestReleaseVersion %}
                 <span class="badge {{ updateAvailable ? 'bg-yellow-lt text-yellow' : 'bg-green-lt text-green' }}">v{{ latestReleaseVersion }}</span>
             {% else %}
                 <span class="badge bg-secondary-lt">{{ trans('Not available') }}</span>
             {% endif %}
+
+            <a class="btn btn-sm btn-outline-primary ms-md-auto d-inline-flex align-items-center gap-1"
+               href="https://github.com/monta990/responsivas/releases" target="_blank" rel="noopener noreferrer">
+                <i class="ti ti-external-link"></i>{{ trans('Releases') }}
+            </a>
         </div>
 
         {% if updateAvailable %}
-            <div class="alert alert-warning d-flex align-items-center mb-3">
+            <div class="alert alert-warning py-2 px-3 mt-2 mb-0 d-flex align-items-center">
                 <i class="ti ti-alert-triangle me-2"></i>
                 <div>{{ trans('A new version is available on GitHub: %s')|format(latestReleaseVersion) }}</div>
             </div>
-        {% elseif latestReleaseVersion %}
-            <div class="alert alert-success d-flex align-items-center mb-3">
-                <i class="ti ti-circle-check me-2"></i>
-                <div>{{ trans('You are using the latest available version.') }}</div>
-            </div>
-        {% else %}
-            <div class="alert alert-secondary d-flex align-items-center mb-3">
-                <i class="ti ti-cloud-off me-2"></i>
-                <div>{{ trans('Could not check the latest version on GitHub.') }}</div>
+        {% elseif not latestReleaseVersion %}
+            <div class="text-muted small mt-2 d-flex align-items-center">
+                <i class="ti ti-cloud-off me-1"></i>
+                <span>{{ trans('Could not check the latest version on GitHub.') }}</span>
             </div>
         {% endif %}
-
-        <a class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
-           href="https://github.com/monta990/responsivas/releases" target="_blank" rel="noopener noreferrer">
-            <i class="ti ti-external-link"></i>{{ trans('Open releases page') }}
-        </a>
-        <div class="form-text mt-2">{{ trans('The latest release is checked automatically and cached for 6 hours.') }}</div>
     </div>
 </div>
 

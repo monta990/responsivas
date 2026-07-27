@@ -878,3 +878,7 @@ msgstr "La última versión se comprueba automáticamente y se almacena en cach�
 
 msgid "Error generating the preview. Check the GLPI error log for details."
 msgstr "Error al generar la vista previa. Revisa el registro de errores de GLPI para obtener más detalles."
+
+#: templates/config/tab_general.html.twig
+msgid "Releases"
+msgstr "Versiones"

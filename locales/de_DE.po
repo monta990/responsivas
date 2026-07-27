@@ -885,3 +885,7 @@ msgstr "Die neueste Version wird automatisch geprüft und 6 Stunden zwischengesp
 
 msgid "Error generating the preview. Check the GLPI error log for details."
 msgstr "Fehler beim Erstellen der Vorschau. Weitere Details finden Sie im GLPI-Fehlerprotokoll."
+
+#: templates/config/tab_general.html.twig
+msgid "Releases"
+msgstr "Versionen"
