@@ -18,7 +18,6 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Hardened the GitHub release checker with HTTP status validation, response-size limits, stable-release/version validation, stale-cache fallback, atomic cache writes, and cache storage under the GLPI plugin files directory.
 - Uploaded PNG and JPEG logos are now decoded and re-encoded before persistence instead of storing uploaded PNG bytes directly.
 - Restricted the logo resource endpoint to configuration administrators and changed preview failures to log technical details instead of displaying exception messages.
-- Added a standalone template-security regression test and GitHub Actions quality checks for PHP syntax, template safety, version consistency, Twig translation usage, and compiled locale catalogs.
 
 ### Fixed
 - **Phone PDF — useful-life clause without invoice ignored text styles** — The configurable `pho_vida_util_sin` template was inserted directly into `{clausula_vida_util}` without passing through `responsivasApplyTemplate()`. As a result, formatting markers such as `**bold**`, `*italic*`, and `__underline__` were introduced only after the outer phone template had already processed its formatting and therefore appeared unstyled in the generated PDF. The no-invoice useful-life clause now uses the same template-processing path as the with-invoice clause, including variable replacement and inline formatting conversion.
