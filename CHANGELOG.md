@@ -6,6 +6,25 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.9] — 2026-07-27
+
+### Added
+- **GitHub version status in General settings** — Added installed/latest version badges, a permanent button to open the GitHub releases page, and clear status messages for update available, up to date, or GitHub check unavailable. The release check remains cached for 6 hours.
+- **Localization for version checker UI** — Added translations for all new version-status labels/messages and compiled `.mo` catalogs for every bundled locale.
+
+### Security / Hardening
+- Enforced per-object visibility and entity access checks for computers, printers, phones, monitors, and peripherals before including them in generated documents; the same builder is used by downloads and email attachments.
+- Centralized safe template rendering: configurable template text is normalized, stripped of arbitrary HTML, escaped, and only the supported bold/italic/underline markup is reintroduced. Legacy formatting tags remain compatible.
+- Hardened the GitHub release checker with HTTP status validation, response-size limits, stable-release/version validation, stale-cache fallback, atomic cache writes, and cache storage under the GLPI plugin files directory.
+- Uploaded PNG and JPEG logos are now decoded and re-encoded before persistence instead of storing uploaded PNG bytes directly.
+- Restricted the logo resource endpoint to configuration administrators and changed preview failures to log technical details instead of displaying exception messages.
+- Added a standalone template-security regression test and GitHub Actions quality checks for PHP syntax, template safety, version consistency, Twig translation usage, and compiled locale catalogs.
+
+### Fixed
+- **Phone PDF — useful-life clause without invoice ignored text styles** — The configurable `pho_vida_util_sin` template was inserted directly into `{clausula_vida_util}` without passing through `responsivasApplyTemplate()`. As a result, formatting markers such as `**bold**`, `*italic*`, and `__underline__` were introduced only after the outer phone template had already processed its formatting and therefore appeared unstyled in the generated PDF. The no-invoice useful-life clause now uses the same template-processing path as the with-invoice clause, including variable replacement and inline formatting conversion.
+
+---
+
 ## [1.4.8] — 2026-05-23
 
 ### Fixed

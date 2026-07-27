@@ -859,3 +859,33 @@ msgstr "Il telefono \"%s\" non ha una linea assegnata. Assegnare una linea nel r
 
 msgid "The uploaded file is not a valid image."
 msgstr "Il file caricato non è un'immagine valida."
+msgid "A new version is available on GitHub: %s"
+msgstr "Una nuova versione è disponibile su GitHub: %s"
+
+msgid "Open releases page"
+msgstr "Apri la pagina delle release"
+
+msgid "Plugin version"
+msgstr "Versione del plugin"
+
+msgid "Installed version"
+msgstr "Versione installata"
+
+msgid "Latest version on GitHub"
+msgstr "Ultima versione su GitHub"
+
+msgid "Not available"
+msgstr "Non disponibile"
+
+msgid "You are using the latest available version."
+msgstr "Stai utilizzando l’ultima versione disponibile."
+
+msgid "Could not check the latest version on GitHub."
+msgstr "Impossibile verificare l’ultima versione su GitHub."
+
+msgid "The latest release is checked automatically and cached for 6 hours."
+msgstr "L’ultima versione viene verificata automaticamente e memorizzata nella cache per 6 ore."
+
+
+msgid "Error generating the preview. Check the GLPI error log for details."
+msgstr "Errore durante la generazione dell’anteprima. Controlla il registro errori di GLPI per maggiori dettagli."

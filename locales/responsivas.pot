@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsivas 1.4.8\n"
+"Project-Id-Version: Responsivas 1.4.9\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
@@ -773,4 +773,33 @@ msgid "Uses the legal representative configured in General settings."
 msgstr ""
 
 msgid "The uploaded file is not a valid image."
+msgstr ""
+msgid "A new version is available on GitHub: %s"
+msgstr ""
+msgid "Open releases page"
+msgstr ""
+
+msgid "Plugin version"
+msgstr ""
+
+msgid "Installed version"
+msgstr ""
+
+msgid "Latest version on GitHub"
+msgstr ""
+
+msgid "Not available"
+msgstr ""
+
+msgid "You are using the latest available version."
+msgstr ""
+
+msgid "Could not check the latest version on GitHub."
+msgstr ""
+
+msgid "The latest release is checked automatically and cached for 6 hours."
+msgstr ""
+
+
+msgid "Error generating the preview. Check the GLPI error log for details."
 msgstr ""

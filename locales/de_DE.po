@@ -855,3 +855,33 @@ msgstr "Das Telefon \"%s\" hat keine zugewiesene Leitung. Weisen Sie im Telefonf
 
 msgid "The uploaded file is not a valid image."
 msgstr "Die hochgeladene Datei ist kein gültiges Bild."
+msgid "A new version is available on GitHub: %s"
+msgstr "Eine neue Version ist auf GitHub verfügbar: %s"
+
+msgid "Open releases page"
+msgstr "Release-Seite öffnen"
+
+msgid "Plugin version"
+msgstr "Plugin-Version"
+
+msgid "Installed version"
+msgstr "Installierte Version"
+
+msgid "Latest version on GitHub"
+msgstr "Neueste Version auf GitHub"
+
+msgid "Not available"
+msgstr "Nicht verfügbar"
+
+msgid "You are using the latest available version."
+msgstr "Sie verwenden die neueste verfügbare Version."
+
+msgid "Could not check the latest version on GitHub."
+msgstr "Die neueste Version auf GitHub konnte nicht geprüft werden."
+
+msgid "The latest release is checked automatically and cached for 6 hours."
+msgstr "Die neueste Version wird automatisch geprüft und 6 Stunden zwischengespeichert."
+
+
+msgid "Error generating the preview. Check the GLPI error log for details."
+msgstr "Fehler beim Erstellen der Vorschau. Weitere Details finden Sie im GLPI-Fehlerprotokoll."

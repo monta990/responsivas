@@ -848,3 +848,33 @@ msgstr "El teléfono \"%s\" no tiene línea asignada. Asigne una línea en el re
 
 msgid "The uploaded file is not a valid image."
 msgstr "El archivo cargado no es una imagen válida."
+msgid "A new version is available on GitHub: %s"
+msgstr "Hay una nueva versión disponible en GitHub: %s"
+
+msgid "Open releases page"
+msgstr "Abrir página de versiones"
+
+msgid "Plugin version"
+msgstr "Versión del plugin"
+
+msgid "Installed version"
+msgstr "Versión instalada"
+
+msgid "Latest version on GitHub"
+msgstr "Última versión en GitHub"
+
+msgid "Not available"
+msgstr "No disponible"
+
+msgid "You are using the latest available version."
+msgstr "Estás usando la última versión disponible."
+
+msgid "Could not check the latest version on GitHub."
+msgstr "No se pudo comprobar la última versión en GitHub."
+
+msgid "The latest release is checked automatically and cached for 6 hours."
+msgstr "La última versión se comprueba automáticamente y se almacena en caché durante 6 horas."
+
+
+msgid "Error generating the preview. Check the GLPI error log for details."
+msgstr "Error al generar la vista previa. Revisa el registro de errores de GLPI para obtener más detalles."

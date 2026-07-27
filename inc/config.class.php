@@ -12,6 +12,83 @@ Session::checkRight('config', UPDATE);
 $self   = PluginResponsivasPaths::webDir() . '/front/config.form.php';
 $config = Config::getConfigurationValues('plugin_responsivas');
 
+
+function plugin_responsivas_get_latest_release_version(): ?string {
+    $cacheDir = PluginResponsivasPaths::filesDir();
+    $cache    = $cacheDir . '/release_cache.json';
+    $ttl      = 21600;
+    $staleVersion = null;
+
+    if (is_file($cache) && is_readable($cache)) {
+        $cached = json_decode((string) @file_get_contents($cache), true);
+        if (is_array($cached) && !empty($cached['version'])) {
+            $candidate = (string) $cached['version'];
+            if (preg_match('/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/', $candidate)) {
+                $staleVersion = $candidate;
+                if (!empty($cached['checked_at']) && (time() - (int) $cached['checked_at']) < $ttl) {
+                    return $candidate;
+                }
+            }
+        }
+    }
+
+    $url = 'https://api.github.com/repos/monta990/responsivas/releases/latest';
+    $context = stream_context_create([
+        'http' => [
+            'method'        => 'GET',
+            'header'        => "User-Agent: GLPI-Responsivas/1.4.9\r\nAccept: application/vnd.github+json\r\nX-GitHub-Api-Version: 2022-11-28\r\n",
+            'timeout'       => 4,
+            'ignore_errors' => true,
+        ],
+    ]);
+
+    // Limitar la respuesta a 64 KiB: el endpoint latest no necesita más.
+    $json = @file_get_contents($url, false, $context, 0, 65536);
+    $status = 0;
+    foreach (($http_response_header ?? []) as $header) {
+        if (preg_match('#^HTTP/\S+\s+(\d{3})#i', $header, $m)) {
+            $status = (int) $m[1];
+        }
+    }
+    if ($json === false || $status !== 200) {
+        return $staleVersion;
+    }
+
+    $data = json_decode($json, true);
+    if (!is_array($data)
+        || empty($data['tag_name'])
+        || !empty($data['draft'])
+        || !empty($data['prerelease'])) {
+        return $staleVersion;
+    }
+
+    $version = preg_replace('/^[vV]/', '', trim((string) $data['tag_name']));
+    if (!is_string($version) || !preg_match('/^\d+\.\d+\.\d+$/', $version)) {
+        return $staleVersion;
+    }
+
+    if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0750, true) && !is_dir($cacheDir)) {
+        return $version;
+    }
+
+    $payload = json_encode([
+        'checked_at' => time(),
+        'version'    => $version,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    if (is_string($payload)) {
+        $tmp = $cache . '.' . bin2hex(random_bytes(6)) . '.tmp';
+        if (@file_put_contents($tmp, $payload, LOCK_EX) !== false) {
+            @chmod($tmp, 0640);
+            if (!@rename($tmp, $cache)) {
+                @unlink($tmp);
+            }
+        }
+    }
+
+    return $version;
+}
+
 function dropdownUser(string $name, array $config): void {
     User::dropdown([
         'name'   => $name,
@@ -27,6 +104,9 @@ function dropdownUser(string $name, array $config): void {
 $maxSize     = 500 * 1024;
 $allowedMime = ['image/png', 'image/jpeg'];
 $logoPath    = PluginResponsivasPaths::logoPath();
+$latestReleaseVersion = plugin_responsivas_get_latest_release_version();
+$currentPluginVersion  = plugin_version_responsivas()['version'] ?? '1.4.9';
+$updateAvailable       = $latestReleaseVersion !== null && version_compare($latestReleaseVersion, $currentPluginVersion, '>');
 
 /* =====================================================
  * POST: delete logo
@@ -147,24 +227,21 @@ if (isset($_POST['update'])) {
             $imageWritten = false;
             if ($mime === 'image/jpeg') {
                 $img = @imagecreatefromjpeg($tmpFile);
-                if ($img !== false) {
-                    imagepng($img, $logoPath);
-                    unset($img);
-                    $imageWritten = true;
-                } else {
-                    Session::addMessageAfterRedirect(
-                        __('Error processing JPG image', 'responsivas'), false, ERROR
-                    );
-                }
+                $errorMessage = __('Error processing JPG image', 'responsivas');
             } else {
-                if (@getimagesize($tmpFile) !== false) {
-                    move_uploaded_file($tmpFile, $logoPath);
-                    $imageWritten = true;
-                } else {
-                    Session::addMessageAfterRedirect(
-                        __('Error processing PNG image', 'responsivas'), false, ERROR
-                    );
+                $img = @imagecreatefrompng($tmpFile);
+                $errorMessage = __('Error processing PNG image', 'responsivas');
+            }
+
+            // Re-codificar siempre la imagen: nunca persistir directamente bytes subidos.
+            if ($img !== false && @imagepng($img, $logoPath)) {
+                imagedestroy($img);
+                $imageWritten = true;
+            } else {
+                if ($img !== false) {
+                    imagedestroy($img);
                 }
+                Session::addMessageAfterRedirect($errorMessage, false, ERROR);
             }
             if ($imageWritten) {
                 chmod($logoPath, 0644);
@@ -234,6 +311,9 @@ $web              = PluginResponsivasPaths::webDir();
 echo PluginResponsivasTwig::env()->render('config/page.html.twig', [
     'self'                 => $self,
     'config'               => $config,
+    'currentPluginVersion' => $currentPluginVersion,
+    'latestReleaseVersion' => $latestReleaseVersion,
+    'updateAvailable'      => $updateAvailable,
     'has_logo'             => $hasLogo,
     'logo_url'             => PluginResponsivasPaths::logoUrl(),
     'logo_url_cached'      => PluginResponsivasPaths::logoUrl() . '&t=' . time(),

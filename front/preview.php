@@ -35,8 +35,9 @@ $admin_user->getFromDB($admin_id);
 try {
    $result = PluginResponsivasPdfBuilder::buildPreview($type, $admin_id, $config);
 } catch (Throwable $e) {
+   Toolbox::logError('[responsivas] preview error: ' . $e->getMessage());
    Session::addMessageAfterRedirect(
-      sprintf(__('Error generating the preview: %s', 'responsivas'), $e->getMessage()),
+      __('Error generating the preview. Check the GLPI error log for details.', 'responsivas'),
       false, ERROR
    );
    Html::back();

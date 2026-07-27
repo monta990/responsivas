@@ -84,9 +84,9 @@ if (($_POST['mode'] ?? '') === 'test') {
    ];
 
    // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-   $email_subject = '[PRUEBA] ' . strip_tags(responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars));
-   $body_safe     = nl2br(responsivasApplyTemplate(htmlspecialchars($email_body_tpl,    ENT_QUOTES, 'UTF-8'), $vars));
-   $footer_raw    = responsivasApplyTemplate(htmlspecialchars($email_footer_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+   $email_subject = '[PRUEBA] ' . strip_tags(responsivasApplyTemplate($email_subject_tpl, $vars));
+   $body_safe     = nl2br(responsivasApplyTemplate($email_body_tpl, $vars));
+   $footer_raw    = responsivasApplyTemplate($email_footer_tpl, $vars);
    $footer_safe   = !empty(trim($email_footer_tpl))
       ? '<hr style="margin-top:24px;border:none;border-top:1px solid #ddd;">'
         . '<p style="color:#888;font-size:11px;">' . nl2br($footer_raw) . '</p>'
@@ -220,7 +220,7 @@ $vars = [
 ];
 
 // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-$email_subject = strip_tags(responsivasApplyTemplate(htmlspecialchars($email_subject_tpl, ENT_QUOTES, 'UTF-8'), $vars));
+$email_subject = strip_tags(responsivasApplyTemplate($email_subject_tpl, $vars));
 
 /* ============================
  * Generar PDFs
@@ -255,8 +255,8 @@ if (empty($pdfs)) {
  * Construir cuerpo HTML del correo
  * ============================ */
 // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-$body_safe   = nl2br(responsivasApplyTemplate(htmlspecialchars($email_body_tpl,    ENT_QUOTES, 'UTF-8'), $vars));
-$footer_raw  = responsivasApplyTemplate(htmlspecialchars($email_footer_tpl, ENT_QUOTES, 'UTF-8'), $vars);
+$body_safe   = nl2br(responsivasApplyTemplate($email_body_tpl, $vars));
+$footer_raw  = responsivasApplyTemplate($email_footer_tpl, $vars);
 $footer_safe = !empty(trim($email_footer_tpl))
    ? '<hr style="margin-top:24px;border:none;border-top:1px solid #ddd;">'
      . '<p style="color:#888;font-size:11px;">' . nl2br($footer_raw) . '</p>'

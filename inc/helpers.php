@@ -168,8 +168,18 @@ function responsivasRenderTemplate(string $escaped_text): string
  * ============================ */
 function responsivasApplyTemplate(string $template, array $vars): string
 {
-   // Normalizar \n literal
+   // Fuente única de sanitización: el texto configurable siempre se trata como texto,
+   // nunca como HTML confiable. Las variables deben llegar ya escapadas.
    $template = str_replace('\\n', "\n", $template);
+   // Compatibilidad con plantillas antiguas que pudieron guardar HTML de formato.
+   $template = preg_replace('/<strong>(.*?)<\/strong>/is', '**$1**', $template);
+   $template = preg_replace('/<em>(.*?)<\/em>/is', '*$1*', $template);
+   $template = preg_replace('/<u>(.*?)<\/u>/is', '__$1__', $template);
+   $template = preg_replace('/<span\s+style=["\']font-weight\s*:\s*bold["\']>(.*?)<\/span>/is', '**$1**', $template);
+   $template = preg_replace('/<span\s+style=["\']font-style\s*:\s*italic["\']>(.*?)<\/span>/is', '*$1*', $template);
+   $template = preg_replace('/<span\s+style=["\']text-decoration\s*:\s*underline["\']>(.*?)<\/span>/is', '__$1__', $template);
+   $template = strip_tags($template);
+   $template = cleanerEscape($template);
    // **texto** → <strong>texto</strong>  (antes de sustituir variables)
    // Orden: ** primero para que * no capture dentro de **texto**
    // Inline styles: mejor compatibilidad con clientes de correo (Outlook, etc.)

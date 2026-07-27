@@ -32,6 +32,38 @@ class PluginResponsivasPdfBuilder
    }
 
    /* =====================================================
+    * HELPER: autorización de objetos y entidades
+    * Centraliza la comprobación para descarga, preview y correo.
+    * ===================================================== */
+   private static function loadViewableItem(CommonDBTM $item, int $id): ?CommonDBTM
+   {
+      if ($id <= 0 || !$item->getFromDB($id) || !$item->canView()) {
+         return null;
+      }
+
+      if (array_key_exists('entities_id', $item->fields)
+          && !Session::haveAccessToEntity((int) $item->fields['entities_id'])) {
+         return null;
+      }
+
+      return $item;
+   }
+
+   private static function filterViewableRows(string $itemClass, array $rows): array
+   {
+      $allowed = [];
+      foreach ($rows as $row) {
+         $id = (int) ($row['id'] ?? 0);
+         /** @var CommonDBTM $item */
+         $item = new $itemClass();
+         if (self::loadViewableItem($item, $id) !== null) {
+            $allowed[] = $item->fields;
+         }
+      }
+      return $allowed;
+   }
+
+   /* =====================================================
     * HELPER: user creator
     * ===================================================== */
    private static function getCreator(): string
@@ -162,15 +194,16 @@ HTML;
       self::validateTemplates('pc', $config);
 
       $user = new User();
-      if (!$user->getFromDB($user_id)) {
+      if (!$user->getFromDB($user_id) || !$user->canView()) {
          throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
       $computers = [];
       foreach ((new Computer())->find(['users_id' => $user_id, 'is_deleted' => 0]) as $row) {
-         $comp         = new Computer();
-         $comp->fields = $row;
-         $computers[]  = $comp;
+         $comp = new Computer();
+         if (self::loadViewableItem($comp, (int) ($row['id'] ?? 0)) !== null) {
+            $computers[] = $comp;
+         }
       }
       if (empty($computers)) {
          throw new RuntimeException(__('The user has no assigned equipment.', 'responsivas'));
@@ -276,12 +309,15 @@ HTML;
          $printed_header_devs  = false;
 
          $result = $DB->request([
-            'SELECT'     => ['glpi_monitors.serial', 'glpi_monitors.otherserial', 'glpi_monitors.states_id', 'glpi_monitors.manufacturers_id', 'glpi_monitors.monitormodels_id'],
+            'SELECT'     => ['glpi_monitors.id', 'glpi_monitors.serial', 'glpi_monitors.otherserial', 'glpi_monitors.states_id', 'glpi_monitors.manufacturers_id', 'glpi_monitors.monitormodels_id'],
             'FROM'       => 'glpi_assets_assets_peripheralassets',
             'INNER JOIN' => ['glpi_monitors' => ['ON' => ['glpi_assets_assets_peripheralassets' => 'items_id_peripheral', 'glpi_monitors' => 'id']]],
             'WHERE'      => ['glpi_assets_assets_peripheralassets.itemtype_asset' => 'Computer', 'glpi_assets_assets_peripheralassets.items_id_asset' => $comp->getID(), 'glpi_assets_assets_peripheralassets.itemtype_peripheral' => 'Monitor', 'glpi_assets_assets_peripheralassets.is_deleted' => 0, 'glpi_monitors.users_id' => $user_id],
          ]);
          foreach ($result as $row) {
+            if (self::loadViewableItem(new Monitor(), (int) ($row['id'] ?? 0)) === null) {
+               continue;
+            }
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
             $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
 <td width='20%'>Monitor</td>
@@ -293,7 +329,7 @@ HTML;
          }
 
          $result = $DB->request([
-            'SELECT'     => ['glpi_peripherals.name', 'glpi_peripherals.serial', 'glpi_peripherals.otherserial', 'glpi_peripherals.states_id', 'glpi_peripherals.manufacturers_id', 'glpi_peripheraltypes.name AS tipo', 'glpi_peripheralmodels.name AS modelo'],
+            'SELECT'     => ['glpi_peripherals.id', 'glpi_peripherals.name', 'glpi_peripherals.serial', 'glpi_peripherals.otherserial', 'glpi_peripherals.states_id', 'glpi_peripherals.manufacturers_id', 'glpi_peripheraltypes.name AS tipo', 'glpi_peripheralmodels.name AS modelo'],
             'FROM'       => 'glpi_assets_assets_peripheralassets',
             'INNER JOIN' => [
                'glpi_peripherals'     => ['ON' => ['glpi_assets_assets_peripheralassets' => 'items_id_peripheral', 'glpi_peripherals' => 'id']],
@@ -303,6 +339,9 @@ HTML;
             'WHERE'      => ['glpi_assets_assets_peripheralassets.itemtype_asset' => 'Computer', 'glpi_assets_assets_peripheralassets.items_id_asset' => $comp->getID(), 'glpi_assets_assets_peripheralassets.itemtype_peripheral' => 'Peripheral', 'glpi_assets_assets_peripheralassets.is_deleted' => 0, 'glpi_peripherals.users_id' => $user_id],
          ]);
          foreach ($result as $row) {
+            if (self::loadViewableItem(new Peripheral(), (int) ($row['id'] ?? 0)) === null) {
+               continue;
+            }
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
             $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
 <td width='20%'>" . cleanerEscape($row['tipo'] ?? 'N/A') . "</td>
@@ -361,11 +400,11 @@ HTML;
       self::validateTemplates('pri', $config);
 
       $user = new User();
-      if (!$user->getFromDB($user_id)) {
+      if (!$user->getFromDB($user_id) || !$user->canView()) {
          throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
-      $printers = (new Printer())->find(['users_id' => $user_id, 'is_deleted' => 0]);
+      $printers = self::filterViewableRows(Printer::class, (new Printer())->find(['users_id' => $user_id, 'is_deleted' => 0]));
       if (empty($printers)) {
          throw new RuntimeException(__('The user has no assigned equipment.', 'responsivas'));
       }
@@ -474,7 +513,7 @@ HTML;
       self::validateTemplates('pho', $config);
 
       $user = new User();
-      if (!$user->getFromDB($user_id)) {
+      if (!$user->getFromDB($user_id) || !$user->canView()) {
          throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
@@ -483,11 +522,11 @@ HTML;
          throw new RuntimeException(__('The phone type for loan agreements is not configured in the plugin.', 'responsivas'));
       }
 
-      $phones = (new Phone())->find([
+      $phones = self::filterViewableRows(Phone::class, (new Phone())->find([
          'users_id'      => $user_id,
          'is_deleted'    => 0,
          'phonetypes_id' => $cellphone_type_id,
-      ]);
+      ]));
       if (empty($phones)) {
          throw new RuntimeException(__('The user has no phones of the configured type assigned.', 'responsivas'));
       }
@@ -687,7 +726,7 @@ HTML;
          } else {
             $vu_tpl = trim($config['pho_vida_util_sin'] ?? '');
             $clausula_vida_util_text = $vu_tpl !== ''
-               ? $vu_tpl
+               ? responsivasApplyTemplate($vu_tpl, $vu_vars)
                : 'Se establece como <strong>vida útil</strong> un periodo de 24 meses desde la fecha de asignación.';
          }
 
@@ -919,7 +958,7 @@ HTML;
 
       // No validar plantillas aquí — si están vacías usamos demo igual
       $user = new User();
-      if (!$user->getFromDB($user_id)) {
+      if (!$user->getFromDB($user_id) || !$user->canView()) {
          throw new RuntimeException(__('User not found.', 'responsivas'));
       }
 
@@ -928,8 +967,8 @@ HTML;
       // antes de llamar a buildXxxPdf (que lanza excepción si no hay activos
       // pero también si la plantilla está vacía o faltan datos de entidad)
       $has_assets = match ($type) {
-         'pc'  => count((new Computer())->find(['users_id' => $user_id, 'is_deleted' => 0])) > 0,
-         'pri' => count((new Printer())->find(['users_id'  => $user_id, 'is_deleted' => 0])) > 0,
+         'pc'  => !empty(self::filterViewableRows(Computer::class, (new Computer())->find(['users_id' => $user_id, 'is_deleted' => 0]))),
+         'pri' => !empty(self::filterViewableRows(Printer::class, (new Printer())->find(['users_id' => $user_id, 'is_deleted' => 0]))),
          'pho' => self::userHasPhones($user_id, $config),
       };
 
@@ -967,15 +1006,16 @@ HTML;
    /** Verifica si el usuario tiene teléfonos del tipo configurado */
    private static function userHasPhones(int $user_id, array $config): bool
    {
-      global $DB;
       $type_id = (int)($config['cellphone_type_id'] ?? 0);
-      if ($type_id === 0) return false;
-      $iter = $DB->request([
-         'COUNT' => 'cnt',
-         'FROM'  => 'glpi_phones',
-         'WHERE' => ['users_id' => $user_id, 'phonetypes_id' => $type_id, 'is_deleted' => 0],
+      if ($type_id === 0) {
+         return false;
+      }
+      $rows = (new Phone())->find([
+         'users_id' => $user_id,
+         'phonetypes_id' => $type_id,
+         'is_deleted' => 0,
       ]);
-      return ($iter->current()['cnt'] ?? 0) > 0;
+      return !empty(self::filterViewableRows(Phone::class, $rows));
    }
 
    /* =====================================================

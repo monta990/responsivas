@@ -9,6 +9,7 @@ require_once GLPI_ROOT . '/inc/includes.php';
 require_once dirname(__DIR__) . '/inc/paths.class.php';
 
 Session::checkLoginUser();
+Session::checkRight('config', UPDATE);
 
 $resource = $_GET['resource'] ?? '';
 
