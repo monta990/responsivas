@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-12.0%2B-blue" alt="GLPI compatibility"></a>
-  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
 </p>
@@ -17,7 +17,9 @@
 
 ## Overview
 
-**Responsibility Forms** is a GLPI plugin that automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users. Documents are sent directly to users via email as attachments.
+**Responsibility Forms (Responsivas) 1.5.0** is a GLPI plugin that automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users. Documents are sent directly to users via email as attachments.
+
+Version 1.5.0 completes the plugin's migration to the modern GLPI plugin architecture. Runtime classes use PSR-4 under `src/`, HTTP endpoints use GLPI/Symfony Controllers with route attributes, and the plugin is designed to run from the same codebase on GLPI 11.x and GLPI 12.x.
 
 ---
 
@@ -26,23 +28,28 @@
 - 📄 **Automatic PDF generation** for computers, printers, and mobile phones
 - 📧 **Email delivery** — sends all PDFs as attachments to the assigned user's email
 - 🖊️ **Fully customizable templates** — title, introduction, body/clauses, witnesses, footer, per asset type
-- 🖼️ **Institutional logo** — In the header of each generated PDF, only JPG or PNG.
-- 🎨 **Text formatting** — `**bold**`, `*italic*`, `__underline__` in all template and email fields, combinable and nestable
-- ✏️ **Format toolbar (B / I / U)** — toggle buttons above every text field with smart selection wrapping
+- 🖼️ **Institutional logo** — JPG or PNG in the header of each generated PDF
+- 🎨 **Text formatting** — `**bold**`, `*italic*`, `__underline__` in template and email fields
+- ✏️ **Format toolbar (B / I / U)** — toggle buttons above editable text fields with smart selection wrapping
 - 🔤 **Clickable variable tags** — click any `{variable}` in the hints panel to insert it at the cursor
 - 🔢 **QR codes** on every document linking directly to the asset in GLPI
 - 👷 **Legal witnesses and representative** — configurable GLPI users
-- 📱 **Phone loan contracts** with full legal clause set
+- 📱 **Phone loan contracts** with the configured legal clause set
+- 💻 **Computer responsibility documents** with a reorganized equipment table and a dedicated associated-devices section
+- 💰 **Purchase price variable** — `{precio}` is available in computer and phone templates and useful-life paragraphs
+- 📝 **Optional useful-life paragraphs** — separate computer and phone templates for assets with invoice/supplier data and without invoice/supplier data
+- 📅 **Localized purchase date** — `{fecha_compra}` uses the same long-date format as `{fecha}`, for example `18 de agosto de 2026`
+- 👁️ **PDF preview with watermark** — previews use real asset data when available and realistic demo data when no asset of that type is available
+- 📍 **Entity location validation** — preview and real generation require City and State for the active GLPI entity; Country is optional
+- 📬 **Selective email sending** — choose Computers, Printers, and/or Phones from the send confirmation dialog
+- 🔎 **GitHub version checker** — the General configuration tab shows the installed version, latest detected release, update status, and a link to GitHub Releases; checks are cached for 6 hours
+- 💾 **Configuration backup** — export/import Responsivas settings and the current logo as a validated JSON file
+- 🔐 **GLPI permission and CSRF protection** — document generation, configuration, and object access follow GLPI's permission model
+- ⚙️ **Schema-versioned configuration** — safe migrations preserve existing settings on plugin updates
+- 🔒 **PDF compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions
+- ✍️ **Optional lender/borrower dual-signature block** on computer and printer documents
+- 📄 **Page-break prevention** — signature blocks and body paragraphs use TCPDF `nobr` where required
 - 🌍 **Multi-language** — Spanish (Mexico), French, German, Italian (English is the base language)
-- 🔒 **CSRF protection** and GLPI permission model
-- ⚙️ **Schema-versioned configuration** — safe migrations on plugin updates
-- 👁️ **PDF preview with watermark** — each asset tab has a "Preview" button that generates a full watermarked PDF using current templates and real data (or realistic demo data if the admin has no assets of that type)
-- 🔐 **Compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions directly from the General configuration tab
-- 📝 **Editable useful-life clauses** — two separate templates at the bottom of the Phones tab: one for phones with an invoice/supplier (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), one for phones without. Pre-filled on install with the standard text; never overwritten on update
-- 📬 **Selective email sending** — the send confirmation modal lets you choose which document types to include (Computers, Printers, Phones). Only asset types with at least one assigned asset are shown, each with its count. All available types are pre-checked; uncheck any to exclude it.
-- ✅ **Template validation** — warns before generating if required fields are empty
-- ✍️ **Optional lender/borrower dual-signature block** on computer and printer documents — configurable toggle per document type in settings; uses the legal representative already configured in General
-- 📄 **Page-break prevention** — signature blocks and body paragraphs use TCPDF `nobr` to ensure clauses and signatures are never split across pages
 
 ---
 
@@ -71,37 +78,45 @@
 
 ## File Structure
 
-```
+## Modern GLPI architecture
+
+Responsivas 1.5.0 follows the modern GLPI plugin architecture and uses the same runtime codebase for GLPI 11.x and GLPI 12.x.
+
+- **PSR-4 classes** are under `src/` using the `GlpiPlugin\Responsivas` namespace.
+- **Symfony/GLPI Controllers** are under `src/Controller/` and use route attributes for HTTP endpoints.
+- **Twig** is used for plugin configuration and presentation templates.
+- **Services** centralize configuration, mail delivery, and GitHub release checking.
+- The legacy plugin runtime directories **`front/` and `inc/` are no longer required**.
+- PDF generation remains centralized in the PDF builder/generator layer so previews, real documents, and email attachments use the same rendering logic.
+- Existing configuration keys are preserved through the schema migration layer.
+
+### File structure
+
+```text
 responsivas/
-├── front/
-│   ├── computer.php          # Computer tab endpoint
-│   ├── config.form.php       # Plugin configuration UI
-│   ├── phone.php             # Phone tab endpoint
-│   ├── preview.php           # Watermarked PDF preview endpoint
-│   ├── printer.php           # Printer tab endpoint
-│   ├── resource.send.php     # Logo resource endpoint
-│   └── send_mail.php         # Email send endpoint
-├── inc/
-│   ├── config.class.php      # Configuration form and storage
-│   ├── generator.class.php   # PDF generation orchestrator
-│   ├── helpers.php           # Template renderer, editor, variable hints
-│   ├── paths.class.php       # Plugin path helpers
-│   ├── pdf.class.php         # TCPDF wrapper (watermark, footer)
-│   ├── pdfbuilder.class.php  # PDF factory, render methods, demo builder
-│   └── user.class.php        # User tab integration
+├── src/
+│   ├── Controller/            # GLPI/Symfony controllers and routes
+│   ├── Exception/             # Plugin-specific exceptions
+│   ├── Pdf/                   # TCPDF integration and PDF builders
+│   ├── Service/               # Configuration, mail and update services
+│   ├── Generator.php          # PDF attachment orchestration
+│   ├── Paths.php              # Plugin path/route helpers
+│   ├── Twig.php               # Twig environment
+│   ├── UserTab.php            # User tab integration
+│   └── Utils.php              # Sanitization and template utilities
 ├── locales/
-│   ├── responsivas.pot       # Translation template
-│   ├── it_IT.po / it_IT.mo  # Italian
-│   ├── es_MX.po / es_MX.mo  # Spanish (Mexico)
-│   ├── fr_FR.po / fr_FR.mo  # French
-│   └── de_DE.po / de_DE.mo  # German
+│   ├── responsivas.pot        # Translation template
+│   ├── es_MX.po / es_MX.mo    # Spanish (Mexico)
+│   ├── fr_FR.po / fr_FR.mo    # French
+│   ├── de_DE.po / de_DE.mo    # German
+│   └── it_IT.po / it_IT.mo    # Italian
 ├── CHANGELOG.md
-├── hook.php                  # Install / uninstall hooks
-├── LICENSE                   # GNU General Public License v3
-├── logo.png                  # Plugin icon (128×128)
-├── plugin.xml                # GLPI catalog metadata
+├── hook.php
+├── LICENSE
+├── logo.png
+├── plugin.xml
 ├── README.md
-└── setup.php                 # Plugin registration and schema migration
+└── setup.php
 ```
 
 ---
@@ -121,8 +136,9 @@ Navigate to **Setup → Plugins → Responsivas** (or **Administration → Plugi
 | Protect PDF | Enable/disable copy and edit restrictions on the PDF |
 | Watermark text | Diagonal text shown on preview PDFs (default: `PREVIEW`) |
 | Watermark opacity | Opacity percentage for the watermark (5–100, default: 25) |
-| Currency symbol | Used in phone loan contract price display |
+| Currency symbol | Used for purchase price display |
 | Institutional logo | In the header of each generated PDF, only JPG or PNG |
+| GitHub release status | Shows installed/latest release information and opens the GitHub Releases page; the check is cached for 6 hours |
 
 ### Witnesses tab
 | Field | Description |
@@ -140,8 +156,8 @@ Each asset type has its own set of template fields:
 | Introduction / Opening paragraph | Text before the asset table |
 | Body / Clauses | Main responsibility text or legal clauses |
 | Witnesses paragraph | *(Phone only)* Closing witness statement |
-| Useful-life clause (with invoice) | *(Phone only)* Template when phone has invoice and supplier data |
-| Useful-life clause (without invoice) | *(Phone only)* Template when phone has no invoice or supplier |
+| Useful-life paragraph (with invoice) | Template for computers and phones when invoice and supplier data are available |
+| Useful-life paragraph (without invoice) | Template for computers and phones when invoice or supplier data are unavailable |
 | Footer fields | Left/right text on PDF page footer |
 | Font size | PDF body font size |
 | Show lender/borrower signatures | *(Computer and Printer)* Show two-column LENDER / BORROWER signature block instead of single borrower line. Uses the legal representative from General settings. |
@@ -166,10 +182,10 @@ Formats can be combined and nested: `*__**text**__*` renders as bold + italic + 
 |----------|-------------|
 | `{nombre}` | Full name of the assigned user |
 | `{empresa}` | Company name |
-| `{activo}` | Asset tag / other serial |
-| `{fecha}` | Document date (dd/mm/yyyy) |
+| `{activo}` | Asset tag / asset identifier |
+| `{fecha}` | Document date in localized long format |
 | `{hora}` | Document time |
-| `{lugar}` | City, State, Country from entity |
+| `{lugar}` | City, State, Country from the active GLPI entity |
 | `{representante}` | Legal representative name |
 | `{marca}` | Asset brand |
 | `{modelo}` | Asset model |
@@ -178,15 +194,19 @@ Formats can be combined and nested: `*__**text**__*` renders as bold + italic + 
 | `{linea}` | *(Phone)* Phone line / mobile number |
 | `{almacenamiento}` | *(Phone)* Storage capacity |
 | `{ram}` | *(Phone)* RAM |
-| `{precio}` | *(Phone)* Purchase price |
+| `{precio}` | *(Computer / Phone)* Purchase price formatted with the configured currency |
 | `{estado}` | Asset condition/status |
-| `{clausula_vida_util}` | *(Phone)* Useful life clause — text defined in configuration |
-| `{fecha_compra}` | *(Phone — useful-life template)* Purchase date |
-| `{factura}` | *(Phone — useful-life template)* Invoice number |
-| `{proveedor}` | *(Phone — useful-life template)* Supplier name |
+| `{clausula_vida_util}` | *(Computer / Phone)* Optional useful-life paragraph generated from the configured template |
+| `{fecha_compra}` | *(Computer / Phone useful-life template)* Purchase date in the same localized long format as `{fecha}` |
+| `{factura}` | *(Computer / Phone useful-life template)* Invoice number |
+| `{proveedor}` | *(Computer / Phone useful-life template)* Supplier name |
 | `{testigo1}` / `{testigo2}` | Witness names |
 | `{direccion}` | Entity address |
 | `{cp}` | Entity postal code |
+
+**Computer useful-life paragraphs:** Two optional templates are available — one for assets with invoice and supplier data and one for assets without them. The generated paragraph is inserted into the existing body at the configured position and is **not** converted into a new numbered clause. If the applicable template is empty, nothing is inserted.
+
+**Location requirement:** The active GLPI entity must have both City and State configured before a preview or real responsibility can be generated. Country is optional. This prevents documents from being generated with incomplete location information.
 
 ### Email tab
 | Field | Description |
@@ -232,6 +252,40 @@ The target user has no default email set in GLPI. Go to **Administration → Use
 
 **"GLPI mail server not configured"**
 Email notifications must be enabled. Go to **Setup → Notifications → Email followups configuration** and enable notifications.
+
+---
+
+## Configuration backup
+
+The **General** tab includes administrator-only JSON export/import.
+
+The export contains document templates and options, useful-life paragraphs, email and footer settings, selected witnesses/legal representative/phone type, and the current plugin logo. It also includes format/version metadata.
+
+Imports use an explicit allowlist and validate the JSON format, maximum file size, timezone, numeric ranges and logo data. User and phone-type references are exported with their IDs and stable names; when an ID differs on the target GLPI, Responsivas attempts to resolve the reference by name. If it cannot be resolved, the target installation keeps its current valid selection instead of aborting the import.
+
+The backup is intended for transferring Responsivas configuration between GLPI installations. GLPI object IDs are installation-specific, so reference resolution by name is used when necessary.
+
+---
+
+## Version 1.5.0
+
+Version 1.5.0 is the major architecture update for modern GLPI compatibility.
+
+Key changes include:
+
+- Migration from the legacy plugin runtime structure to PSR-4 classes and GLPI/Symfony Controllers.
+- Compatibility work for GLPI 11.x and GLPI 12.x.
+- Centralized configuration, mail, update-checking, and PDF generation services.
+- Improved authorization, entity visibility checks, CSRF handling, and safer template processing.
+- Computer PDF layout redesigned for clearer asset and associated-device information.
+- Optional useful-life paragraphs added to computer responsibilities, matching the existing phone behavior.
+- `{precio}` added to computer templates.
+- `{fecha_compra}` standardized to the same localized long-date format used by `{fecha}`.
+- Preview and real generation now validate the active entity's City and State.
+- GitHub release checking in the General configuration tab with six-hour caching.
+- Translation catalogs updated and compiled for all bundled locales.
+
+See [CHANGELOG.md](CHANGELOG.md) for the complete list of changes.
 
 ---
 
@@ -352,22 +406,15 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 ```
 responsivas/
-├── front/
-│   ├── computer.php          # Endpoint de pestaña de computadoras
-│   ├── config.form.php       # Interfaz de configuración del plugin
-│   ├── phone.php             # Endpoint de pestaña de teléfonos
-│   ├── preview.php           # Endpoint de vista previa con marca de agua
-│   ├── printer.php           # Endpoint de pestaña de impresoras
-│   ├── resource.send.php     # Endpoint de recurso de logo
-│   └── send_mail.php         # Endpoint de envío de correo
-├── inc/
-│   ├── config.class.php      # Formulario y almacenamiento de configuración
-│   ├── generator.class.php   # Orquestador de generación de PDFs
-│   ├── helpers.php           # Renderizador de plantillas, editor, hints de variables
-│   ├── paths.class.php       # Helpers de rutas del plugin
-│   ├── pdf.class.php         # Wrapper de TCPDF (marca de agua, pie de página)
-│   ├── pdfbuilder.class.php  # Factory de PDF, métodos render, constructor demo
-│   └── user.class.php        # Integración de pestaña en usuario
+├── src/
+│   ├── Controller/            # Rutas Symfony/GLPI; sin endpoints front legacy
+│   ├── Pdf/                   # Wrapper TCPDF y constructores de PDF
+│   ├── Service/               # Configuración, correo y actualización
+│   ├── Generator.php          # Orquestador de adjuntos PDF
+│   ├── Paths.php              # Rutas físicas y URLs del plugin
+│   ├── Twig.php               # Entorno Twig
+│   ├── UserTab.php            # Integración de pestaña en usuarios
+│   └── Utils.php              # Sanitización y utilidades de plantillas
 ├── locales/
 │   ├── responsivas.pot       # Plantilla de traducciones
 │   ├── it_IT.po / it_IT.mo  # Italiano
