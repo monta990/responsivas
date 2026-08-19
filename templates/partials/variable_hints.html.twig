@@ -1,0 +1,23 @@
+<div class="alert alert-info d-flex align-items-start mb-3" role="alert">
+    <i class="ti ti-tags me-2 fs-5 mt-1"></i>
+    <div style="font-size:0.85rem;">
+        <strong>{{ trans('Available tags') }}:</strong>
+        <span class="text-muted">
+            <b>**{{ trans('bold') }}**</b>
+            &nbsp;&bull;&nbsp;
+            <i>*{{ trans('italic') }}*</i>
+            &nbsp;&bull;&nbsp;
+            <u>__{{ trans('underline') }}__</u>
+        </span><br>
+        <span class="text-muted d-block mt-1" style="font-size:0.82em;">
+            <i class="ti ti-hand-click me-1"></i>{{ trans('Click a variable to insert it at the cursor position.') }}
+        </span>
+        {% for tag, desc in vars %}
+            {% if not loop.first %}<br>{% endif %}
+            <code class="me-1" style="cursor:pointer;"
+                  title="{{ desc }}"
+                  data-resp-var="{{ tag }}"
+                  onclick="responsivasInsertVar(this.dataset.respVar)">{{ tag }}</code> &mdash; {{ desc }}
+        {% endfor %}
+    </div>
+</div>

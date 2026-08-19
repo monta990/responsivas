@@ -1,0 +1,217 @@
+{% import _self as macros %}
+
+{# ── Asset button macro ──────────────────────────────────── #}
+{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty) %}
+    {% set tooltip = count
+        ? 'Generate responsibility documents'|trans
+        : (tooltip_empty ?: 'No equipment assigned'|trans) %}
+    <span data-bs-toggle="tooltip" title="{{ tooltip }}" class="d-inline-block">
+        {% if count %}
+            <a class="{{ btn_class }}" href="{{ url }}" target="_blank" data-resp-pdf-btn="1">
+                <i class="ti {{ icon }} me-2"></i>{{ label }}
+                <span class="badge badge-secondary ms-1">{{ count }}</span>
+            </a>
+        {% else %}
+            <a class="{{ btn_class }} disabled" href="#"
+               aria-disabled="true" role="button" style="pointer-events:none">
+                <i class="ti {{ icon }} me-2"></i>{{ label }}
+                <span class="badge badge-secondary ms-1">0</span>
+            </a>
+        {% endif %}
+    </span>
+{% endmacro %}
+
+{# ── Card ──────────────────────────────────────────────────── #}
+<div class="card mt-3 shadow-sm">
+
+    <div class="card-header mb-3 pt-2 position-relative">
+        <div class="ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1">
+            <i class="fs-2x ti ti-file-text"></i>
+        </div>
+        <h4 class="card-title ms-5 mb-0">{{ trans('Responsibility Document Generator') }}</h4>
+    </div>
+
+    <h3 class="text-center mt-3">
+        {{ trans('Select the asset type to generate responsibility documents') }}
+    </h3>
+
+    {% if not config.cellphone_type_id %}
+        <div class="alert alert-warning mx-auto" style="max-width:600px">
+            <i class="ti ti-alert-triangle me-2"></i>
+            {{ trans('The phone type for responsibility documents has not been configured. Contact the administrator.') }}
+        </div>
+    {% endif %}
+
+    <div class="d-flex flex-wrap justify-content-center gap-3 mt-4 mb-2">
+        {{ macros.asset_button(
+            counts.computers,
+            computer_url,
+            'ti-device-desktop',
+            trans('Computers'),
+            'btn btn-primary',
+            trans('No computers assigned')
+        ) }}
+        {{ macros.asset_button(
+            counts.printers,
+            printer_url,
+            'ti-printer',
+            trans('Printers'),
+            'btn btn-secondary',
+            trans('No printers assigned')
+        ) }}
+        {{ macros.asset_button(
+            counts.phones,
+            phone_url,
+            'ti-device-mobile',
+            trans('Phones'),
+            'btn btn-info',
+            trans('No phones of the configured type assigned')
+        ) }}
+    </div>
+
+    {# ── Email button / modal ──────────────────────────────── #}
+    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 mt-2">
+        {% if email_disabled %}
+            <span data-bs-toggle="tooltip" title="{{ email_tooltip }}" class="d-inline-block">
+                <button type="button" class="btn btn-success disabled"
+                        aria-disabled="true" style="pointer-events:none">
+                    <i class="ti ti-mail me-2"></i>{{ trans('Send by email') }}
+                </button>
+            </span>
+        {% else %}
+            {% set form_id  = 'form_email_resp_'  ~ user_id %}
+            {% set modal_id = 'modal_email_resp_' ~ user_id %}
+
+            <form id="{{ form_id }}" method="post"
+                  action="{{ mail_url }}" style="display:none;">
+                <input type="hidden" name="users_id" value="{{ user_id }}">
+                <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="send_computers" value="" id="hidden_comp_{{ user_id }}">
+                <input type="hidden" name="send_printers"  value="" id="hidden_print_{{ user_id }}">
+                <input type="hidden" name="send_phones"    value="" id="hidden_phone_{{ user_id }}">
+            </form>
+
+            <span data-bs-toggle="tooltip" title="{{ email_tooltip }}" class="d-inline-block">
+                <button type="button" class="btn btn-success"
+                        data-bs-toggle="modal" data-bs-target="#{{ modal_id }}">
+                    <i class="ti ti-mail me-2"></i>{{ trans('Send by email') }}
+                </button>
+            </span>
+
+            <div class="modal fade" id="{{ modal_id }}" tabindex="-1"
+                 aria-labelledby="{{ modal_id }}_label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="{{ modal_id }}_label">
+                                <i class="ti ti-mail me-2"></i>{{ trans('Confirm sending') }}
+                            </h5>
+                            <button type="button" class="btn-close"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-3">
+                                {{ trans('Send the responsibility documents to %s?')|replace({'%s': '<strong>' ~ user_email|e ~ '</strong>'})|raw }}
+                            </p>
+                            <p class="fw-bold mb-2">{{ trans('Select document types to send:') }}</p>
+
+                            {% if counts.computers > 0 %}
+                                <div class="form-check">
+                                    <input class="form-check-input resp-type-check" type="checkbox"
+                                           name="send_computers" id="chk_comp_{{ user_id }}" value="1" checked>
+                                    <label class="form-check-label" for="chk_comp_{{ user_id }}">
+                                        <i class="ti ti-device-desktop me-1"></i>{{ trans('Computers') }}
+                                        <span class="badge ms-1" style="background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);">{{ counts.computers }}</span>
+                                    </label>
+                                </div>
+                            {% endif %}
+                            {% if counts.printers > 0 %}
+                                <div class="form-check">
+                                    <input class="form-check-input resp-type-check" type="checkbox"
+                                           name="send_printers" id="chk_print_{{ user_id }}" value="1" checked>
+                                    <label class="form-check-label" for="chk_print_{{ user_id }}">
+                                        <i class="ti ti-printer me-1"></i>{{ trans('Printers') }}
+                                        <span class="badge ms-1" style="background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);">{{ counts.printers }}</span>
+                                    </label>
+                                </div>
+                            {% endif %}
+                            {% if counts.phones > 0 %}
+                                <div class="form-check">
+                                    <input class="form-check-input resp-type-check" type="checkbox"
+                                           name="send_phones" id="chk_phone_{{ user_id }}" value="1" checked>
+                                    <label class="form-check-label" for="chk_phone_{{ user_id }}">
+                                        <i class="ti ti-device-mobile me-1"></i>{{ trans('Phones') }}
+                                        <span class="badge ms-1" style="background-color:var(--tblr-border-color,#dee2e6);color:var(--tblr-body-color,#1e293b);">{{ counts.phones }}</span>
+                                    </label>
+                                </div>
+                            {% endif %}
+
+                            <div class="alert alert-warning mt-2 d-none" id="warn_none_{{ user_id }}">
+                                <i class="ti ti-alert-triangle me-1"></i>
+                                {{ trans('Select at least one document type.') }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="ti ti-x me-1"></i>{{ trans('Cancel') }}
+                            </button>
+                            <button type="button" class="btn btn-success" id="btn_send_{{ form_id }}"
+                                    onclick="(function(btn){
+                                        var modal=document.getElementById('{{ modal_id }}');
+                                        var checks=modal.querySelectorAll('.resp-type-check:checked');
+                                        if(checks.length===0){
+                                            document.getElementById('warn_none_{{ user_id }}').classList.remove('d-none');
+                                            return;
+                                        }
+                                        btn.disabled=true;
+                                        var icon=btn.querySelector('i');
+                                        if(icon){icon.className='spinner-border spinner-border-sm me-1';icon.setAttribute('role','status');}
+                                        var names=['send_computers','send_printers','send_phones'];
+                                        var ids=['hidden_comp_{{ user_id }}','hidden_print_{{ user_id }}','hidden_phone_{{ user_id }}'];
+                                        names.forEach(function(name,i){
+                                            var chk=modal.querySelector('[name='+name+']:checked');
+                                            document.getElementById(ids[i]).value=chk?'1':'';
+                                        });
+                                        document.getElementById('{{ form_id }}').submit();
+                                    })(this)">
+                                <i class="ti ti-send me-1"></i>{{ trans('Send by email') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card-footer text-end py-2">
+        <small>{{ trans('Last updated: ') }}{{ last_updated }}</small>
+    </div>
+
+</div><!-- /card -->
+
+<script>
+(function () {
+    if (typeof bootstrap !== 'undefined') {
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+            if (!el.dataset.tooltipInit) {
+                new bootstrap.Tooltip(el);
+                el.dataset.tooltipInit = '1';
+            }
+        });
+    }
+    document.querySelectorAll('[data-resp-pdf-btn="1"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var icon = btn.querySelector('i');
+            var origClass = icon ? icon.className : '';
+            if (icon) icon.className = 'spinner-border spinner-border-sm me-2';
+            btn.classList.add('disabled');
+            btn.setAttribute('aria-disabled', 'true');
+            setTimeout(function () {
+                btn.classList.remove('disabled');
+                btn.removeAttribute('aria-disabled');
+                if (icon) icon.className = origClass;
+            }, 5000);
+        });
+    });
+})();
+</script>
