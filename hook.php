@@ -123,6 +123,70 @@ function plugin_responsivas_getDefaults(): array {
 /**
  * Instalación
  */
+/**
+ * Limpia las cachés que pueden conservar Twig y los catálogos de idioma
+ * después de una instalación o actualización del plugin.
+ *
+ * Se utiliza la API de caché nativa de GLPI cuando está disponible y,
+ * adicionalmente, se elimina únicamente la caché compilada de Twig de
+ * Responsivas. Esto evita borrar archivos de configuración, documentos o
+ * logos del plugin.
+ */
+function plugin_responsivas_clearCaches(): void {
+   // Cache nativa de GLPI: incluye las cachés de traducciones/I18n y Symfony.
+   try {
+      if (class_exists('\\Glpi\\Cache\\CacheManager')) {
+         $cache_manager = \Glpi\Cache\CacheManager::getInstance();
+
+         foreach (['clear', 'clearAll'] as $method) {
+            if (method_exists($cache_manager, $method)) {
+               $cache_manager->{$method}();
+               break;
+            }
+         }
+      }
+   } catch (\Throwable $e) {
+      Event::log(
+         0,
+         'plugin_responsivas',
+         3,
+         'plugin',
+         'No se pudo limpiar la caché nativa de GLPI durante la instalación/actualización: ' . $e->getMessage()
+      );
+   }
+
+   // Caché compilada específica de Twig de Responsivas.
+   $twig_cache_dir = (defined('GLPI_CACHE_DIR') ? rtrim(GLPI_CACHE_DIR, '/\\') : sys_get_temp_dir())
+      . '/responsivas_twig';
+
+   if (!is_dir($twig_cache_dir)) {
+      return;
+   }
+
+   try {
+      $iterator = new \RecursiveIteratorIterator(
+         new \RecursiveDirectoryIterator($twig_cache_dir, \FilesystemIterator::SKIP_DOTS),
+         \RecursiveIteratorIterator::CHILD_FIRST
+      );
+
+      foreach ($iterator as $item) {
+         if ($item->isDir()) {
+            @rmdir($item->getPathname());
+         } else {
+            @unlink($item->getPathname());
+         }
+      }
+   } catch (\Throwable $e) {
+      Event::log(
+         0,
+         'plugin_responsivas',
+         3,
+         'plugin',
+         'No se pudo limpiar la caché Twig de Responsivas: ' . $e->getMessage()
+      );
+   }
+}
+
 function plugin_responsivas_install() {
 
    $files_dir = (defined('GLPI_PLUGIN_DOC_DIR') ? rtrim(GLPI_PLUGIN_DOC_DIR, '/\\') . '/responsivas' : GLPI_ROOT . '/files/_plugins/responsivas');
@@ -166,6 +230,9 @@ function plugin_responsivas_install() {
    // =============================
    $existing = Config::getConfigurationValues('plugin_responsivas') ?? [];
    plugin_responsivas_migrateConfig($existing);
+
+   // Force GLPI/Twig/I18n caches to be rebuilt with the installed plugin files.
+   plugin_responsivas_clearCaches();
 
    return true;
 }
@@ -219,6 +286,10 @@ function plugin_responsivas_migrateConfig(array $existing): void {
 function plugin_responsivas_update($current, $new) {
    $existing = Config::getConfigurationValues('plugin_responsivas') ?? [];
    plugin_responsivas_migrateConfig($existing);
+
+   // Always invalidate compiled templates and translation caches after update.
+   plugin_responsivas_clearCaches();
+
    return true;
 }
 

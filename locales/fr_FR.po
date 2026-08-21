@@ -601,7 +601,7 @@ msgid "Speed"
 msgstr "Vitesse"
 
 msgid "OS"
-msgstr "SE"
+msgstr "Système d’exploitation"
 
 msgid "Comments"
 msgstr "Commentaires"
