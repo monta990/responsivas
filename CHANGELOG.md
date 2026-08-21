@@ -4,7 +4,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
-## [1.5.0] — 2026-08-18
+## [1.5.0] — 2026-08-21
 
 ### Added
 
@@ -13,6 +13,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **Cache cleanup on install/update** — Added automatic invalidation of GLPI translation/cache data and Responsivas compiled Twig templates after installation or update, preventing stale templates or language catalogs from being reused.
 - **Computer useful-life paragraph spacing** — The optional useful-life paragraph inserted into computer responsibilities now ends with an explicit line break, so it no longer runs directly into the following legal paragraph. The same spacing is applied to the computer preview/demo.
 - **Computer preview demo variables** — The default useful-life paragraph in the computer preview now resolves `{fecha_compra}`, `{factura}`, and `{proveedor}` through the normal template engine instead of leaving placeholders visible in the generated demo.
 
