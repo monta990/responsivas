@@ -24,7 +24,6 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - **TCPDF SVG errors** — Removed the last SVG rendering path from the manual PDF pipeline, preventing malformed-SVG errors for current manual resources.
 - **Action button contrast** — Corrected text/icon contrast for red destructive buttons and the email-send action while preserving the existing Cancel button styling.
 - **Logo/image hardening** — Added file-type, maximum size, image-dimension and pixel-count validation before GD image decoding to reduce memory-exhaustion risk.
-- **Demo preview generation** — Removed an undefined entity reference from the standard responsibility PDF demo path.
 
 ---
 
