@@ -580,7 +580,7 @@ $web              = Paths::webDir();
 
 echo Twig::env()->render('config/page.html.twig', [
     'self'                 => $self,
-    'export_action'        => Paths::routeUrl('config_export'),
+    'export_action'        => Paths::routeUrl('config/export'),
     'config'               => $config,
     'currentPluginVersion' => $currentPluginVersion,
     'latestReleaseVersion' => $latestReleaseVersion,
