@@ -15,8 +15,6 @@
 
 ---
 
-# English
-
 ## Overview
 
 **Responsivas** generates PDF responsibility documents and phone loan contracts for IT assets assigned to GLPI users. It also provides fixed, print-ready visual inspection and return forms for Computers, Printers and Phones.
