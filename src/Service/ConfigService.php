@@ -27,12 +27,21 @@ final class ConfigService
             'email_subject', 'email_body', 'email_footer',
             'pc_footer_left_1', 'pc_footer_right_1', 'pc_footer_left_2', 'pc_footer_right_2',
             'pri_footer_left_1', 'pri_footer_right_1', 'pri_footer_left_2', 'pri_footer_right_2',
-            'pho_footer_left_1', 'pho_footer_right_1', 'pho_footer_left_2', 'pho_footer_right_2',
+            'pho_footer_left_1', 'pho_footer_right_1', 'pho_footer_left_2', 'pho_footer_right_2',            'pc_enable_visual_inspection', 'pc_enable_return_form',
+            'pri_enable_visual_inspection', 'pri_enable_return_form',
+            'pho_enable_visual_inspection', 'pho_enable_return_form',
+            'pc_inspection_title', 'pc_inspection_instructions', 'pc_return_title', 'pc_return_instructions',
+            'pri_inspection_title', 'pri_inspection_instructions', 'pri_return_title', 'pri_return_instructions',
+            'pho_inspection_title', 'pho_inspection_instructions', 'pho_return_title', 'pho_return_instructions',
+            'pc_inspection_footer_left_1', 'pc_inspection_footer_right_1', 'pc_inspection_footer_left_2', 'pc_inspection_footer_right_2', 'pc_return_footer_left_1', 'pc_return_footer_right_1', 'pc_return_footer_left_2', 'pc_return_footer_right_2', 'pri_inspection_footer_left_1', 'pri_inspection_footer_right_1', 'pri_inspection_footer_left_2', 'pri_inspection_footer_right_2', 'pri_return_footer_left_1', 'pri_return_footer_right_1', 'pri_return_footer_left_2', 'pri_return_footer_right_2', 'pho_inspection_footer_left_1', 'pho_inspection_footer_right_1', 'pho_inspection_footer_left_2', 'pho_inspection_footer_right_2', 'pho_return_footer_left_1', 'pho_return_footer_right_1', 'pho_return_footer_left_2', 'pho_return_footer_right_2',
+
         ];
     }
 
-    private static function exportConfiguration(): Response
+    public static function export(): Response
     {
+        \Session::checkLoginUser();
+        \Session::checkRight('config', UPDATE);
         $config = \Config::getConfigurationValues('plugin_responsivas');
         $data = [
             'format' => 'responsivas-config',
@@ -131,6 +140,9 @@ final class ConfigService
             if (in_array($key, [
                 'show_employee_number','show_qr','pdf_compression','pdf_protection',
                 'pc_show_comodato_sigs','pri_show_comodato_sigs',
+                'pc_enable_visual_inspection','pc_enable_return_form',
+                'pri_enable_visual_inspection','pri_enable_return_form',
+                'pho_enable_visual_inspection','pho_enable_return_form',
             ], true)) {
                 $values[$key] = (bool)$value ? 1 : 0;
             } elseif (in_array($key, [
@@ -230,6 +242,10 @@ final class ConfigService
                 $tmp = tempnam(Paths::filesDir(), 'responsivas_import_');
                 if ($tmp !== false) {
                     $img = @imagecreatefromstring($decoded);
+                    if ($img !== false) {
+                        imagealphablending($img, false);
+                        imagesavealpha($img, true);
+                    }
                     if ($img !== false && @imagepng($img, $tmp)) {
                         imagedestroy($img);
                         if (@rename($tmp, Paths::logoPath())) {
@@ -286,16 +302,12 @@ $maxSize     = 500 * 1024;
 $allowedMime = ['image/png', 'image/jpeg'];
 $logoPath    = Paths::logoPath();
 $latestReleaseVersion = UpdateChecker::latest();
-$currentPluginVersion  = plugin_version_responsivas()['version'] ?? '1.5.0';
+$currentPluginVersion  = plugin_version_responsivas()['version'] ?? '1.6.0';
 $updateAvailable       = $latestReleaseVersion !== null && version_compare($latestReleaseVersion, $currentPluginVersion, '>');
 
 /* =====================================================
  * POST: export/import configuration
  * ===================================================== */
-if (isset($_POST['export_config'])) {
-    return self::exportConfiguration();
-}
-
 if (isset($_POST['import_config'])) {
     return self::importConfiguration($_FILES['config_file'] ?? []);
 }
@@ -370,6 +382,50 @@ if (isset($_POST['update'])) {
         'pho_testigos'            => trim($_POST['pho_testigos']          ?? ''),
         'pho_vida_util_factura'   => trim($_POST['pho_vida_util_factura'] ?? ''),
         'pho_vida_util_sin'       => trim($_POST['pho_vida_util_sin']     ?? ''),
+        'pc_enable_visual_inspection'  => isset($_POST['pc_enable_visual_inspection']) ? 1 : 0,
+        'pc_enable_return_form'        => isset($_POST['pc_enable_return_form']) ? 1 : 0,
+        'pri_enable_visual_inspection' => isset($_POST['pri_enable_visual_inspection']) ? 1 : 0,
+        'pri_enable_return_form'       => isset($_POST['pri_enable_return_form']) ? 1 : 0,
+        'pho_enable_visual_inspection' => isset($_POST['pho_enable_visual_inspection']) ? 1 : 0,
+        'pho_enable_return_form'       => isset($_POST['pho_enable_return_form']) ? 1 : 0,
+        'pc_inspection_title'        => Utils::escape(trim($_POST['pc_inspection_title'] ?? '')),
+        'pc_inspection_instructions' => trim($_POST['pc_inspection_instructions'] ?? ''),
+        'pc_return_title'            => Utils::escape(trim($_POST['pc_return_title'] ?? '')),
+        'pc_return_instructions'     => trim($_POST['pc_return_instructions'] ?? ''),
+        'pri_inspection_title'        => Utils::escape(trim($_POST['pri_inspection_title'] ?? '')),
+        'pri_inspection_instructions' => trim($_POST['pri_inspection_instructions'] ?? ''),
+        'pri_return_title'            => Utils::escape(trim($_POST['pri_return_title'] ?? '')),
+        'pri_return_instructions'     => trim($_POST['pri_return_instructions'] ?? ''),
+        'pho_inspection_title'        => Utils::escape(trim($_POST['pho_inspection_title'] ?? '')),
+        'pho_inspection_instructions' => trim($_POST['pho_inspection_instructions'] ?? ''),
+        'pho_return_title'            => Utils::escape(trim($_POST['pho_return_title'] ?? '')),
+        'pho_return_instructions'     => trim($_POST['pho_return_instructions'] ?? ''),
+        'pc_inspection_footer_left_1' => trim($_POST['pc_inspection_footer_left_1'] ?? ''),
+        'pc_inspection_footer_right_1' => trim($_POST['pc_inspection_footer_right_1'] ?? ''),
+        'pc_inspection_footer_left_2' => trim($_POST['pc_inspection_footer_left_2'] ?? ''),
+        'pc_inspection_footer_right_2' => trim($_POST['pc_inspection_footer_right_2'] ?? ''),
+        'pc_return_footer_left_1' => trim($_POST['pc_return_footer_left_1'] ?? ''),
+        'pc_return_footer_right_1' => trim($_POST['pc_return_footer_right_1'] ?? ''),
+        'pc_return_footer_left_2' => trim($_POST['pc_return_footer_left_2'] ?? ''),
+        'pc_return_footer_right_2' => trim($_POST['pc_return_footer_right_2'] ?? ''),
+        'pri_inspection_footer_left_1' => trim($_POST['pri_inspection_footer_left_1'] ?? ''),
+        'pri_inspection_footer_right_1' => trim($_POST['pri_inspection_footer_right_1'] ?? ''),
+        'pri_inspection_footer_left_2' => trim($_POST['pri_inspection_footer_left_2'] ?? ''),
+        'pri_inspection_footer_right_2' => trim($_POST['pri_inspection_footer_right_2'] ?? ''),
+        'pri_return_footer_left_1' => trim($_POST['pri_return_footer_left_1'] ?? ''),
+        'pri_return_footer_right_1' => trim($_POST['pri_return_footer_right_1'] ?? ''),
+        'pri_return_footer_left_2' => trim($_POST['pri_return_footer_left_2'] ?? ''),
+        'pri_return_footer_right_2' => trim($_POST['pri_return_footer_right_2'] ?? ''),
+        'pho_inspection_footer_left_1' => trim($_POST['pho_inspection_footer_left_1'] ?? ''),
+        'pho_inspection_footer_right_1' => trim($_POST['pho_inspection_footer_right_1'] ?? ''),
+        'pho_inspection_footer_left_2' => trim($_POST['pho_inspection_footer_left_2'] ?? ''),
+        'pho_inspection_footer_right_2' => trim($_POST['pho_inspection_footer_right_2'] ?? ''),
+        'pho_return_footer_left_1' => trim($_POST['pho_return_footer_left_1'] ?? ''),
+        'pho_return_footer_right_1' => trim($_POST['pho_return_footer_right_1'] ?? ''),
+        'pho_return_footer_left_2' => trim($_POST['pho_return_footer_left_2'] ?? ''),
+        'pho_return_footer_right_2' => trim($_POST['pho_return_footer_right_2'] ?? ''),
+
+
 
         'email_subject' => Utils::escape(trim($_POST['email_subject'] ?? '')),
         'email_body'    => trim($_POST['email_body']   ?? ''),
@@ -399,7 +455,7 @@ if (isset($_POST['update'])) {
 
         $tmpFile = $_FILES['logo']['tmp_name'];
         $size    = $_FILES['logo']['size'];
-        $finfo   = new finfo(FILEINFO_MIME_TYPE);
+        $finfo   = new \finfo(FILEINFO_MIME_TYPE);
         $mime    = $finfo->file($tmpFile);
 
         if ($size > $maxSize) {
@@ -407,12 +463,27 @@ if (isset($_POST['update'])) {
                 __('The file exceeds the maximum allowed size (500 KB).', 'responsivas'),
                 false, ERROR
             );
-        } elseif (!in_array($mime, $allowedMime)) {
+        } elseif (!in_array($mime, $allowedMime, true)) {
             \Session::addMessageAfterRedirect(
                 __('Format not allowed. PNG or JPG only.', 'responsivas'),
                 false, ERROR
             );
         } else {
+            $imageInfo = @getimagesize($tmpFile);
+            $maxDimension = 4096;
+            $maxPixels = 12_000_000;
+            $validDimensions = is_array($imageInfo)
+                && isset($imageInfo[0], $imageInfo[1])
+                && (int)$imageInfo[0] <= $maxDimension
+                && (int)$imageInfo[1] <= $maxDimension
+                && ((int)$imageInfo[0] * (int)$imageInfo[1]) <= $maxPixels;
+
+            if (!$validDimensions) {
+                \Session::addMessageAfterRedirect(
+                    __('The image dimensions exceed the allowed limit (4096 × 4096 pixels and 12 megapixels).', 'responsivas'),
+                    false, ERROR
+                );
+            } else {
             if (!is_dir(Paths::filesDir())) {
                 mkdir(Paths::filesDir(), 0755, true);
             }
@@ -423,6 +494,11 @@ if (isset($_POST['update'])) {
             } else {
                 $img = @imagecreatefrompng($tmpFile);
                 $errorMessage = __('Error processing PNG image', 'responsivas');
+                // Preserve the alpha channel from transparent PNG logos.
+                if ($img !== false) {
+                    imagealphablending($img, false);
+                    imagesavealpha($img, true);
+                }
             }
 
             // Re-codificar siempre la imagen: nunca persistir directamente bytes subidos.
@@ -441,6 +517,7 @@ if (isset($_POST['update'])) {
                     __('Logo updated successfully.', 'responsivas'), false, INFO
                 );
                 $logo_uploaded = true;
+            }
             }
         }
     }
@@ -503,13 +580,14 @@ $web              = Paths::webDir();
 
 echo Twig::env()->render('config/page.html.twig', [
     'self'                 => $self,
+    'export_action'        => Paths::routeUrl('config_export'),
     'config'               => $config,
     'currentPluginVersion' => $currentPluginVersion,
     'latestReleaseVersion' => $latestReleaseVersion,
     'updateAvailable'      => $updateAvailable,
     'has_logo'             => $hasLogo,
     'logo_url'             => Paths::logoUrl(),
-    'logo_url_cached'      => Paths::logoUrl() . '&t=' . time(),
+    'logo_url_cached'      => Paths::logoUrl() . '?t=' . time(),
     'logo_width'           => $logoWidth,
     'logo_height'          => $logoHeight,
     'logo_size_kb'         => $logoSizeKB,
@@ -525,6 +603,13 @@ echo Twig::env()->render('config/page.html.twig', [
     'widget_representante' => $widget_representante,
     'widget_phone_type'    => $widget_phone_type,
     'preview_pc'           => Paths::routeUrl('preview?type=pc'),
+    'preview_pc_inspection'       => Paths::routeUrl('preview?type=manual_pc_inspection'),
+    'preview_pc_return'           => Paths::routeUrl('preview?type=manual_pc_return'),
+    'preview_pri_inspection'      => Paths::routeUrl('preview?type=manual_pri_inspection'),
+    'preview_pri_return'          => Paths::routeUrl('preview?type=manual_pri_return'),
+    'preview_pho_inspection'      => Paths::routeUrl('preview?type=manual_pho_inspection'),
+    'preview_pho_return'          => Paths::routeUrl('preview?type=manual_pho_return'),
+
     'preview_pri'          => Paths::routeUrl('preview?type=pri'),
     'preview_pho'          => Paths::routeUrl('preview?type=pho'),
     'pc_titulo_v'             => $nv($config['pc_titulo']            ?? 'CARTA RESPONSIVA DE ACTIVO ASIGNADO'),

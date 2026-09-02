@@ -6,6 +6,7 @@ namespace GlpiPlugin\Responsivas\Controller;
 use Glpi\Controller\AbstractController;
 use GlpiPlugin\Responsivas\Exception\MissingEntityLocationException;
 use GlpiPlugin\Responsivas\Pdf\PdfBuilder;
+use GlpiPlugin\Responsivas\Pdf\PDF;
 use GlpiPlugin\Responsivas\Paths;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,17 @@ final class PreviewController extends AbstractController
         }
 
         $type = (string)$request->query->get('type', '');
-        if (!in_array($type, ['pc', 'pri', 'pho'], true)) {
+
+        $manualPreviews = [
+            'manual_pc_inspection'  => ['itemtype' => 'Computer', 'movement' => 'delivery', 'enabled' => 'pc_enable_visual_inspection'],
+            'manual_pc_return'      => ['itemtype' => 'Computer', 'movement' => 'return', 'enabled' => 'pc_enable_return_form'],
+            'manual_pri_inspection' => ['itemtype' => 'Printer',  'movement' => 'delivery', 'enabled' => 'pri_enable_visual_inspection'],
+            'manual_pri_return'     => ['itemtype' => 'Printer',  'movement' => 'return', 'enabled' => 'pri_enable_return_form'],
+            'manual_pho_inspection' => ['itemtype' => 'Phone',    'movement' => 'delivery', 'enabled' => 'pho_enable_visual_inspection'],
+            'manual_pho_return'     => ['itemtype' => 'Phone',    'movement' => 'return', 'enabled' => 'pho_enable_return_form'],
+        ];
+
+        if (!in_array($type, ['pc', 'pri', 'pho'], true) && !isset($manualPreviews[$type])) {
             throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException();
         }
 
@@ -30,7 +41,29 @@ final class PreviewController extends AbstractController
         $adminId = (int)\Session::getLoginUserID();
 
         try {
-            $result = PdfBuilder::buildPreview($type, $adminId, $config);
+            if (isset($manualPreviews[$type])) {
+                $manual = $manualPreviews[$type];
+                if ((int)($config[$manual['enabled']] ?? 0) !== 1) {
+                    throw new \Glpi\Exception\Http\AccessDeniedHttpException();
+                }
+
+                PDF::$global_watermark = true;
+                $wmText = trim($config['watermark_text'] ?? '');
+                PDF::$global_watermark_text = $wmText !== '' ? $wmText : __('PREVIEW', 'responsivas');
+                try {
+                    $result = PdfBuilder::buildManualFormPdf(
+                        $manual['itemtype'],
+                        $manual['movement'],
+                        $adminId,
+                        true
+                    );
+                } finally {
+                    PDF::$global_watermark = false;
+                    PDF::$global_watermark_text = 'PREVIEW';
+                }
+            } else {
+                $result = PdfBuilder::buildPreview($type, $adminId, $config);
+            }
         } catch (MissingEntityLocationException $e) {
             \Session::addMessageAfterRedirect($e->getMessage(), false, WARNING);
             return new \Symfony\Component\HttpFoundation\RedirectResponse(

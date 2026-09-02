@@ -35,4 +35,5 @@ final class ResourceController extends AbstractController
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }
+
 }

@@ -146,6 +146,8 @@ class UserTab extends \CommonGLPI {
          'printer_url'    => Paths::routeUrl('printer?users_id=' . $id),
          'phone_url'      => Paths::routeUrl('phone?users_id=' . $id),
          'mail_url'       => Paths::routeUrl('mail'),
+         'inspection_url' => Paths::routeUrl('inspection?users_id=' . $id),
+         'return_url'     => Paths::routeUrl('return?users_id=' . $id),
          'config'         => $config,
          'user_email'     => $user_email,
          'email_disabled' => $email_disabled,

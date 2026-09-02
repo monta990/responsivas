@@ -4,11 +4,11 @@
     <div class="card-body py-2">
         <div class="d-flex flex-wrap align-items-center gap-2">
             <span class="text-muted small">{{ trans('Installed version') }}</span>
-            <span class="badge bg-blue-lt text-blue">v{{ currentPluginVersion }}</span>
+            <span class="badge bg-blue-lt text-blue">{{ currentPluginVersion }}</span>
 
             <span class="text-muted small ms-md-2">{{ trans('Latest version on GitHub') }}</span>
             {% if latestReleaseVersion %}
-                <span class="badge {{ updateAvailable ? 'bg-yellow-lt text-yellow' : 'bg-green-lt text-green' }}">v{{ latestReleaseVersion }}</span>
+                <span class="badge {{ updateAvailable ? 'bg-yellow-lt text-yellow' : 'bg-green-lt text-green' }}">{{ latestReleaseVersion }}</span>
             {% else %}
                 <span class="badge bg-secondary-lt">{{ trans('Not available') }}</span>
             {% endif %}
@@ -41,9 +41,9 @@
             <div class="col-md-6">
                 <div class="fw-bold mb-1"><i class="ti ti-download me-1"></i>{{ trans('Export configuration') }}</div>
                 <div class="form-text">{{ trans('Export Responsivas settings and the current logo to a JSON backup file.') }}</div>
-                <button type="submit" name="export_config" value="1" class="btn btn-outline-primary mt-2">
+                <a href="{{ export_action }}" class="btn btn-outline-primary mt-2">
                     <i class="ti ti-download me-1"></i>{{ trans('Export configuration') }}
-                </button>
+                </a>
             </div>
             <div class="col-md-6">
                 <label class="form-label fw-bold" for="responsivas_config_file">
@@ -227,7 +227,7 @@
                             {{ trans('Preview dimensions: ') }}{{ logo_width }} × {{ logo_height }} px · {{ trans('Size: ') }}<strong>{{ logo_size_kb }} KB</strong>
                         </div>
                         <div class="mt-3">
-                            <button type="button" class="btn btn-danger d-flex align-items-center gap-2"
+                            <button type="button" class="btn btn-danger text-white d-flex align-items-center gap-2"
                                     data-bs-toggle="modal" data-bs-target="#deleteLogoModal">
                                 <i class="ti ti-trash"></i> {{ trans('Delete current logo') }}
                             </button>

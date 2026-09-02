@@ -16,4 +16,10 @@ final class ConfigController extends AbstractController
     {
         return ConfigService::handle();
     }
+
+    #[Route('/config/export', name: 'responsivas_config_export', methods: ['GET'])]
+    public function export(): Response
+    {
+        return ConfigService::export();
+    }
 }

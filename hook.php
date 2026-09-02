@@ -107,10 +107,52 @@ function plugin_responsivas_getSchemaFields(): array {
       'pho_vida_util_factura' => ['default'=>$pho_vida_util_factura_default, 'type'=>'text', 'since'=>'1.2.6', 'group'=>'template', 'migrate'=>'keep'],
       'pho_vida_util_sin'     => ['default'=>$pho_vida_util_sin_default,     'type'=>'text', 'since'=>'1.2.6', 'group'=>'template', 'migrate'=>'keep'],
       // ── Schema version ────────────────────────────────── internal, always reset
-      'config_schema_version'=> ['default'=>PLUGIN_RESPONSIVAS_SCHEMA_VERSION, 'type'=>'string', 'since'=>'1', 'group'=>'internal', 'migrate'=>'reset'],
+      'pc_enable_visual_inspection'  => ['default'=>1, 'type'=>'bool', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pc_enable_return_form'        => ['default'=>1, 'type'=>'bool', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pri_enable_visual_inspection' => ['default'=>1, 'type'=>'bool', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pri_enable_return_form'       => ['default'=>1, 'type'=>'bool', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pho_enable_visual_inspection' => ['default'=>1, 'type'=>'bool', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pho_enable_return_form'       => ['default'=>1, 'type'=>'bool', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pc_inspection_title'          => ['default'=>'FORMATO DE INSPECCIÓN VISUAL DE COMPUTADORA', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pc_inspection_instructions'   => ['default'=>'Registre a mano la condición física del equipo, daños visibles, faltantes y observaciones relevantes al momento de la entrega.', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pc_return_title'              => ['default'=>'FORMATO DE DEVOLUCIÓN DE COMPUTADORA', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pc_return_instructions'       => ['default'=>'Registre a mano la condición física del equipo, daños visibles, faltantes y observaciones relevantes al momento de la devolución.', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pri_inspection_title'         => ['default'=>'FORMATO DE INSPECCIÓN VISUAL DE IMPRESORA', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pri_inspection_instructions'  => ['default'=>'Registre a mano la condición física del equipo, daños visibles, faltantes y observaciones relevantes al momento de la entrega.', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pri_return_title'             => ['default'=>'FORMATO DE DEVOLUCIÓN DE IMPRESORA', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pri_return_instructions'      => ['default'=>'Registre a mano la condición física del equipo, daños visibles, faltantes y observaciones relevantes al momento de la devolución.', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pho_inspection_title'         => ['default'=>'FORMATO DE INSPECCIÓN VISUAL DE TELÉFONO', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pho_inspection_instructions'  => ['default'=>'Registre a mano la condición física del equipo, daños visibles, faltantes y observaciones relevantes al momento de la entrega.', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pho_return_title'             => ['default'=>'FORMATO DE DEVOLUCIÓN DE TELÉFONO', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      'pho_return_instructions'      => ['default'=>'Registre a mano la condición física del equipo, daños visibles, faltantes y observaciones relevantes al momento de la devolución.', 'type'=>'text', 'since'=>'1.6.0', 'group'=>'manual_forms', 'migrate'=>'keep'],
+      // ── Manual form footer settings: four editable properties per format
+      'pc_inspection_footer_left_1'   => ['default'=>'Original: Empresa',   'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_inspection_footer_right_1'  => ['default'=>'Copia: Colaborador',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_inspection_footer_left_2'   => ['default'=>'SIS-RESP-001',        'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_inspection_footer_right_2'  => ['default'=>'Rev 1.6 01/09/2026',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_return_footer_left_1'       => ['default'=>'Original: Empresa',   'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_return_footer_right_1'      => ['default'=>'Copia: Colaborador',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_return_footer_left_2'       => ['default'=>'SIS-RESP-001',        'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pc_return_footer_right_2'      => ['default'=>'Rev 1.6 01/09/2026',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_inspection_footer_left_1'  => ['default'=>'Original: Empresa',   'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_inspection_footer_right_1' => ['default'=>'Copia: Colaborador',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_inspection_footer_left_2'  => ['default'=>'SIS-RESP-003',        'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_inspection_footer_right_2' => ['default'=>'Rev 1.6 01/09/2026',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_return_footer_left_1'      => ['default'=>'Original: Empresa',   'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_return_footer_right_1'     => ['default'=>'Copia: Colaborador',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_return_footer_left_2'      => ['default'=>'SIS-RESP-003',        'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pri_return_footer_right_2'     => ['default'=>'Rev 1.6 01/09/2026',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_inspection_footer_left_1'  => ['default'=>'Original: Empresa',   'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_inspection_footer_right_1' => ['default'=>'Copia: Colaborador',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_inspection_footer_left_2'  => ['default'=>'SIS-RESP-002',        'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_inspection_footer_right_2' => ['default'=>'Rev 1.6 01/09/2026',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_return_footer_left_1'      => ['default'=>'Original: Empresa',   'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_return_footer_right_1'     => ['default'=>'Copia: Colaborador',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_return_footer_left_2'      => ['default'=>'SIS-RESP-002',        'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'pho_return_footer_right_2'     => ['default'=>'Rev 1.6 01/09/2026',  'type'=>'string', 'since'=>'1.6.0', 'group'=>'manual_footer', 'migrate'=>'keep'],
+      'config_schema_version'         => ['default'=>PLUGIN_RESPONSIVAS_SCHEMA_VERSION, 'type'=>'string', 'since'=>'1', 'group'=>'internal', 'migrate'=>'reset'],
    ];
 }
-
 
 /**
  * Valores por defecto del plugin.
@@ -187,6 +229,10 @@ function plugin_responsivas_clearCaches(): void {
    }
 }
 
+
+/**
+ * Instalación
+ */
 function plugin_responsivas_install() {
 
    $files_dir = (defined('GLPI_PLUGIN_DOC_DIR') ? rtrim(GLPI_PLUGIN_DOC_DIR, '/\\') . '/responsivas' : GLPI_ROOT . '/files/_plugins/responsivas');
@@ -198,7 +244,6 @@ function plugin_responsivas_install() {
    // Crear directorio files del plugin
    if (!is_dir($files_dir)) {
       if (!mkdir($files_dir, 0755, true)) {
-
          if (class_exists('Session')) {
             Session::addMessageAfterRedirect(
                __('Could not create the Responsivas plugin files directory. Check permissions.', 'responsivas'),
@@ -221,13 +266,12 @@ function plugin_responsivas_install() {
 
    // Copiar logo por defecto SOLO si no existe uno
    if (!is_file($logo_path) && is_readable($default_logo)) {
-      copy($default_logo, $logo_path);
-      chmod($logo_path, 0644);
+      if (@copy($default_logo, $logo_path)) {
+         @chmod($logo_path, 0644);
+      }
    }
 
-   // =============================
    // Inicialización segura de configuración
-   // =============================
    $existing = Config::getConfigurationValues('plugin_responsivas') ?? [];
    plugin_responsivas_migrateConfig($existing);
 
@@ -292,6 +336,8 @@ function plugin_responsivas_update($current, $new) {
 
    return true;
 }
+
+
 
 function plugin_responsivas_uninstall(): bool {
    global $DB;

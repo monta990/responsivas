@@ -31,7 +31,7 @@ final class UpdateChecker
         $context = stream_context_create([
             'http' => [
                 'method' => 'GET',
-                'header' => "User-Agent: GLPI-Responsivas/1.5.0\r\nAccept: application/vnd.github+json\r\nX-GitHub-Api-Version: 2022-11-28\r\n",
+                'header' => "Accept: application/vnd.github+json\r\nX-GitHub-Api-Version: 2022-11-28\r\n",
                 'timeout' => 4,
                 'ignore_errors' => true,
             ],
