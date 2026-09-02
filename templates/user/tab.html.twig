@@ -1,18 +1,26 @@
 {% import _self as macros %}
+<style>
+    .manual-action-btn {
+        min-width: 154px;
+        min-height: 36px;
+        padding: 0.5rem 1rem;
+        justify-content: center;
+    }
+</style>
 
 {# ── Asset button macro ──────────────────────────────────── #}
-{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty) %}
+{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty, text_class='') %}
     {% set tooltip = count
         ? 'Generate responsibility documents'|trans
         : (tooltip_empty ?: 'No equipment assigned'|trans) %}
     <span data-bs-toggle="tooltip" title="{{ tooltip }}" class="d-inline-block">
         {% if count %}
-            <a class="{{ btn_class }}" href="{{ url }}" target="_blank" data-resp-pdf-btn="1">
+            <a class="{{ btn_class }} {{ text_class }}" href="{{ url }}"{% if text_class == 'text-dark' %} style="color:#212529!important;"{% endif %} target="_blank" data-resp-pdf-btn="1">
                 <i class="ti {{ icon }} me-2"></i>{{ label }}
                 <span class="badge badge-secondary ms-1">{{ count }}</span>
             </a>
         {% else %}
-            <a class="{{ btn_class }} disabled" href="#"
+            <a class="{{ btn_class }} {{ text_class }} disabled" href="#"
                aria-disabled="true" role="button" style="pointer-events:none">
                 <i class="ti {{ icon }} me-2"></i>{{ label }}
                 <span class="badge badge-secondary ms-1">0</span>
@@ -42,38 +50,78 @@
         </div>
     {% endif %}
 
-    <div class="d-flex flex-wrap justify-content-center gap-3 mt-4 mb-2">
-        {{ macros.asset_button(
-            counts.computers,
-            computer_url,
-            'ti-device-desktop',
-            trans('Computers'),
-            'btn btn-primary',
-            trans('No computers assigned')
-        ) }}
-        {{ macros.asset_button(
-            counts.printers,
-            printer_url,
-            'ti-printer',
-            trans('Printers'),
-            'btn btn-secondary',
-            trans('No printers assigned')
-        ) }}
-        {{ macros.asset_button(
-            counts.phones,
-            phone_url,
-            'ti-device-mobile',
-            trans('Phones'),
-            'btn btn-info',
-            trans('No phones of the configured type assigned')
-        ) }}
+    <div class="row g-3 justify-content-center mt-4 mb-3">
+        {% set asset_groups = [
+            {key:'computers', count:counts.computers, url:computer_url, icon:'ti-device-desktop', label:trans('Computers'), btn:'btn btn-primary', inspection:config.pc_enable_visual_inspection, return_form:config.pc_enable_return_form, inspection_url:inspection_url ~ '&itemtype=Computer', return_url:return_url ~ '&itemtype=Computer'},
+            {key:'printers', count:counts.printers, url:printer_url, icon:'ti-printer', label:trans('Printers'), btn:'btn btn-secondary', inspection:config.pri_enable_visual_inspection, return_form:config.pri_enable_return_form, inspection_url:inspection_url ~ '&itemtype=Printer', return_url:return_url ~ '&itemtype=Printer'},
+            {key:'phones', count:counts.phones, url:phone_url, icon:'ti-device-mobile', label:trans('Phones'), btn:'btn btn-info', inspection:config.pho_enable_visual_inspection, return_form:config.pho_enable_return_form, inspection_url:inspection_url ~ '&itemtype=Phone', return_url:return_url ~ '&itemtype=Phone'}
+        ] %}
+        {% for group in asset_groups %}
+            {% set manual_btn_class = group.key == 'computers'
+                ? 'btn-primary'
+                : (group.key == 'printers' ? 'btn-secondary' : 'btn-info') %}
+            {% set manual_btn_text = 'text-dark' %}
+            {% set asset_main_text = group.key == 'phones' ? 'text-dark' : '' %}
+            <div class="col-lg-4 col-md-6">
+                <div class="border rounded-2 p-3 h-100 text-center">
+                    {{ macros.asset_button(
+                        group.count,
+                        group.url,
+                        group.icon,
+                        group.label,
+                        group.btn,
+                        trans('No equipment assigned'),
+                        asset_main_text
+                    ) }}
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                        {% set manual_enabled = group.count > 0 %}
+                        {% if group.inspection and manual_enabled %}
+                            <a class="btn {{ manual_btn_class }} btn-sm px-3 manual-action-btn {{ manual_btn_text }}" href="{{ group.inspection_url }}" target="_blank"
+                               data-resp-pdf-btn="1">
+                                <i class="ti ti-map-pin me-1"></i>{{ trans('Visual condition') }}
+                            </a>
+                        {% else %}
+                            {% set inspection_tooltip = group.inspection
+                                ? trans('No equipment assigned')
+                                : trans('Not enabled') %}
+                            <span data-bs-toggle="tooltip"
+                                  title="{{ inspection_tooltip }}"
+                                  class="d-inline-block">
+                                <button type="button" class="btn {{ manual_btn_class }} btn-sm px-3 manual-action-btn disabled {{ manual_btn_text }}"
+                                        aria-disabled="true" tabindex="-1" style="pointer-events:none">
+                                    <i class="ti ti-map-pin me-1"></i>{{ trans('Visual condition') }}
+                                </button>
+                            </span>
+                        {% endif %}
+
+                        {% if group.return_form and manual_enabled %}
+                            <a class="btn {{ manual_btn_class }} btn-sm px-3 manual-action-btn {{ manual_btn_text }}" href="{{ group.return_url }}" target="_blank"
+                               data-resp-pdf-btn="1">
+                                <i class="ti ti-package-export me-1"></i>{{ trans('Return') }}
+                            </a>
+                        {% else %}
+                            {% set return_tooltip = group.return_form
+                                ? trans('No equipment assigned')
+                                : trans('Not enabled') %}
+                            <span data-bs-toggle="tooltip"
+                                  title="{{ return_tooltip }}"
+                                  class="d-inline-block">
+                                <button type="button" class="btn {{ manual_btn_class }} btn-sm px-3 manual-action-btn disabled {{ manual_btn_text }}"
+                                        aria-disabled="true" tabindex="-1" style="pointer-events:none">
+                                    <i class="ti ti-package-export me-1"></i>{{ trans('Return') }}
+                                </button>
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
-    {# ── Email button / modal ──────────────────────────────── #}
-    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 mt-2">
+    <div class="d-flex justify-content-center mb-4 mt-3">
         {% if email_disabled %}
             <span data-bs-toggle="tooltip" title="{{ email_tooltip }}" class="d-inline-block">
-                <button type="button" class="btn btn-success disabled"
+                <button type="button" class="btn btn-success text-white disabled px-4 py-2"
                         aria-disabled="true" style="pointer-events:none">
                     <i class="ti ti-mail me-2"></i>{{ trans('Send by email') }}
                 </button>
@@ -92,7 +140,7 @@
             </form>
 
             <span data-bs-toggle="tooltip" title="{{ email_tooltip }}" class="d-inline-block">
-                <button type="button" class="btn btn-success"
+                <button type="button" class="btn btn-success text-white px-4 py-2 shadow-sm"
                         data-bs-toggle="modal" data-bs-target="#{{ modal_id }}">
                     <i class="ti ti-mail me-2"></i>{{ trans('Send by email') }}
                 </button>
@@ -155,7 +203,7 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 <i class="ti ti-x me-1"></i>{{ trans('Cancel') }}
                             </button>
-                            <button type="button" class="btn btn-success" id="btn_send_{{ form_id }}"
+                            <button type="button" class="btn btn-success text-white" id="btn_send_{{ form_id }}"
                                     onclick="(function(btn){
                                         var modal=document.getElementById('{{ modal_id }}');
                                         var checks=modal.querySelectorAll('.resp-type-check:checked');

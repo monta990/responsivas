@@ -5,6 +5,7 @@ namespace GlpiPlugin\Responsivas\Pdf;
 
 use GlpiPlugin\Responsivas\Exception\MissingEntityLocationException;
 use GlpiPlugin\Responsivas\Utils;
+use GlpiPlugin\Responsivas\Paths;
 
 /**
  * PdfBuilder
@@ -145,17 +146,85 @@ class PdfBuilder
       $l = self::lbl();
       $html .= <<<HTML
 <tr style="background-color:{$th_bg};">
-  <td colspan="5"><strong>{$l['associated_devices']}</strong></td>
+  <td colspan="6"><strong>{$l['associated_devices']}</strong></td>
 </tr>
 <tr style="background-color:{$th_bg};">
-  <td width="20%"><strong>{$l['device']}</strong></td>
-  <td width="20%"><strong>{$l['brand']}</strong></td>
-  <td width="20%"><strong>{$l['model']}</strong></td>
-  <td width="20%"><strong>{$l['serial_asset']}</strong></td>
-  <td width="20%"><strong>{$l['condition']}</strong></td>
+  <td width="16.6667%"><strong>{$l['device']}</strong></td>
+  <td width="16.6667%"><strong>{$l['brand']}</strong></td>
+  <td width="16.6667%"><strong>{$l['model']}</strong></td>
+  <td width="16.6667%"><strong>{$l['serial']}</strong></td>
+  <td width="16.6667%"><strong>{$l['asset']}</strong></td>
+  <td width="16.6667%"><strong>{$l['condition']}</strong></td>
 </tr>
 HTML;
       $printed = true;
+   }
+
+   private static function appendDeviceRow(
+      string &$html,
+      string $device,
+      string $brand,
+      string $model,
+      string $serial,
+      string $asset,
+      string $condition,
+      string $td_bg
+   ): void {
+      $html .= '<tr style="background-color:' . $td_bg . ';">'
+         . '<td width="16.6667%">' . Utils::escape($device) . '</td>'
+         . '<td width="16.6667%">' . Utils::escape($brand) . '</td>'
+         . '<td width="16.6667%">' . Utils::escape($model) . '</td>'
+         . '<td width="16.6667%" style="white-space:nowrap;font-size:8pt;">' . Utils::escape($serial) . '</td>'
+         . '<td width="16.6667%" style="white-space:nowrap;font-size:8pt;">' . Utils::escape($asset) . '</td>'
+         . '<td width="16.6667%">' . Utils::escape($condition) . '</td>'
+         . '</tr>';
+   }
+
+   /**
+    * Renders the computer asset table used by standard responsibilities and
+    * manual inspection/return forms. The optional cellpadding lets the manual
+    * one-page layout compact the same table without maintaining a second copy.
+    */
+   private static function renderComputerAssetTable(
+      string $brand,
+      string $model,
+      string $serial,
+      string $cpu,
+      string $speed,
+      string $asset,
+      string $identification,
+      string $ram,
+      string $os,
+      string $storage,
+      string $type,
+      string $state,
+      string $comments,
+      string $dispositivosHtml,
+      string $thBg,
+      string $tdBg,
+      float $cellPadding = 3.0
+   ): string {
+      $l = self::lbl();
+      $padding = rtrim(rtrim(number_format($cellPadding, 2, '.', ''), '0'), '.');
+
+      return '<table border="1" cellpadding="' . $padding . '" cellspacing="0" width="100%">'
+         . '<tr style="background-color:' . $thBg . ';">'
+         . '<td width="16.6667%"><strong>' . $l['brand'] . '</strong></td>'
+         . '<td width="16.6667%"><strong>' . $l['model'] . '</strong></td>'
+         . '<td width="16.6667%"><strong>' . $l['serial'] . '</strong></td>'
+         . '<td width="16.6667%"><strong>' . $l['processor'] . '</strong></td>'
+         . '<td width="16.6667%"><strong>' . $l['speed'] . '</strong></td>'
+         . '<td width="16.6667%"><strong>' . $l['asset'] . '</strong></td></tr>'
+         . '<tr style="background-color:' . $tdBg . ';">'
+         . '<td>' . $brand . '</td><td>' . $model . '</td><td>' . $serial . '</td><td>' . $cpu . '</td><td>' . $speed . '</td><td>' . $asset . '</td></tr>'
+         . '<tr style="background-color:' . $thBg . ';">'
+         . '<td><strong>' . $l['ram'] . '</strong></td><td><strong>' . $l['os'] . '</strong></td><td><strong>' . $l['storage'] . '</strong></td><td><strong>' . $l['type'] . '</strong></td><td><strong>' . $l['condition'] . '</strong></td><td><strong>' . $l['identification'] . '</strong></td></tr>'
+         . '<tr style="background-color:' . $tdBg . ';">'
+         . '<td>' . $ram . '</td><td>' . $os . '</td><td>' . $storage . '</td><td>' . $type . '</td><td>' . $state . '</td><td>' . $identification . '</td></tr>'
+         . '<tr style="background-color:' . $thBg . ';"><td colspan="6"><strong>' . $l['comments'] . '</strong></td></tr>'
+         . '<tr style="background-color:' . $tdBg . ';"><td colspan="6">' . $comments . '</td></tr>'
+         . $dispositivosHtml
+         . '</table>';
    }
 
    /* =====================================================
@@ -246,8 +315,886 @@ HTML;
          'na'            => __('N/A',            'responsivas'),
          'in_use'        => __('In use',         'responsivas'),
          'employee_no'   => __('Employee No.: ', 'responsivas'),
+         'asset'         => __('Asset', 'responsivas'),
+         'identification' => __('Identification', 'responsivas'),
+         'inspection_date' => __('Inspection date', 'responsivas'),
+         'visual_inspection' => __('Visual inspection / physical condition', 'responsivas'),
+         'delivery_condition' => __('Delivery condition', 'responsivas'),
+         'return_condition' => __('Return condition', 'responsivas'),
+         'observations' => __('Observations', 'responsivas'),
+         'no_observations' => __('No visual observations recorded.', 'responsivas'),
+         'marker_details' => __('Marker details', 'responsivas'),
+         'major' => __('Major', 'responsivas'),
+         'minor' => __('Minor', 'responsivas'),
+         'inspection_note' => __('Inspection record kept with the responsibility document.', 'responsivas'),
       ];
    }
+
+   /** Fixed, print-ready form intended to be completed by hand. */
+   
+   private static function getManualAssets(string $itemtype, int $userId): array
+   {
+      $classes = [
+         'Computer' => \Computer::class,
+         'Printer'  => \Printer::class,
+         'Phone'    => \Phone::class,
+      ];
+
+      if ($userId <= 0 || !isset($classes[$itemtype])) {
+         return [];
+      }
+
+      $criteria = [
+         'users_id'   => $userId,
+         'is_deleted' => 0,
+      ];
+
+      if ($itemtype === 'Phone') {
+         $cfg = \Config::getConfigurationValues('plugin_responsivas');
+         $phoneTypeId = (int)($cfg['cellphone_type_id'] ?? 0);
+         if ($phoneTypeId > 0) {
+            $criteria['phonetypes_id'] = $phoneTypeId;
+         }
+      }
+
+      $class = $classes[$itemtype];
+      $assets = [];
+
+      foreach ((new $class())->find($criteria) as $row) {
+         $id = (int)($row['id'] ?? 0);
+         if ($id <= 0) {
+            continue;
+         }
+
+         $item = new $class();
+         if (self::loadViewableItem($item, $id) !== null) {
+            $assets[] = $item->fields;
+         }
+      }
+
+      return $assets;
+   }
+
+   private static function getManualComputerAssociatedDevices(int $computerId, int $userId): array
+   {
+      global $DB;
+
+      if ($computerId <= 0 || $userId <= 0) {
+         return [];
+      }
+
+      $devices = [];
+      $append = static function (array &$target, array $row, string $deviceType, string $modelName = ''): void {
+         $target[] = [
+            'device'    => $deviceType,
+            'brand'     => Utils::dropdownName((int)($row['manufacturers_id'] ?? 0), 'glpi_manufacturers', __('Not specified', 'responsivas')),
+            'model'     => trim($modelName) !== '' ? trim($modelName) : __('Not specified', 'responsivas'),
+            'serial'    => trim((string)($row['serial'] ?? '')) !== '' ? trim((string)$row['serial']) : __('N/A', 'responsivas'),
+            'asset'     => trim((string)($row['otherserial'] ?? '')) !== '' ? trim((string)$row['otherserial']) : __('N/A', 'responsivas'),
+            'condition' => Utils::dropdownName((int)($row['states_id'] ?? 0), 'glpi_states', __('Not specified', 'responsivas')),
+         ];
+      };
+
+      foreach ($DB->request([
+         'SELECT'     => [
+            'glpi_monitors.id', 'glpi_monitors.serial', 'glpi_monitors.otherserial',
+            'glpi_monitors.states_id', 'glpi_monitors.manufacturers_id', 'glpi_monitors.monitormodels_id',
+         ],
+         'FROM'       => 'glpi_assets_assets_peripheralassets',
+         'INNER JOIN' => [
+            'glpi_monitors' => [
+               'ON' => [
+                  'glpi_assets_assets_peripheralassets' => 'items_id_peripheral',
+                  'glpi_monitors' => 'id',
+               ],
+            ],
+         ],
+         'WHERE'      => [
+            'glpi_assets_assets_peripheralassets.itemtype_asset'     => 'Computer',
+            'glpi_assets_assets_peripheralassets.items_id_asset'     => $computerId,
+            'glpi_assets_assets_peripheralassets.itemtype_peripheral' => 'Monitor',
+            'glpi_assets_assets_peripheralassets.is_deleted'         => 0,
+            'glpi_monitors.users_id'                                  => $userId,
+         ],
+      ]) as $row) {
+         $monitor = new \Monitor();
+         if (self::loadViewableItem($monitor, (int)($row['id'] ?? 0)) === null) {
+            continue;
+         }
+         $model = Utils::dropdownName((int)($row['monitormodels_id'] ?? 0), 'glpi_monitormodels', '');
+         $append($devices, $row, __('Monitor', 'responsivas'), $model);
+      }
+
+      foreach ($DB->request([
+         'SELECT'     => [
+            'glpi_peripherals.id', 'glpi_peripherals.name', 'glpi_peripherals.serial',
+            'glpi_peripherals.otherserial', 'glpi_peripherals.states_id', 'glpi_peripherals.manufacturers_id',
+            'glpi_peripheraltypes.name AS tipo', 'glpi_peripheralmodels.name AS modelo',
+         ],
+         'FROM'       => 'glpi_assets_assets_peripheralassets',
+         'INNER JOIN' => [
+            'glpi_peripherals' => [
+               'ON' => [
+                  'glpi_assets_assets_peripheralassets' => 'items_id_peripheral',
+                  'glpi_peripherals' => 'id',
+               ],
+            ],
+            'glpi_peripheraltypes' => [
+               'ON' => [
+                  'glpi_peripherals' => 'peripheraltypes_id',
+                  'glpi_peripheraltypes' => 'id',
+               ],
+            ],
+         ],
+         'LEFT JOIN' => [
+            'glpi_peripheralmodels' => [
+               'ON' => [
+                  'glpi_peripherals' => 'peripheralmodels_id',
+                  'glpi_peripheralmodels' => 'id',
+               ],
+            ],
+         ],
+         'WHERE'      => [
+            'glpi_assets_assets_peripheralassets.itemtype_asset'     => 'Computer',
+            'glpi_assets_assets_peripheralassets.items_id_asset'     => $computerId,
+            'glpi_assets_assets_peripheralassets.itemtype_peripheral' => 'Peripheral',
+            'glpi_assets_assets_peripheralassets.is_deleted'         => 0,
+            'glpi_peripherals.users_id'                               => $userId,
+         ],
+      ]) as $row) {
+         $peripheral = new \Peripheral();
+         if (self::loadViewableItem($peripheral, (int)($row['id'] ?? 0)) === null) {
+            continue;
+         }
+         $append(
+            $devices,
+            $row,
+            trim((string)($row['tipo'] ?? '')) !== '' ? (string)$row['tipo'] : __('Device', 'responsivas'),
+            (string)($row['modelo'] ?? '')
+         );
+      }
+
+      return $devices;
+   }
+
+   private static function getManualPreviewDisplayData(string $itemtype, ?\User $user): array
+   {
+      $userName = $user ? $user->getFriendlyName() : __('Preview user', 'responsivas');
+
+      $common = [
+         'asset'   => 'DEMO-001',
+         'name'    => 'Equipo de demostración',
+         'user'    => $userName,
+         'brand'   => $itemtype === 'Phone' ? 'Samsung' : ($itemtype === 'Printer' ? 'HP' : 'Dell'),
+         'model'   => $itemtype === 'Phone' ? 'Galaxy A54 5G' : ($itemtype === 'Printer' ? 'LaserJet Pro M404n' : 'Inspiron 3520'),
+         'serial'  => $itemtype === 'Phone' ? 'UUID-DEMO-001' : 'SERIE-DEMO-001',
+         'type'    => $itemtype === 'Phone' ? 'Celular' : ($itemtype === 'Printer' ? 'Impresora' : 'Computadora'),
+         'state'   => __('Used', 'responsivas'),
+         'comment' => __('Demo data for template preview', 'responsivas'),
+         'os'      => $itemtype === 'Computer' ? 'Windows 11 Pro' : __('Not specified', 'responsivas'),
+         'ram'     => $itemtype === 'Computer' || $itemtype === 'Phone' ? '8 GB' : __('Not specified', 'responsivas'),
+         'storage' => $itemtype === 'Computer' || $itemtype === 'Phone' ? '256 GB SSD' : __('Not specified', 'responsivas'),
+         'cpu'     => $itemtype === 'Computer' ? 'Intel Core i5' : __('Not specified', 'responsivas'),
+         'speed'   => $itemtype === 'Computer' ? '2.40 GHz' : __('Not specified', 'responsivas'),
+         'imei'    => $itemtype === 'Phone' ? '352999DEMO0001' : __('Not specified', 'responsivas'),
+         'uuid'    => $itemtype === 'Phone' ? 'UUID-DEMO-001' : __('Not specified', 'responsivas'),
+         'line'    => $itemtype === 'Phone' ? '662-100-0001' : __('Not specified', 'responsivas'),
+         'price'   => $itemtype === 'Phone' ? '$ 7,500.00' : __('Not specified', 'responsivas'),
+         'associated_devices' => $itemtype === 'Computer' ? [
+            [
+               'device' => __('Monitor', 'responsivas'), 'brand' => 'Dell', 'model' => 'P2422H',
+               'serial' => 'MON-DEMO-001', 'asset' => 'ACT-MON-001', 'condition' => __('Used', 'responsivas'),
+            ],
+            [
+               'device' => __('Keyboard', 'responsivas'), 'brand' => 'Logitech', 'model' => 'K120',
+               'serial' => 'KB-DEMO-001', 'asset' => 'ACT-KB-001', 'condition' => __('Used', 'responsivas'),
+            ],
+         ] : [],
+      ];
+
+      return $common;
+   }
+
+   private static function getManualAssetDisplayData(
+      string $itemtype,
+      array $asset,
+      \User $user
+   ): array {
+      $modelMap = [
+         'Computer' => ['computermodels_id', 'glpi_computermodels', 'computertypes_id', 'glpi_computertypes'],
+         'Printer'  => ['printermodels_id', 'glpi_printermodels', 'printertypes_id', 'glpi_printertypes'],
+         'Phone'    => ['phonemodels_id', 'glpi_phonemodels', 'phonetypes_id', 'glpi_phonetypes'],
+      ];
+      [$modelField, $modelTable, $typeField, $typeTable] = $modelMap[$itemtype];
+      $notSpecified = __('Not specified', 'responsivas');
+
+      $display = [
+         'asset'   => trim((string)($asset['otherserial'] ?? '')),
+         'name'    => trim((string)($asset['name'] ?? '')),
+         'user'    => $user->getFriendlyName(),
+         'brand'   => trim((string)Utils::dropdownName((int)($asset['manufacturers_id'] ?? 0), 'glpi_manufacturers', $notSpecified)),
+         'model'   => trim((string)Utils::dropdownName((int)($asset[$modelField] ?? 0), $modelTable, $notSpecified)),
+         'serial'  => $itemtype === 'Phone'
+            ? trim((string)($asset['uuid'] ?? ''))
+            : trim((string)($asset['serial'] ?? '')),
+         'type'    => trim((string)Utils::dropdownName((int)($asset[$typeField] ?? 0), $typeTable, $notSpecified)),
+         'state'   => trim((string)Utils::dropdownName((int)($asset['states_id'] ?? 0), 'glpi_states', $notSpecified)),
+         'comment' => trim((string)($asset['comment'] ?? $notSpecified)),
+         'os'      => $notSpecified,
+         'ram'     => $notSpecified,
+         'storage' => $notSpecified,
+         'cpu'     => $notSpecified,
+         'speed'   => $notSpecified,
+         'imei'    => trim((string)($asset['serial'] ?? '')),
+         'uuid'    => trim((string)($asset['uuid'] ?? '')),
+         'line'    => $notSpecified,
+         'price'   => $notSpecified,
+         'associated_devices' => [],
+      ];
+
+      if ($display['asset'] === '') {
+         $display['asset'] = $display['name'] !== '' ? $display['name'] : $notSpecified;
+      }
+      if ($display['serial'] === '') {
+         $display['serial'] = $notSpecified;
+      }
+      if ($display['comment'] === '') {
+         $display['comment'] = $notSpecified;
+      }
+
+      if ($itemtype === 'Computer') {
+         foreach ((new \Item_OperatingSystem())->find([
+            'items_id' => (int)($asset['id'] ?? 0), 'itemtype' => 'Computer', 'is_deleted' => 0,
+         ], ['date_mod DESC'], 1) as $row) {
+            $parts = [];
+            foreach ([
+               ['operatingsystems_id', 'glpi_operatingsystems'],
+               ['operatingsystemversions_id', 'glpi_operatingsystemversions'],
+               ['operatingsystemeditions_id', 'glpi_operatingsystemeditions'],
+            ] as [$field, $table]) {
+               $v = Utils::dropdownName((int)($row[$field] ?? 0), $table, '');
+               if ($v !== '') $parts[] = $v;
+            }
+            if ($parts !== []) {
+               $display['os'] = implode(' ', $parts);
+               break;
+            }
+         }
+
+         $ram = [];
+         foreach ((new \Item_DeviceMemory())->find([
+            'items_id' => (int)($asset['id'] ?? 0), 'itemtype' => 'Computer', 'is_deleted' => 0,
+         ]) as $row) {
+            $mem = new \DeviceMemory();
+            if ($mem->getFromDB((int)($row['devicememories_id'] ?? 0)) && !empty($mem->fields['designation'])) {
+               $ram[] = $mem->fields['designation'];
+            }
+         }
+         if ($ram !== []) $display['ram'] = implode(' + ', $ram);
+
+         $disks = [];
+         foreach ((new \Item_DeviceHardDrive())->find([
+            'items_id' => (int)($asset['id'] ?? 0), 'itemtype' => 'Computer', 'is_deleted' => 0,
+         ]) as $row) {
+            $disk = new \DeviceHardDrive();
+            if ($disk->getFromDB((int)($row['deviceharddrives_id'] ?? 0)) && !empty($disk->fields['designation'])) {
+               $disks[] = $disk->fields['designation'];
+            }
+         }
+         if ($disks !== []) $display['storage'] = implode(', ', array_unique($disks));
+
+         foreach ((new \Item_DeviceProcessor())->find([
+            'items_id' => (int)($asset['id'] ?? 0), 'itemtype' => 'Computer', 'is_deleted' => 0,
+         ], ['id DESC'], 1) as $row) {
+            $cpu = new \DeviceProcessor();
+            if ($cpu->getFromDB((int)($row['deviceprocessors_id'] ?? 0))) {
+               $mfr = Utils::dropdownName((int)($cpu->fields['manufacturers_id'] ?? 0), 'glpi_manufacturers', '');
+               $designation = trim((string)($cpu->fields['designation'] ?? ''));
+               $display['cpu'] = trim($mfr . ' ' . $designation) !== '' ? trim($mfr . ' ' . $designation) : $notSpecified;
+               if (!empty($cpu->fields['frequence'])) {
+                  $display['speed'] = number_format((float)$cpu->fields['frequence'] / 1000, 2) . ' GHz';
+               }
+               break;
+            }
+         }
+      }
+
+      if ($itemtype === 'Computer') {
+         $display['associated_devices'] = self::getManualComputerAssociatedDevices(
+            (int)($asset['id'] ?? 0),
+            $user->getID()
+         );
+      }
+
+      if ($itemtype === 'Phone') {
+         $phoneRam = [];
+         foreach ((new \Item_DeviceMemory())->find([
+            'items_id' => (int)($asset['id'] ?? 0), 'itemtype' => 'Phone', 'is_deleted' => 0,
+         ]) as $row) {
+            $designation = Utils::dropdownName((int)($row['devicememories_id'] ?? 0), 'glpi_devicememories', '');
+            if ($designation !== '') $phoneRam[] = $designation;
+         }
+         if ($phoneRam !== []) $display['ram'] = implode(' + ', $phoneRam);
+
+         $phoneStorage = [];
+         foreach ((new \Item_DeviceHardDrive())->find([
+            'items_id' => (int)($asset['id'] ?? 0), 'itemtype' => 'Phone', 'is_deleted' => 0,
+         ]) as $row) {
+            $designation = Utils::dropdownName((int)($row['deviceharddrives_id'] ?? 0), 'glpi_deviceharddrives', '');
+            if ($designation !== '') $phoneStorage[] = $designation;
+         }
+         if ($phoneStorage !== []) $display['storage'] = implode(', ', array_unique($phoneStorage));
+
+         $lineRows = (new \Item_Line())->find([
+            'items_id' => (int)($asset['id'] ?? 0),
+            'itemtype' => 'Phone',
+         ]);
+         $lineRow = reset($lineRows);
+         if ($lineRow && !empty($lineRow['lines_id'])) {
+            $line = new \Line();
+            if ($line->getFromDB((int)$lineRow['lines_id'])) {
+               $callerNum = trim((string)($line->fields['caller_num'] ?? ''));
+               $lineName  = trim((string)($line->fields['name'] ?? ''));
+               $display['line'] = $callerNum !== '' ? $callerNum : ($lineName !== '' ? $lineName : $notSpecified);
+            }
+         }
+         $display['uuid'] = trim((string)($asset['uuid'] ?? $notSpecified)) ?: $notSpecified;
+      }
+
+      return $display;
+   }
+
+   
+
+   
+
+public static function buildManualFormPdf(string $itemtype, string $movement, int $userId = 0, bool $preview = false): array
+   {
+      global $CFG_GLPI;
+      if (!in_array($itemtype, ['Computer', 'Printer', 'Phone'], true)) {
+         throw new \InvalidArgumentException(__('Invalid asset type.', 'responsivas'));
+      }
+      if (!in_array($movement, ['delivery', 'return'], true)) {
+         throw new \InvalidArgumentException(__('Invalid manual form type.', 'responsivas'));
+      }
+
+      $config = \Config::getConfigurationValues('plugin_responsivas');
+      $prefix = ['Computer' => 'pc', 'Printer' => 'pri', 'Phone' => 'pho'][$itemtype];
+      $form = $movement === 'return' ? 'return' : 'inspection';
+
+      $title = trim((string)($config[$prefix . '_' . $form . '_title'] ?? ''));
+      $instructions = trim((string)($config[$prefix . '_' . $form . '_instructions'] ?? ''));
+      if ($title === '') {
+         $title = $movement === 'return'
+            ? __('ASSET RETURN FORM', 'responsivas')
+            : __('VISUAL ASSET CONDITION FORM', 'responsivas');
+      }
+
+      if ($instructions === '') {
+         $instructions = $movement === 'return'
+            ? __('Inspect the equipment before receiving it and record any relevant physical condition.', 'responsivas')
+            : __('Inspect all visible surfaces before delivering the equipment and record any relevant physical condition.', 'responsivas');
+      }
+      $timezone = (string)($config['timezone'] ?? date_default_timezone_get());
+      $dateText = Utils::dateToText(
+         (string)($_SESSION['glpi_currenttime'] ?? date('Y-m-d H:i:s')),
+         $timezone
+      );
+
+      $location = '';
+      try {
+         $location = self::getActiveEntityLocation();
+      } catch (\Throwable $e) {
+         // Keep the manual document printable if the entity has no location.
+      }
+
+      $pdf = self::makePdf(
+         $prefix,
+         'Responsivas - ' . $title,
+         $title,
+         'responsivas, formulario, condicion, devolucion, activos',
+         $location,
+         $dateText,
+         $config,
+         24.0,
+         false
+      );
+      // The exact manual format owns its own 4-position footer configuration.
+      $pdf->setDocumentType($prefix . '_font_size', $prefix . '_' . $form);
+
+      $assignedUser = null;
+      if ($userId > 0) {
+         $candidate = new \User();
+         if ($candidate->getFromDB($userId) && $candidate->canView()) {
+            $assignedUser = $candidate;
+         }
+      }
+
+      $assets = $assignedUser ? self::getManualAssets($itemtype, $userId) : [];
+      if ($assets === [] || $preview) {
+         // Configuration preview is a template preview: always render one
+         // complete manual sheet using representative values, never depend on
+         // the administrator's assigned inventory.
+         $assets = [[]];
+      }
+
+      $font = \Config::getConfigurationValue('core', 'pdffont');
+      $fontSize = max(8, min(12, (int)($config[$prefix . '_font_size'] ?? 10)));
+      $labelSize = max(7, $fontSize - 1);
+      $escapeValue = static function (string $value): string {
+         return Utils::escape($value !== '' ? $value : __('Not specified', 'responsivas'));
+      };
+
+      foreach ($assets as $asset) {
+         $pdf->AddPage();
+
+         // Manual forms use the same footer QR mechanism as standard
+         // responsibility documents. For real documents, the QR points to
+         // the exact GLPI asset record represented by the sheet.
+         if ($preview) {
+            // Keep manual previews visually consistent with standard previews:
+            // show the QR in the footer, pointing to the GLPI base URL.
+            $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
+         } elseif (isset($asset['id'])) {
+            $manualUrlMap = [
+               'Computer' => '/front/computer.form.php?id=',
+               'Printer'  => '/front/printer.form.php?id=',
+               'Phone'    => '/front/phone.form.php?id=',
+            ];
+            if (isset($manualUrlMap[$itemtype])) {
+               $pdf->setQrForPage(
+                  $pdf->getPage(),
+                  $CFG_GLPI['url_base'] . $manualUrlMap[$itemtype] . (int)$asset['id']
+               );
+            }
+         }
+
+         // Center the configured title as plain text. renderTemplate() returns
+         // HTML intended for writeHTML(), so it must never be passed to Cell().
+         $pdf->SetFont($font, 'B', $fontSize + 1);
+         $titleText = trim(strip_tags(Utils::applyTemplate($title, [])));
+         $pdf->SetX(15);
+         $pdf->Cell(186, 7.5, $titleText, 0, 1, 'C');
+         $pdf->Ln(0.5);
+
+         $data = ($assignedUser && isset($asset['id']) && !$preview)
+            ? self::getManualAssetDisplayData($itemtype, $asset, $assignedUser)
+            : self::getManualPreviewDisplayData($itemtype, $assignedUser);
+
+         $pdf->SetFont($font, '', $labelSize);
+         if ($itemtype === 'Computer') {
+            // Computer asset tag and Name are rendered in the shared six-column table.
+            $identificationHtml = '';
+         } else {
+            // Printer and phone manuals keep the asset number on the left and place
+            // the corresponding asset Name on the right. The recipient already
+            // appears in the signature block, so there is no redundant Assigned to line.
+            $identificationLabel = $itemtype === 'Phone'
+               ? __('Phone identification', 'responsivas')
+               : __('Printer identification', 'responsivas');
+            $identificationHtml =
+               '<table nobr="true" width="100%" cellpadding="0" cellspacing="0">'
+               . '<tr>'
+               . '<td width="50%" style="font-size:' . $labelSize . 'pt;">'
+               . '<strong>' . Utils::escape(__('Asset identification', 'responsivas')) . ':</strong> '
+               . $escapeValue((string)$data['asset'])
+               . '</td>'
+               . '<td width="50%" style="font-size:' . $labelSize . 'pt;">'
+               . '<strong>' . Utils::escape($identificationLabel) . ':</strong> '
+               . $escapeValue((string)($data['name'] ?? ''))
+               . '</td>'
+               . '</tr>'
+               . '</table>';
+         }
+         if ($identificationHtml !== '') {
+            $pdf->writeHTML(
+               $identificationHtml,
+               true,
+               false,
+               true,
+               false,
+               ''
+            );
+         }
+
+         // The property table intentionally mirrors the normal responsibility PDF.
+         if ($itemtype === 'Computer') {
+            // Reuse the exact same computer asset table as the standard responsibility.
+            // The smaller cell padding is only for the fixed one-page manual layout.
+            $associatedDevices = (array)($data['associated_devices'] ?? []);
+            $associatedCount = count($associatedDevices);
+            $devicesHtml = '';
+            $printedDevicesHeader = false;
+            if ($associatedCount > 0) {
+               self::appendDevicesHeader($devicesHtml, $printedDevicesHeader, '#E6E6E6');
+               foreach ($associatedDevices as $device) {
+                  self::appendDeviceRow(
+                     $devicesHtml,
+                     (string)($device['device'] ?? ''),
+                     (string)($device['brand'] ?? ''),
+                     (string)($device['model'] ?? ''),
+                     (string)($device['serial'] ?? ''),
+                     (string)($device['asset'] ?? ''),
+                     (string)($device['condition'] ?? ''),
+                     '#FFFFFF'
+                  );
+               }
+            }
+
+            $tablePadding = $associatedCount > 6 ? 1.5 : ($associatedCount > 3 ? 1.75 : 2.0);
+            $assetTable = self::renderComputerAssetTable(
+               $escapeValue((string)$data['brand']),
+               $escapeValue((string)$data['model']),
+               $escapeValue((string)$data['serial']),
+               $escapeValue((string)$data['cpu']),
+               $escapeValue((string)$data['speed']),
+               $escapeValue((string)($data['asset'] ?? '')),
+               $escapeValue((string)($data['name'] ?? '')),
+               $escapeValue((string)$data['ram']),
+               $escapeValue((string)$data['os']),
+               $escapeValue((string)$data['storage']),
+               $escapeValue((string)$data['type']),
+               $escapeValue((string)$data['state']),
+               $escapeValue((string)$data['comment']),
+               $devicesHtml,
+               '#E6E6E6',
+               '#FFFFFF',
+               $tablePadding
+            );
+         } elseif ($itemtype === 'Printer') {
+            $table = '<table border="1" cellpadding="3" cellspacing="0" width="100%">'
+               . '<tr style="background-color:#E6E6E6;">'
+               . '<td width="20%"><strong>' . __('Brand', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Model', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Serial', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Type', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Condition', 'responsivas') . '</strong></td></tr>'
+               . '<tr>'
+               . '<td>' . $escapeValue($data['brand']) . '</td>'
+               . '<td>' . $escapeValue($data['model']) . '</td>'
+               . '<td>' . $escapeValue($data['serial']) . '</td>'
+               . '<td>' . $escapeValue($data['type']) . '</td>'
+               . '<td>' . $escapeValue($data['state']) . '</td></tr>'
+               . '<tr style="background-color:#E6E6E6;"><td colspan="5"><strong>' . __('Comments', 'responsivas') . '</strong></td></tr>'
+               . '<tr><td colspan="5">' . $escapeValue($data['comment']) . '</td></tr>'
+               . '</table><br>';
+         } else {
+            $table = '<table border="1" cellpadding="3" cellspacing="0" width="100%">'
+               . '<tr style="background-color:#E6E6E6;">'
+               . '<td width="20%"><strong>' . __('Brand', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Model', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Serial', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('Storage', 'responsivas') . '</strong></td>'
+               . '<td width="20%"><strong>' . __('RAM', 'responsivas') . '</strong></td></tr>'
+               . '<tr>'
+               . '<td>' . $escapeValue($data['brand']) . '</td>'
+               . '<td>' . $escapeValue($data['model']) . '</td>'
+               . '<td>' . $escapeValue($data['serial']) . '</td>'
+               . '<td>' . $escapeValue($data['storage']) . '</td>'
+               . '<td>' . $escapeValue($data['ram']) . '</td></tr>'
+               . '<tr style="background-color:#E6E6E6;">'
+               . '<td><strong>' . __('Type', 'responsivas') . '</strong></td>'
+               . '<td><strong>' . __('Condition', 'responsivas') . '</strong></td>'
+               . '<td><strong>' . __('IMEI', 'responsivas') . '</strong></td>'
+               . '<td><strong>' . __('Line', 'responsivas') . '</strong></td>'
+               . '<td><strong>' . __('Asset', 'responsivas') . '</strong></td></tr>'
+               . '<tr>'
+               . '<td>' . $escapeValue($data['type']) . '</td>'
+               . '<td>' . $escapeValue($data['state']) . '</td>'
+               . '<td>' . $escapeValue($data['imei']) . '</td>'
+               . '<td>' . $escapeValue($data['line']) . '</td>'
+               . '<td>' . $escapeValue($data['asset']) . '</td></tr>'
+               . '</table><br>';
+         }
+
+         $pdf->SetFont($font, '', $labelSize);
+         $pdf->writeHTML($itemtype === 'Computer' ? $assetTable : $table, true, false, true, false, '');
+
+         // Keep the condition heading and all four options on one compact row
+         // in manual inspection/return forms to preserve space for the
+         // visual map, notes and signatures on the same Letter page.
+         $conditionLabel = $movement === 'return'
+            ? __('Condition at return', 'responsivas')
+            : __('Condition at delivery', 'responsivas');
+         $conditions = [
+            __('Excellent', 'responsivas'),
+            __('Good', 'responsivas'),
+            __('Fair', 'responsivas'),
+            __('Damaged', 'responsivas'),
+         ];
+         // Remove the small empty band left by TCPDF after the property table
+         // before the condition row. Keep the adjustment local to manual forms.
+         $conditionY = max(25.0, $pdf->GetY() - 1.5);
+         $conditionX = 15;
+         $conditionHeadingW = 50;
+         $conditionOptionW = 34;
+         $pdf->SetFont($font, 'B', $fontSize);
+         $pdf->SetXY($conditionX, $conditionY);
+         $pdf->Cell($conditionHeadingW, 5.5, $conditionLabel, 0, 0, 'L');
+         $conditionX += $conditionHeadingW;
+
+         foreach ($conditions as $condition) {
+            // Set the line width immediately before each rectangle so every
+            // checkbox is rendered with the same print-safe thickness.
+            $pdf->SetLineWidth(0.45);
+            $pdf->Rect($conditionX, $conditionY + 0.5, 4.5, 4.5);
+            $pdf->SetXY($conditionX + 6, $conditionY);
+            $pdf->SetFont($font, '', $labelSize);
+            $pdf->Cell($conditionOptionW - 6, 5.5, $condition, 0, 0, 'L');
+            $conditionX += $conditionOptionW;
+         }
+
+         $pdf->SetLineWidth(0.2);
+         $pdf->SetY($conditionY + 5);
+
+         // General computer condition map: no laptop/desktop inference.
+         $pdf->SetFont($font, 'B', $fontSize);
+         $pdf->Cell(0, 5.5, __('Visual condition map', 'responsivas'), 0, 1, 'L');
+         if ($itemtype === 'Computer') {
+            $baseY = $pdf->GetY() + 1;
+            // Keep the existing computer schematic exactly as designed. Associated
+            // device rows adapt inside their own table; the schematic is never resized.
+            // Slightly reduce the computer schematic so manuals with larger
+            // associated-device tables keep enough vertical space for the
+            // instructions, notes and signatures on the same Letter page.
+            $mapWidth = ($preview && $itemtype === 'Computer') ? 148 : 150;
+            $mapHeight = $mapWidth * (702 / 1863);
+            $mapX = (210 - $mapWidth) / 2;
+            $pdf->Image(Paths::assetPath('computer_general.png'), $mapX, $baseY, $mapWidth, 0, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+            if ($preview) {
+               $pdf->drawWatermarkAt(105, $baseY + ($mapHeight / 2));
+            }
+            $pdf->SetY($baseY + $mapHeight);
+         } else {
+            if ($itemtype === 'Phone') {
+               $baseY = $pdf->GetY() + 1;
+               $phoneMapW = 62;
+               $phoneMapH = 62; // source is square; keep the full four-view diagram visible
+               $phoneMapX = (210 - $phoneMapW) / 2;
+               $pdf->Image(
+                  Paths::assetPath('phone_general.png'),
+                  $phoneMapX,
+                  $baseY,
+                  $phoneMapW,
+                  $phoneMapH,
+                  'PNG',
+                  '',
+                  '',
+                  false,
+                  300,
+                  '',
+                  false,
+                  false,
+                  0,
+                  false,
+                  false,
+                  false
+               );
+               if ($preview) {
+                  $pdf->drawWatermarkAt(105, $baseY + ($phoneMapH / 2));
+               }
+               // Reserve the full rendered height before continuing with Instructions.
+               $pdf->SetY($baseY + $phoneMapH + 2);
+            } elseif ($itemtype === 'Printer') {
+               $baseY = $pdf->GetY() + 1;
+               $pdf->Image(
+                  Paths::assetPath('printer_general.png'),
+                  70,
+                  $baseY,
+                  70,
+                  0,
+                  'PNG',
+                  '',
+                  '',
+                  false,
+                  300,
+                  '',
+                  false,
+                  false,
+                  0,
+                  false,
+                  false,
+                  false
+               );
+               if ($preview) {
+                  $pdf->drawWatermarkAt(105, $baseY + 28);
+               }
+               $pdf->SetY($baseY + 56);
+            } else {
+               $baseY = $pdf->GetY() + 1;
+               $pdf->Image(
+                  Paths::assetPath('printer_general.png'),
+                  70,
+                  $baseY,
+                  70,
+                  0,
+                  'PNG',
+                  '',
+                  '',
+                  false,
+                  300,
+                  '',
+                  false,
+                  false,
+                  0,
+                  false,
+                  false,
+                  false
+               );
+               $pdf->SetY($baseY + 56);
+            }
+         }
+
+         // Editable Instructions followed by the compact icon-based damage guide.
+         $pdf->SetY($pdf->GetY() + 0.75);
+         $pdf->SetFont($font, 'B', max(8, $fontSize - 1));
+         $pdf->Cell(0, 5, __('Instructions', 'responsivas'), 0, 1, 'L');
+
+         $instructionText = trim(strip_tags(Utils::applyTemplate($instructions, [
+            '{nombre}' => $data['user'] ?? '',
+            '{activo}' => $data['asset'] ?? '',
+            '{marca}'  => $data['brand'] ?? '',
+            '{modelo}' => $data['model'] ?? '',
+            '{serie}'  => $data['serial'] ?? '',
+            '{estado}' => $data['state'] ?? '',
+            '{fecha}'  => $dateText,
+         ])));
+
+         if ($instructionText !== '') {
+            $pdf->SetFont($font, '', max(6.5, $fontSize - 2));
+            $pdf->MultiCell(186, 4.2, $instructionText, 0, 'L', false, 1);
+         }
+
+         $guideItems = [
+            ['icon' => 'scratch.png', 'title' => __('Scratches', 'responsivas'),
+             'text' => __('Draw short lines over the scratched area.', 'responsivas')],
+            ['icon' => 'impact.png', 'title' => __('Impacts / dents', 'responsivas'),
+             'text' => __('Draw a circle around the damaged area.', 'responsivas')],
+            ['icon' => 'wear.png', 'title' => __('Wear / use', 'responsivas'),
+             'text' => __('Draw short waves over the worn area.', 'responsivas')],
+            ['icon' => 'missing.png', 'title' => __('Missing parts / other', 'responsivas'),
+             'text' => __('Draw an X over the missing part or component.', 'responsivas')],
+         ];
+
+         $guideY = $pdf->GetY() + 1.0;
+         $iconSize = 5.5;
+         $lineH = ($itemtype === 'Computer' && $associatedCount > 6) ? 4.4 : (($itemtype === 'Computer' && $associatedCount > 3) ? 4.7 : 5.0);
+
+         foreach ($guideItems as $item) {
+            $pdf->Image(
+               Paths::assetPath('damage_icons/' . $item['icon']),
+               15,
+               $guideY + 0.1,
+               $iconSize,
+               $iconSize,
+               'PNG',
+               '',
+               '',
+               false,
+               300,
+               '',
+               false,
+               false,
+               0,
+               false,
+               false,
+               false
+            );
+
+            $pdf->SetXY(23, $guideY);
+            $pdf->SetFont($font, 'B', max(6.5, $fontSize - 2));
+            $pdf->Cell(48, $lineH, $item['title'] . ':', 0, 0, 'L');
+
+            $pdf->SetFont($font, '', max(6.5, $fontSize - 2));
+            $pdf->Cell(
+               115,
+               $lineH,
+               $item['text'],
+               0,
+               1,
+               'L'
+            );
+
+            $guideY += $lineH;
+         }
+
+         $pdf->SetY($guideY + 1);
+
+         // Larger handwriting area because the compact guide releases vertical space.
+         $pdf->SetFont($font, 'B', $fontSize);
+         $pdf->Cell(0, 5.5, __('Additional notes', 'responsivas'), 0, 1, 'L');
+         $notesY = $pdf->GetY();
+         // Keep the handwriting box clearly visible after printing while making
+         // additional computer device rows fit on the same Letter sheet.
+         $compactLevel = ($itemtype === 'Computer')
+            ? ($associatedCount > 10 ? 3 : ($associatedCount > 6 ? 2 : ($associatedCount > 3 ? 1 : 0)))
+            : 0;
+         $notesHeight = [20, 19, 18, 17][$compactLevel];
+         // The previous layout reserved a large empty band below the notes box.
+         // Keep only the space needed for the signature block so the manual
+         // sheet remains on one Letter page even with a taller device table.
+         // Add a few millimetres of breathing room before the signature block
+         // so the handwritten signature has a slightly larger usable area.
+         $notesAfter = [31, 29, 27, 25][$compactLevel];
+         $pdf->SetLineWidth(0.45);
+         $pdf->Rect(15, $notesY, 186, $notesHeight);
+         $pdf->SetLineWidth(0.2);
+         $pdf->SetY($notesY + $notesAfter);
+
+         // Real signer names: technician assigned to asset, otherwise logged-in GLPI user.
+         $technician = '';
+         if (isset($asset['users_id_tech']) && (int)$asset['users_id_tech'] > 0) {
+            $tech = new \User();
+            if ($tech->getFromDB((int)$asset['users_id_tech']) && $tech->canView()) {
+               $technician = $tech->getFriendlyName();
+            }
+         }
+
+         if ($technician === '') {
+            $loginId = (int)\Session::getLoginUserID();
+            if ($loginId > 0) {
+               $tech = new \User();
+               if ($tech->getFromDB($loginId) && $tech->canView()) {
+                  $technician = $tech->getFriendlyName();
+               }
+            }
+         }
+
+         if ($technician === '') {
+            $technician = __('Not specified', 'responsivas');
+         }
+
+         $recipient = $data['user'] !== ''
+            ? $data['user']
+            : ($assignedUser ? $assignedUser->getFriendlyName() : __('Not specified', 'responsivas'));
+
+         $pdf->SetFont($font, '', $labelSize);
+         $pdf->Cell(93, 4.5, '________________________________________', 0, 0, 'C');
+         $pdf->Cell(93, 4.5, '________________________________________', 0, 1, 'C');
+
+         $pdf->SetFont($font, 'B', max(7, $labelSize));
+         $pdf->Cell(93, 4.5, $technician, 0, 0, 'C');
+         $pdf->Cell(93, 4.5, $recipient, 0, 1, 'C');
+
+         $pdf->SetFont($font, '', max(6, $fontSize - 2));
+         $pdf->Cell(93, 4, __('Technician', 'responsivas'), 0, 0, 'C');
+         $pdf->Cell(93, 4, __('User', 'responsivas'), 0, 1, 'C');
+
+      }
+      $namePrefix = ['Computer' => 'Computadora', 'Printer' => 'Impresora', 'Phone' => 'Telefono'][$itemtype];
+      $nameSuffix = $movement === 'return' ? 'Devolucion' : 'Inspeccion_Visual';
+      return [
+         'pdf' => $pdf,
+         'filename' => self::makeFilename($namePrefix . '_' . $nameSuffix, $assignedUser ? $assignedUser->getFriendlyName() : 'Manual'),
+      ];
+   }
+
+
+
+
+
+
+
 
    public static function buildComputerPdf(int $user_id): array
    {
@@ -378,13 +1325,16 @@ HTML;
                continue;
             }
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
-            $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
-<td width='20%'>Monitor</td>
-<td width='20%'>" . Utils::escape(Utils::dropdownName($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
-<td width='20%'>" . Utils::escape(Utils::dropdownName($row['monitormodels_id'], 'glpi_monitormodels')) . "</td>
-<td width='20%'>" . Utils::escape($row['serial'] ?: 'N/A') . " / " . Utils::escape($row['otherserial'] ?: 'N/A') . "</td>
-<td width='20%'>" . Utils::escape(Utils::dropdownName($row['states_id'], 'glpi_states')) . "</td>
-</tr>";
+            self::appendDeviceRow(
+               $dispositivos_html,
+               __('Monitor', 'responsivas'),
+               (string)Utils::dropdownName($row['manufacturers_id'], 'glpi_manufacturers'),
+               (string)Utils::dropdownName($row['monitormodels_id'], 'glpi_monitormodels'),
+               (string)($row['serial'] ?: 'N/A'),
+               (string)($row['otherserial'] ?: 'N/A'),
+               (string)Utils::dropdownName($row['states_id'], 'glpi_states'),
+               $td_bg
+            );
          }
 
          $result = $DB->request([
@@ -402,13 +1352,16 @@ HTML;
                continue;
             }
             self::appendDevicesHeader($dispositivos_html, $printed_header_devs, $th_bg);
-            $dispositivos_html .= "<tr style='background-color:{$td_bg};'>
-<td width='20%'>" . Utils::escape($row['tipo'] ?? 'N/A') . "</td>
-<td width='20%'>" . Utils::escape(Utils::dropdownName($row['manufacturers_id'], 'glpi_manufacturers')) . "</td>
-<td width='20%'>" . Utils::escape(!empty($row['modelo']) ? $row['modelo'] : 'N/A') . "</td>
-<td width='20%'>" . Utils::escape($row['serial'] ?: 'N/A') . " / " . Utils::escape($row['otherserial'] ?: 'N/A') . "</td>
-<td width='20%'>" . Utils::escape(Utils::dropdownName($row['states_id'], 'glpi_states')) . "</td>
-</tr>";
+            self::appendDeviceRow(
+               $dispositivos_html,
+               (string)($row['tipo'] ?? 'N/A'),
+               (string)Utils::dropdownName($row['manufacturers_id'], 'glpi_manufacturers'),
+               (string)($row['modelo'] ?? 'N/A'),
+               (string)($row['serial'] ?: 'N/A'),
+               (string)($row['otherserial'] ?: 'N/A'),
+               (string)Utils::dropdownName($row['states_id'], 'glpi_states'),
+               $td_bg
+            );
          }
 
          $employee_line_html = $employee_line ? "<br>{$employee_line}" : '';
@@ -510,13 +1463,13 @@ Cuando se goce de periodo vacacional",
          $pdf->writeHTML(self::renderPcPage(
             $pc_titulo, $pc_intro, $pc_cuerpo,
             $marca, $modelo, $serie, $cpu_name, $cpu_freq,
-            $ram_texto, $os_texto, $disco, $tipo, $estado_nombre,
+            $activo, Utils::escape((string)($comp->fields['name'] ?? '')), $ram_texto, $os_texto, $disco, $tipo, $estado_nombre,
             $comentarios, $dispositivos_html,
             $full_name_safe, $employee_line_html,
             $th_bg, $td_bg,
             $show_both_sigs_pc, $representante_pc
          ), true, false, true, false, '');
-      }
+}
 
       return [
          'pdf'      => $pdf,
@@ -624,7 +1577,7 @@ Cuando se goce de periodo vacacional",
             $th_bg, $td_bg,
             $show_both_sigs_pri, $representante_pri
          ), true, false, true, false, '');
-         $i++;
+$i++;
       }
 
       return [
@@ -962,6 +1915,7 @@ Cuando se goce de periodo vacacional",
       string $titulo, string $intro, string $cuerpo,
       string $marca, string $modelo, string $serie,
       string $cpu_name, string $cpu_freq,
+      string $activo, string $identificacion,
       string $ram, string $os, string $disco,
       string $tipo, string $estado, string $comentarios,
       string $dispositivos_html,
@@ -973,27 +1927,24 @@ Cuando se goce de periodo vacacional",
       $l = self::lbl();
 
       $sig_block = $show_both_sigs
-         ? '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+         ? '<br><br><br><br><table nobr="true" width="100%" style="text-align:center;">'
            . '<tr>'
            . '<td width="50%"><strong>' . $l['lender'] . '</strong><br><br>_______________________________<br>' . $representante . '</td>'
            . '<td width="50%"><strong>' . $l['borrower'] . '</strong><br><br>_______________________________<br>' . $full_name_safe . $employee_line_html . '</td>'
            . '</tr></table>'
-         : '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+         : '<br><br><br><br><table nobr="true" width="100%" style="text-align:center;">'
            . '<tr><td><strong>_________________________________<br>' . $full_name_safe . $employee_line_html . '</strong></td></tr>'
            . '</table>';
+
+      $asset_table = self::renderComputerAssetTable(
+         $marca, $modelo, $serie, $cpu_name, $cpu_freq, $activo, $identificacion, $ram, $os, $disco, $tipo, $estado,
+         $comentarios, $dispositivos_html, $th_bg, $td_bg
+      );
 
       return <<<HTML
 <h2 style="text-align:center;">{$titulo}</h2>
 <table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.2;">{$intro}</td></tr></table>
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-<tr style="background-color:{$th_bg};"><td width="20%"><strong>{$l['brand']}</strong></td><td width="20%"><strong>{$l['model']}</strong></td><td width="20%"><strong>{$l['serial']}</strong></td><td width="20%"><strong>{$l['processor']}</strong></td><td width="20%"><strong>{$l['speed']}</strong></td></tr>
-<tr style="background-color:{$td_bg};"><td>{$marca}</td><td>{$modelo}</td><td>{$serie}</td><td>{$cpu_name}</td><td>{$cpu_freq}</td></tr>
-<tr style="background-color:{$th_bg};"><td><strong>{$l['ram']}</strong></td><td><strong>{$l['os']}</strong></td><td><strong>{$l['storage']}</strong></td><td><strong>{$l['type']}</strong></td><td><strong>{$l['condition']}</strong></td></tr>
-<tr style="background-color:{$td_bg};"><td>{$ram}</td><td>{$os}</td><td>{$disco}</td><td>{$tipo}</td><td>{$estado}</td></tr>
-<tr style="background-color:{$th_bg};"><td colspan="5"><strong>{$l['comments']}</strong></td></tr>
-<tr style="background-color:{$td_bg};"><td colspan="5">{$comentarios}</td></tr>
-{$dispositivos_html}
-</table>
+{$asset_table}
 {$cuerpo}
 {$sig_block}
 HTML;
@@ -1012,12 +1963,12 @@ HTML;
 
       $emp_sep   = $employee_line !== '' ? '<br>' . $employee_line : '';
       $sig_block = $show_both_sigs
-         ? '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+         ? '<br><br><br><br><table nobr="true" width="100%" style="text-align:center;">'
            . '<tr>'
            . '<td width="50%"><strong>' . $l['lender'] . '</strong><br><br>_______________________________<br>' . $representante . '</td>'
            . '<td width="50%"><strong>' . $l['borrower'] . '</strong><br><br>_______________________________<br>' . $full_safe . $emp_sep . '</td>'
            . '</tr></table>'
-         : '<br><br><br><table nobr="true" width="100%" style="text-align:center;">'
+         : '<br><br><br><br><table nobr="true" width="100%" style="text-align:center;">'
            . '<tr><td><strong>_________________________________<br>' . $full_safe . $emp_sep . '</strong></td></tr>'
            . '</table>';
 
@@ -1123,6 +2074,16 @@ HTML;
                PDF::$global_watermark = false;
                PDF::$global_watermark_text = 'PREVIEW';
             }
+
+            // The preview watermark must still be available when TCPDF renders
+            // Header/Footer during Output(). Do not rely on the temporary
+            // static flag above because it is intentionally reset before the
+            // response is generated. Keep the watermark on this PDF instance.
+            $wm_text = trim($config['watermark_text'] ?? '');
+            $result['pdf']->show_watermark    = true;
+            $result['pdf']->watermark_text    = $wm_text !== '' ? $wm_text : __('PREVIEW', 'responsivas');
+            $result['pdf']->watermark_opacity = max(5, min(100, (int)($config['watermark_opacity'] ?? 25)));
+
             $result['pdf']->SetTitle(match ($type) {
                'pc'  => __('Preview - Computer Responsibility - ', 'responsivas') . $user->getFriendlyName(),
                'pri' => __('Preview - Printer Responsibility - ',  'responsivas') . $user->getFriendlyName(),
@@ -1181,10 +2142,6 @@ HTML;
       $testigo2 = ($t2_id  > 0 && ($n = Utils::userName($t2_id))  !== '') ? $n : __('Demo Witness 2',     'responsivas');
       $rep      = ($rep_id > 0 && ($n = Utils::userName($rep_id)) !== '') ? $n : __('Demo Representative', 'responsivas');
 
-      // Entity address/postcode (igual que el build real de teléfono)
-      $address  = Utils::escape($entity->fields['address']  ?? '');
-      $postcode = Utils::escape($entity->fields['postcode']  ?? '');
-
       // Estado al azar de los existentes en GLPI
       global $DB;
       $states     = iterator_to_array($DB->request(['SELECT' => ['name'], 'FROM' => 'glpi_states', 'LIMIT' => 10]));
@@ -1198,7 +2155,7 @@ HTML;
             __('Preview - Computer Responsibility - ', 'responsivas') . $full_name,
             'Vista previa responsiva de computadora',
             'vista previa, responsiva, computadora, activos, TI',
-            $location, $fecha_header, $config, 30.0, true
+            $location, $fecha_header, $config, 18.0, true
          );
          $pdf->AddPage();
          $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
@@ -1256,13 +2213,14 @@ HTML;
             $pc_titulo, $pc_intro, $pc_cuerpo,
             'Dell', 'Latitude 5540', 'SN-DEMO-123456',
             'Intel Core i5-1345U', '1.60 GHz',
+            'PC-DEMO-001', 'Equipo de demostración',
             '16 GB DDR4', 'Windows 11 Pro', 'SSD 512 GB',
             'Laptop', $demo_state,
             Utils::escape(__('Demo equipment for template preview', 'responsivas')),
             '', $full_name_safe, $employee_line_html, $th_bg, $td_bg,
             $show_demo_pc_sigs, $demo_pc_rep
          ), true, false, true, false, '');
-         return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Computo_DEMO', $full_name)];
+return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Computo_DEMO', $full_name)];
       }
 
       // ── Impresora ────────────────────────────────────────────────────
@@ -1302,7 +2260,7 @@ HTML;
             $full_safe, $employee_line, $th_bg, $td_bg,
             $show_demo_pri_sigs, $demo_pri_rep
          ), true, false, true, false, '');
-         return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DEMO', $full_name)];
+return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DEMO', $full_name)];
       }
 
       // ── Teléfono ─────────────────────────────────────────────────────
@@ -1345,7 +2303,7 @@ HTML;
          Utils::escape($rep), $full_name_safe, $employee_line,
          Utils::escape($testigo1), Utils::escape($testigo2)
       ), true, false, true, false, '');
-      return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
+return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
    }
 
 

@@ -154,14 +154,4 @@ final class Utils
         echo Twig::env()->render('partials/variable_hints.html.twig', ['vars' => $vars]);
     }
 
-    public static function errorAndBack(string $message): void
-    {
-        global $CFG_GLPI;
-        \Session::addMessageAfterRedirect($message, false, ERROR);
-        $referer = $_SERVER['HTTP_REFERER'] ?? '';
-        $base = $CFG_GLPI['url_base'] ?? '';
-        $fallback = $CFG_GLPI['root_doc'] ?? '/';
-        $target = ($base !== '' && str_starts_with($referer, $base)) ? $referer : $fallback;
-        \Html::redirect($target);
-    }
 }

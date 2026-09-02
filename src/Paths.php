@@ -44,6 +44,25 @@ final class Paths
         return self::filesDir() . '/logo.png';
     }
 
+    public static function assetPath(string $file): string
+    {
+        $allowed = [
+            'computer_general.png',
+            'phone_general.png',
+            'printer_general.png',
+            'damage_icons/scratch.png',
+            'damage_icons/impact.png',
+            'damage_icons/wear.png',
+            'damage_icons/missing.png',
+        ];
+
+        if (!in_array($file, $allowed, true)) {
+            throw new \InvalidArgumentException(__('Invalid Responsivas asset.', 'responsivas'));
+        }
+
+        return self::pluginDir() . '/assets/schematics/' . $file;
+    }
+
     public static function logoUrl(): string
     {
         return self::routeUrl('resource/logo');

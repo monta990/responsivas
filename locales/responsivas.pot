@@ -1,9 +1,5 @@
-#
 msgid ""
-msgstr ""
-"Project-Id-Version: Responsivas\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+msgstr "Project-Id-Version: Responsivas\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
 
 msgid "Responsivas"
 msgstr ""
@@ -11,13 +7,10 @@ msgstr ""
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr ""
 
-msgid ""
-"Responsivas requires TCPDF, which must be available in GLPI's vendor "
-"directory."
+msgid "Responsivas requires TCPDF, which must be available in GLPI's vendor directory."
 msgstr ""
 
-msgid ""
-"Could not create the Responsivas plugin files directory. Check permissions."
+msgid "Could not create the Responsivas plugin files directory. Check permissions."
 msgstr ""
 
 msgid "Responsibility Forms"
@@ -53,9 +46,7 @@ msgstr ""
 msgid "The legal representative is invalid or inactive."
 msgstr ""
 
-msgid ""
-"Phone \"%s\" has no purchase price. Add it in Management → Administrative "
-"and financial information → Purchase price."
+msgid "Phone \"%s\" has no purchase price. Add it in Management → Administrative and financial information → Purchase price."
 msgstr ""
 
 msgid "N/A"
@@ -70,9 +61,7 @@ msgstr ""
 msgid "Select the asset type to generate responsibility documents"
 msgstr ""
 
-msgid ""
-"The phone type for responsibility documents has not been configured. Contact"
-" the administrator."
+msgid "The phone type for responsibility documents has not been configured. Contact the administrator."
 msgstr ""
 
 msgid "Show QR"
@@ -104,6 +93,7 @@ msgstr ""
 
 msgid "Email not configured"
 msgstr ""
+
 msgid "Confirm sending"
 msgstr ""
 
@@ -146,9 +136,7 @@ msgstr ""
 msgid "Timezone for PDFs"
 msgstr ""
 
-msgid ""
-"This timezone will be used to display dates and times in PDFs. At plugin "
-"installation it defaults to the server timezone. More information at: %s"
+msgid "This timezone will be used to display dates and times in PDFs. At plugin installation it defaults to the server timezone. More information at: %s"
 msgstr ""
 
 msgid "PHP timezone list"
@@ -169,9 +157,7 @@ msgstr ""
 msgid "Currency symbol"
 msgstr ""
 
-msgid ""
-"Symbol or code that appears before the price in phone loan agreements (e.g.:"
-" $, USD, MXN, €)."
+msgid "Symbol or code that appears before the price in phone loan agreements (e.g.: $, USD, MXN, €)."
 msgstr ""
 
 msgid "Witnesses for phone loan agreements"
@@ -225,9 +211,7 @@ msgstr ""
 msgid "Load an image for a preview."
 msgstr ""
 
-msgid ""
-"Once loaded and validated in preview, remember to save for it to take "
-"effect."
+msgid "Once loaded and validated in preview, remember to save for it to take effect."
 msgstr ""
 
 msgid "Confirm deletion"
@@ -271,6 +255,7 @@ msgstr ""
 
 msgid "Email options"
 msgstr ""
+
 msgid "Full name of the assigned user"
 msgstr ""
 
@@ -298,15 +283,10 @@ msgstr ""
 msgid "Email footer (optional)"
 msgstr ""
 
-msgid ""
-"Optional. Appears at the bottom of the email, separated by a line. You can "
-"use {nombre}, {empresa} and {fecha}."
+msgid "Optional. Appears at the bottom of the email, separated by a line. You can use {nombre}, {empresa} and {fecha}."
 msgstr ""
 
-msgid ""
-"The GLPI mail server is not configured or email notifications are disabled. "
-"The send button will fail until you configure it in <strong>Configuration → "
-"Notifications → Email configuration</strong>."
+msgid "The GLPI mail server is not configured or email notifications are disabled. The send button will fail until you configure it in <strong>Configuration → Notifications → Email configuration</strong>."
 msgstr ""
 
 msgid "Configure the email subject and body first"
@@ -339,9 +319,7 @@ msgstr ""
 msgid "Body / Clauses"
 msgstr ""
 
-msgid ""
-"Legal text after the table. Lines with \"1. text\" → numbered list. Blank "
-"line → new paragraph. **text** → bold."
+msgid "Legal text after the table. Lines with \"1. text\" → numbered list. Blank line → new paragraph. **text** → bold."
 msgstr ""
 
 msgid "Opening paragraph"
@@ -353,9 +331,7 @@ msgstr ""
 msgid "Clauses"
 msgstr ""
 
-msgid ""
-"One clause per line with format \"1. text\". Use {clausula_vida_util} for "
-"the useful life clause. **text** → bold."
+msgid "One clause per line with format \"1. text\". Use {clausula_vida_util} for the useful life clause. **text** → bold."
 msgstr ""
 
 msgid "Witnesses paragraph"
@@ -445,9 +421,7 @@ msgstr ""
 msgid "Open asset record in GLPI"
 msgstr ""
 
-msgid ""
-"You do not have permission to generate responsibility documents for this "
-"user."
+msgid "You do not have permission to generate responsibility documents for this user."
 msgstr ""
 
 msgid "Access denied."
@@ -456,9 +430,7 @@ msgstr ""
 msgid "The user does not have a registered email address."
 msgstr ""
 
-msgid ""
-"Incomplete email configuration. Configure the subject and body in the Email "
-"tab."
+msgid "Incomplete email configuration. Configure the subject and body in the Email tab."
 msgstr ""
 
 msgid "There are no responsibility documents to generate for this user."
@@ -482,25 +454,19 @@ msgstr ""
 msgid "Invalid user."
 msgstr ""
 
-msgid ""
-"Your user does not have an email address registered in GLPI. Add it in your "
-"profile."
+msgid "Your user does not have an email address registered in GLPI. Add it in your profile."
 msgstr ""
 
 msgid "Incomplete email configuration. Configure the subject and body first."
 msgstr ""
 
-msgid ""
-"This is a test email generated from the Responsivas plugin configuration. No"
-" PDFs are attached."
+msgid "This is a test email generated from the Responsivas plugin configuration. No PDFs are attached."
 msgstr ""
 
 msgid "Test email successfully sent to %s."
 msgstr ""
 
-msgid ""
-"The document template has empty fields. Complete the following fields in "
-"Configuration → Responsivas: %s"
+msgid "The document template has empty fields. Complete the following fields in Configuration → Responsivas: %s"
 msgstr ""
 
 msgid "Title (Computer)"
@@ -560,8 +526,7 @@ msgstr ""
 msgid "Demo Representative"
 msgstr ""
 
-msgid ""
-"Generates a PDF preview using current settings. A watermark is applied."
+msgid "Generates a PDF preview using current settings. A watermark is applied."
 msgstr ""
 
 msgid "Compress PDF"
@@ -591,17 +556,13 @@ msgstr ""
 msgid "Useful life clause (with invoice)"
 msgstr ""
 
-msgid ""
-"Used when the phone has an invoice and supplier. Variables: {fecha_compra}, "
-"{factura}, {proveedor}. Empty uses the default text."
+msgid "Used when the phone has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the default text."
 msgstr ""
 
 msgid "Useful life clause (without invoice)"
 msgstr ""
 
-msgid ""
-"Used when the phone has no registered invoice or supplier. Empty uses the "
-"default text."
+msgid "Used when the phone has no registered invoice or supplier. Empty uses the default text."
 msgstr ""
 
 msgid "Demo equipment for template preview"
@@ -774,8 +735,10 @@ msgstr ""
 
 msgid "The uploaded file is not a valid image."
 msgstr ""
+
 msgid "A new version is available on GitHub: %s"
 msgstr ""
+
 msgid "Open releases page"
 msgstr ""
 
@@ -800,15 +763,12 @@ msgstr ""
 msgid "The latest release is checked automatically and cached for 6 hours."
 msgstr ""
 
-
 msgid "Error generating the preview. Check the GLPI error log for details."
 msgstr ""
 
-#: templates/config/tab_general.html.twig
 msgid "Releases"
 msgstr ""
 
-#: inc/pdfbuilder.class.php
 msgid "Associated devices"
 msgstr ""
 
@@ -933,4 +893,524 @@ msgid "Import a Responsivas JSON backup. Existing settings are replaced by the v
 msgstr ""
 
 msgid "The export includes templates, document options, email settings, footer settings, and the logo. User and phone-type selections are only portable when their IDs exist in the target GLPI installation."
+msgstr ""
+
+msgid "Visual condition"
+msgstr ""
+
+msgid "Return"
+msgstr ""
+
+msgid "Asset return"
+msgstr ""
+
+msgid "Visual inspection"
+msgstr ""
+
+msgid "Save inspection"
+msgstr ""
+
+msgid "Select an asset"
+msgstr ""
+
+msgid "Visual condition map"
+msgstr ""
+
+msgid "Markers"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete this marker?"
+msgstr ""
+
+msgid "Describe the observation"
+msgstr ""
+
+msgid "Is this a major damage?"
+msgstr ""
+
+msgid "Major"
+msgstr ""
+
+msgid "Minor"
+msgstr ""
+
+msgid "General observations"
+msgstr ""
+
+msgid "Excellent"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Fair"
+msgstr ""
+
+msgid "Damaged"
+msgstr ""
+
+msgid "Return observations"
+msgstr ""
+
+msgid "Final condition"
+msgstr ""
+
+msgid "Return condition map"
+msgstr ""
+
+msgid "Click the schematic to add a return observation marker."
+msgstr ""
+
+msgid "Describe the return observation"
+msgstr ""
+
+msgid "Asset to return"
+msgstr ""
+
+msgid "Generate return document"
+msgstr ""
+
+msgid "Unassign asset from user after successful return"
+msgstr ""
+
+msgid "If you check the option below, the asset will be unassigned from this user only after the return PDF is generated successfully."
+msgstr ""
+
+msgid "Visual inspection / physical condition"
+msgstr ""
+
+msgid "Condition at delivery"
+msgstr ""
+
+msgid "Condition at return"
+msgstr ""
+
+msgid "Observations"
+msgstr ""
+
+msgid "No visual observations recorded."
+msgstr ""
+
+msgid "Visual observations"
+msgstr ""
+
+msgid "This page records the visual condition registered in Responsivas at the time of the movement."
+msgstr ""
+
+msgid "Delivery"
+msgstr ""
+
+msgid "Asset returned by"
+msgstr ""
+
+msgid "The asset is returned to the organization for review, storage, reassignment or disposal according to internal policy."
+msgstr ""
+
+msgid "ACTA DE DEVOLUCIÓN"
+msgstr ""
+
+msgid "Asset"
+msgstr ""
+
+msgid "Asset Return"
+msgstr ""
+
+msgid "Click the schematic to add an observation marker."
+msgstr ""
+
+msgid "Delivery condition"
+msgstr ""
+
+msgid "Desktop computer"
+msgstr ""
+
+msgid "Equipment"
+msgstr ""
+
+msgid "Identification"
+msgstr ""
+
+msgid "Inspection date"
+msgstr ""
+
+msgid "Inspection record kept with the responsibility document."
+msgstr ""
+
+msgid "Invalid asset type."
+msgstr ""
+
+msgid "Invalid inspection data."
+msgstr ""
+
+msgid "Invalid inspection type."
+msgstr ""
+
+msgid "Laptop"
+msgstr ""
+
+msgid "Marker details"
+msgstr ""
+
+msgid "Mobile phone"
+msgstr ""
+
+msgid "Printer"
+msgstr ""
+
+msgid "RETURN ACT"
+msgstr ""
+
+msgid "Return condition"
+msgstr ""
+
+msgid "Select an asset."
+msgstr ""
+
+msgid "The maximum of 50 markers has been reached."
+msgstr ""
+
+msgid "The return document was generated, but the asset could not be unassigned."
+msgstr ""
+
+msgid "The selected asset is not assigned to this user."
+msgstr ""
+
+msgid "Visual inspection saved successfully."
+msgstr ""
+
+msgid "Visual observation"
+msgstr ""
+
+msgid "Invalid condition."
+msgstr ""
+
+msgid "Manual forms"
+msgstr ""
+
+msgid "Enable visual inspection form"
+msgstr ""
+
+msgid "Enable return form"
+msgstr ""
+
+msgid "Shows the Visual condition button below Computers. The PDF is fixed and designed to be completed by hand."
+msgstr ""
+
+msgid "Shows the Visual condition button below Printers. The PDF is fixed and designed to be completed by hand."
+msgstr ""
+
+msgid "Shows the Visual condition button below Phones. The PDF is fixed and designed to be completed by hand."
+msgstr ""
+
+msgid "Shows the Return button below Computers. The PDF is fixed and designed to be completed by hand."
+msgstr ""
+
+msgid "Shows the Return button below Printers. The PDF is fixed and designed to be completed by hand."
+msgstr ""
+
+msgid "Shows the Return button below Phones. The PDF is fixed and designed to be completed by hand."
+msgstr ""
+
+msgid "Visual inspection form"
+msgstr ""
+
+msgid "Asset return form"
+msgstr ""
+
+msgid "Fixed manual form for printing"
+msgstr ""
+
+msgid "VISUAL ASSET CONDITION FORM"
+msgstr ""
+
+msgid "ASSET RETURN FORM"
+msgstr ""
+
+msgid "Fixed form to document the physical condition at asset delivery."
+msgstr ""
+
+msgid "Fixed form to document the physical condition at asset return."
+msgstr ""
+
+msgid "Asset type"
+msgstr ""
+
+msgid "User / employee"
+msgstr ""
+
+msgid "Brand / manufacturer"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Overall condition"
+msgstr ""
+
+msgid "Asset schematic"
+msgstr ""
+
+msgid "Observations / visual damage"
+msgstr ""
+
+msgid "Technician / responsible person"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Computer type"
+msgstr ""
+
+msgid "Laptop computer"
+msgstr ""
+
+msgid "Record visible damage, missing accessories and the condition of the asset at the time of return."
+msgstr ""
+
+msgid "Record scratches, dents, cracks, missing parts and any other visible condition at the time of delivery."
+msgstr ""
+
+msgid "Computer"
+msgstr ""
+
+msgid "Invalid manual form type."
+msgstr ""
+
+msgid "Manual form templates"
+msgstr ""
+
+msgid "Visual condition form"
+msgstr ""
+
+msgid "Return form"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Instructions"
+msgstr ""
+
+msgid "Title printed in the fixed manual PDF."
+msgstr ""
+
+msgid "Text printed above the handwritten observation area. Use **text** for bold."
+msgstr ""
+
+msgid "Asset identification"
+msgstr ""
+
+msgid "Computer identification"
+msgstr ""
+
+msgid "Phone identification"
+msgstr ""
+
+msgid "Technician"
+msgstr ""
+
+msgid "Instructions / observations"
+msgstr ""
+
+msgid "Marker details / notes"
+msgstr ""
+
+msgid "Could not generate the manual PDF."
+msgstr ""
+
+msgid "Unknown computer type"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "Asset name"
+msgstr ""
+
+msgid "Phone type"
+msgstr ""
+
+msgid "Identifier"
+msgstr ""
+
+msgid "Operating system"
+msgstr ""
+
+msgid "Printer type"
+msgstr ""
+
+msgid "Observations / damage details"
+msgstr ""
+
+msgid "Assigned to"
+msgstr ""
+
+msgid "How to record delivery condition"
+msgstr ""
+
+msgid "How to record return condition"
+msgstr ""
+
+msgid "Use a number on the drawing and repeat the same number in the corresponding box. Use a short description: scratch = line, impact/dent = circle around the area, wear = note the worn surface, missing part = write the missing piece. Record the side/view (front, rear, left or right) whenever possible."
+msgstr ""
+
+msgid "Scratches"
+msgstr ""
+
+msgid "Mark the area with a numbered line and describe its length/location."
+msgstr ""
+
+msgid "Impacts / dents"
+msgstr ""
+
+msgid "Circle the affected area, add a number and describe the corner/side."
+msgstr ""
+
+msgid "Wear / use"
+msgstr ""
+
+msgid "Describe worn surfaces, faded labels, loose hinges, buttons or connectors."
+msgstr ""
+
+msgid "Missing parts / other"
+msgstr ""
+
+msgid "List missing accessories or any other physical observation."
+msgstr ""
+
+msgid "Additional notes"
+msgstr ""
+
+
+
+
+
+msgid "Top left"
+msgstr ""
+
+msgid "Upper-left footer line."
+msgstr ""
+
+msgid "Upper-right footer line."
+msgstr ""
+
+msgid "Lower-left footer line."
+msgstr ""
+
+msgid "Lower-right footer line."
+msgstr ""
+
+msgid "Register scratches, impacts, wear, missing parts and the condition of the asset at the time of delivery."
+msgstr ""
+
+msgid "Register visible damage, missing accessories, wear and the condition of the asset at the time of return."
+msgstr ""
+
+msgid "Before delivering the equipment, inspect all visible surfaces. On the map, assign a reference number to each observation. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or accessory. Record the reference number and view in the corresponding area below."
+msgstr ""
+
+msgid "Before receiving the equipment, compare it with its current condition. On the map, use the matching view and assign a reference number. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or accessory. Record the reference number and view in the corresponding area below."
+msgstr ""
+
+msgid "Circle the damaged area; note corner, edge or side."
+msgstr ""
+
+msgid "Describe worn surface, faded marking, loose hinge, button or connector."
+msgstr ""
+
+msgid "Draw a short line where the scratch is located; note size and view."
+msgstr ""
+
+msgid "Reference numbers"
+msgstr ""
+
+msgid "Write the exact missing part, accessory or other observation."
+msgstr ""
+
+msgid "Draw short lines directly over the scratched area."
+msgstr ""
+
+msgid "Draw a circle around the damaged area."
+msgstr ""
+
+msgid "Draw short waves over the worn area."
+msgstr ""
+
+msgid "Draw an X over the missing part or component."
+msgstr ""
+
+msgid "Mark the exact location on the map."
+msgstr ""
+
+msgid "Draw short lines over the scratched area."
+msgstr ""
+
+msgid "Inspection and return form templates"
+msgstr ""
+
+msgid "Inspect the equipment before receiving it and record any relevant physical condition."
+msgstr ""
+
+msgid "Inspect all visible surfaces before delivering the equipment and record any relevant physical condition."
+msgstr ""
+
+msgid "Manual form previews"
+msgstr ""
+
+msgid "Visual inspection preview"
+msgstr ""
+
+msgid "Return form preview"
+msgstr ""
+
+msgid "Not enabled"
+msgstr ""
+
+msgid "Preview user"
+msgstr ""
+
+msgid "Demo data for template preview"
+msgstr ""
+
+msgid "Used"
+msgstr ""
+
+msgid "Generate a PDF preview of the selected format."
+msgstr ""
+
+msgid "Responsibility document preview"
+msgstr ""
+
+msgid "Visual inspection format"
+msgstr ""
+
+msgid "Return format"
+msgstr ""
+
+msgid "Vista previa de responsiva"
+msgstr ""
+
+msgid "Vista previa de inspección visual"
+msgstr ""
+
+msgid "Vista previa de devolución"
+msgstr ""
+
+msgid "Responsivas requires the PHP extension %s."
+msgstr ""
+
+msgid "The image dimensions exceed the allowed limit (4096 × 4096 pixels and 12 megapixels)."
+msgstr ""
+
+msgid "Invalid Responsivas asset."
+msgstr ""
+
+msgid "Monitor"
+msgstr ""
+
+msgid "Keyboard"
 msgstr ""

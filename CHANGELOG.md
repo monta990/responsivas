@@ -4,6 +4,30 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.0] — 2026-09-02
+
+### Added
+
+- **Manual visual inspection and return forms** — Added printable, single-page Letter formats for Computers, Printers and Phones, with independent enable/disable controls for inspection and return.
+- **Editable visual inspection and return forms templates** — Each manual format has its own title, Instructions and four editable footer positions.
+- **Configuration previews** — Added dedicated previews for the responsibility document, visual inspection format and return format; manual previews are shown only when the corresponding format is enabled and use representative data.
+
+### Changed
+
+- **Associated device table columns** — Split **Serial** and **Asset** into separate columns in the shared computer responsibility table, expanding the associated-device layout from five to six columns for better readability and to prevent unnecessary line wrapping.
+- **Computer identification columns** — Moved the main computer **Asset** number and **Identification** (computer Name) into the sixth column of the computer property table, removing the redundant inline identification line and avoiding duplicated recipient information.
+
+### Fixed
+
+- **Institutional PNG logo** — Fixed the PNG upload path and MIME handling, including transparent PNG preservation; uploaded logos are safely re-encoded as PNG before storage.
+- **PDF PNG transparency** — Fixed transparent PNG rendering in manual PDFs so printer and phone schematics no longer produce black areas.
+- **TCPDF SVG errors** — Removed the last SVG rendering path from the manual PDF pipeline, preventing malformed-SVG errors for current manual resources.
+- **Action button contrast** — Corrected text/icon contrast for red destructive buttons and the email-send action while preserving the existing Cancel button styling.
+- **Logo/image hardening** — Added file-type, maximum size, image-dimension and pixel-count validation before GD image decoding to reduce memory-exhaustion risk.
+- **Demo preview generation** — Removed an undefined entity reference from the standard responsibility PDF demo path.
+
+---
+
 ## [1.5.0] — 2026-08-21
 
 ### Added

@@ -1,909 +1,953 @@
 msgid ""
-msgstr ""
-"Project-Id-Version: Responsivas\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-06 00:00+0000\n"
-"PO-Revision-Date: 2026-05-06 00:00+0000\n"
-"Last-Translator: Edwin Elias Alvarez <edwin@sontechs.com>\n"
-"Language-Team: French (France)\n"
-"Language: fr_FR\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
+msgstr "Project-Id-Version: Responsivas\nReport-Msgid-Bugs-To: \nPOT-Creation-Date: 2026-05-06 00:00+0000\nPO-Revision-Date: 2026-05-06 00:00+0000\nLast-Translator: Edwin Elias Alvarez <edwin@sontechs.com>\nLanguage-Team: French (France)\nLanguage: fr_FR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
 msgid "Responsivas"
 msgstr "Documents de responsabilité"
-
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr "Responsivas nécessite PHP 8.2 ou supérieur. Version actuelle : %s"
-
 msgid "Responsivas requires TCPDF, which must be available in GLPI's vendor directory."
 msgstr "Responsivas nécessite TCPDF, qui doit être disponible dans le répertoire vendor de GLPI."
-
 msgid "Could not create the Responsivas plugin files directory. Check permissions."
 msgstr "Impossible de créer le répertoire des fichiers du plugin Responsivas. Vérifiez les permissions."
-
 msgid "Responsibility Forms"
 msgstr "Formulaires de responsabilité"
-
 msgid "Responsivas plugin uninstalled. Configuration deleted."
 msgstr "Plugin Responsibility Documents désinstallé. Configuration supprimée."
-
 msgid "User not found."
 msgstr "Utilisateur introuvable."
-
 msgid "The user has no assigned equipment."
 msgstr "L'utilisateur n'a pas d'équipement assigné."
-
 msgid "Could not retrieve the entity."
 msgstr "Impossible de récupérer l'entité."
-
 msgid "The phone type for loan agreements is not configured in the plugin."
 msgstr "Le type de téléphone pour les contrats de prêt n'est pas configuré dans le plugin."
-
 msgid "The user has no phones of the configured type assigned."
 msgstr "L'utilisateur n'a pas de téléphones du type configuré assignés."
-
 msgid "You must configure Witness 1 and Witness 2 in the plugin settings."
 msgstr "Vous devez configurer Témoin 1 et Témoin 2 dans les paramètres du plugin."
-
 msgid "One or both configured witnesses are invalid or inactive."
 msgstr "Un ou les deux témoins configurés sont invalides ou inactifs."
-
 msgid "You must configure the legal representative in the plugin settings."
 msgstr "Vous devez configurer le représentant légal dans les paramètres du plugin."
-
 msgid "The legal representative is invalid or inactive."
 msgstr "Le représentant légal est invalide ou inactif."
-
 msgid "Phone \"%s\" has no purchase price. Add it in Management → Administrative and financial information → Purchase price."
 msgstr "Le téléphone \"%s\" n'a pas de prix d'achat. Ajoutez-le dans Gestion → Informations administratives et financières → Prix d'achat."
-
 msgid "N/A"
 msgstr "N/D"
-
 msgid "Available tags"
 msgstr "Étiquettes disponibles"
-
 msgid "Responsibility Document Generator"
 msgstr "Générateur de responsivas"
-
 msgid "Select the asset type to generate responsibility documents"
 msgstr "Sélectionnez le type d'actif pour générer les responsivas"
-
 msgid "The phone type for responsibility documents has not been configured. Contact the administrator."
 msgstr "Le type de téléphone pour les responsivas n'a pas été configuré. Contactez l'administrateur."
-
 msgid "Show QR"
 msgstr "Afficher QR"
-
 msgid "Show employee number"
 msgstr "Afficher le numéro d'employé"
-
 msgid "Generate responsibility documents"
 msgstr "Générer les responsivas"
-
 msgid "Computers"
 msgstr "Ordinateurs"
-
 msgid "Printers"
 msgstr "Imprimantes"
-
 msgid "Phones"
 msgstr "Téléphones"
-
 msgid "Send by email"
 msgstr "Envoyer par e-mail"
-
 msgid "No responsibility documents to send"
 msgstr "Aucune responsiva à envoyer"
-
 msgid "No email address"
 msgstr "Pas d'adresse e-mail"
-
 msgid "Email not configured"
 msgstr "E-mail non configuré"
-
 msgid "Confirm sending"
 msgstr "Confirmer l'envoi"
-
 msgid "Cancel"
 msgstr "Annuler"
-
 msgid "Send the responsibility documents to %s?"
 msgstr "Envoyer les responsivas à l'adresse %s ?"
-
 msgid "No computers assigned"
 msgstr "Aucun ordinateur assigné"
-
 msgid "No printers assigned"
 msgstr "Aucune imprimante assignée"
-
 msgid "No phones of the configured type assigned"
 msgstr "Aucun téléphone du type configuré assigné"
-
 msgid "GLPI mail server not configured"
 msgstr "Serveur de messagerie GLPI non configuré"
-
 msgid "No equipment assigned"
 msgstr "Aucun équipement assigné"
-
 msgid "Responsivas Settings"
 msgstr "Paramètres Documents de responsabilité"
-
 msgid "Configuration saved successfully."
 msgstr "Configuration enregistrée avec succès."
-
 msgid "You must select a valid phone type."
 msgstr "Vous devez sélectionner un type de téléphone valide."
-
 msgid "General"
 msgstr "Général"
-
 msgid "Email"
 msgstr "E-mail"
-
 msgid "Timezone for PDFs"
 msgstr "Fuseau horaire pour les PDFs"
-
 msgid "This timezone will be used to display dates and times in PDFs. At plugin installation it defaults to the server timezone. More information at: %s"
 msgstr "Ce fuseau horaire sera utilisé pour afficher les dates et heures dans les PDFs. À l'installation du plugin, il prend par défaut celui du serveur. Plus d'informations sur : %s"
-
 msgid "PHP timezone list"
 msgstr "Liste des fuseaux horaires PHP"
-
 msgid "Show employee number in the responsibility document"
 msgstr "Afficher le numéro d'employé dans la responsiva"
-
 msgid "Show QR with asset URL in responsibility document"
 msgstr "Afficher QR avec l'URL de l'actif dans la responsiva"
-
 msgid "Company name in responsibility documents"
 msgstr "Nom de l'entreprise dans les responsivas"
-
 msgid "This name will appear in the responsibility document text."
 msgstr "Ce nom apparaîtra dans le texte de la responsiva."
-
 msgid "Currency symbol"
 msgstr "Symbole monétaire"
-
 msgid "Symbol or code that appears before the price in phone loan agreements (e.g.: $, USD, MXN, €)."
 msgstr "Symbole ou code qui apparaît avant le prix dans les contrats de prêt téléphonique (ex : $, USD, MXN, €)."
-
 msgid "Witnesses for phone loan agreements"
 msgstr "Témoins pour les contrats de prêt téléphonique"
-
 msgid "Select two witnesses for the phone loan agreement."
 msgstr "Sélectionnez deux témoins pour le contrat de prêt téléphonique."
-
 msgid "Witness 1"
 msgstr "Témoin 1"
-
 msgid "Witness 2"
 msgstr "Témoin 2"
-
 msgid "Legal representative for phone loan agreements"
 msgstr "Représentant légal pour les contrats de prêt téléphonique"
-
 msgid "Select the legal representative for the phone loan agreement."
 msgstr "Sélectionnez le représentant légal pour le contrat de prêt téléphonique."
-
 msgid "Legal representative"
 msgstr "Représentant légal"
-
 msgid "Current logo"
 msgstr "Logo actuel"
-
 msgid "Click the image to download a backup copy."
 msgstr "Cliquez sur l'image pour télécharger une copie de sauvegarde."
-
 msgid "Size: "
 msgstr "Taille : "
-
 msgid "Last updated: "
 msgstr "Dernière mise à jour : "
-
 msgid "No logo configured."
 msgstr "Aucun logo configuré."
-
 msgid "PDFs will be generated without a logo."
 msgstr "Les PDFs seront générés sans logo."
-
 msgid "Upload new logo"
 msgstr "Télécharger un nouveau logo"
-
 msgid "PNG / JPG · Max 500 KB · Will be saved as <b>logo.png</b>."
 msgstr "PNG / JPG · Max 500 Ko · Sera enregistré sous <b>logo.png</b>."
-
 msgid "Preview"
 msgstr "Aperçu"
-
 msgid "Load an image for a preview."
 msgstr "Chargez une image pour un aperçu."
-
 msgid "Once loaded and validated in preview, remember to save for it to take effect."
 msgstr "Une fois chargé et validé en aperçu, n'oubliez pas de sauvegarder pour l'appliquer."
-
 msgid "Confirm deletion"
 msgstr "Confirmer la suppression"
-
 msgid "Are you sure you want to delete the current logo?"
 msgstr "Êtes-vous sûr de vouloir supprimer le logo actuel ?"
-
 msgid "This action cannot be undone."
 msgstr "Cette action ne peut pas être annulée."
-
 msgid "Delete logo"
 msgstr "Supprimer le logo"
-
 msgid "Delete current logo"
 msgstr "Supprimer le logo actuel"
-
 msgid "Download logo"
 msgstr "Télécharger le logo"
-
 msgid "Logo updated successfully."
 msgstr "Logo mis à jour avec succès."
-
 msgid "Logo deleted successfully."
 msgstr "Logo supprimé avec succès."
-
 msgid "Could not delete the logo."
 msgstr "Impossible de supprimer le logo."
-
 msgid "Format not allowed. PNG or JPG only."
 msgstr "Format non autorisé. PNG ou JPG uniquement."
-
 msgid "The file exceeds the maximum allowed size (500 KB)."
 msgstr "Le fichier dépasse la taille maximale autorisée (500 Ko)."
-
 msgid "Error processing JPG image"
 msgstr "Erreur lors du traitement de l'image JPG"
-
 msgid "Error processing PNG image"
 msgstr "Erreur lors du traitement de l'image PNG"
-
 msgid "Email options"
 msgstr "Options de messagerie"
-
 msgid "Full name of the assigned user"
 msgstr "Nom complet de l'utilisateur"
-
 msgid "Company name (configured in General)"
 msgstr "Nom de l'entreprise (configuré dans Général)"
-
 msgid "Document date in dd/mm/yyyy format"
 msgstr "Date du jour au format jj/mm/aaaa"
-
 msgid "Use **text** for bold"
 msgstr "Utilisez **texte** pour le gras"
-
 msgid "Email subject"
 msgstr "Objet de l'e-mail"
-
 msgid "You can use the variables {nombre}, {empresa} and {fecha}."
 msgstr "Vous pouvez utiliser les variables {nombre}, {empresa} et {fecha}."
-
 msgid "Email body"
 msgstr "Corps de l'e-mail"
-
 msgid "Email footer"
 msgstr "Pied de l'e-mail"
-
 msgid "Email footer (optional)"
 msgstr "Pied de l'e-mail (facultatif)"
-
 msgid "Optional. Appears at the bottom of the email, separated by a line. You can use {nombre}, {empresa} and {fecha}."
 msgstr "Optionnel. Apparaît en bas de l'e-mail, séparé par une ligne. Vous pouvez utiliser {nombre}, {empresa} et {fecha}."
-
 msgid "The GLPI mail server is not configured or email notifications are disabled. The send button will fail until you configure it in <strong>Configuration → Notifications → Email configuration</strong>."
 msgstr "Le serveur de messagerie GLPI n'est pas configuré ou les notifications par e-mail sont désactivées. Le bouton d'envoi échouera jusqu'à ce que vous le configuriez dans <strong>Configuration → Notifications → Configuration des e-mails</strong>."
-
 msgid "Configure the email subject and body first"
 msgstr "Configurez d'abord l'objet et le corps de l'e-mail"
-
 msgid "Sends a test email to your registered GLPI address"
 msgstr "Envoie un e-mail de test à votre adresse GLPI enregistrée"
-
 msgid "Send test email"
 msgstr "Envoyer un e-mail de test"
-
 msgid "The email will be sent to the address registered in your GLPI profile."
 msgstr "L'e-mail sera envoyé à l'adresse enregistrée dans votre profil GLPI."
-
 msgid "Document template"
 msgstr "Modèle de document"
-
 msgid "Document title"
 msgstr "Titre du document"
-
 msgid "Main heading text. Use **text** for bold."
 msgstr "Texte de l'en-tête principal. Utilisez **texte** pour le gras."
-
 msgid "Introduction paragraph"
 msgstr "Paragraphe d'introduction"
-
 msgid "Introductory paragraph before the table. Use **text** for bold."
 msgstr "Paragraphe introductif avant le tableau. Utilisez **texte** pour le gras."
-
 msgid "Body / Clauses"
 msgstr "Corps / Clauses"
-
 msgid "Legal text after the table. Lines with \"1. text\" → numbered list. Blank line → new paragraph. **text** → bold."
 msgstr "Texte juridique après le tableau. Lignes avec \"1. texte\" → liste numérotée. Ligne vide → nouveau paragraphe. **texte** → gras."
-
 msgid "Opening paragraph"
 msgstr "Paragraphe d'ouverture"
-
 msgid "Appearance paragraph before the clauses. Use **text** for bold."
 msgstr "Paragraphe de comparution avant les clauses. Utilisez **texte** pour le gras."
-
 msgid "Clauses"
-msgstr "Clauses"
-
+msgstr "Dispositions"
 msgid "One clause per line with format \"1. text\". Use {clausula_vida_util} for the useful life clause. **text** → bold."
 msgstr "Une clause par ligne au format \"1. texte\". Utilisez {clausula_vida_util} pour la clause de durée de vie. **texte** → gras."
-
 msgid "Witnesses paragraph"
 msgstr "Paragraphe des témoins"
-
 msgid "Witnesses appearance text. Use **text** for bold."
 msgstr "Texte de comparution des témoins. Utilisez **texte** pour le gras."
-
 msgid "Contract heading. Use **text** for bold."
 msgstr "En-tête du contrat. Utilisez **texte** pour le gras."
-
 msgid "Company"
 msgstr "Entreprise"
-
 msgid "Employee number"
 msgstr "Numéro d'employé"
-
 msgid "Asset number"
 msgstr "Numéro d'actif"
-
 msgid "Serial number"
 msgstr "Numéro de série"
-
 msgid "Brand"
 msgstr "Marque"
-
 msgid "Model"
 msgstr "Modèle"
-
 msgid "Equipment type"
 msgstr "Type d'équipement"
-
 msgid "Condition / Status"
 msgstr "Condition / Statut"
-
 msgid "Document date"
 msgstr "Date du document"
-
 msgid "City, State, Country"
 msgstr "Ville, État, Pays"
-
 msgid "UUID / Serial"
 msgstr "UUID / Série"
-
 msgid "IMEI"
 msgstr "IMEI"
-
 msgid "Purchase price"
 msgstr "Prix d'achat"
-
 msgid "Line / mobile number"
 msgstr "Numéro de ligne / mobile"
-
 msgid "RAM"
-msgstr "RAM"
-
+msgstr "Mémoire vive"
 msgid "Storage"
 msgstr "Stockage"
-
 msgid "Document time"
 msgstr "Heure du document"
-
 msgid "Entity address"
 msgstr "Adresse de l'entité"
-
 msgid "ZIP / Postal code"
 msgstr "Code postal"
-
 msgid "Representative name"
 msgstr "Nom du représentant"
-
 msgid "User name"
 msgstr "Nom de l'utilisateur"
-
 msgid "Useful life clause (auto-generated)"
 msgstr "Clause de durée de vie (auto-générée)"
-
 msgid "Type"
-msgstr "Type"
-
+msgstr "Catégorie"
 msgid "Condition"
-msgstr "Condition"
-
+msgstr "État"
 msgid "Save"
 msgstr "Enregistrer"
-
 msgid "Open asset record in GLPI"
 msgstr "Ouvrir la fiche d'actif dans GLPI"
-
 msgid "You do not have permission to generate responsibility documents for this user."
 msgstr "Vous n'avez pas la permission de générer des responsivas pour cet utilisateur."
-
 msgid "Access denied."
 msgstr "Accès refusé."
-
 msgid "The user does not have a registered email address."
 msgstr "L'utilisateur n'a pas d'adresse e-mail enregistrée."
-
 msgid "Incomplete email configuration. Configure the subject and body in the Email tab."
 msgstr "Configuration e-mail incomplète. Configurez l'objet et le corps dans l'onglet E-mail."
-
 msgid "There are no responsibility documents to generate for this user."
 msgstr "Il n'y a pas de responsivas à générer pour cet utilisateur."
-
 msgid "Email successfully sent to %s."
 msgstr "E-mail envoyé avec succès à %s."
-
 msgid "Error sending email. Check the GLPI error log for details."
 msgstr "Erreur lors de l'envoi de l'e-mail. Consultez le journal des erreurs GLPI pour plus de détails."
-
 msgid "The mail server rejected the sending."
 msgstr "Le serveur de messagerie a rejeté l'envoi."
-
 msgid "Responsibility documents sent by email to %s by %s (%d PDF)."
 msgstr "Responsivas envoyées par e-mail à %s par %s (%d PDF)."
-
 msgid "%d responsibility PDF attached."
 msgstr "%d PDF de responsabilité joint."
-
 msgid "Invalid user."
 msgstr "Utilisateur invalide."
-
 msgid "Your user does not have an email address registered in GLPI. Add it in your profile."
 msgstr "Votre utilisateur n'a pas d'adresse e-mail enregistrée dans GLPI. Ajoutez-la dans votre profil."
-
 msgid "Incomplete email configuration. Configure the subject and body first."
 msgstr "Configuration e-mail incomplète. Configurez d'abord l'objet et le corps."
-
 msgid "This is a test email generated from the Responsivas plugin configuration. No PDFs are attached."
 msgstr "Ceci est un e-mail de test généré depuis la configuration du plugin Responsivas. Aucun PDF n'est joint."
-
 msgid "Test email successfully sent to %s."
 msgstr "E-mail de test envoyé avec succès à %s."
-
 msgid "The document template has empty fields. Complete the following fields in Configuration → Responsivas: %s"
 msgstr "Le modèle de document a des champs vides. Complétez les champs suivants dans Configuration → Responsivas : %s"
-
 msgid "Title (Computer)"
 msgstr "Titre (Ordinateur)"
-
 msgid "Introduction (Computer)"
 msgstr "Introduction (Ordinateur)"
-
 msgid "Body / Clauses (Computer)"
 msgstr "Corps / Clauses (Ordinateur)"
-
 msgid "Title (Printer)"
 msgstr "Titre (Imprimante)"
-
 msgid "Introduction (Printer)"
 msgstr "Introduction (Imprimante)"
-
 msgid "Body / Clauses (Printer)"
 msgstr "Corps / Clauses (Imprimante)"
-
 msgid "Title (Phone)"
 msgstr "Titre (Téléphone)"
-
 msgid "Opening paragraph (Phone)"
 msgstr "Paragraphe d'ouverture (Téléphone)"
-
 msgid "Clauses (Phone)"
 msgstr "Clauses (Téléphone)"
-
 msgid "Witnesses paragraph (Phone)"
 msgstr "Paragraphe des témoins (Téléphone)"
-
 msgid "bold"
 msgstr "gras"
-
 msgid "italic"
 msgstr "italique"
-
 msgid "underline"
 msgstr "souligné"
-
 msgid "Click a variable to insert it at the cursor position."
 msgstr "Cliquez sur une variable pour l'insérer à la position du curseur."
-
 msgid "PREVIEW"
 msgstr "APERÇU"
-
 msgid "Error generating the preview: %s"
 msgstr "Erreur lors de la génération de l'aperçu : %s"
-
 msgid "Demo Witness 1"
 msgstr "Témoin démo 1"
-
 msgid "Demo Witness 2"
 msgstr "Témoin démo 2"
-
 msgid "Demo Representative"
 msgstr "Représentant démo"
-
 msgid "Generates a PDF preview using current settings. A watermark is applied."
 msgstr "Génère un aperçu PDF avec les paramètres actuels. Un filigrane est appliqué."
-
 msgid "Compress PDF"
 msgstr "Compresser le PDF"
-
 msgid "Compress the generated PDF file"
 msgstr "Compresser le fichier PDF généré"
-
 msgid "Protect PDF"
 msgstr "Protéger le PDF"
-
 msgid "Restrict PDF copying and editing"
 msgstr "Restreindre la copie et l'édition du PDF"
-
 msgid "Watermark text"
 msgstr "Texte du filigrane"
-
 msgid "Diagonal text shown on previews. Leave empty for the default."
 msgstr "Texte diagonal affiché sur les aperçus. Vide utilise la valeur par défaut."
-
 msgid "Watermark opacity (%)"
 msgstr "Opacité du filigrane (%)"
-
 msgid "5–100. Default: 25."
 msgstr "5–100. Par défaut : 25."
-
 msgid "Useful life clause (with invoice)"
 msgstr "Clause de durée de vie (avec facture)"
-
 msgid "Used when the phone has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the default text."
 msgstr "Utilisé quand le téléphone a une facture et un fournisseur. Variables : {fecha_compra}, {factura}, {proveedor}. Vide utilise le texte par défaut."
-
 msgid "Useful life clause (without invoice)"
 msgstr "Clause de durée de vie (sans facture)"
-
 msgid "Used when the phone has no registered invoice or supplier. Empty uses the default text."
 msgstr "Utilisé quand le téléphone n'a pas de facture ou de fournisseur enregistré. Vide utilise le texte par défaut."
-
 msgid "Demo equipment for template preview"
 msgstr "Équipement démo pour aperçu de modèle"
-
 msgid "Demo printer for template preview"
 msgstr "Imprimante démo pour aperçu de modèle"
-
 msgid "Select document types to send:"
 msgstr "Sélectionner les types de documents à envoyer :"
-
 msgid "Select at least one document type."
 msgstr "Veuillez sélectionner au moins un type de document."
-
 msgid "Send selected responsibility documents to the user email"
 msgstr "Envoyer les documents sélectionnés à l'e-mail de l'utilisateur"
-
 msgid "Serial"
 msgstr "Numéro de série"
-
 msgid "Processor"
 msgstr "Processeur"
-
 msgid "Speed"
 msgstr "Vitesse"
-
 msgid "OS"
 msgstr "Système d’exploitation"
-
 msgid "Comments"
 msgstr "Commentaires"
-
 msgid "Device"
 msgstr "Périphérique"
-
 msgid "Serial / Asset"
 msgstr "Série / Actif"
-
 msgid "Asset No."
 msgstr "No. Actif"
-
 msgid "Serial/UUID"
 msgstr "Série/UUID"
-
 msgid "Line"
 msgstr "Ligne"
-
 msgid "Price"
 msgstr "Prix"
-
 msgid "CLAUSES"
-msgstr "CLAUSES"
-
+msgstr "DISPOSITIONS"
 msgid "LENDER"
 msgstr "PRÊTEUR"
-
 msgid "BORROWER"
 msgstr "EMPRUNTEUR"
-
 msgid "WITNESS"
 msgstr "TÉMOIN"
-
 msgid "Not specified"
 msgstr "Non spécifié"
-
 msgid "No comments"
 msgstr "Sans commentaires"
-
 msgid "In use"
 msgstr "En service"
-
 msgid "Employee No.: "
 msgstr "Employé n° : "
-
 msgid "%d responsibility PDFs attached."
 msgstr "%d PDF de responsabilité joints."
-
 msgid "Footer left text"
 msgstr "En haut à gauche"
-
 msgid "Example: Original: Company"
 msgstr "Exemple : Original : Entreprise"
-
 msgid "Top right"
-msgstr "En haut à droite"
-
+msgstr "Supérieur droit"
 msgid "Example: Copy: Employee"
 msgstr "Exemple : Copie : Employé"
-
 msgid "Bottom left"
-msgstr "En bas à gauche"
-
+msgstr "Inférieur gauche"
 msgid "Bottom right"
-msgstr "En bas à droite"
-
+msgstr "Inférieur droit"
 msgid "Example: SIS-RESP-001"
 msgstr "Exemple : SIS-RESP-001"
-
 msgid "Example: Rev 1.4 08/01/2026"
 msgstr "Exemple : Rév 1.4 08/01/2026"
-
 msgid "Document footer"
 msgstr "Pied de page du document"
-
 msgid "These lines will appear in the footer of the responsibility document."
 msgstr "Ces lignes apparaîtront dans le pied de page du document de responsabilité."
-
 msgid "Bold — **text**"
 msgstr "Gras — **texte**"
-
 msgid "Italic — *text*"
 msgstr "Italique — *texte*"
-
 msgid "Underline — __text__"
 msgstr "Souligné — __texte__"
-
 msgid "Preview dimensions: "
 msgstr "Dimensions de l'aperçu : "
-
 msgid "Save active tab when changing"
 msgstr "Sauvegarder l'onglet actif lors du changement"
-
 msgid "Restore active tab on load"
 msgstr "Restaurer l'onglet actif au chargement"
-
 msgid "Responsibility document options"
 msgstr "Options du document de responsabilité"
-
 msgid "Institutional logo"
 msgstr "Logo institutionnel"
-
 msgid "Computer responsibility document settings"
 msgstr "Paramètres du document de responsabilité pour ordinateurs"
-
 msgid "Font used in PDFs, can be changed in GLPI settings"
 msgstr "Police utilisée dans les PDF, peut être modifiée dans les paramètres GLPI"
-
 msgid "Font size (pt)"
 msgstr "Taille de police (pt)"
-
 msgid "Enter the font size for the PDF"
 msgstr "Entrez la taille de police pour le PDF"
-
 msgid "Printer responsibility document settings"
 msgstr "Paramètres du document de responsabilité pour imprimantes"
-
 msgid "Font used"
 msgstr "Police utilisée"
-
 msgid "Phone responsibility document settings"
 msgstr "Paramètres du document de responsabilité pour téléphones"
-
 msgid "Phone type for responsibility"
 msgstr "Type de téléphone pour la responsabilité"
-
 msgid "Select the phone type that will be considered for generating responsibility documents."
 msgstr "Sélectionnez le type de téléphone qui sera pris en compte pour générer les documents de responsabilité."
-
 msgid "Show lender/borrower signatures"
 msgstr "Afficher les signatures prêteur/emprunteur"
-
 msgid "Show both lender and borrower signature lines in computer responsibility document"
 msgstr "Afficher les lignes de signature du prêteur et de l'emprunteur dans le document de responsabilité informatique"
-
 msgid "Show both lender and borrower signature lines in printer responsibility document"
 msgstr "Afficher les lignes de signature du prêteur et de l'emprunteur dans le document de responsabilité imprimante"
-
 msgid "Uses the legal representative configured in General settings."
 msgstr "Utilise le représentant légal configuré dans les paramètres généraux."
-
 msgid "The uploaded file is not a valid image."
 msgstr "Le fichier téléchargé n'est pas une image valide."
-
 msgid "A new version is available on GitHub: %s"
 msgstr "Une nouvelle version est disponible sur GitHub : %s"
-
 msgid "Open releases page"
 msgstr "Ouvrir la page des versions"
-
 msgid "Plugin version"
 msgstr "Version du plugin"
-
 msgid "Installed version"
 msgstr "Version installée"
-
 msgid "Latest version on GitHub"
 msgstr "Dernière version sur GitHub"
-
 msgid "Not available"
 msgstr "Non disponible"
-
 msgid "You are using the latest available version."
 msgstr "Vous utilisez la dernière version disponible."
-
 msgid "Could not check the latest version on GitHub."
 msgstr "Impossible de vérifier la dernière version sur GitHub."
-
 msgid "The latest release is checked automatically and cached for 6 hours."
 msgstr "La dernière version est vérifiée automatiquement et mise en cache pendant 6 heures."
-
 msgid "Error generating the preview. Check the GLPI error log for details."
 msgstr "Erreur lors de la génération de l’aperçu. Consultez le journal des erreurs de GLPI pour plus de détails."
-
-#: templates/config/tab_general.html.twig
 msgid "Releases"
 msgstr "Versions"
-
-#: inc/pdfbuilder.class.php
 msgid "Associated devices"
 msgstr "Appareils associés"
-
 msgid "The active entity is missing required location data: %s. Complete the City and State fields in the entity before generating the responsibility document."
 msgstr "L’entité active ne contient pas les données de localisation requises : %s. Renseignez les champs Ville et État de l’entité avant de générer le document de responsabilité."
-
 msgid "Could not retrieve the active entity."
 msgstr "Impossible de récupérer l’entité active."
-
 msgid "City"
 msgstr "Ville"
-
 msgid "State"
 msgstr "État"
-
 msgid "Used when the computer has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the default text."
 msgstr "Utilisé lorsque l’ordinateur possède une facture et un fournisseur. Variables : {fecha_compra}, {factura}, {proveedor}. Si vide, le texte par défaut est utilisé."
-
 msgid "Used when the computer has no registered invoice or supplier. Empty uses the default text."
 msgstr "Utilisé lorsque l’ordinateur n’a aucune facture ou aucun fournisseur enregistré. Si vide, le texte par défaut est utilisé."
-
 msgid "The useful life clause is inserted automatically; use {clausula_vida_util} to control its position."
 msgstr "La clause de durée de vie est insérée automatiquement ; utilisez {clausula_vida_util} pour contrôler sa position."
-
 msgid "Useful life paragraph (optional)"
 msgstr "Paragraphe de durée de vie (facultatif)"
-
 msgid "Useful life paragraph (with invoice)"
 msgstr "Paragraphe de durée de vie (avec facture)"
-
 msgid "Useful life paragraph (without invoice)"
 msgstr "Paragraphe de durée de vie (sans facture)"
-
 msgid "Optional paragraph. If both useful-life fields are empty, nothing is inserted. Use {clausula_vida_util} to control its position."
 msgstr "Paragraphe facultatif. Si les deux champs de durée de vie sont vides, rien n’est inséré. Utilisez {clausula_vida_util} pour contrôler sa position."
-
 msgid "Used when the computer has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty means no paragraph is inserted."
 msgstr "Utilisé lorsque l’ordinateur possède une facture et un fournisseur. Variables : {fecha_compra}, {factura}, {proveedor}. Si vide, le paragraphe n’est pas inséré."
-
 msgid "Used when the computer has no registered invoice or supplier. Empty means no paragraph is inserted."
 msgstr "Utilisé lorsque l’ordinateur n’a aucune facture ou aucun fournisseur enregistré. Si vide, le paragraphe n’est pas inséré."
-
 msgid "Legal text after the table. Lines with \"1. text\" → numbered list. Blank line → new paragraph. **text** → bold. The useful life paragraph is optional; if both fields are empty, nothing is inserted. Use {clausula_vida_util} to control its position."
 msgstr "Texte juridique après le tableau. Les lignes avec « 1. texte » → liste numérotée. Ligne vide → nouveau paragraphe. **texte** → gras. Le paragraphe de durée de vie est facultatif ; si les deux champs sont vides, rien n’est inséré. Utilisez {clausula_vida_util} pour contrôler sa position."
-
 msgid "Purchase date (same format as {fecha})"
 msgstr "Date d’achat (même format que {fecha})"
-
 msgid "Computer Responsibility - "
 msgstr "Responsabilité de l’ordinateur - "
-
 msgid "Error sending email: %s"
 msgstr "Erreur lors de l’envoi du courriel : %s"
-
 msgid "Invoice number"
 msgstr "Numéro de facture"
-
 msgid "Legal text after the table. Lines with "
 msgstr "Texte juridique après le tableau. Les lignes avec "
-
 msgid "One clause per line with format "
 msgstr "Une clause par ligne au format "
-
 msgid "Phone "
 msgstr "Téléphone "
-
 msgid "Phone Loan - "
 msgstr "Prêt de téléphone - "
-
 msgid "Preview - Computer Responsibility - "
 msgstr "Aperçu - Responsabilité de l’ordinateur - "
-
 msgid "Preview - Phone Loan - "
 msgstr "Aperçu - Prêt de téléphone - "
-
 msgid "Preview - Printer Responsibility - "
 msgstr "Aperçu - Responsabilité de l’imprimante - "
-
 msgid "Printer Responsibility - "
 msgstr "Responsabilité de l’imprimante - "
-
 msgid "Responsivas requires TCPDF, which must be available in the GLPI vendor directory."
 msgstr "Responsivas nécessite TCPDF, qui doit être disponible dans le répertoire vendor de GLPI."
-
 msgid "Supplier"
 msgstr "Fournisseur"
-
 msgid "Could not create the configuration export."
 msgstr "Impossible de créer l’exportation de la configuration."
-
 msgid "Could not read the configuration file."
 msgstr "Impossible de lire le fichier de configuration."
-
 msgid "The configuration file is invalid or exceeds the maximum size of 2 MB."
 msgstr "Le fichier de configuration est invalide ou dépasse la taille maximale de 2 Mo."
-
 msgid "The selected file is not a valid Responsivas configuration export."
 msgstr "Le fichier sélectionné n’est pas une exportation de configuration Responsivas valide."
-
 msgid "Configuration imported successfully."
 msgstr "La configuration a été importée avec succès."
-
 msgid "Logo imported successfully."
 msgstr "Le logo a été importé avec succès."
-
 msgid "Some values were skipped because they are not valid in this GLPI installation: %s."
 msgstr "Certaines valeurs ont été ignorées car elles ne sont pas valides dans cette installation GLPI : %s."
-
 msgid "Configuration backup"
 msgstr "Sauvegarde de la configuration"
-
 msgid "Export configuration"
 msgstr "Exporter la configuration"
-
 msgid "Export Responsivas settings and the current logo to a JSON backup file."
 msgstr "Exportez les paramètres de Responsivas et le logo actuel dans un fichier de sauvegarde JSON."
-
 msgid "Import configuration"
 msgstr "Importer la configuration"
-
 msgid "Import a Responsivas JSON backup. Existing settings are replaced by the values in the backup. Invalid user or phone-type references are skipped so the target installation keeps its current valid selection."
 msgstr "Importez une sauvegarde JSON de Responsivas. Les paramètres existants sont remplacés par ceux de la sauvegarde. Les références d’utilisateur ou de type de téléphone invalides sont ignorées afin de conserver la sélection valide actuelle de cette installation."
-
 msgid "The export includes templates, document options, email settings, footer settings, and the logo. User and phone-type selections are only portable when their IDs exist in the target GLPI installation."
 msgstr "L’exportation inclut les modèles, les options des documents, les paramètres d’e-mail, les pieds de page et le logo. Les sélections d’utilisateurs et de types de téléphone ne sont transférables que si leurs identifiants existent dans l’installation GLPI cible."
+msgid "Visual condition"
+msgstr "État visuel"
+msgid "Return"
+msgstr "Restitution"
+msgid "Asset return"
+msgstr "Restitution du matériel"
+msgid "Visual inspection"
+msgstr "Inspection visuelle"
+msgid "Save inspection"
+msgstr "Enregistrer l’inspection"
+msgid "Select an asset"
+msgstr "Sélectionner un matériel"
+msgid "Visual condition map"
+msgstr "Carte de condition visuelle"
+msgid "Markers"
+msgstr "Marqueurs"
+msgid "Delete"
+msgstr "Supprimer"
+msgid "Delete this marker?"
+msgstr "Supprimer ce marqueur ?"
+msgid "Describe the observation"
+msgstr "Décrire l’observation"
+msgid "Is this a major damage?"
+msgstr "S’agit-il d’un dommage important ?"
+msgid "Major"
+msgstr "Majeur"
+msgid "Minor"
+msgstr "Mineur"
+msgid "General observations"
+msgstr "Observations générales"
+msgid "Excellent"
+msgstr "Excellent"
+msgid "Good"
+msgstr "Bon"
+msgid "Fair"
+msgstr "Moyen"
+msgid "Damaged"
+msgstr "Endommagé"
+msgid "Return observations"
+msgstr "Observations de restitution"
+msgid "Final condition"
+msgstr "État final"
+msgid "Return condition map"
+msgstr "Schéma de l’état au retour"
+msgid "Click the schematic to add a return observation marker."
+msgstr "Cliquez sur le schéma pour ajouter un marqueur d’observation de restitution."
+msgid "Describe the return observation"
+msgstr "Décrire l’observation de restitution"
+msgid "Asset to return"
+msgstr "Matériel à restituer"
+msgid "Generate return document"
+msgstr "Générer le document de restitution"
+msgid "Unassign asset from user after successful return"
+msgstr "Dissocier le matériel de l’utilisateur après une restitution réussie"
+msgid "If you check the option below, the asset will be unassigned from this user only after the return PDF is generated successfully."
+msgstr "Si vous activez l’option ci-dessous, le matériel sera dissocié de cet utilisateur uniquement après la génération réussie du PDF de restitution."
+msgid "Visual inspection / physical condition"
+msgstr "Inspection visuelle / état physique"
+msgid "Condition at delivery"
+msgstr "État à la remise"
+msgid "Condition at return"
+msgstr "État à la restitution"
+msgid "Observations"
+msgstr "Observations"
+msgid "No visual observations recorded."
+msgstr "Aucune observation visuelle enregistrée."
+msgid "Visual observations"
+msgstr "Observations visuelles"
+msgid "This page records the visual condition registered in Responsivas at the time of the movement."
+msgstr "Cette page consigne l’état visuel enregistré dans Responsivas au moment du mouvement."
+msgid "Delivery"
+msgstr "Remise"
+msgid "Asset returned by"
+msgstr "Matériel restitué par"
+msgid "The asset is returned to the organization for review, storage, reassignment or disposal according to internal policy."
+msgstr "Le matériel est restitué à l’organisation pour contrôle, stockage, réaffectation ou mise au rebut conformément à la politique interne."
+msgid "ACTA DE DEVOLUCIÓN"
+msgstr "PROCÈS-VERBAL DE RESTITUTION"
+msgid "Asset"
+msgstr "Matériel"
+msgid "Asset Return"
+msgstr "Restitution du matériel"
+msgid "Click the schematic to add an observation marker."
+msgstr "Cliquez sur le schéma pour ajouter un repère d’observation."
+msgid "Delivery condition"
+msgstr "État lors de la remise"
+msgid "Desktop computer"
+msgstr "Ordinateur de bureau"
+msgid "Equipment"
+msgstr "Équipement"
+msgid "Identification"
+msgstr "Identification"
+
+msgid "Inspection date"
+msgstr "Date de l’inspection"
+msgid "Inspection record kept with the responsibility document."
+msgstr "Le relevé d’inspection est conservé avec le document de responsabilité."
+msgid "Invalid asset type."
+msgstr "Type d’actif invalide."
+msgid "Invalid inspection data."
+msgstr "Données d’inspection invalides."
+msgid "Invalid inspection type."
+msgstr "Type d’inspection invalide."
+msgid "Laptop"
+msgstr "Ordinateur portable"
+msgid "Marker details"
+msgstr "Détail des repères"
+msgid "Mobile phone"
+msgstr "Téléphone mobile"
+msgid "Printer"
+msgstr "Imprimante"
+msgid "RETURN ACT"
+msgstr "ACTE DE RESTITUTION"
+msgid "Return condition"
+msgstr "État lors de la restitution"
+msgid "Select an asset."
+msgstr "Sélectionnez un actif."
+msgid "The maximum of 50 markers has been reached."
+msgstr "Le maximum de 50 repères a été atteint."
+msgid "The return document was generated, but the asset could not be unassigned."
+msgstr "Le document de restitution a été généré, mais l’actif n’a pas pu être désattribué."
+msgid "The selected asset is not assigned to this user."
+msgstr "L’actif sélectionné n’est pas attribué à cet utilisateur."
+msgid "Visual inspection saved successfully."
+msgstr "L’inspection visuelle a été enregistrée."
+msgid "Visual observation"
+msgstr "Observation visuelle"
+msgid "Invalid condition."
+msgstr "État invalide."
+msgid "Manual forms"
+msgstr "Formulaires manuels"
+msgid "Enable visual inspection form"
+msgstr "Activer le formulaire d’inspection visuelle"
+msgid "Enable return form"
+msgstr "Activer le formulaire de restitution"
+msgid "Shows the Visual condition button below Computers. The PDF is fixed and designed to be completed by hand."
+msgstr "Affiche le bouton Inspection visuelle sous Ordinateurs. Le PDF est fixe et conçu pour être rempli à la main."
+msgid "Shows the Visual condition button below Printers. The PDF is fixed and designed to be completed by hand."
+msgstr "Affiche le bouton Inspection visuelle sous Imprimantes. Le PDF est fixe et conçu pour être rempli à la main."
+msgid "Shows the Visual condition button below Phones. The PDF is fixed and designed to be completed by hand."
+msgstr "Affiche le bouton Inspection visuelle sous Téléphones. Le PDF est fixe et conçu pour être rempli à la main."
+msgid "Shows the Return button below Computers. The PDF is fixed and designed to be completed by hand."
+msgstr "Affiche le bouton Restitution sous Ordinateurs. Le PDF est fixe et conçu pour être rempli à la main."
+msgid "Shows the Return button below Printers. The PDF is fixed and designed to be completed by hand."
+msgstr "Affiche le bouton Restitution sous Imprimantes. Le PDF est fixe et conçu pour être rempli à la main."
+msgid "Shows the Return button below Phones. The PDF is fixed and designed to be completed by hand."
+msgstr "Affiche le bouton Restitution sous Téléphones. Le PDF est fixe et conçu pour être rempli à la main."
+msgid "Visual inspection form"
+msgstr "Formulaire d’inspection visuelle"
+msgid "Asset return form"
+msgstr "Formulaire de restitution du matériel"
+msgid "Fixed manual form for printing"
+msgstr "Formulaire manuel fixe pour impression"
+msgid "VISUAL ASSET CONDITION FORM"
+msgstr "FICHE DE CONDITION VISUELLE DU MATÉRIEL"
+msgid "ASSET RETURN FORM"
+msgstr "FORMULAIRE DE RESTITUTION DU MATÉRIEL"
+msgid "Fixed form to document the physical condition at asset delivery."
+msgstr "Formulaire fixe pour documenter l’état physique lors de la remise du matériel."
+msgid "Fixed form to document the physical condition at asset return."
+msgstr "Formulaire fixe pour documenter l’état physique lors de la restitution du matériel."
+msgid "Asset type"
+msgstr "Type de matériel"
+msgid "User / employee"
+msgstr "Utilisateur / employé"
+msgid "Brand / manufacturer"
+msgstr "Marque / fabricant"
+msgid "Date"
+msgstr "Date"
+msgid "Overall condition"
+msgstr "État général"
+msgid "Asset schematic"
+msgstr "Schéma du matériel"
+msgid "Observations / visual damage"
+msgstr "Observations / dommages visibles"
+msgid "Technician / responsible person"
+msgstr "Technicien / responsable"
+msgid "User"
+msgstr "Utilisateur"
+msgid "Computer type"
+msgstr "Type d’ordinateur"
+msgid "Laptop computer"
+msgstr "Ordinateur portable"
+msgid "Record visible damage, missing accessories and the condition of the asset at the time of return."
+msgstr "Notez les dommages visibles, les accessoires manquants et l’état du matériel au moment de la restitution."
+msgid "Record scratches, dents, cracks, missing parts and any other visible condition at the time of delivery."
+msgstr "Notez les rayures, chocs, fissures, pièces manquantes et tout autre état visible au moment de la remise."
+msgid "Computer"
+msgstr "Ordinateur"
+msgid "Invalid manual form type."
+msgstr "Type de formulaire manuel invalide."
+msgid "Manual form templates"
+msgstr "Modèles de formulaires manuels"
+msgid "Visual condition form"
+msgstr "Formulaire de condition visuelle"
+msgid "Return form"
+msgstr "Formulaire de restitution"
+msgid "Title"
+msgstr "Titre"
+msgid "Instructions"
+msgstr "Instructions"
+msgid "Title printed in the fixed manual PDF."
+msgstr "Titre imprimé dans le PDF manuel fixe."
+msgid "Text printed above the handwritten observation area. Use **text** for bold."
+msgstr "Texte imprimé au-dessus de la zone d’observations manuscrites. Utilisez **texte** pour le gras."
+msgid "Asset identification"
+msgstr "Identification du matériel"
+
+msgid "Computer identification"
+msgstr "Identification de l’ordinateur"
+
+msgid "Phone identification"
+msgstr "Identification du téléphone"
+
+msgid "Technician"
+msgstr "Technicien"
+msgid "Instructions / observations"
+msgstr "Instructions / observations"
+msgid "Marker details / notes"
+msgstr "Détails des repères / notes"
+msgid "Could not generate the manual PDF."
+msgstr "Impossible de générer le PDF manuel."
+msgid "Unknown computer type"
+msgstr "Type d’ordinateur inconnu"
+msgid "Memory"
+msgstr "Mémoire"
+msgid "Asset name"
+msgstr "Nom du matériel"
+msgid "Phone type"
+msgstr "Type de téléphone"
+msgid "Identifier"
+msgstr "Identifiant"
+msgid "Operating system"
+msgstr "Système d’exploitation"
+msgid "Printer type"
+msgstr "Type d’imprimante"
+msgid "Observations / damage details"
+msgstr "Observations / détails des dommages"
+msgid "Assigned to"
+msgstr "Attribué à"
+msgid "How to record delivery condition"
+msgstr "Comment enregistrer l’état à la remise"
+msgid "How to record return condition"
+msgstr "Comment enregistrer l’état à la restitution"
+msgid "Use a number on the drawing and repeat the same number in the corresponding box. Use a short description: scratch = line, impact/dent = circle around the area, wear = note the worn surface, missing part = write the missing piece. Record the side/view (front, rear, left or right) whenever possible."
+msgstr "Utilisez un numéro sur le dessin et reportez le même numéro dans la zone correspondante. Utilisez une description courte : rayure = ligne, impact/choc = cercle autour de la zone, usure = notez la surface usée, pièce manquante = indiquez la pièce manquante. Indiquez le côté/la vue (avant, arrière, gauche ou droite) lorsque cela est possible."
+msgid "Scratches"
+msgstr "Rayures"
+msgid "Mark the area with a numbered line and describe its length/location."
+msgstr "Marquez la zone avec une ligne numérotée et décrivez sa longueur/emplacement."
+msgid "Impacts / dents"
+msgstr "Impacts / bosses"
+msgid "Circle the affected area, add a number and describe the corner/side."
+msgstr "Entourez la zone affectée, ajoutez un numéro et décrivez l’angle/le côté."
+msgid "Wear / use"
+msgstr "Usure / utilisation"
+msgid "Describe worn surfaces, faded labels, loose hinges, buttons or connectors."
+msgstr "Décrivez les surfaces usées, étiquettes effacées, charnières, boutons ou connecteurs desserrés."
+msgid "Missing parts / other"
+msgstr "Pièces manquantes / autres"
+msgid "List missing accessories or any other physical observation."
+msgstr "Listez les accessoires manquants ou toute autre observation physique."
+msgid "Additional notes"
+msgstr "Notes supplémentaires"
+
+
+
+
+msgid "Top left"
+msgstr "Supérieur gauche"
+msgid "Upper-left footer line."
+msgstr "Ligne de pied de page supérieure gauche."
+msgid "Upper-right footer line."
+msgstr "Ligne de pied de page supérieure droite."
+msgid "Lower-left footer line."
+msgstr "Ligne de pied de page inférieure gauche."
+msgid "Lower-right footer line."
+msgstr "Ligne de pied de page inférieure droite."
+msgid "Register scratches, impacts, wear, missing parts and the condition of the asset at the time of delivery."
+msgstr "Notez les rayures, impacts, l’usure, les pièces manquantes et l’état du matériel lors de la remise."
+msgid "Register visible damage, missing accessories, wear and the condition of the asset at the time of return."
+msgstr "Notez les dommages visibles, accessoires manquants, l’usure et l’état du matériel lors de la restitution."
+msgid "Before delivering the equipment, inspect all visible surfaces. On the map, assign a reference number to each observation. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or accessory. Record the reference number and view in the corresponding area below."
+msgstr "Avant de remettre le matériel, inspectez toutes les surfaces visibles. Sur le schéma, attribuez un numéro de référence à chaque observation. Pour une rayure, tracez une courte ligne ; pour un choc ou une bosse, entourez la zone concernée ; pour l’usure, décrivez la surface usée, le marquage effacé, la charnière, le bouton ou le connecteur desserré ; pour une pièce manquante, indiquez la pièce ou l’accessoire exact. Notez le numéro de référence et la vue correspondante dans la zone ci-dessous."
+msgid "Before receiving the equipment, compare it with its current condition. On the map, use the matching view and assign a reference number. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or accessory. Record the reference number and view in the corresponding area below."
+msgstr "Avant de réceptionner le matériel, comparez son état actuel avec son état attendu. Sur le schéma, utilisez la vue correspondante et attribuez un numéro de référence. Pour une rayure, tracez une courte ligne ; pour un choc ou une bosse, entourez la zone concernée ; pour l’usure, décrivez la surface usée, le marquage effacé, la charnière, le bouton ou le connecteur desserré ; pour une pièce manquante, indiquez la pièce ou l’accessoire exact. Notez le numéro de référence et la vue correspondante dans la zone ci-dessous."
+msgid "Circle the damaged area; note corner, edge or side."
+msgstr "Entourez la zone endommagée ; indiquez l’angle, le bord ou le côté."
+msgid "Describe worn surface, faded marking, loose hinge, button or connector."
+msgstr "Décrivez la surface usée, le marquage effacé, la charnière, le bouton ou le connecteur desserré."
+msgid "Draw a short line where the scratch is located; note size and view."
+msgstr "Tracez une courte ligne à l’emplacement de la rayure ; indiquez la taille et la vue."
+msgid "Reference numbers"
+msgstr "Numéros de référence"
+msgid "Write the exact missing part, accessory or other observation."
+msgstr "Indiquez la pièce, l’accessoire manquant ou toute autre observation."
+msgid "Draw short lines directly over the scratched area."
+msgstr "Tracez de courtes lignes directement sur la zone rayée."
+msgid "Draw a circle around the damaged area."
+msgstr "Tracez un cercle autour de la zone endommagée."
+msgid "Draw short waves over the worn area."
+msgstr "Tracez de petites ondulations sur la zone usée."
+msgid "Draw an X over the missing part or component."
+msgstr "Dessinez un X sur la pièce ou le composant manquant."
+msgid "Mark the exact location on the map."
+msgstr "Indiquez l’emplacement exact sur le schéma."
+msgid "Draw short lines over the scratched area."
+msgstr "Tracez de courtes lignes sur la zone rayée."
+msgid "Inspection and return form templates"
+msgstr "Modèles de formulaires d’inspection et de restitution"
+msgid "Inspect the equipment before receiving it and record any relevant physical condition."
+msgstr "Inspectez le matériel avant sa réception et notez toute condition physique pertinente."
+msgid "Inspect all visible surfaces before delivering the equipment and record any relevant physical condition."
+msgstr "Inspectez toutes les surfaces visibles avant de remettre le matériel et notez toute condition physique pertinente."
+msgid "Manual form previews"
+msgstr "Aperçus des formulaires manuels"
+msgid "Visual inspection preview"
+msgstr "Aperçu de l’inspection visuelle"
+msgid "Return form preview"
+msgstr "Aperçu du formulaire de restitution"
+msgid "Not enabled"
+msgstr "Non activé"
+msgid "Preview user"
+msgstr "Utilisateur de prévisualisation"
+msgid "Demo data for template preview"
+msgstr "Données de démonstration pour l’aperçu du modèle"
+msgid "Used"
+msgstr "Utilisé"
+msgid "Generate a PDF preview of the selected format."
+msgstr "Génère un aperçu PDF du formulaire sélectionné."
+msgid "Responsibility document preview"
+msgstr "Aperçu de la responsiva"
+msgid "Visual inspection format"
+msgstr "Formulaire d’inspection visuelle"
+msgid "Return format"
+msgstr "Formulaire de restitution"
+msgid "Vista previa de responsiva"
+msgstr "Aperçu de la responsiva"
+msgid "Vista previa de inspección visual"
+msgstr "Aperçu de l’inspection visuelle"
+msgid "Vista previa de devolución"
+msgstr "Aperçu de la restitution"
+msgid "Responsivas requires the PHP extension %s."
+msgstr "Responsivas nécessite l’extension PHP %s."
+msgid "The image dimensions exceed the allowed limit (4096 × 4096 pixels and 12 megapixels)."
+msgstr "Les dimensions de l’image dépassent la limite autorisée (4096 × 4096 pixels et 12 mégapixels)."
+
+msgid "Invalid Responsivas asset."
+msgstr "Matériel Responsivas non valide."
+
+msgid "Monitor"
+msgstr "Moniteur"
+
+msgid "Keyboard"
+msgstr "Clavier"

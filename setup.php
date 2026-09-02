@@ -14,7 +14,7 @@ if (!defined('GLPI_ROOT')) {
  * from src/ by GLPI's plugin autoloader; HTTP entry points are Symfony
  * Controllers under src/Controller/.
  */
-define('PLUGIN_RESPONSIVAS_VERSION', '1.5.0');
+define('PLUGIN_RESPONSIVAS_VERSION', '1.6.0');
 define('PLUGIN_RESPONSIVAS_MIN_GLPI', '11.0');
 define('PLUGIN_RESPONSIVAS_MAX_GLPI', '12.99');
 
@@ -69,6 +69,19 @@ function plugin_responsivas_check_prerequisites() {
          . sprintf(__('Responsivas requires PHP 8.2 or higher. Current version: %s', 'responsivas'), PHP_VERSION)
          . '</div>';
       return false;
+   }
+
+   // Required PHP extensions for image processing, localized dates and JSON.
+   foreach (['fileinfo', 'gd', 'intl', 'json'] as $extension) {
+      if (!extension_loaded($extension)) {
+         echo '<div class="alert alert-danger">'
+            . sprintf(
+               __('Responsivas requires the PHP extension %s.', 'responsivas'),
+               $extension
+            )
+            . '</div>';
+         return false;
+      }
    }
 
    // TCPDF debe estar disponible (lo incluye GLPI en vendor)

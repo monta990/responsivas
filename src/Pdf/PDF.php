@@ -45,10 +45,12 @@ class PDF extends \TCPDF {
 
 
     /**
-     * Dibuja la marca de agua diagonal centrada en la página actual.
-     * Se llama desde Header() para que aparezca en cada página.
+     * Dibuja la marca de agua diagonal en una posición concreta de la página.
+     * Se utiliza para las vistas previas de los formatos manuales, donde la
+     * marca debe quedar sobre el esquema visual, pero no sobre el resto del
+     * contenido que se renderiza después.
      */
-    protected function drawWatermark(): void
+    public function drawWatermarkAt(float $x, float $y): void
     {
         // Support both instance flag and static class flag
         if (!$this->show_watermark && !static::$global_watermark) {
@@ -61,9 +63,6 @@ class PDF extends \TCPDF {
         $this->SetTextColor(200, 200, 200);
         $this->SetAlpha($opacity);
 
-        $x = $this->getPageWidth()  / 2;
-        $y = $this->getPageHeight() / 2;
-
         $this->Rotate(45, $x, $y);
         $this->Text($x - 55, $y, $text);
         $this->Rotate(0);
@@ -75,6 +74,18 @@ class PDF extends \TCPDF {
             \Config::getConfigurationValue('core', 'pdffont'),
             '',
             (int)(\Config::getConfigurationValues('plugin_responsivas')[$this->font_size_key] ?? 10)
+        );
+    }
+
+    /**
+     * Dibuja la marca de agua diagonal centrada en la página actual.
+     * Se conserva para las responsivas estándar.
+     */
+    protected function drawWatermark(): void
+    {
+        $this->drawWatermarkAt(
+            $this->getPageWidth() / 2,
+            $this->getPageHeight() / 2
         );
     }
 
@@ -92,7 +103,6 @@ class PDF extends \TCPDF {
         );
         $this->SetY(15);
         $this->Cell(0, 5, $this->location . ' a ' . $this->fecha_header, 0, 1, 'R');
-        $this->drawWatermark();
     }
 
     /**
@@ -156,6 +166,13 @@ class PDF extends \TCPDF {
                 0,
                 __('Open asset record in GLPI', 'responsivas')
             );
+        }
+
+        // Standard responsibility previews keep the watermark in the footer
+        // layer. Manual previews place it explicitly over their visual map.
+        if (!str_ends_with($this->footer_prefix, '_inspection')
+            && !str_ends_with($this->footer_prefix, '_return')) {
+            $this->drawWatermark();
         }
     }
 }
