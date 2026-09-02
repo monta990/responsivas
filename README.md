@@ -15,101 +15,335 @@
 
 ---
 
+# English
+
 ## Overview
 
-**Responsibility Forms (Responsivas) 1.5.0** is a GLPI plugin that automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users. Documents are sent directly to users via email as attachments.
+**Responsivas** generates PDF responsibility documents and phone loan contracts for IT assets assigned to GLPI users. It also provides fixed, print-ready visual inspection and return forms for Computers, Printers and Phones.
 
-Version 1.5.0 completes the plugin's migration to the modern GLPI plugin architecture. Runtime classes use PSR-4 under `src/`, HTTP endpoints use GLPI/Symfony Controllers with route attributes, and the plugin is designed to run from the same codebase on GLPI 11.x and GLPI 12.x.
+The plugin is designed to use the same codebase on **GLPI 11.x and GLPI 12.x** and follows the modern plugin architecture with PSR-4 classes, Symfony/GLPI Controllers and Twig templates.
 
----
+## Main features
 
-## Features
-
-- 📄 **Automatic PDF generation** for computers, printers, and mobile phones
-- 📧 **Email delivery** — sends all PDFs as attachments to the assigned user's email
-- 🖊️ **Fully customizable templates** — title, introduction, body/clauses, witnesses, footer, per asset type
-- 🖼️ **Institutional logo** — JPG or PNG in the header of each generated PDF
-- 🎨 **Text formatting** — `**bold**`, `*italic*`, `__underline__` in template and email fields
-- ✏️ **Format toolbar (B / I / U)** — toggle buttons above editable text fields with smart selection wrapping
-- 🔤 **Clickable variable tags** — click any `{variable}` in the hints panel to insert it at the cursor
-- 🔢 **QR codes** on every document linking directly to the asset in GLPI
-- 👷 **Legal witnesses and representative** — configurable GLPI users
-- 📱 **Phone loan contracts** with the configured legal clause set
-- 💻 **Computer responsibility documents** with a reorganized equipment table and a dedicated associated-devices section
-- 💰 **Purchase price variable** — `{precio}` is available in computer and phone templates and useful-life paragraphs
-- 📝 **Optional useful-life paragraphs** — separate computer and phone templates for assets with invoice/supplier data and without invoice/supplier data
-- 📅 **Localized purchase date** — `{fecha_compra}` uses the same long-date format as `{fecha}`, for example `18 de agosto de 2026`
-- 👁️ **PDF preview with watermark** — previews use real asset data when available and realistic demo data when no asset of that type is available
-- 📍 **Entity location validation** — preview and real generation require City and State for the active GLPI entity; Country is optional
-- 📬 **Selective email sending** — choose Computers, Printers, and/or Phones from the send confirmation dialog
-- 🔎 **GitHub version checker** — the General configuration tab shows the installed version, latest detected release, update status, and a link to GitHub Releases; checks are cached for 6 hours
-- 💾 **Configuration backup** — export/import Responsivas settings and the current logo as a validated JSON file
-- 🔐 **GLPI permission and CSRF protection** — document generation, configuration, and object access follow GLPI's permission model
-- ⚙️ **Schema-versioned configuration** — safe migrations preserve existing settings on plugin updates
-- 🔒 **PDF compression and protection toggles** — enable/disable PDF compression and copy/edit restrictions
-- ✍️ **Optional lender/borrower dual-signature block** on computer and printer documents
-- 📄 **Page-break prevention** — signature blocks and body paragraphs use TCPDF `nobr` where required
-- 🌍 **Multi-language** — Spanish (Mexico), French, German, Italian (English is the base language)
-
----
+- 📄 Automatic PDF responsibility documents for Computers, Printers and Phones.
+- 🧾 Phone loan contracts with configurable legal clauses.
+- 🧭 **Visual inspection forms** and **Return forms** for Computers, Printers and Phones.
+- 🖨️ Fixed manual forms designed for **one Letter-size page**.
+- ✍️ Physical-condition information is intended to be completed **by hand**.
+- 🖼️ Approved PNG schematics for Computers, Printers and Phones.
+- 📝 Compact damage guidance for **scratches, impacts/dents, wear/use and missing parts/other**.
+- 👤 Manual forms prefill the real asset identification and assigned-user information from GLPI.
+- 👷 Manual-form signatures use the **technician assigned to the asset**; when none is assigned, the document uses the GLPI user generating it.
+- 🔢 Phone manual forms include the asset/line identification used by the normal phone responsibility.
+- 🧩 Each asset type has independent controls for enabling/disabling **Visual inspection** and **Return**.
+- 👁️ Configuration previews are available for the normal responsibility and for each enabled manual form.
+- 🖊️ Each manual form has its own editable **title, Instructions and four footer fields**.
+- 📬 Selective responsibility-document email sending.
+- 💾 Validated configuration export/import, including the institutional logo.
+- 🖼️ JPG/PNG institutional logo support, including transparent PNG preservation.
+- 🔐 GLPI permission and CSRF protections.
+- 🌍 Spanish (Mexico), French, German and Italian translations.
 
 ## Requirements
 
-| Component | Minimum version |
-|-----------|----------------|
-| GLPI | ≥ 11.0.0 / 12.0.0 |
-| PHP | ≥ 8.2 |
-| TCPDF | included with GLPI |
-
----
+| Component | Minimum |
+|-----------|---------|
+| GLPI | 11.0.0 / 12.x |
+| PHP | 8.2 |
+| TCPDF | Included with GLPI |
+| PHP extensions | `fileinfo`, `gd`, `intl`, `json` |
 
 ## Installation
 
-### Manual installation
-1. Download the latest release `.zip` from [Releases](../../releases)
-2. Unzip into your GLPI plugins directory:
-   ```
+1. Download the release ZIP.
+2. Extract it into the GLPI plugins directory:
+   ```text
    /var/www/glpi/plugins/responsivas/
    ```
-3. Go to **Setup → Plugins**
-4. Click **Install** next to Responsivas, then click **Enable**
+3. Open **Setup → Plugins**.
+4. Install **Responsivas**.
+5. Enable the plugin.
+6. Open the Responsivas configuration and review the templates, document options, manual forms and email settings.
 
----
+On installation or update, the plugin clears the plugin-related Twig/locale cache required by its templates and translations.
 
-## File Structure
+## Manual visual inspection and return forms
+
+The manual forms are independent printable documents. They are **not an additional page automatically appended to the normal responsibility PDF**.
+
+Each asset type provides two independent formats:
+
+| Asset type | Visual inspection | Return |
+|-----------|:-----------------:|:------:|
+| Computer | Yes | Yes |
+| Printer | Yes | Yes |
+| Phone | Yes | Yes |
+
+A format can be enabled or disabled separately. When a format is disabled, its action is not available on the user page and configuration preview.
+
+### What the manual forms do
+
+When a manual form is generated for a specific asset, the PDF pre-fills the information that can be obtained from GLPI, such as:
+
+- Asset identification.
+- Assigned user.
+- Brand.
+- Model.
+- Serial/UUID, where applicable.
+- Asset type and condition.
+- Computer hardware properties according to the Computer responsibility.
+- Computer manual forms include monitors and peripherals associated with the computer, using the same visibility rules as the standard computer responsibility. The associated-device table uses a compact adaptive layout to keep the form suitable for a single Letter-size sheet.
+- Printer properties according to the Printer responsibility.
+- Phone properties such as storage, RAM, IMEI and line.
+- The associated-device table uses **six columns**, separating **Serial** and **Asset** into independent columns for clearer identification.
+- The main Computer table also uses a six-column layout, with **Asset** and **Identification (Name)** represented separately from the hardware fields.
+- The redundant **Assigned to** line is not repeated in the forms because the assigned user is already identified in the user/signature area.
+- Printer and Phone forms show the asset identification and the corresponding **Printer Identification** or **Phone Identification** using the asset **Name** from GLPI.
+
+The physical inspection itself remains a paper workflow. The technician records the physical condition manually on the PDF.
+
+### Condition and damage areas
+
+The form includes:
+
+1. **Condition** — Excellent, Good, Fair or Damaged.
+2. **Visual condition map** — The corresponding approved asset schematic.
+3. **Instructions** — The configured instructions for that specific manual format.
+4. **Damage guidance** — Small icons and concise text for:
+   - scratches;
+   - impacts/dents;
+   - wear/use;
+   - missing parts/other.
+5. **Additional notes** — Blank area for handwritten observations.
+6. **Signatures** — Technician and assigned user.
+
+The condition and notes areas are intentionally optimized for printing. Checkbox and notes-box borders use increased line weight to remain visible on paper.
+
+### Manual-form templates
+
+For each of the three asset types and for each movement (Visual inspection and Return), the configuration provides:
+
+- Title.
+- Instructions.
+- Four footer positions.
+
+These settings are independent from the normal responsibility template.
+
+### Configuration preview behavior
+
+Under each asset type, the preview area contains:
+
+- **Preview of responsibility**.
+- **Preview of visual inspection** — shown only when Visual inspection is enabled.
+- **Preview of return** — shown only when Return is enabled.
+
+Manual previews use representative data so they can be tested from configuration even when the administrator has no assigned asset of that type.
+
+### Multiple assets of the same type
+
+Manual forms support the same per-asset concept used by the normal responsibilities.
+
+For example, if a user has:
+
+```text
+Computer EC-0001
+Computer EC-0002
+Computer EC-0003
+```
+
+the manual form can be generated for each specific asset and the asset information is taken from that asset's GLPI record.
+
+The configuration preview is different: it is only a template demonstration and therefore uses representative data.
+
+### Signatures
+
+For the manual forms, the technician is resolved in this order:
+
+1. Technician assigned to the asset, when available.
+2. User generating the document, when no technician is assigned.
+
+The assigned user is shown as the recipient of the asset.
+
+The physical inspection/return markings written on paper are not intended to modify the asset assignment.
+
+## Configuration
+
+### PDF font and text-size recommendation
+
+For best visual consistency in generated PDFs, it is recommended to configure **Helvetica** as the PDF font in GLPI.
+
+For editable text fields in Responsivas, a **9 pt or 10 pt** font size is recommended. These sizes provide a good balance between readability and available space, especially in the manual inspection and return formats.
+
+Open **Setup → Plugins → Responsivas**.
+
+### General
+
+Configure:
+
+| Setting | Purpose |
+|--------|---------|
+| Company name | Company/institution name used by templates |
+| Timezone | Document date and time |
+| Employee number | Show or hide the employee number |
+| QR code | Show or hide the asset QR code |
+| PDF compression | Enable/disable PDF compression |
+| PDF protection | Enable/disable copy/edit restrictions |
+| Watermark text | Text used by PDF previews |
+| Watermark opacity | Preview watermark opacity |
+| Currency | Currency symbol used by supported price fields |
+| Institutional logo | JPG/PNG used in document headers |
+
+PNG logos keep transparency when the source file contains an alpha channel.
+
+### Witnesses
+
+Configure:
+
+- Witness 1.
+- Witness 2.
+- Legal representative.
+- Phone asset type.
+
+### Templates
+
+Computer, Printer and Phone templates are configured separately.
+
+Depending on the asset type, the plugin provides:
+
+- Document title.
+- Introduction/opening paragraph.
+- Body/clauses.
+- Witness paragraph, where applicable.
+- Useful-life paragraphs for Computer and Phone.
+- Footer fields.
+- Font size.
+- Optional lender/borrower signatures for Computer and Printer responsibilities.
+
+The manual inspection and Return templates are configured separately below the normal document template area.
+
+## Template formatting
+
+Editable text supports:
+
+| Syntax | Result |
+|--------|--------|
+| `**text**` | **Bold** |
+| `*text*` | *Italic* |
+| `__text__` | Underline |
+
+Formatting can be combined:
+
+```text
+*__**text**__*
+```
+
+The B/I/U toolbar can wrap or remove the corresponding markers.
+
+## Available variables
+
+Common variables include:
+
+| Variable | Description |
+|----------|-------------|
+| `{nombre}` | Assigned user full name |
+| `{empresa}` | Company name |
+| `{activo}` | Asset identifier/tag |
+| `{fecha}` | Localized document date |
+| `{hora}` | Document time |
+| `{lugar}` | City, State, Country from the active GLPI entity |
+| `{representante}` | Legal representative |
+| `{marca}` | Asset brand |
+| `{modelo}` | Asset model |
+| `{serie}` / `{serie_uuid}` | Serial / UUID |
+| `{estado}` | Asset status/condition |
+| `{direccion}` | Entity address |
+| `{cp}` | Entity postal code |
+
+Phone-specific variables include `{imei}`, `{linea}`, `{almacenamiento}` and `{ram}`.
+
+Computer/Phone price variables include `{precio}`.
+
+Computer/Phone useful-life templates support `{fecha_compra}`, `{factura}`, `{proveedor}` and `{clausula_vida_util}`.
+
+## Useful-life paragraphs
+
+Computer and Phone templates support two optional useful-life paragraphs:
+
+- **With invoice** — used when invoice/supplier information exists.
+- **Without invoice** — used when those data are not available.
+
+The paragraph is inserted into the configured document body. It is not created as a new numbered clause.
+
+When the applicable template is empty, no paragraph is inserted.
+
+`{fecha_compra}` uses the same localized long-date style as `{fecha}`.
+
+## Location validation
+
+Before generating a preview or a real responsibility document, the active GLPI entity must have:
+
+- **City**
+- **State**
+
+Country is optional.
+
+This prevents documents from being generated with incomplete location information.
+
+## Sending documents
+
+From a user's **Responsivas** tab:
+
+1. Review the assigned assets.
+2. Click **Send responsibility documents**.
+3. Select the asset types to include.
+4. Confirm.
+
+The plugin generates documents for the selected asset types and sends them to the user's registered email address.
+
+## Permissions
+
+| Action | GLPI right |
+|--------|------------|
+| View Responsivas tab | `user` → READ |
+| Generate/send documents | `user` → READ |
+| Access configuration | `config` → UPDATE |
+
+## Configuration backup and import
+
+The General configuration includes administrator-only JSON export/import.
+
+The backup includes configuration values, templates, footer settings, selected users/reference values and the current logo.
+
+Imports validate the format, allowed fields and reference data before applying the configuration. When user/object IDs differ between GLPI installations, the plugin can use stable names to resolve compatible references.
 
 ## Modern GLPI architecture
 
-Responsivas 1.5.0 follows the modern GLPI plugin architecture and uses the same runtime codebase for GLPI 11.x and GLPI 12.x.
+Responsivas uses:
 
-- **PSR-4 classes** are under `src/` using the `GlpiPlugin\Responsivas` namespace.
-- **Symfony/GLPI Controllers** are under `src/Controller/` and use route attributes for HTTP endpoints.
-- **Twig** is used for plugin configuration and presentation templates.
-- **Services** centralize configuration, mail delivery, and GitHub release checking.
-- The legacy plugin runtime directories **`front/` and `inc/` are no longer required**.
-- PDF generation remains centralized in the PDF builder/generator layer so previews, real documents, and email attachments use the same rendering logic.
-- Existing configuration keys are preserved through the schema migration layer.
+- PSR-4 classes under `src/`.
+- Symfony/GLPI Controllers with route attributes under `src/Controller/`.
+- Twig configuration/presentation templates.
+- Centralized services for configuration, mail and update checks.
+- Centralized PDF generation.
+- Versioned configuration migration.
 
-### File structure
+The plugin keeps compatibility declarations for both GLPI 11.x and GLPI 12.x.
+
+## File structure
 
 ```text
 responsivas/
 ├── src/
-│   ├── Controller/            # GLPI/Symfony controllers and routes
-│   ├── Exception/             # Plugin-specific exceptions
-│   ├── Pdf/                   # TCPDF integration and PDF builders
-│   ├── Service/               # Configuration, mail and update services
-│   ├── Generator.php          # PDF attachment orchestration
-│   ├── Paths.php              # Plugin path/route helpers
-│   ├── Twig.php               # Twig environment
-│   ├── UserTab.php            # User tab integration
-│   └── Utils.php              # Sanitization and template utilities
+│   ├── Controller/
+│   ├── Exception/
+│   ├── Pdf/
+│   ├── Service/
+│   ├── Generator.php
+│   ├── Paths.php
+│   ├── Twig.php
+│   ├── UserTab.php
+│   └── Utils.php
 ├── locales/
-│   ├── responsivas.pot        # Translation template
-│   ├── es_MX.po / es_MX.mo    # Spanish (Mexico)
-│   ├── fr_FR.po / fr_FR.mo    # French
-│   ├── de_DE.po / de_DE.mo    # German
-│   └── it_IT.po / it_IT.mo    # Italian
 ├── CHANGELOG.md
 ├── hook.php
 ├── LICENSE
@@ -118,187 +352,6 @@ responsivas/
 ├── README.md
 └── setup.php
 ```
-
----
-
-## Configuration
-
-Navigate to **Setup → Plugins → Responsivas** (or **Administration → Plugins → Responsivas Configuration**).
-
-### General tab
-| Field | Description |
-|-------|-------------|
-| Company name | Appears in document templates and email |
-| Timezone | Used for document date/time |
-| Show employee number | Toggle employee number display on PDFs |
-| Show QR code | Toggle QR code on documents |
-| Compress PDF | Enable/disable PDF file compression |
-| Protect PDF | Enable/disable copy and edit restrictions on the PDF |
-| Watermark text | Diagonal text shown on preview PDFs (default: `PREVIEW`) |
-| Watermark opacity | Opacity percentage for the watermark (5–100, default: 25) |
-| Currency symbol | Used for purchase price display |
-| Institutional logo | In the header of each generated PDF, only JPG or PNG |
-| GitHub release status | Shows installed/latest release information and opens the GitHub Releases page; the check is cached for 6 hours |
-
-### Witnesses tab
-| Field | Description |
-|-------|-------------|
-| Witness 1 / Witness 2 | GLPI users who sign as witnesses on phone contracts |
-| Legal representative | GLPI user who signs as the company representative |
-| Phone asset type | The GLPI phone type used to identify loan phones |
-
-### Templates tab (Computer / Printer / Phone)
-Each asset type has its own set of template fields:
-
-| Field | Description |
-|-------|-------------|
-| Document title | Header title on the PDF |
-| Introduction / Opening paragraph | Text before the asset table |
-| Body / Clauses | Main responsibility text or legal clauses |
-| Witnesses paragraph | *(Phone only)* Closing witness statement |
-| Useful-life paragraph (with invoice) | Template for computers and phones when invoice and supplier data are available |
-| Useful-life paragraph (without invoice) | Template for computers and phones when invoice or supplier data are unavailable |
-| Footer fields | Left/right text on PDF page footer |
-| Font size | PDF body font size |
-| Show lender/borrower signatures | *(Computer and Printer)* Show two-column LENDER / BORROWER signature block instead of single borrower line. Uses the legal representative from General settings. |
-
-**Text formatting in templates:** Use Markdown-style syntax — HTML tags are not supported because GLPI sanitizes them automatically.
-
-| Syntax | Result |
-|--------|--------|
-| `**text**` | **Bold** |
-| `*text*` | *Italic* |
-| `__text__` | Underlined |
-
-Formats can be combined and nested: `*__**text**__*` renders as bold + italic + underline simultaneously.
-
-**Format toolbar (B / I / U):** Every editable text field — template fields, email body/footer, and PDF footer corner fields — has a small toolbar above it. Selecting text and clicking a button wraps it with the appropriate markers. Clicking the same button again on already-marked text removes the markers (toggle behavior).
-
-**Clickable variable tags:** All `{variable}` tags in the hints panel are clickable. Click while a field is focused to insert the tag at the cursor position. If no field is focused, the tag is copied to the clipboard.
-
-**Available template variables:**
-
-| Variable | Description |
-|----------|-------------|
-| `{nombre}` | Full name of the assigned user |
-| `{empresa}` | Company name |
-| `{activo}` | Asset tag / asset identifier |
-| `{fecha}` | Document date in localized long format |
-| `{hora}` | Document time |
-| `{lugar}` | City, State, Country from the active GLPI entity |
-| `{representante}` | Legal representative name |
-| `{marca}` | Asset brand |
-| `{modelo}` | Asset model |
-| `{serie}` / `{serie_uuid}` | Serial number / UUID |
-| `{imei}` | *(Phone)* IMEI number |
-| `{linea}` | *(Phone)* Phone line / mobile number |
-| `{almacenamiento}` | *(Phone)* Storage capacity |
-| `{ram}` | *(Phone)* RAM |
-| `{precio}` | *(Computer / Phone)* Purchase price formatted with the configured currency |
-| `{estado}` | Asset condition/status |
-| `{clausula_vida_util}` | *(Computer / Phone)* Optional useful-life paragraph generated from the configured template |
-| `{fecha_compra}` | *(Computer / Phone useful-life template)* Purchase date in the same localized long format as `{fecha}` |
-| `{factura}` | *(Computer / Phone useful-life template)* Invoice number |
-| `{proveedor}` | *(Computer / Phone useful-life template)* Supplier name |
-| `{testigo1}` / `{testigo2}` | Witness names |
-| `{direccion}` | Entity address |
-| `{cp}` | Entity postal code |
-
-**Computer useful-life paragraphs:** Two optional templates are available — one for assets with invoice and supplier data and one for assets without them. The generated paragraph is inserted into the existing body at the configured position and is **not** converted into a new numbered clause. If the applicable template is empty, nothing is inserted.
-
-**Location requirement:** The active GLPI entity must have both City and State configured before a preview or real responsibility can be generated. Country is optional. This prevents documents from being generated with incomplete location information.
-
-### Email tab
-| Field | Description |
-|-------|-------------|
-| Subject | Email subject line. Supports `{nombre}`, `{empresa}`, `{fecha}` |
-| Body | Email body text. Supports `{nombre}`, `{empresa}`, `{fecha}` and `**bold**`, `*italic*`, `__underline__` |
-| Footer | Optional footer below a separator line. Same formatting support |
-| Test email button | Sends a test email (no PDFs attached) to your own GLPI registered address |
-
----
-
-## Usage
-
-### Sending a responsibility document to a user
-
-1. Open any **User** record in GLPI (**Administration → Users**)
-2. Go to the **Responsibility Forms** tab
-3. Review the list of assigned assets (computers, printers, phones)
-4. Click **Send responsibility documents**
-5. Confirm in the modal dialog
-
-The plugin will generate one PDF per asset type (one for all computers, one for all printers, one per phone) and send them all as email attachments to the user's registered email address.
-
----
-
-## Permissions
-
-| Action | Required GLPI right |
-|--------|-------------------|
-| View Responsivas tab on a user | `user` → READ |
-| Send documents / generate PDFs | `user` → READ |
-| Access plugin configuration | `config` → UPDATE |
-
----
-
-## Troubleshooting
-
-**"The document template has empty fields"**
-One or more required template fields are blank. Go to **Configuration → Responsibility Forms → Templates** and fill in all required fields for the affected asset type.
-
-**"No email address registered"**
-The target user has no default email set in GLPI. Go to **Administration → Users → [user] → Email addresses** and add a default address.
-
-**"GLPI mail server not configured"**
-Email notifications must be enabled. Go to **Setup → Notifications → Email followups configuration** and enable notifications.
-
----
-
-## Configuration backup
-
-The **General** tab includes administrator-only JSON export/import.
-
-The export contains document templates and options, useful-life paragraphs, email and footer settings, selected witnesses/legal representative/phone type, and the current plugin logo. It also includes format/version metadata.
-
-Imports use an explicit allowlist and validate the JSON format, maximum file size, timezone, numeric ranges and logo data. User and phone-type references are exported with their IDs and stable names; when an ID differs on the target GLPI, Responsivas attempts to resolve the reference by name. If it cannot be resolved, the target installation keeps its current valid selection instead of aborting the import.
-
-The backup is intended for transferring Responsivas configuration between GLPI installations. GLPI object IDs are installation-specific, so reference resolution by name is used when necessary.
-
----
-
-## Version 1.5.0
-
-Version 1.5.0 is the major architecture update for modern GLPI compatibility.
-
-Key changes include:
-
-- Migration from the legacy plugin runtime structure to PSR-4 classes and GLPI/Symfony Controllers.
-- Compatibility work for GLPI 11.x and GLPI 12.x.
-- Centralized configuration, mail, update-checking, and PDF generation services.
-- Improved authorization, entity visibility checks, CSRF handling, and safer template processing.
-- Computer PDF layout redesigned for clearer asset and associated-device information.
-- Optional useful-life paragraphs added to computer responsibilities, matching the existing phone behavior.
-- `{precio}` added to computer templates.
-- `{fecha_compra}` standardized to the same localized long-date format used by `{fecha}`.
-- Preview and real generation now validate the active entity's City and State.
-- GitHub release checking in the General configuration tab with six-hour caching.
-- Translation catalogs updated and compiled for all bundled locales.
-
-See [CHANGELOG.md](CHANGELOG.md) for the complete list of changes.
-
----
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
 ---
 
 ## Changelog
@@ -348,132 +401,209 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 ---
 
-## Inducción
+## Descripción
 
-**Responsivas** es un plugin para GLPI que genera automáticamente cartas responsivas y contratos de comodato en formato PDF para activos de TI asignados a usuarios. Los documentos se envían directamente al usuario por correo electrónico como archivos adjuntos.
+**Responsivas** genera cartas responsivas y contratos de comodato en PDF para activos de TI asignados a usuarios de GLPI. También proporciona **formatos fijos de inspección visual y devolución** para Computadoras, Impresoras y Teléfonos.
 
----
+El plugin utiliza la misma base de código para **GLPI 11.x y GLPI 12.x** y sigue la arquitectura moderna de plugins con clases PSR-4, Controllers Symfony/GLPI y plantillas Twig.
 
-## Características
+## Características principales
 
-- 📄 **Generación automática de PDFs** para computadoras, impresoras y teléfonos celulares.
-- 📧 **Envío por correo** — adjunta todos los PDFs al correo registrado del usuario en GLPI.
-- 🖊️ **Plantillas completamente configurables** — título, introducción, cuerpo/cláusulas, testigos y pie de página, por tipo de activo.
-- 🖼️ **Logo institucional** — En encabezado de cada PDF generado, solo JPG o PNG.
-- 🎨 **Formato de texto** — `**negrita**`, `*cursiva*`, `__subrayado__` en todos los campos, combinables y anidables.
-- ✏️ **Barra de formato (B / I / U)** — botones toggle sobre cada campo de texto.
-- 🔤 **Variables clicleables** — haz clic en cualquier `{variable}` para insertarla en el cursor.
-- 🔢 **Códigos QR** en cada documento con enlace directo al activo en GLP.I
-- 👷 **Testigos y representante legal** — usuarios de GLPI configurables.
-- 📱 **Contratos de comodato** para teléfonos con set completo de cláusulas legales.
-- 🌍 **Multiidioma** — Español (México), Inglés (EE. UU. y Reino Unido), Francés, Alemán, Italiano.
-- 🔒 **Protección CSRF** y modelo de permisos de GLPI.
-- ⚙️ **Configuración con schema versionado** — migraciones seguras al actualizar el plugin.
-- 👁️ **Vista previa con marca de agua** — cada pestaña de activo tiene un botón "Vista previa" que genera un PDF completo con los datos actuales (o datos demo si el admin no tiene activos de ese tipo)
-- 🔐 **Toggles de compresión y protección** — activa/desactiva la compresión del PDF y las restricciones de copia/edición desde la pestaña General
-- 📝 **Cláusulas de vida útil editables** — dos plantillas al fondo de la pestaña Teléfonos: una para teléfonos con factura/proveedor (variables `{fecha_compra}`, `{factura}`, `{proveedor}`), otra para teléfonos sin datos de factura. Pre-llenadas en la instalación; nunca sobrescritas en actualizaciones.
-- 📬 **Envío selectivo por correo** — el modal de confirmación de envío permite elegir qué tipos de documentos incluir (Computadoras, Impresoras, Teléfonos). Solo se muestran los tipos con al menos un activo asignado, con su conteo. Todos los tipos disponibles vienen pre-seleccionados; desmarca los que no quieras enviar.
-- ✅ **Validación de plantillas** — avisa antes de generar si algún campo requerido está vacío.
-- ✍️ **Bloque de firmas comodante/comodatario opcional** en computadoras e impresoras — toggle configurable por tipo de documento en la pestaña correspondiente; usa el representante legal ya configurado en General.
-- 📄 **Prevención de cortes de página** — bloques de firmas y párrafos del cuerpo usan `nobr` de TCPDF para que cláusulas y firmas nunca queden partidas entre páginas.
-
----
+- 📄 Generación automática de cartas responsivas para Computadoras, Impresoras y Teléfonos.
+- 🧾 Contratos de comodato para teléfonos con cláusulas configurables.
+- 🧭 **Formatos de inspección visual** y **devolución** para Computadoras, Impresoras y Teléfonos.
+- 🖨️ Formatos manuales fijos diseñados para **una sola hoja tamaño Carta**.
+- ✍️ La condición física está diseñada para ser **llenada a mano**.
+- 🖼️ Esquemas PNG aprobados para Computadoras, Teléfonos e Impresoras.
+- 📝 Instrucciones compactas para **rayones, golpes/abolladuras, desgaste/uso y piezas faltantes/otros**.
+- 👤 Los formatos manuales prellenan la identificación real del activo y del usuario asignado desde GLPI.
+- 👷 La firma del formato manual utiliza al **técnico asignado al activo**; si no existe, utiliza al usuario de GLPI que genera el documento.
+- 🔢 Los formatos manuales de teléfono incluyen la información de línea e identificación utilizada por la responsiva normal.
+- 🧩 Cada tipo de activo tiene controles independientes para activar/desactivar **Inspección visual** y **Devolución**.
+- 👁️ Las vistas previas de configuración están disponibles para la responsiva normal y para cada formato manual habilitado.
+- 🖊️ Cada formato manual tiene su propio **título, Instrucciones y cuatro campos de pie de página** editables.
+- 📬 Envío selectivo de documentos por correo.
+- 💾 Exportación/importación validada de la configuración y del logo institucional.
+- 🖼️ Soporte de logo JPG/PNG, incluida la conservación de transparencia en PNG.
+- 🔐 Protección mediante permisos de GLPI y CSRF.
+- 🌍 Idiomas: Español (México), Francés, Alemán e Italiano.
 
 ## Requisitos
 
-| Componente | Versión mínima |
-|------------|---------------|
-| GLPI | ≥ 11.0.0 /12.0.0 |
-| PHP | ≥ 8.2 |
-| TCPDF | incluido con GLPI |
-
----
+| Componente | Mínimo |
+|-----------|--------|
+| GLPI | 11.0.0 / 12.x |
+| PHP | 8.2 |
+| TCPDF | Incluido con GLPI |
+| Extensiones PHP | `fileinfo`, `gd`, `intl`, `json` |
 
 ## Instalación
 
-### Instalación manual
-1. Descarga el `.zip` de la última versión desde [Releases](../../releases)
-2. Descomprime dentro del directorio de plugins de GLPI:
-   ```
+1. Descarga el ZIP de la versión publicada.
+2. Descomprímelo en el directorio de plugins de GLPI:
+   ```text
    /var/www/glpi/plugins/responsivas/
    ```
-3. Ve a **Configuración → Plugins**
-4. Haz clic en **Instalar** junto a Responsivas y luego en **Activar**
+3. Abre **Configuración → Complementos**.
+4. Instala **Responsivas**.
+5. Activa el plugin.
+6. Abre la configuración de Responsivas y revisa las plantillas, opciones del documento, formatos manuales y correo.
 
----
+Durante la instalación o actualización, el plugin limpia la caché Twig/locales necesaria para que las plantillas y traducciones actualizadas se carguen correctamente.
 
-## Estructura de archivos
+## Formatos de inspección visual y devolución
 
+Los formatos manuales son documentos independientes listos para imprimir. **No son una segunda página que se agregue automáticamente a la carta responsiva normal**.
+
+Cada tipo de activo tiene dos formatos independientes:
+
+| Tipo de activo | Inspección visual | Devolución |
+|-----------|:-----------------:|:------:|
+| Computadora | Sí | Sí |
+| Impresora | Sí | Sí |
+| Teléfono | Sí | Sí |
+
+Cada formato se puede activar o desactivar por separado. Cuando un formato está deshabilitado, su acción no aparece en la página del usuario ni en la vista previa de configuración.
+
+### ¿Cómo funcionan?
+
+Al generar el formato manual para un activo específico, el PDF prellena la información que GLPI tiene disponible, por ejemplo:
+
+- Identificación del activo.
+- Usuario asignado.
+- Marca.
+- Modelo.
+- Serie/UUID, cuando corresponde.
+- Tipo y estado del activo.
+- Propiedades de hardware de la computadora conforme a su responsiva.
+- Los formatos manuales de computadora incluyen los monitores y periféricos asociados al equipo, usando las mismas reglas de visibilidad que la responsiva normal. La tabla de dispositivos asociados utiliza un diseño compacto y adaptativo para mantener el formato en una sola hoja tamaño Carta.
+- Propiedades de la impresora conforme a su responsiva.
+- Datos del teléfono como almacenamiento, RAM, IMEI y línea.
+
+La inspección física se mantiene como un proceso en papel. El técnico registra a mano la condición física del equipo.
+
+### Áreas del formato
+
+El documento contiene:
+
+1. **Condición** — Excelente, Bueno, Regular o Dañado.
+2. **Esquema de condición visual** — El esquema correspondiente al tipo de activo.
+3. **Instrucciones** — Las instrucciones configuradas para ese formato.
+4. **Guía de daños** — Iconos pequeños y texto conciso para:
+   - rayones;
+   - golpes/abolladuras;
+   - desgaste/uso;
+   - piezas faltantes/otros.
+5. **Notas adicionales** — Área libre para observaciones a mano.
+6. **Firmas** — Técnico y usuario asignado.
+
+Los bordes de los cuadros de condición y de notas están reforzados para que sean claramente visibles al imprimir.
+
+### Plantillas de formatos manuales
+
+Para cada tipo de activo y para cada movimiento (Inspección visual y Devolución), la configuración permite editar:
+
+- Título.
+- Instrucciones.
+- Cuatro posiciones del pie de página.
+
+Estas configuraciones son independientes de la plantilla de la carta responsiva normal.
+
+### Vistas previas
+
+En cada tipo de activo, el área de vistas previas contiene:
+
+- **Vista previa de responsiva**.
+- **Vista previa de inspección visual** — aparece solo cuando está habilitada.
+- **Vista previa de devolución** — aparece solo cuando está habilitada.
+
+Las vistas previas de formatos manuales utilizan datos de demostración, por lo que pueden probarse desde configuración incluso cuando el administrador no tiene activos asignados.
+
+### Varios activos del mismo tipo
+
+Los formatos manuales funcionan por activo, igual que las responsivas normales.
+
+Por ejemplo, si un usuario tiene:
+
+```text
+Computadora EC-0001
+Computadora EC-0002
+Computadora EC-0003
 ```
-responsivas/
-├── src/
-│   ├── Controller/            # Rutas Symfony/GLPI; sin endpoints front legacy
-│   ├── Pdf/                   # Wrapper TCPDF y constructores de PDF
-│   ├── Service/               # Configuración, correo y actualización
-│   ├── Generator.php          # Orquestador de adjuntos PDF
-│   ├── Paths.php              # Rutas físicas y URLs del plugin
-│   ├── Twig.php               # Entorno Twig
-│   ├── UserTab.php            # Integración de pestaña en usuarios
-│   └── Utils.php              # Sanitización y utilidades de plantillas
-├── locales/
-│   ├── responsivas.pot       # Plantilla de traducciones
-│   ├── it_IT.po / it_IT.mo  # Italiano
-│   ├── es_MX.po / es_MX.mo  # Español (México)
-│   ├── fr_FR.po / fr_FR.mo  # Francés
-│   └── de_DE.po / de_DE.mo  # Alemán
-├── CHANGELOG.md
-├── hook.php                  # Hooks de instalación / desinstalación
-├── LICENSE                   # Licencia Pública General GNU v3
-├── logo.png                  # Ícono del plugin (128×128)
-├── plugin.xml                # Metadatos del catálogo de GLPI
-├── README.md
-└── setup.php                 # Registro del plugin y migración de schema
-```
 
----
+el formato manual puede generarse para cada activo específico y toma la información del registro correspondiente de GLPI.
+
+La vista previa de configuración es diferente: solamente demuestra la plantilla y por eso usa datos de demostración.
+
+### Firmas
+
+El técnico del formato manual se determina en este orden:
+
+1. Técnico asignado al activo, cuando existe.
+2. Usuario que genera el documento, cuando no existe técnico asignado.
+
+El usuario asignado al activo aparece como destinatario.
+
+Las anotaciones físicas realizadas a mano no están destinadas a modificar la asignación del activo en GLPI.
 
 ## Configuración
 
-Navega a **Configuración → Complementos → Responsivas** (o **Administración → Complementos → Configuración de Responsivas**).
+### Recomendación de fuente y tamaño de texto para PDF
 
-### Pestaña General
-| Campo | Descripción |
-|-------|-------------|
-| Nombre de la empresa | Aparece en las plantillas y en el correo |
-| Zona horaria | Usada para la fecha y hora del documento |
-| Mostrar número de empleado | Activa/desactiva el número de empleado en los PDFs |
-| Mostrar QR | Activa/desactiva el código QR en los documentos |
-| Comprimir PDF | Activa/desactiva la compresión del archivo PDF |
-| Proteger PDF | Activa/desactiva las restricciones de copia y edición del PDF |
-| Texto de marca de agua | Texto diagonal en las vistas previas (predeterminado: `VISTA PREVIA`) |
-| Opacidad de marca de agua | Porcentaje de opacidad de la marca de agua (5–100, predeterminado: 25) |
-| Símbolo de moneda | Se usa en los comodatos de teléfono para mostrar el precio |
-| Logo institucional| En encabezado de cada PDF generado, solo JPG o PNG |
+Para obtener una mejor consistencia visual en los PDFs generados, se recomienda configurar **Helvetica** como fuente para PDF en GLPI.
 
+Para los campos de texto editables de Responsivas, se recomienda utilizar un tamaño de fuente de **9 pt o 10 pt**. Estos tamaños ofrecen un buen equilibrio entre legibilidad y espacio disponible, especialmente en los formatos manuales de inspección y devolución.
 
-### Pestaña Testigos
-| Campo | Descripción |
-|-------|-------------|
-| Testigo 1 / Testigo 2 | Usuarios de GLPI que firman como testigos en contratos de teléfono |
-| Representante legal | Usuario de GLPI que firma como representante de la empresa |
-| Tipo de teléfono | Tipo de activo de teléfono usado para identificar equipos de comodato |
+Abre **Configuración → Complementos → Responsivas**.
 
-### Pestaña Plantillas (Computadora / Impresora / Teléfono)
-Cada tipo de activo tiene su propio conjunto de campos de plantilla:
+### General
 
-| Campo | Descripción |
-|-------|-------------|
-| Título del documento | Encabezado principal del PDF |
-| Introducción / Párrafo de apertura | Texto antes de la tabla del activo |
-| Cuerpo / Cláusulas | Texto principal de responsabilidad o cláusulas legales |
-| Párrafo de testigos | *(Solo teléfono)* Declaración final de testigos |
-| Cláusula de vida útil (con factura) | *(Solo teléfono)* Plantilla cuando el teléfono tiene factura y proveedor registrados |
-| Cláusula de vida útil (sin factura) | *(Solo teléfono)* Plantilla cuando el teléfono no tiene factura o proveedor registrado |
-| Campos del pie de página | Texto izquierdo/derecho en el pie del PDF |
-| Tamaño de fuente | Tamaño de letra del cuerpo del PDF |
-| Mostrar firmas comodante/comodatario | *(Computadora e Impresora)* Muestra un bloque de dos columnas COMODANTE / COMODATARIO en lugar de una sola firma. Usa el representante legal de la configuración General. |
+Configura:
 
-**Formato de texto en las plantillas:** Usa sintaxis estilo Markdown — las etiquetas HTML no funcionan porque GLPI las sanitiza automáticamente.
+| Ajuste | Función |
+|--------|---------|
+| Nombre de la empresa | Nombre utilizado por las plantillas |
+| Zona horaria | Fecha y hora de los documentos |
+| Número de empleado | Mostrar/ocultar número de empleado |
+| Código QR | Mostrar/ocultar QR |
+| Compresión PDF | Activar/desactivar compresión |
+| Protección PDF | Activar/desactivar restricciones de copia/edición |
+| Texto de marca de agua | Texto de las vistas previas |
+| Opacidad | Opacidad de la marca de agua |
+| Moneda | Símbolo utilizado por variables de precio |
+| Logo institucional | JPG/PNG utilizado en el encabezado |
+
+Los logos PNG conservan la transparencia cuando el archivo contiene canal alfa.
+
+### Testigos
+
+Configura:
+
+- Testigo 1.
+- Testigo 2.
+- Representante legal.
+- Tipo de teléfono.
+
+### Plantillas
+
+Las plantillas de Computadora, Impresora y Teléfono se configuran por separado.
+
+Según el tipo de activo, se pueden configurar:
+
+- Título del documento.
+- Introducción/párrafo inicial.
+- Cuerpo/cláusulas.
+- Párrafo de testigos, cuando corresponda.
+- Cláusulas de vida útil para Computadora y Teléfono.
+- Campos del pie de página.
+- Tamaño de fuente.
+- Firmas opcionales comodante/comodatario para Computadora e Impresora.
+
+Los formatos manuales de inspección y devolución se configuran por separado, debajo de la sección de la plantilla normal del documento.
+
+## Formato de texto
+
+Los campos de texto admiten:
 
 | Sintaxis | Resultado |
 |----------|-----------|
@@ -481,108 +611,155 @@ Cada tipo de activo tiene su propio conjunto de campos de plantilla:
 | `*texto*` | *Cursiva* |
 | `__texto__` | Subrayado |
 
-Los formatos se pueden combinar y anidar: `*__**texto**__*` produce negrita + cursiva + subrayado simultáneamente.
+Se pueden combinar:
 
-**Barra de formato (B / I / U):** Cada campo de texto editable — plantillas del documento, cuerpo/pie del correo y los cuatro campos del pie de página del PDF — tiene una pequeña barra de botones encima. Selecciona texto y haz clic en un botón para envolver con los marcadores. Volver a hacer clic en el mismo botón sobre texto ya marcado elimina los marcadores (comportamiento de toggle).
+```text
+*__**texto**__*
+```
 
-**Etiquetas de variable clicleables:** Todas las etiquetas `{variable}` del panel de hints son clicleables. Haz clic mientras un campo está activo para insertar la etiqueta en la posición del cursor. Si ningún campo está activo, la etiqueta se copia al portapapeles.
+La barra B/I/U permite agregar o quitar los marcadores.
 
-**Variables disponibles en las plantillas:**
+## Variables disponibles
 
 | Variable | Descripción |
 |----------|-------------|
 | `{nombre}` | Nombre completo del usuario asignado |
 | `{empresa}` | Nombre de la empresa |
-| `{activo}` | Número de activo / número de inventario |
-| `{fecha}` | Fecha del documento (dd/mm/aaaa) |
+| `{activo}` | Identificador/número de activo |
+| `{fecha}` | Fecha localizada del documento |
 | `{hora}` | Hora del documento |
-| `{lugar}` | Ciudad, Estado, País de la entidad |
-| `{representante}` | Nombre del representante legal |
+| `{lugar}` | Ciudad, Estado, País de la entidad activa |
+| `{representante}` | Representante legal |
 | `{marca}` | Marca del activo |
 | `{modelo}` | Modelo del activo |
-| `{serie}` / `{serie_uuid}` | Número de serie / UUID |
-| `{imei}` | *(Teléfono)* Número IMEI |
-| `{linea}` | *(Teléfono)* Número de línea / celular |
-| `{almacenamiento}` | *(Teléfono)* Capacidad de almacenamiento |
-| `{ram}` | *(Teléfono)* Memoria RAM |
-| `{precio}` | *(Teléfono)* Precio de compra |
-| `{estado}` | Condición / estado del activo |
-| `{clausula_vida_util}` | *(Teléfono)* Cláusula de vida útil — texto definido en la configuración |
-| `{fecha_compra}` | *(Teléfono — plantilla vida útil)* Fecha de compra |
-| `{factura}` | *(Teléfono — plantilla vida útil)* Número de factura |
-| `{proveedor}` | *(Teléfono — plantilla vida útil)* Nombre del proveedor |
-| `{testigo1}` / `{testigo2}` | Nombres de los testigos |
+| `{serie}` / `{serie_uuid}` | Serie / UUID |
+| `{estado}` | Estado/condición del activo |
 | `{direccion}` | Dirección de la entidad |
-| `{cp}` | Código postal de la entidad |
+| `{cp}` | Código postal |
 
-### Pestaña Correo
-| Campo | Descripción |
-|-------|-------------|
-| Asunto | Asunto del correo. Soporta `{nombre}`, `{empresa}`, `{fecha}` |
-| Cuerpo | Cuerpo del correo. Soporta `{nombre}`, `{empresa}`, `{fecha}` y `**negrita**`, `*cursiva*`, `__subrayado__` |
-| Pie de correo | Texto opcional bajo una línea separadora. Mismo soporte de formato |
-| Botón de correo de prueba | Envía un correo de prueba (sin PDFs adjuntos) a tu propio correo registrado en GLPI |
+Variables específicas de teléfono:
+
+```text
+{imei}
+{linea}
+{almacenamiento}
+{ram}
+```
+
+Variables de precio:
+
+```text
+{precio}
+```
+
+Variables de vida útil para Computadora y Teléfono:
+
+```text
+{fecha_compra}
+{factura}
+{proveedor}
+{clausula_vida_util}
+```
+
+## Cláusulas de vida útil
+
+Computadora y Teléfono tienen dos plantillas opcionales:
+
+- **Con factura** — cuando existe información de factura/proveedor.
+- **Sin factura** — cuando no existe.
+
+El párrafo se inserta dentro del cuerpo configurado. **No se crea una nueva cláusula numerada.**
+
+Si la plantilla aplicable está vacía, no se inserta nada.
+
+`{fecha_compra}` utiliza el mismo formato largo localizado de `{fecha}`.
+
+## Validación de ubicación
+
+Antes de generar una vista previa o una carta responsiva real, la entidad activa de GLPI debe tener:
+
+- **Ciudad**
+- **Estado**
+
+El País es opcional.
+
+Esto evita generar documentos con ubicación incompleta.
+
+## Envío de documentos
+
+Desde la pestaña **Responsivas** del usuario:
+
+1. Revisa los activos asignados.
+2. Haz clic en **Enviar documentos de responsiva**.
+3. Selecciona los tipos de activos que deseas incluir.
+4. Confirma.
+
+El plugin genera los documentos de los tipos seleccionados y los envía al correo registrado del usuario.
+
+## Permisos
+
+| Acción | Permiso de GLPI |
+|--------|-----------------|
+| Ver pestaña Responsivas | `user` → LECTURA |
+| Generar/enviar documentos | `user` → LECTURA |
+| Acceder a configuración | `config` → MODIFICAR |
+
+## Respaldo e importación de configuración
+
+La pestaña General incluye exportación/importación JSON para administradores.
+
+El respaldo incluye configuración, plantillas, pies de página, referencias seleccionadas y el logo institucional actual.
+
+La importación valida formato, campos permitidos y referencias antes de aplicar los datos. Cuando los IDs cambian entre instalaciones de GLPI, el plugin puede resolver referencias mediante nombres estables.
+
+## Arquitectura moderna de GLPI
+
+Responsivas utiliza:
+
+- Clases PSR-4 bajo `src/`.
+- Controllers Symfony/GLPI con atributos de rutas en `src/Controller/`.
+- Twig para configuración y presentación.
+- Servicios centralizados para configuración, correo y actualizaciones.
+- Generación de PDF centralizada.
+- Migración versionada de configuración.
+
+El plugin conserva las declaraciones de compatibilidad para GLPI 11.x y GLPI 12.x.
+
+## Estructura de archivos
+
+```text
+responsivas/
+├── src/
+│   ├── Controller/
+│   ├── Exception/
+│   ├── Pdf/
+│   ├── Service/
+│   ├── Generator.php
+│   ├── Paths.php
+│   ├── Twig.php
+│   ├── UserTab.php
+│   └── Utils.php
+├── locales/
+├── CHANGELOG.md
+├── hook.php
+├── LICENSE
+├── logo.png
+├── plugin.xml
+├── README.md
+└── setup.php
+```
 
 ---
 
-## Uso
+## Changelog
 
-### Enviar documentos de responsiva a un usuario
-
-1. Abre cualquier registro de **Usuario** en GLPI (**Administración → Usuarios**)
-2. Ve a la pestaña **Responsivas**
-3. Revisa la lista de activos asignados (computadoras, impresoras, teléfonos)
-4. Haz clic en **Enviar documentos de responsiva**
-5. Confirma en el diálogo modal
-
-El plugin genera un PDF por tipo de activo (uno para todas las computadoras, uno para todas las impresoras, uno por teléfono) y los envía como archivos adjuntos al correo registrado del usuario en GLPI.
-
----
-
-## Permisos requeridos
-
-| Acción | Permiso de GLPI requerido |
-|--------|--------------------------|
-| Ver pestaña Responsivas en un usuario | `user` → LECTURA |
-| Enviar documentos / generar PDFs | `user` → LECTURA |
-| Acceder a la configuración del plugin | `config` → MODIFICAR |
-
----
-
-## Solución de problemas
-
-**"La plantilla del documento tiene campos vacíos"**
-Uno o más campos requeridos de la plantilla están en blanco. Ve a **Configuración → Responsivas → Plantillas** y completa todos los campos del tipo de activo afectado.
-
-**"El usuario no tiene dirección de correo registrada"**
-El usuario destino no tiene correo predeterminado en GLPI. Ve a **Administración → Usuarios → [usuario] → Direcciones de correo** y agrega una dirección predeterminada.
-
-**"Servidor de correo de GLPI no configurado"**
-Las notificaciones por correo deben estar activadas. Ve a **Configuración → Notificaciones → Configuración de correos** y activa las notificaciones.
-
----
-
-## Contribuir
-
-Los pull requests son bienvenidos. Para cambios importantes, por favor abre un issue primero.
-
-1. Haz fork del repositorio
-2. Crea tu rama de feature (`git checkout -b feature/mi-feature`)
-3. Haz commit de tus cambios
-4. Sube la rama (`git push origin feature/mi-feature`)
-5. Abre un Pull Request
-
----
-
-## Cambios
-
-Ver [CHANGELOG.md](CHANGELOG.md).
+Consulta [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
 ## Autor
 
-**Edwin Elias Alvarez** — [GitHub](https://github.com/monta990)
+**Edwin Elias Alvarez** — [GitHub](https://github.com/monta990/responsivas)
 
 ---
 
@@ -596,7 +773,9 @@ Si te gusta mi trabajo, me puedes apoyar con una donación:
 
 ## Licencia
 
-GPL v3 o posterior. Ver [LICENSE](LICENSE).
+GPL v3 o posterior. Consulta [LICENSE](LICENSE).
+
+---
 
 ## Problemas
 
