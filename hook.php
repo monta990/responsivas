@@ -328,8 +328,18 @@ function plugin_responsivas_migrateConfig(array $existing): void {
  * Actualización: aplica nuevos defaults sin sobrescribir valores existentes
  */
 function plugin_responsivas_update($current, $new) {
+   global $DB;
+
    $existing = Config::getConfigurationValues('plugin_responsivas') ?? [];
    plugin_responsivas_migrateConfig($existing);
+
+   // Remove the legacy inspection-history table created by older Responsivas versions.
+   // The current manual inspection/return forms are printable-only and do not persist
+   // inspection records in a plugin-owned table.
+   $legacy_table = 'glpi_plugin_responsivas_inspections';
+   if ($DB->tableExists($legacy_table)) {
+      $DB->doQuery('DROP TABLE `' . $legacy_table . '`');
+   }
 
    // Always invalidate compiled templates and translation caches after update.
    plugin_responsivas_clearCaches();

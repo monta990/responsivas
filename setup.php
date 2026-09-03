@@ -14,7 +14,7 @@ if (!defined('GLPI_ROOT')) {
  * from src/ by GLPI's plugin autoloader; HTTP entry points are Symfony
  * Controllers under src/Controller/.
  */
-define('PLUGIN_RESPONSIVAS_VERSION', '1.6.0');
+define('PLUGIN_RESPONSIVAS_VERSION', '1.6.1');
 define('PLUGIN_RESPONSIVAS_MIN_GLPI', '11.0');
 define('PLUGIN_RESPONSIVAS_MAX_GLPI', '12.99');
 
