@@ -2134,6 +2134,15 @@ HTML;
 // No usar una ciudad/estado hardcodeados en el preview.
       $location = self::getActiveEntityLocation();
 
+      // Entity address fields used by phone template variables.
+      // Keep them consistent with real phone document generation.
+      $entity = new \Entity();
+      if (!$entity->getFromDB(\Session::getActiveEntity())) {
+         throw new \RuntimeException(__('Could not retrieve the active entity.', 'responsivas'));
+      }
+      $address  = Utils::escape($entity->fields['address']  ?? '');
+      $postcode = Utils::escape($entity->fields['postcode'] ?? '');
+
       // Testigos / representante reales si están configurados, si no → demo
       $t1_id  = (int)($config['testigo_1']     ?? 0);
       $t2_id  = (int)($config['testigo_2']     ?? 0);

@@ -4,6 +4,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.1] — 2026-09-02
+
+### Fixed
+
+- **Legacy inspection table removed** — Removed the obsolete `glpi_plugin_responsivas_inspections` table from existing installations during plugin update. The current visual inspection and return forms are printable-only and do not persist inspection records, so the legacy table no longer serves any runtime purpose. New installations no longer create it.
+- **Deprecated date/time warning eliminated** — Removed the obsolete table that caused GLPI's `migration:timestamps` warning for `date_creation` and `last_update`.
+
+---
+
 ## [1.6.0] — 2026-09-02
 
 ### Added
@@ -24,6 +33,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - **TCPDF SVG errors** — Removed the last SVG rendering path from the manual PDF pipeline, preventing malformed-SVG errors for current manual resources.
 - **Action button contrast** — Corrected text/icon contrast for red destructive buttons and the email-send action while preserving the existing Cancel button styling.
 - **Logo/image hardening** — Added file-type, maximum size, image-dimension and pixel-count validation before GD image decoding to reduce memory-exhaustion risk.
+- **Demo preview generation** — Removed an undefined entity reference from the standard responsibility PDF demo path.
 
 ---
 
