@@ -16,6 +16,42 @@ use GlpiPlugin\Responsivas\Paths;
  */
 class PDF extends \TCPDF {
 
+    /**
+     * Extend TCPDF 7's local image/font allowlist with Responsivas paths.
+     *
+     * GLPI 12 ships TCPDF 7, whose facade delegates local file access to
+     * tc-lib-file. Paths outside the engine defaults are rejected unless they
+     * are explicitly trusted. Responsivas stores its bundled schematics in
+     * the plugin directory and the configured logo in the GLPI plugin files
+     * directory, so both locations must be allowed for PDF rendering.
+     *
+     * This override is harmless on older TCPDF versions that do not consume
+     * this method, and avoids changing global GLPI/TCPDF security settings.
+     *
+     * @return array<int, string>
+     */
+    protected function fileAllowedPaths(): array
+    {
+        // TCPDF 7 (used by GLPI 12) introduced the local file allowlist.
+        // TCPDF 6.x (used by GLPI 11) has no such parent method; keep the
+        // override inert there so the legacy image-loading behavior is
+        // completely unchanged.
+        if (!method_exists(get_parent_class($this), 'fileAllowedPaths')) {
+            return [];
+        }
+
+        $paths = parent::fileAllowedPaths();
+
+        foreach ([Paths::pluginDir(), Paths::filesDir()] as $path) {
+            $real = realpath($path);
+            if ($real !== false) {
+                $paths[] = $real;
+            }
+        }
+
+        return array_values(array_unique($paths));
+    }
+
     public string $fecha_header  = '';
     public string $location      = '';
     public bool   $show_watermark = false;

@@ -4,12 +4,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
-## [1.6.1] — 2026-09-02
+## [1.6.2] — 2026-09-06
+
+### Fixed
+
+- **GLPI 12 / TCPDF 7 image loading** — Extended TCPDF's local file allowlist for the Responsivas plugin directory and configured plugin-files directory so bundled schematics and the configured institutional logo render correctly under GLPI 12 RC1. The allowlist extension is guarded so GLPI 11 with TCPDF 6.x keeps its native image-loading behavior unchanged.
+
+## [1.6.1] — 2026-09-03
 
 ### Fixed
 
 - **Legacy inspection table removed** — Removed the obsolete `glpi_plugin_responsivas_inspections` table from existing installations during plugin update. The current visual inspection and return forms are printable-only and do not persist inspection records, so the legacy table no longer serves any runtime purpose. New installations no longer create it.
 - **Deprecated date/time warning eliminated** — Removed the obsolete table that caused GLPI's `migration:timestamps` warning for `date_creation` and `last_update`.
+- **Configuration preview regression** — Restored the entity address and postal-code variables used by the phone preview demo and restored the correct Symfony export route generation (`config/export`).
 
 ---
 
