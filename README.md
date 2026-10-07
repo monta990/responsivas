@@ -21,6 +21,8 @@
 
 The plugin is designed to use the same codebase on **GLPI 11.x and GLPI 12.x** and follows the modern plugin architecture with PSR-4 classes, Symfony/GLPI Controllers and Twig templates.
 
+Responsibility PDF generation from the User tab uses **POST requests protected by GLPI's CSRF token** because successful PDF downloads are recorded in the target user's GLPI history. The standard GLPI asset URLs embedded in QR codes remain unchanged.
+
 ## Main features
 
 - 📄 Automatic PDF responsibility documents for Computers, Printers and Phones.

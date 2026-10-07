@@ -176,16 +176,11 @@ function plugin_responsivas_getDefaults(): array {
  */
 function plugin_responsivas_clearCaches(): void {
    // Cache nativa de GLPI: incluye las cachés de traducciones/I18n y Symfony.
+   // GLPI 11 y 12 exponen resetAllCaches() como método de instancia.
    try {
       if (class_exists('\\Glpi\\Cache\\CacheManager')) {
-         $cache_manager = \Glpi\Cache\CacheManager::getInstance();
-
-         foreach (['clear', 'clearAll'] as $method) {
-            if (method_exists($cache_manager, $method)) {
-               $cache_manager->{$method}();
-               break;
-            }
-         }
+         $cache_manager = new \Glpi\Cache\CacheManager();
+         $cache_manager->resetAllCaches();
       }
    } catch (\Throwable $e) {
       Event::log(
@@ -328,18 +323,8 @@ function plugin_responsivas_migrateConfig(array $existing): void {
  * Actualización: aplica nuevos defaults sin sobrescribir valores existentes
  */
 function plugin_responsivas_update($current, $new) {
-   global $DB;
-
    $existing = Config::getConfigurationValues('plugin_responsivas') ?? [];
    plugin_responsivas_migrateConfig($existing);
-
-   // Remove the legacy inspection-history table created by older Responsivas versions.
-   // The current manual inspection/return forms are printable-only and do not persist
-   // inspection records in a plugin-owned table.
-   $legacy_table = 'glpi_plugin_responsivas_inspections';
-   if ($DB->tableExists($legacy_table)) {
-      $DB->doQuery('DROP TABLE `' . $legacy_table . '`');
-   }
 
    // Always invalidate compiled templates and translation caches after update.
    plugin_responsivas_clearCaches();

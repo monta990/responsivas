@@ -146,6 +146,10 @@ class PDF extends \TCPDF {
      * Mismo orden que responsivasApplyTemplate para resultados consistentes.
      */
     private static function fmtCell(string $text): string {
+        // Footer values come from administrator configuration. Escape the raw
+        // text before adding the small, supported formatting tags so arbitrary
+        // HTML (including external resource URLs) cannot reach writeHTMLCell().
+        $text = htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $text = preg_replace_callback('/\*\*(.+?)\*\*/s', static fn($m) => '<b>'  . $m[1] . '</b>', $text);
         $text = preg_replace_callback('/\*(.+?)\*/s',       static fn($m) => '<i>'  . $m[1] . '</i>', $text);
         $text = preg_replace_callback('/__(.+?)__/s',         static fn($m) => '<u>'  . $m[1] . '</u>', $text);

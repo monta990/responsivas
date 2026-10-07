@@ -725,7 +725,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
       $assignedUser = null;
       if ($userId > 0) {
          $candidate = new \User();
-         if ($candidate->getFromDB($userId) && $candidate->canView()) {
+         if ($candidate->getFromDB($userId) && $candidate->can($userId, READ)) {
             $assignedUser = $candidate;
          }
       }

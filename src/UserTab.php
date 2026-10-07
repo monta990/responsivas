@@ -142,18 +142,24 @@ class UserTab extends \CommonGLPI {
       echo Twig::env()->render('user/tab.html.twig', [
          'user_id'        => $id,
          'counts'         => $data,
-         'computer_url'   => Paths::routeUrl('computer?users_id=' . $id),
-         'printer_url'    => Paths::routeUrl('printer?users_id=' . $id),
-         'phone_url'      => Paths::routeUrl('phone?users_id=' . $id),
+         'computer_url'   => Paths::routeUrl('computer'),
+         'printer_url'    => Paths::routeUrl('printer'),
+         'phone_url'      => Paths::routeUrl('phone'),
          'mail_url'       => Paths::routeUrl('mail'),
          'inspection_url' => Paths::routeUrl('inspection?users_id=' . $id),
          'return_url'     => Paths::routeUrl('return?users_id=' . $id),
          'config'         => $config,
          'user_email'     => $user_email,
          'email_disabled' => $email_disabled,
-         'email_tooltip'  => $email_tooltip,
-         'csrf_token'     => \Session::getNewCSRFToken(),
-         'last_updated'   => $dt->format('d/m/Y H:i'),
+         'email_tooltip'      => $email_tooltip,
+         // GLPI 11 consumes a normal CSRF token after each successful POST.
+         // Use a dedicated one-time token per form so the user can generate
+         // Computer, Printer, Phone and Email documents from the same tab.
+         'computer_csrf_token' => \Session::getNewCSRFToken(true),
+         'printer_csrf_token'  => \Session::getNewCSRFToken(true),
+         'phone_csrf_token'    => \Session::getNewCSRFToken(true),
+         'mail_csrf_token'     => \Session::getNewCSRFToken(true),
+         'last_updated'        => $dt->format('d/m/Y H:i'),
       ]);
    }
 }
