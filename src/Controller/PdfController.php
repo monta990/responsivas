@@ -179,12 +179,20 @@ final class PdfController extends AbstractController
             'expires' => time() + 300,
         ];
 
-        $history = $type . ' PDF downloaded';
+        $typeLabels = [
+            'computer' => __('Computer', 'responsivas'),
+            'printer'  => __('Printer', 'responsivas'),
+            'phone'    => __('Phone', 'responsivas'),
+        ];
+        $history = sprintf(
+            __('Responsibility PDF for %s downloaded.', 'responsivas'),
+            $typeLabels[$type] ?? $type
+        );
         \Log::history(
             $userId,
             'User',
-            [0, '', ''],
-            'responsivas: ' . $history,
+            [0, '', $history],
+            '',
             \Log::HISTORY_LOG_SIMPLE_MESSAGE
         );
 
