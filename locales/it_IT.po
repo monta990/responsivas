@@ -1532,3 +1532,9 @@ msgid_plural "%d responsibility PDFs attached."
 msgstr[0] "%d documento PDF di responsabilità allegato."
 msgstr[1] "%d documenti PDF di responsabilità allegati."
 
+msgid "Phone"
+msgstr "Telefono"
+
+#, python-format
+msgid "Responsibility PDF for %s downloaded."
+msgstr "PDF della responsiva per %s scaricato."

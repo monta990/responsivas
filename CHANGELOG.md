@@ -4,10 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
-## [1.6.3] — 2026-10-06
+## [1.6.3] — 2026-10-07
 
 ### Fixed
 
+- **User history entries** — PDF download history now stores the translated message in the history value, instead of creating a blank history row.
 - **Plural email attachment translation** — Corrected the gettext plural catalog entry for responsibility PDF attachment counts so localized messages are used correctly when an email contains multiple PDFs on GLPI 11 and GLPI 12.
 - **GLPI 12 / TCPDF 7 PDF output compatibility** — Generate responsibility PDFs in memory with the portable `S` destination and write the temporary file with PHP, avoiding the `F` destination issue present in older TCPDF 7.x releases while preserving the existing GLPI 11 behavior.
 - **PDF download requests moved to POST** — Responsibility PDF generation for Computers, Printers and Phones now uses POST requests protected by GLPI CSRF validation instead of GET. This keeps the existing download history entry as a deliberate state-changing action and prevents crawlers, prefetchers or ordinary GET visits from writing download history. The plugin remains compatible with GLPI 11.0.0 and later; no minimum GLPI version increase is required.
