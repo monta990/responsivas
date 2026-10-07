@@ -9,16 +9,20 @@
 </style>
 
 {# ── Asset button macro ──────────────────────────────────── #}
-{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty, text_class='') %}
+{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty, user_id, csrf_token, text_class='') %}
     {% set tooltip = count
         ? 'Generate responsibility documents'|trans
         : (tooltip_empty ?: 'No equipment assigned'|trans) %}
     <span data-bs-toggle="tooltip" title="{{ tooltip }}" class="d-inline-block">
         {% if count %}
-            <a class="{{ btn_class }} {{ text_class }}" href="{{ url }}"{% if text_class == 'text-dark' %} style="color:#212529!important;"{% endif %} target="_blank" data-resp-pdf-btn="1">
-                <i class="ti {{ icon }} me-2"></i>{{ label }}
-                <span class="badge badge-secondary ms-1">{{ count }}</span>
-            </a>
+            <form method="post" action="{{ url }}" target="_blank" style="display:inline">
+                <input type="hidden" name="users_id" value="{{ user_id }}">
+                <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="{{ btn_class }} {{ text_class }}"{% if text_class == 'text-dark' %} style="color:#212529!important;"{% endif %} data-resp-pdf-btn="1">
+                    <i class="ti {{ icon }} me-2"></i>{{ label }}
+                    <span class="badge badge-secondary ms-1">{{ count }}</span>
+                </button>
+            </form>
         {% else %}
             <a class="{{ btn_class }} {{ text_class }} disabled" href="#"
                aria-disabled="true" role="button" style="pointer-events:none">
@@ -71,6 +75,8 @@
                         group.label,
                         group.btn,
                         trans('No equipment assigned'),
+                        user_id,
+                        group.key == 'computers' ? computer_csrf_token : (group.key == 'printers' ? printer_csrf_token : phone_csrf_token),
                         asset_main_text
                     ) }}
                     <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
@@ -133,7 +139,7 @@
             <form id="{{ form_id }}" method="post"
                   action="{{ mail_url }}" style="display:none;">
                 <input type="hidden" name="users_id" value="{{ user_id }}">
-                <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="_glpi_csrf_token" value="{{ mail_csrf_token }}">
                 <input type="hidden" name="send_computers" value="" id="hidden_comp_{{ user_id }}">
                 <input type="hidden" name="send_printers"  value="" id="hidden_print_{{ user_id }}">
                 <input type="hidden" name="send_phones"    value="" id="hidden_phone_{{ user_id }}">

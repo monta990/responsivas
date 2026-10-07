@@ -247,7 +247,7 @@ final class ConfigService
                         imagesavealpha($img, true);
                     }
                     if ($img !== false && @imagepng($img, $tmp)) {
-                        imagedestroy($img);
+                        unset($img);
                         if (@rename($tmp, Paths::logoPath())) {
                             @chmod(Paths::logoPath(), 0644);
                             $logoImported = true;
@@ -255,7 +255,7 @@ final class ConfigService
                             @unlink($tmp);
                         }
                     } else {
-                        if ($img !== false) imagedestroy($img);
+                        if ($img !== false) unset($img);
                         @unlink($tmp);
                     }
                 }
@@ -503,11 +503,11 @@ if (isset($_POST['update'])) {
 
             // Re-codificar siempre la imagen: nunca persistir directamente bytes subidos.
             if ($img !== false && @imagepng($img, $logoPath)) {
-                imagedestroy($img);
+                unset($img);
                 $imageWritten = true;
             } else {
                 if ($img !== false) {
-                    imagedestroy($img);
+                    unset($img);
                 }
                 \Session::addMessageAfterRedirect($errorMessage, false, ERROR);
             }

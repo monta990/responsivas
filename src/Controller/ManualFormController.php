@@ -21,6 +21,17 @@ abstract class ManualFormController extends AbstractController
 
         $itemtype = (string)$request->query->get('itemtype', 'Computer');
         $userId = (int)$request->query->get('users_id', 0);
+
+        if ($userId <= 0) {
+            throw new BadRequestHttpException(__('Invalid user.', 'responsivas'));
+        }
+
+        // Authorize the specific target user, including GLPI entity scope.
+        $targetUser = new \User();
+        if (!$targetUser->getFromDB($userId) || !$targetUser->can($userId, READ)) {
+            throw new \Glpi\Exception\Http\AccessDeniedHttpException();
+        }
+
         $config = \Config::getConfigurationValues('plugin_responsivas');
 
         $prefix = [

@@ -4,6 +4,20 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.3] — 2026-10-06
+
+### Fixed
+
+- **PDF download requests moved to POST** — Responsibility PDF generation for Computers, Printers and Phones now uses POST requests protected by GLPI CSRF validation instead of GET. This keeps the existing download history entry as a deliberate state-changing action and prevents crawlers, prefetchers or ordinary GET visits from writing download history. The plugin remains compatible with GLPI 11.0.0 and later; no minimum GLPI version increase is required.
+- **Entity-scoped authorization for manual forms** — Visual inspection and return forms now authorize the specific target GLPI user with the item's `READ` check, including GLPI entity scope, while retaining the existing global User right prerequisite. The same scoped check is enforced again inside the PDF builder as defense in depth.
+- **PHP 8.2+ image cleanup compatibility** — Replaced the explicit `imagedestroy()` calls used after temporary GD image processing with normal variable cleanup via `unset()`. This avoids the deprecated `imagedestroy()` usage while preserving the existing image generation, validation, PNG handling and transparent-logo behavior on the minimum supported PHP 8.2 environment.
+- **PDF footer HTML escaping** — Escaped administrator-configured footer text before applying Responsivas' supported bold, italic and underline markers, preventing arbitrary HTML from reaching TCPDF `writeHTMLCell()` while preserving the existing formatting behavior.
+- **Legacy inspection-table cleanup retired** — Removed the temporary update-time cleanup that deleted the obsolete inspection-history table. Responsivas no longer creates or manages that historical table, so plugin updates no longer perform this destructive database operation.
+- **GLPI cache API compatibility on install/update** — Replaced the obsolete `CacheManager::getInstance()` call with GLPI's supported `new CacheManager()->resetAllCaches()` API, preventing the cache-cleanup error observed on GLPI 11.0.11 while retaining native cache invalidation on GLPI 11 and 12.
+- **GLPI 11 CSRF token reuse in the User tab** — Assigned a dedicated one-time CSRF token to each Computer, Printer, Phone and Email POST form so multiple different actions can be submitted from the same User tab without reusing a token already consumed by GLPI 11's CSRF listener; GLPI 12 behaviour remains compatible.
+
+---
+
 ## [1.6.2] — 2026-09-06
 
 ### Fixed

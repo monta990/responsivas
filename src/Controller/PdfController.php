@@ -12,19 +12,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PdfController extends AbstractController
 {
-    #[Route('/computer', name: 'responsivas_computer', methods: ['GET'])]
+    #[Route('/computer', name: 'responsivas_computer', methods: ['POST'])]
     public function computer(Request $request): Response
     {
         return $this->generate($request, 'computer');
     }
 
-    #[Route('/printer', name: 'responsivas_printer', methods: ['GET'])]
+    #[Route('/printer', name: 'responsivas_printer', methods: ['POST'])]
     public function printer(Request $request): Response
     {
         return $this->generate($request, 'printer');
     }
 
-    #[Route('/phone', name: 'responsivas_phone', methods: ['GET'])]
+    #[Route('/phone', name: 'responsivas_phone', methods: ['POST'])]
     public function phone(Request $request): Response
     {
         return $this->generate($request, 'phone');
@@ -37,7 +37,13 @@ final class PdfController extends AbstractController
             throw new \Glpi\Exception\Http\AccessDeniedHttpException();
         }
 
-        $userId = (int)$request->query->get('users_id', $request->query->get('id', 0));
+        // PDF generation is a state-changing request because it records the download in history.
+        // Read the target user from POST data; the query fallback keeps compatibility with
+        // POST callers that already send the identifier in the query string.
+        $userId = (int)$request->request->get(
+            'users_id',
+            $request->request->get('id', $request->query->get('users_id', $request->query->get('id', 0)))
+        );
         if ($userId <= 0) {
             throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException(
                 __('Invalid user.', 'responsivas')
