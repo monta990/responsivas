@@ -8,6 +8,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **Plural email attachment translation** — Corrected the gettext plural catalog entry for responsibility PDF attachment counts so localized messages are used correctly when an email contains multiple PDFs on GLPI 11 and GLPI 12.
+- **GLPI 12 / TCPDF 7 PDF output compatibility** — Generate responsibility PDFs in memory with the portable `S` destination and write the temporary file with PHP, avoiding the `F` destination issue present in older TCPDF 7.x releases while preserving the existing GLPI 11 behavior.
 - **PDF download requests moved to POST** — Responsibility PDF generation for Computers, Printers and Phones now uses POST requests protected by GLPI CSRF validation instead of GET. This keeps the existing download history entry as a deliberate state-changing action and prevents crawlers, prefetchers or ordinary GET visits from writing download history. The plugin remains compatible with GLPI 11.0.0 and later; no minimum GLPI version increase is required.
 - **Entity-scoped authorization for manual forms** — Visual inspection and return forms now authorize the specific target GLPI user with the item's `READ` check, including GLPI entity scope, while retaining the existing global User right prerequisite. The same scoped check is enforced again inside the PDF builder as defense in depth.
 - **PHP 8.2+ image cleanup compatibility** — Replaced the explicit `imagedestroy()` calls used after temporary GD image processing with normal variable cleanup via `unset()`. This avoids the deprecated `imagedestroy()` usage while preserving the existing image generation, validation, PNG handling and transparent-logo behavior on the minimum supported PHP 8.2 environment.
@@ -15,6 +17,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - **Legacy inspection-table cleanup retired** — Removed the temporary update-time cleanup that deleted the obsolete inspection-history table. Responsivas no longer creates or manages that historical table, so plugin updates no longer perform this destructive database operation.
 - **GLPI cache API compatibility on install/update** — Replaced the obsolete `CacheManager::getInstance()` call with GLPI's supported `new CacheManager()->resetAllCaches()` API, preventing the cache-cleanup error observed on GLPI 11.0.11 while retaining native cache invalidation on GLPI 11 and 12.
 - **GLPI 11 CSRF token reuse in the User tab** — Assigned a dedicated one-time CSRF token to each Computer, Printer, Phone and Email POST form so multiple different actions can be submitted from the same User tab without reusing a token already consumed by GLPI 11's CSRF listener; GLPI 12 behaviour remains compatible.
+- **GLPI 11 repeated PDF generation** — PDF buttons keep native POST navigation so the browser preserves the server-provided PDF filename, while the source User tab is automatically refreshed after submission to obtain a fresh dedicated CSRF token for the next click. This allows repeated Computer, Printer or Phone generation without manually reloading the tab.
+- **PDF filename regression after POST migration** — Restored the 1.6.2 browser filename behavior by completing the protected POST with a one-time, session-bound temporary PDF and a 303 redirect to a normal GET URL containing the generated filename. The PDF is served without logging side effects on the GET endpoint, so Save As/print workflows retain the original filename while the GLPI 11 CSRF fix remains in place.
 
 ---
 
@@ -23,6 +27,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - **GLPI 12 / TCPDF 7 image loading** — Extended TCPDF's local file allowlist for the Responsivas plugin directory and configured plugin-files directory so bundled schematics and the configured institutional logo render correctly under GLPI 12 RC1. The allowlist extension is guarded so GLPI 11 with TCPDF 6.x keeps its native image-loading behavior unchanged.
+
+---
 
 ## [1.6.1] — 2026-09-03
 
