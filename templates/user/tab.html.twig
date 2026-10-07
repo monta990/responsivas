@@ -15,7 +15,7 @@
         : (tooltip_empty ?: 'No equipment assigned'|trans) %}
     <span data-bs-toggle="tooltip" title="{{ tooltip }}" class="d-inline-block">
         {% if count %}
-            <form method="post" action="{{ url }}" target="_blank" style="display:inline">
+            <form method="post" action="{{ url }}" target="_blank" style="display:inline" data-resp-pdf-form="1">
                 <input type="hidden" name="users_id" value="{{ user_id }}">
                 <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
                 <button type="submit" class="{{ btn_class }} {{ text_class }}"{% if text_class == 'text-dark' %} style="color:#212529!important;"{% endif %} data-resp-pdf-btn="1">
@@ -253,6 +253,7 @@
             }
         });
     }
+
     document.querySelectorAll('[data-resp-pdf-btn="1"]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var icon = btn.querySelector('i');
@@ -265,6 +266,34 @@
                 btn.removeAttribute('aria-disabled');
                 if (icon) icon.className = origClass;
             }, 5000);
+        });
+    });
+
+    // Keep the PDF request as a native form POST so the browser receives the
+    // server Content-Disposition filename. A Blob URL would replace that
+    // filename with a browser-generated UUID.
+    //
+    // GLPI 11 consumes a standalone CSRF token after a successful normal POST.
+    // The PDF form opens in a new tab, so refresh this source User tab shortly
+    // after the submission. The refreshed tab generates fresh dedicated tokens
+    // for the next click while the PDF response keeps its original filename.
+    document.querySelectorAll('form[data-resp-pdf-form="1"]').forEach(function (form) {
+        form.addEventListener('submit', function () {
+            if (form.dataset.respSubmitting === '1') {
+                return;
+            }
+
+            var button = form.querySelector('button[type="submit"]');
+            form.dataset.respSubmitting = '1';
+            if (button) {
+                button.disabled = true;
+            }
+
+            // target="_blank" sends the PDF to a new browsing context; reloading
+            // this tab therefore does not navigate away from the generated PDF.
+            window.setTimeout(function () {
+                window.location.reload();
+            }, 500);
         });
     });
 })();

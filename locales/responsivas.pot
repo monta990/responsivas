@@ -1,9 +1,21 @@
+
 msgid ""
-msgstr "Project-Id-Version: Responsivas\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+msgstr ""
+"Project-Id-Version:  Responsivas\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-07 07:25+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Responsivas"
 msgstr ""
 
+#, python-format
 msgid "Responsivas requires PHP 8.2 or higher. Current version: %s"
 msgstr ""
 
@@ -46,6 +58,7 @@ msgstr ""
 msgid "The legal representative is invalid or inactive."
 msgstr ""
 
+#, python-format
 msgid "Phone \"%s\" has no purchase price. Add it in Management → Administrative and financial information → Purchase price."
 msgstr ""
 
@@ -100,6 +113,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#, python-format
 msgid "Send the responsibility documents to %s?"
 msgstr ""
 
@@ -136,7 +150,10 @@ msgstr ""
 msgid "Timezone for PDFs"
 msgstr ""
 
-msgid "This timezone will be used to display dates and times in PDFs. At plugin installation it defaults to the server timezone. More information at: %s"
+#, python-format
+msgid ""
+"This timezone will be used to display dates and times in PDFs. At plugin installation it defaults to the server "
+"timezone. More information at: %s"
 msgstr ""
 
 msgid "PHP timezone list"
@@ -271,6 +288,7 @@ msgstr ""
 msgid "Email subject"
 msgstr ""
 
+#, python-brace-format
 msgid "You can use the variables {nombre}, {empresa} and {fecha}."
 msgstr ""
 
@@ -283,10 +301,13 @@ msgstr ""
 msgid "Email footer (optional)"
 msgstr ""
 
+#, python-brace-format
 msgid "Optional. Appears at the bottom of the email, separated by a line. You can use {nombre}, {empresa} and {fecha}."
 msgstr ""
 
-msgid "The GLPI mail server is not configured or email notifications are disabled. The send button will fail until you configure it in <strong>Configuration → Notifications → Email configuration</strong>."
+msgid ""
+"The GLPI mail server is not configured or email notifications are disabled. The send button will fail until you "
+"configure it in <strong>Configuration → Notifications → Email configuration</strong>."
 msgstr ""
 
 msgid "Configure the email subject and body first"
@@ -331,6 +352,7 @@ msgstr ""
 msgid "Clauses"
 msgstr ""
 
+#, python-brace-format
 msgid "One clause per line with format \"1. text\". Use {clausula_vida_util} for the useful life clause. **text** → bold."
 msgstr ""
 
@@ -436,6 +458,7 @@ msgstr ""
 msgid "There are no responsibility documents to generate for this user."
 msgstr ""
 
+#, python-format
 msgid "Email successfully sent to %s."
 msgstr ""
 
@@ -445,10 +468,8 @@ msgstr ""
 msgid "The mail server rejected the sending."
 msgstr ""
 
+#, python-format
 msgid "Responsibility documents sent by email to %s by %s (%d PDF)."
-msgstr ""
-
-msgid "%d responsibility PDF attached."
 msgstr ""
 
 msgid "Invalid user."
@@ -463,9 +484,11 @@ msgstr ""
 msgid "This is a test email generated from the Responsivas plugin configuration. No PDFs are attached."
 msgstr ""
 
+#, python-format
 msgid "Test email successfully sent to %s."
 msgstr ""
 
+#, python-format
 msgid "The document template has empty fields. Complete the following fields in Configuration → Responsivas: %s"
 msgstr ""
 
@@ -514,6 +537,7 @@ msgstr ""
 msgid "PREVIEW"
 msgstr ""
 
+#, python-format
 msgid "Error generating the preview: %s"
 msgstr ""
 
@@ -556,7 +580,10 @@ msgstr ""
 msgid "Useful life clause (with invoice)"
 msgstr ""
 
-msgid "Used when the phone has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the default text."
+#, python-brace-format
+msgid ""
+"Used when the phone has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the "
+"default text."
 msgstr ""
 
 msgid "Useful life clause (without invoice)"
@@ -635,9 +662,6 @@ msgid "In use"
 msgstr ""
 
 msgid "Employee No.: "
-msgstr ""
-
-msgid "%d responsibility PDFs attached."
 msgstr ""
 
 msgid "Footer left text"
@@ -736,6 +760,7 @@ msgstr ""
 msgid "The uploaded file is not a valid image."
 msgstr ""
 
+#, python-format
 msgid "A new version is available on GitHub: %s"
 msgstr ""
 
@@ -772,7 +797,10 @@ msgstr ""
 msgid "Associated devices"
 msgstr ""
 
-msgid "The active entity is missing required location data: %s. Complete the City and State fields in the entity before generating the responsibility document."
+#, python-format
+msgid ""
+"The active entity is missing required location data: %s. Complete the City and State fields in the entity before "
+"generating the responsibility document."
 msgstr ""
 
 msgid "Could not retrieve the active entity."
@@ -784,12 +812,16 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-msgid "Used when the computer has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the default text."
+#, python-brace-format
+msgid ""
+"Used when the computer has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty uses the"
+" default text."
 msgstr ""
 
 msgid "Used when the computer has no registered invoice or supplier. Empty uses the default text."
 msgstr ""
 
+#, python-brace-format
 msgid "The useful life clause is inserted automatically; use {clausula_vida_util} to control its position."
 msgstr ""
 
@@ -802,24 +834,36 @@ msgstr ""
 msgid "Useful life paragraph (without invoice)"
 msgstr ""
 
-msgid "Optional paragraph. If both useful-life fields are empty, nothing is inserted. Use {clausula_vida_util} to control its position."
+#, python-brace-format
+msgid ""
+"Optional paragraph. If both useful-life fields are empty, nothing is inserted. Use {clausula_vida_util} to control "
+"its position."
 msgstr ""
 
-msgid "Used when the computer has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty means no paragraph is inserted."
+#, python-brace-format
+msgid ""
+"Used when the computer has an invoice and supplier. Variables: {fecha_compra}, {factura}, {proveedor}. Empty means no"
+" paragraph is inserted."
 msgstr ""
 
 msgid "Used when the computer has no registered invoice or supplier. Empty means no paragraph is inserted."
 msgstr ""
 
-msgid "Legal text after the table. Lines with \"1. text\" → numbered list. Blank line → new paragraph. **text** → bold. The useful life paragraph is optional; if both fields are empty, nothing is inserted. Use {clausula_vida_util} to control its position."
+#, python-brace-format
+msgid ""
+"Legal text after the table. Lines with \"1. text\" → numbered list. Blank line → new paragraph. **text** → bold. The "
+"useful life paragraph is optional; if both fields are empty, nothing is inserted. Use {clausula_vida_util} to control"
+" its position."
 msgstr ""
 
+#, python-brace-format
 msgid "Purchase date (same format as {fecha})"
 msgstr ""
 
 msgid "Computer Responsibility - "
 msgstr ""
 
+#, python-format
 msgid "Error sending email: %s"
 msgstr ""
 
@@ -874,6 +918,7 @@ msgstr ""
 msgid "Logo imported successfully."
 msgstr ""
 
+#, python-format
 msgid "Some values were skipped because they are not valid in this GLPI installation: %s."
 msgstr ""
 
@@ -889,10 +934,14 @@ msgstr ""
 msgid "Import configuration"
 msgstr ""
 
-msgid "Import a Responsivas JSON backup. Existing settings are replaced by the values in the backup. Invalid user or phone-type references are skipped so the target installation keeps its current valid selection."
+msgid ""
+"Import a Responsivas JSON backup. Existing settings are replaced by the values in the backup. Invalid user or phone-"
+"type references are skipped so the target installation keeps its current valid selection."
 msgstr ""
 
-msgid "The export includes templates, document options, email settings, footer settings, and the logo. User and phone-type selections are only portable when their IDs exist in the target GLPI installation."
+msgid ""
+"The export includes templates, document options, email settings, footer settings, and the logo. User and phone-type "
+"selections are only portable when their IDs exist in the target GLPI installation."
 msgstr ""
 
 msgid "Visual condition"
@@ -976,7 +1025,9 @@ msgstr ""
 msgid "Unassign asset from user after successful return"
 msgstr ""
 
-msgid "If you check the option below, the asset will be unassigned from this user only after the return PDF is generated successfully."
+msgid ""
+"If you check the option below, the asset will be unassigned from this user only after the return PDF is generated "
+"successfully."
 msgstr ""
 
 msgid "Visual inspection / physical condition"
@@ -1255,7 +1306,10 @@ msgstr ""
 msgid "How to record return condition"
 msgstr ""
 
-msgid "Use a number on the drawing and repeat the same number in the corresponding box. Use a short description: scratch = line, impact/dent = circle around the area, wear = note the worn surface, missing part = write the missing piece. Record the side/view (front, rear, left or right) whenever possible."
+msgid ""
+"Use a number on the drawing and repeat the same number in the corresponding box. Use a short description: scratch = "
+"line, impact/dent = circle around the area, wear = note the worn surface, missing part = write the missing piece. "
+"Record the side/view (front, rear, left or right) whenever possible."
 msgstr ""
 
 msgid "Scratches"
@@ -1285,10 +1339,6 @@ msgstr ""
 msgid "Additional notes"
 msgstr ""
 
-
-
-
-
 msgid "Top left"
 msgstr ""
 
@@ -1310,10 +1360,18 @@ msgstr ""
 msgid "Register visible damage, missing accessories, wear and the condition of the asset at the time of return."
 msgstr ""
 
-msgid "Before delivering the equipment, inspect all visible surfaces. On the map, assign a reference number to each observation. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or accessory. Record the reference number and view in the corresponding area below."
+msgid ""
+"Before delivering the equipment, inspect all visible surfaces. On the map, assign a reference number to each "
+"observation. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe "
+"the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or "
+"accessory. Record the reference number and view in the corresponding area below."
 msgstr ""
 
-msgid "Before receiving the equipment, compare it with its current condition. On the map, use the matching view and assign a reference number. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part or accessory. Record the reference number and view in the corresponding area below."
+msgid ""
+"Before receiving the equipment, compare it with its current condition. On the map, use the matching view and assign a"
+" reference number. For a scratch, draw a short line; for an impact or dent, circle the affected area; for wear, "
+"describe the worn surface, faded marking, loose hinge, button or connector; for a missing part, write the exact part "
+"or accessory. Record the reference number and view in the corresponding area below."
 msgstr ""
 
 msgid "Circle the damaged area; note corner, edge or side."
@@ -1400,6 +1458,7 @@ msgstr ""
 msgid "Vista previa de devolución"
 msgstr ""
 
+#, python-format
 msgid "Responsivas requires the PHP extension %s."
 msgstr ""
 
@@ -1414,3 +1473,10 @@ msgstr ""
 
 msgid "Keyboard"
 msgstr ""
+
+#, python-format
+msgid "%d responsibility PDF attached."
+msgid_plural "%d responsibility PDFs attached."
+msgstr[0] ""
+msgstr[1] ""
+
