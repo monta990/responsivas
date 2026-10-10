@@ -26,7 +26,7 @@ define('PLUGIN_RESPONSIVAS_SCHEMA_VERSION', '1');
  *
  * Cada campo incluye:
  *   - 'default'  : valor por defecto
- *   - 'type'     : 'string' | 'int' | 'bool' | 'text'
+ *   - 'type'     : 'string' | 'int' | 'number' | 'bool' | 'text'
  *   - 'since'    : versión del schema donde se introdujo el campo
  *   - 'group'    : agrupación lógica para migraciones selectivas
  *   - 'migrate'  : 'reset' = sobrescribir si schema bumped | 'keep' = nunca sobrescribir
@@ -72,21 +72,21 @@ function plugin_responsivas_getSchemaFields(): array {
       'pc_footer_right_1'    => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
       'pc_footer_left_2'     => ['default'=>'SIS-RESP-001',              'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
       'pc_footer_right_2'    => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
-      'pc_font_size'         => ['default'=>10,                          'type'=>'int',    'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
+      'pc_font_size'         => ['default'=>10,                          'type'=>'number',    'since'=>'1',     'group'=>'footer_pc', 'migrate'=>'keep'],
       'pc_show_comodato_sigs'=> ['default'=>0,                           'type'=>'bool',   'since'=>'1.4.2', 'group'=>'footer_pc', 'migrate'=>'keep'],
       // ── Footer Impresoras ─────────────────────────────── since v1, keep
       'pri_footer_left_1'    => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
       'pri_footer_right_1'   => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
       'pri_footer_left_2'    => ['default'=>'SIS-RESP-003',              'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
       'pri_footer_right_2'   => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
-      'pri_font_size'        => ['default'=>10,                          'type'=>'int',    'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
+      'pri_font_size'        => ['default'=>10,                          'type'=>'number',    'since'=>'1',     'group'=>'footer_pri','migrate'=>'keep'],
       'pri_show_comodato_sigs'=> ['default'=>0,                          'type'=>'bool',   'since'=>'1.4.2', 'group'=>'footer_pri','migrate'=>'keep'],
       // ── Footer Teléfonos ──────────────────────────────── since v1, keep
       'pho_footer_left_1'    => ['default'=>'Original: Empresa',         'type'=>'string', 'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
       'pho_footer_right_1'   => ['default'=>'Copia: Colaborador',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
       'pho_footer_left_2'    => ['default'=>'SIS-RESP-002',              'type'=>'string', 'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
       'pho_footer_right_2'   => ['default'=>'Rev 1.4 08/01/2026',        'type'=>'string', 'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
-      'pho_font_size'        => ['default'=>9,                           'type'=>'int',    'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
+      'pho_font_size'        => ['default'=>9,                           'type'=>'number',    'since'=>'1', 'group'=>'footer_pho','migrate'=>'keep'],
       // ── Correo ────────────────────────────────────────── since v1, keep
       'email_subject'        => ['default'=>'Responsivas de activos asignados', 'type'=>'string', 'since'=>'1', 'group'=>'email', 'migrate'=>'keep'],
       'email_body'           => ['default'=>"Estimado colaborador,\n\nSe adjuntan sus responsivas y contratos de comodato de los activos asignados a su nombre.\n\nPor favor conserve este documento para cualquier aclaración futura.", 'type'=>'text', 'since'=>'1', 'group'=>'email', 'migrate'=>'keep'],

@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Responsivas\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-06 00:00+0000\n"
-"PO-Revision-Date: 2026-05-06 00:00+0000\n"
+"POT-Creation-Date: 2026-10-10 06:32+0000\n"
+"PO-Revision-Date: 2026-10-10 06:32+0000\n"
 "Last-Translator: Edwin Elias Alvarez <edwin@sontechs.com>\n"
 "Language: fr_FR\n"
 "Language-Team: French (France)\n"
@@ -1539,3 +1539,7 @@ msgstr "Téléphone"
 #, python-format
 msgid "Responsibility PDF for %s downloaded."
 msgstr "PDF de responsabilité pour %s téléchargé."
+
+#: src/Pdf/PdfBuilder.php
+msgid "Printer identification"
+msgstr "Identification de l’imprimante"

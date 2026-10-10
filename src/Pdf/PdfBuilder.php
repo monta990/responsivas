@@ -477,6 +477,27 @@ HTML;
       return $devices;
    }
 
+   /**
+    * Use the GLPI User title as the signature label when configured.
+    * If the user has no title (or the title cannot be resolved), keep the
+    * translated default label such as Technician or User.
+    */
+   private static function getManualSignatureTitle(?\User $user, string $fallback): string
+   {
+      $titleId = (int)($user?->fields['usertitles_id'] ?? 0);
+      if ($titleId > 0) {
+         $title = new \UserTitle();
+         if ($title->getFromDB($titleId)) {
+            $name = trim((string)($title->fields['name'] ?? ''));
+            if ($name !== '') {
+               return $name;
+            }
+         }
+      }
+
+      return __($fallback, 'responsivas');
+   }
+
    private static function getManualPreviewDisplayData(string $itemtype, ?\User $user): array
    {
       $userName = $user ? $user->getFriendlyName() : __('Preview user', 'responsivas');
@@ -739,7 +760,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
       }
 
       $font = \Config::getConfigurationValue('core', 'pdffont');
-      $fontSize = max(8, min(12, (int)($config[$prefix . '_font_size'] ?? 10)));
+      $fontSize = max(8.0, min(12.0, (float)($config[$prefix . '_font_size'] ?? 10)));
       $labelSize = max(7, $fontSize - 1);
       $escapeValue = static function (string $value): string {
          return Utils::escape($value !== '' ? $value : __('Not specified', 'responsivas'));
@@ -904,6 +925,8 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
                . '<td>' . $escapeValue($data['imei']) . '</td>'
                . '<td>' . $escapeValue($data['line']) . '</td>'
                . '<td>' . $escapeValue($data['asset']) . '</td></tr>'
+               . '<tr style="background-color:#E6E6E6;"><td colspan="5"><strong>' . __('Comments', 'responsivas') . '</strong></td></tr>'
+               . '<tr><td colspan="5">' . $escapeValue($data['comment']) . '</td></tr>'
                . '</table><br>';
          }
 
@@ -924,7 +947,10 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
          ];
          // Remove the small empty band left by TCPDF after the property table
          // before the condition row. Keep the adjustment local to manual forms.
-         $conditionY = max(25.0, $pdf->GetY() - 1.5);
+         // Computer's custom six-column table already lands correctly. The
+         // Printer/Phone tables use different row heights and must not pull the
+         // condition row back over their bottom border.
+         $conditionY = max(25.0, $pdf->GetY() + ($itemtype === 'Computer' ? -1.5 : 1.5));
          $conditionX = 15;
          $conditionHeadingW = 50;
          $conditionOptionW = 34;
@@ -1142,10 +1168,14 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
          $pdf->SetY($notesY + $notesAfter);
 
          // Real signer names: technician assigned to asset, otherwise logged-in GLPI user.
+         // Keep the User objects too, so their configured GLPI titles can be used
+         // as the signature labels without changing the displayed names.
          $technician = '';
+         $technicianUser = null;
          if (isset($asset['users_id_tech']) && (int)$asset['users_id_tech'] > 0) {
             $tech = new \User();
             if ($tech->getFromDB((int)$asset['users_id_tech']) && $tech->canView()) {
+               $technicianUser = $tech;
                $technician = $tech->getFriendlyName();
             }
          }
@@ -1155,6 +1185,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
             if ($loginId > 0) {
                $tech = new \User();
                if ($tech->getFromDB($loginId) && $tech->canView()) {
+                  $technicianUser = $tech;
                   $technician = $tech->getFriendlyName();
                }
             }
@@ -1167,6 +1198,8 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
          $recipient = $data['user'] !== ''
             ? $data['user']
             : ($assignedUser ? $assignedUser->getFriendlyName() : __('Not specified', 'responsivas'));
+         $technicianLabel = self::getManualSignatureTitle($technicianUser, 'Technician');
+         $recipientLabel = self::getManualSignatureTitle($assignedUser, 'User');
 
          $pdf->SetFont($font, '', $labelSize);
          $pdf->Cell(93, 4.5, '________________________________________', 0, 0, 'C');
@@ -1177,8 +1210,8 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
          $pdf->Cell(93, 4.5, $recipient, 0, 1, 'C');
 
          $pdf->SetFont($font, '', max(6, $fontSize - 2));
-         $pdf->Cell(93, 4, __('Technician', 'responsivas'), 0, 0, 'C');
-         $pdf->Cell(93, 4, __('User', 'responsivas'), 0, 1, 'C');
+         $pdf->Cell(93, 4, $technicianLabel, 0, 0, 'C');
+         $pdf->Cell(93, 4, $recipientLabel, 0, 1, 'C');
 
       }
       $namePrefix = ['Computer' => 'Computadora', 'Printer' => 'Impresora', 'Phone' => 'Telefono'][$itemtype];
@@ -1907,7 +1940,7 @@ $i++;
       if ((int)($config['pdf_protection'] ?? 1) === 1) {
          $pdf->SetProtection(['copy', 'modify'], '', null);
       }
-      $pdf->SetFont(\Config::getConfigurationValue('core', 'pdffont'), '', (int)($config[$font_key] ?? 10));
+      $pdf->SetFont(\Config::getConfigurationValue('core', 'pdffont'), '', (float)($config[$font_key] ?? 10));
       return $pdf;
    }
 

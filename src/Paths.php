@@ -31,6 +31,38 @@ final class Paths
         return $base . ($route !== '' ? '/' . ltrim($route, '/') : '');
     }
 
+    /**
+     * Return a language-aware URL slug for manual PDF forms.
+     * The localized path also gives browser PDF tabs a translated fallback
+     * title, because browsers may display the URL path rather than PDF metadata.
+     */
+    public static function manualFormSlug(string $form): string
+    {
+        if (!in_array($form, ['inspection', 'return'], true)) {
+            throw new \InvalidArgumentException('Invalid manual form route.');
+        }
+
+        $language = strtolower(substr((string)($_SESSION['glpilanguage'] ?? ''), 0, 2));
+        $slugs = [
+            'inspection' => [
+                'en' => 'inspection',
+                'es' => 'inspeccion-visual',
+                'fr' => 'inspection-visuelle',
+                'de' => 'sichtpruefung',
+                'it' => 'ispezione-visiva',
+            ],
+            'return' => [
+                'en' => 'return',
+                'es' => 'devolucion',
+                'fr' => 'restitution',
+                'de' => 'rueckgabe',
+                'it' => 'restituzione',
+            ],
+        ];
+
+        return $slugs[$form][$language] ?? $slugs[$form]['en'];
+    }
+
     public static function filesDir(): string
     {
         if (defined('GLPI_PLUGIN_DOC_DIR')) {
