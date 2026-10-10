@@ -109,7 +109,7 @@ class PDF extends \TCPDF {
         $this->SetFont(
             \Config::getConfigurationValue('core', 'pdffont'),
             '',
-            (int)(\Config::getConfigurationValues('plugin_responsivas')[$this->font_size_key] ?? 10)
+            (float)(\Config::getConfigurationValues('plugin_responsivas')[$this->font_size_key] ?? 10)
         );
     }
 
@@ -135,7 +135,7 @@ class PDF extends \TCPDF {
         $this->SetFont(
             \Config::getConfigurationValue('core', 'pdffont'),
             '',
-            (int)($cfg[$this->font_size_key] ?? 10)
+            (float)($cfg[$this->font_size_key] ?? 10)
         );
         $this->SetY(15);
         $this->Cell(0, 5, $this->location . ' a ' . $this->fecha_header, 0, 1, 'R');
@@ -161,7 +161,7 @@ class PDF extends \TCPDF {
 
         $cfg = \Config::getConfigurationValues('plugin_responsivas');
         $p   = $this->footer_prefix;
-        $fs  = (int)($cfg[$this->font_size_key] ?? 10);
+        $fs  = (float)($cfg[$this->font_size_key] ?? 10);
 
         $this->SetFont(\Config::getConfigurationValue('core', 'pdffont'), '', $fs);
 

@@ -4,6 +4,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.4] — 2026-10-09
+
+### Changed
+
+- **Decimal PDF font sizes** — Computer, Printer and Phone font-size settings now accept fractional points in 0.1 pt increments. Configuration save/import and all standard, manual-form, header and footer PDF rendering paths preserve decimals; existing integer values and defaults remain unchanged.
+
+### Fixed
+
+- **Localized manual PDF tab titles** — The Visual inspection and Return buttons use language-specific route slugs for English, Spanish (Mexico), French, German and Italian, so PDF tabs no longer display the generic English `inspection` / `return` path on localized GLPI sessions. The original English routes remain available for existing bookmarks and external links.
+- **Manual form layout** — Added a safe separation between Printer/Phone property tables and the delivery/return condition row to prevent overlap with the table border, while preserving the Computer layout.
+- **Phone comments** — Added the Comments section to the Phone property table in both visual-inspection and return forms, matching the Computer and Printer forms.
+- **Printer identification localization** — Added the missing `Printer identification` translation entry to the POT and Spanish (Mexico), French, German and Italian catalogs.
+- **Signature labels from GLPI user titles** — Manual inspection and return forms now display each signer's configured GLPI User title below their name. If a title is not assigned or cannot be resolved, the labels fall back to the translated `Technician` and `User` strings.
+- **Documentation** — Updated the English and Spanish sections of the README for version 1.6.4 and the manual-form comments/signature-label behavior.
+
+---
+
 ## [1.6.3] — 2026-10-07
 
 ### Fixed

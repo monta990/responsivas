@@ -11,6 +11,28 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class ConfigService
 {
+    /**
+     * Normalize configurable PDF font sizes while preserving fractional points.
+     * Values are restricted to 6–72 pt and rounded to one decimal place, which
+     * matches the precision offered by the configuration inputs.
+     *
+     * @return int|float Keep whole-number sizes as integers for backward compatibility.
+     */
+    private static function normalizeFontSize(mixed $value, mixed $fallback): int|float
+    {
+        $default = (is_scalar($fallback) && is_numeric($fallback) && is_finite((float)$fallback))
+            ? (float)$fallback
+            : 10.0;
+
+        $number = (is_scalar($value) && is_numeric($value) && is_finite((float)$value))
+            ? (float)$value
+            : $default;
+
+        $number = round(max(6.0, min(72.0, $number)), 1);
+
+        return floor($number) === $number ? (int)$number : $number;
+    }
+
     private static function exportableKeys(): array
     {
         return [
@@ -147,7 +169,7 @@ final class ConfigService
                 $values[$key] = (bool)$value ? 1 : 0;
             } elseif (in_array($key, [
                 'testigo_1','testigo_2','representante','cellphone_type_id',
-                'pc_font_size','pri_font_size','pho_font_size','watermark_opacity',
+                'watermark_opacity',
             ], true)) {
                 $values[$key] = (int)$value;
             } else {
@@ -202,9 +224,18 @@ final class ConfigService
             }
         }
 
-        $values['pc_font_size'] = max(6, min(72, (int)($values['pc_font_size'] ?? ($current['pc_font_size'] ?? 10))));
-        $values['pri_font_size'] = max(6, min(72, (int)($values['pri_font_size'] ?? ($current['pri_font_size'] ?? 10))));
-        $values['pho_font_size'] = max(6, min(72, (int)($values['pho_font_size'] ?? ($current['pho_font_size'] ?? 9))));
+        $values['pc_font_size'] = self::normalizeFontSize(
+            $values['pc_font_size'] ?? ($current['pc_font_size'] ?? 10),
+            $current['pc_font_size'] ?? 10
+        );
+        $values['pri_font_size'] = self::normalizeFontSize(
+            $values['pri_font_size'] ?? ($current['pri_font_size'] ?? 10),
+            $current['pri_font_size'] ?? 10
+        );
+        $values['pho_font_size'] = self::normalizeFontSize(
+            $values['pho_font_size'] ?? ($current['pho_font_size'] ?? 9),
+            $current['pho_font_size'] ?? 9
+        );
         $values['watermark_opacity'] = max(5, min(100, (int)($values['watermark_opacity'] ?? ($current['watermark_opacity'] ?? 25))));
 
         if (isset($values['timezone']) && !in_array($values['timezone'], \DateTimeZone::listIdentifiers(), true)) {
@@ -361,7 +392,7 @@ if (isset($_POST['update'])) {
         'representante'        => (int)($_POST['representante']   ?? 0),
         'cellphone_type_id'    => (int)($_POST['cellphone_type_id'] ?? 0),
 
-        'pc_font_size'          => max(6, min(72, (int)($_POST['pc_font_size']  ?? 10))),
+        'pc_font_size'          => self::normalizeFontSize($_POST['pc_font_size'] ?? ($config['pc_font_size'] ?? 10), $config['pc_font_size'] ?? 10),
         'pc_titulo'             => Utils::escape(trim($_POST['pc_titulo']  ?? '')),
         'pc_intro'              => trim($_POST['pc_intro']   ?? ''),
         'pc_cuerpo'             => trim($_POST['pc_cuerpo']  ?? ''),
@@ -369,13 +400,13 @@ if (isset($_POST['update'])) {
         'pc_vida_util_sin'      => trim($_POST['pc_vida_util_sin'] ?? ''),
         'pc_show_comodato_sigs' => isset($_POST['pc_show_comodato_sigs']) ? 1 : 0,
 
-        'pri_font_size'          => max(6, min(72, (int)($_POST['pri_font_size'] ?? 10))),
+        'pri_font_size'          => self::normalizeFontSize($_POST['pri_font_size'] ?? ($config['pri_font_size'] ?? 10), $config['pri_font_size'] ?? 10),
         'pri_titulo'             => Utils::escape(trim($_POST['pri_titulo']  ?? '')),
         'pri_intro'              => trim($_POST['pri_intro']   ?? ''),
         'pri_cuerpo'             => trim($_POST['pri_cuerpo']  ?? ''),
         'pri_show_comodato_sigs' => isset($_POST['pri_show_comodato_sigs']) ? 1 : 0,
 
-        'pho_font_size'           => max(6, min(72, (int)($_POST['pho_font_size'] ?? 9))),
+        'pho_font_size'           => self::normalizeFontSize($_POST['pho_font_size'] ?? ($config['pho_font_size'] ?? 9), $config['pho_font_size'] ?? 9),
         'pho_titulo'              => Utils::escape(trim($_POST['pho_titulo']           ?? '')),
         'pho_apertura'            => trim($_POST['pho_apertura']          ?? ''),
         'pho_clausulas'           => trim($_POST['pho_clausulas']         ?? ''),

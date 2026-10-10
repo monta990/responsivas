@@ -19,9 +19,9 @@
 
 **Responsivas** generates PDF responsibility documents and phone loan contracts for IT assets assigned to GLPI users. It also provides fixed, print-ready visual inspection and return forms for Computers, Printers and Phones.
 
-The plugin is designed to use the same codebase on **GLPI 11.x and GLPI 12.x** and follows the modern plugin architecture with PSR-4 classes, Symfony/GLPI Controllers and Twig templates.
+**Current version: 1.6.4.** The plugin is designed to use the same codebase on **GLPI 11.x and GLPI 12.x** and follows the modern plugin architecture with PSR-4 classes, Symfony/GLPI Controllers and Twig templates.
 
-Responsibility PDF generation from the User tab uses **POST requests protected by GLPI's CSRF token** because successful PDF downloads are recorded in the target user's GLPI history. The standard GLPI asset URLs embedded in QR codes remain unchanged.
+Responsibility PDF generation from the User tab uses **POST requests protected by GLPI's CSRF protections** because successful PDF downloads are recorded in the target user's GLPI history. GLPI 11 uses its token-based mechanism; GLPI 12 validates browser origin headers. The standard GLPI asset URLs embedded in QR codes remain unchanged.
 
 ## Main features
 
@@ -34,10 +34,13 @@ Responsibility PDF generation from the User tab uses **POST requests protected b
 - 📝 Compact damage guidance for **scratches, impacts/dents, wear/use and missing parts/other**.
 - 👤 Manual forms prefill the real asset identification and assigned-user information from GLPI.
 - 👷 Manual-form signatures use the **technician assigned to the asset**; when none is assigned, the document uses the GLPI user generating it.
+- 🪪 Signature labels use each signer’s configured GLPI **User title**; if no title is configured, the labels fall back to **Technician** and **User**.
 - 🔢 Phone manual forms include the asset/line identification used by the normal phone responsibility.
+- 💬 Phone inspection and return forms include the **Comments** field in the property table, like Computer and Printer forms.
 - 🧩 Each asset type has independent controls for enabling/disabling **Visual inspection** and **Return**.
 - 👁️ Configuration previews are available for the normal responsibility and for each enabled manual form.
 - 🖊️ Each manual form has its own editable **title, Instructions and four footer fields**.
+- 🌐 Inspection and return PDF tabs use localized URL slugs for English, Spanish, French, German and Italian, while the original English URLs remain supported.
 - 📬 Selective responsibility-document email sending.
 - 💾 Validated configuration export/import, including the institutional logo.
 - 🖼️ JPG/PNG institutional logo support, including transparent PNG preservation.
@@ -48,8 +51,8 @@ Responsibility PDF generation from the User tab uses **POST requests protected b
 
 | Component | Minimum |
 |-----------|---------|
-| GLPI | 11.0.0 / 12.x |
-| PHP | 8.2 |
+| GLPI | 11.x / 12.x |
+| PHP | 8.2+ on GLPI 11; 8.3+ on GLPI 12 |
 | TCPDF | Included with GLPI |
 | PHP extensions | `fileinfo`, `gd`, `intl`, `json` |
 
@@ -94,7 +97,7 @@ When a manual form is generated for a specific asset, the PDF pre-fills the info
 - Computer hardware properties according to the Computer responsibility.
 - Computer manual forms include monitors and peripherals associated with the computer, using the same visibility rules as the standard computer responsibility. The associated-device table uses a compact adaptive layout to keep the form suitable for a single Letter-size sheet.
 - Printer properties according to the Printer responsibility.
-- Phone properties such as storage, RAM, IMEI and line.
+- Phone properties such as storage, RAM, IMEI and line, followed by a Comments row in both manual-form types.
 - The associated-device table uses **six columns**, separating **Serial** and **Asset** into independent columns for clearer identification.
 - The main Computer table also uses a six-column layout, with **Asset** and **Identification (Name)** represented separately from the hardware fields.
 - The redundant **Assigned to** line is not repeated in the forms because the assigned user is already identified in the user/signature area.
@@ -115,7 +118,7 @@ The form includes:
    - wear/use;
    - missing parts/other.
 5. **Additional notes** — Blank area for handwritten observations.
-6. **Signatures** — Technician and assigned user.
+6. **Signatures** — Technician and assigned user. The label under each name uses the signer’s GLPI User title when configured; otherwise it falls back to Technician/User.
 
 The condition and notes areas are intentionally optimized for printing. Checkbox and notes-box borders use increased line weight to remain visible on paper.
 
@@ -162,7 +165,7 @@ For the manual forms, the technician is resolved in this order:
 1. Technician assigned to the asset, when available.
 2. User generating the document, when no technician is assigned.
 
-The assigned user is shown as the recipient of the asset.
+The text below each signer’s name uses that GLPI user’s configured **User title**. If the title is empty or unavailable, the corresponding label defaults to **Technician** or **User**. The assigned user is shown as the recipient of the asset.
 
 The physical inspection/return markings written on paper are not intended to modify the asset assignment.
 
@@ -172,7 +175,7 @@ The physical inspection/return markings written on paper are not intended to mod
 
 For best visual consistency in generated PDFs, it is recommended to configure **Helvetica** as the PDF font in GLPI.
 
-For editable text fields in Responsivas, a **9 pt or 10 pt** font size is recommended. These sizes provide a good balance between readability and available space, especially in the manual inspection and return formats.
+For editable text fields in Responsivas, a **9 pt or 10 pt** font size is recommended. These sizes provide a good balance between readability and available space, especially in the manual inspection and return formats. The Computer, Printer and Phone font-size settings accept whole or fractional point sizes in **0.1 pt increments**, such as **8.5 pt**. Existing whole-number settings remain unchanged.
 
 Open **Setup → Plugins → Responsivas**.
 
@@ -405,7 +408,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 **Responsivas** genera cartas responsivas y contratos de comodato en PDF para activos de TI asignados a usuarios de GLPI. También proporciona **formatos fijos de inspección visual y devolución** para Computadoras, Impresoras y Teléfonos.
 
-El plugin utiliza la misma base de código para **GLPI 11.x y GLPI 12.x** y sigue la arquitectura moderna de plugins con clases PSR-4, Controllers Symfony/GLPI y plantillas Twig.
+**Versión actual: 1.6.4.** El plugin utiliza la misma base de código para **GLPI 11.x y GLPI 12.x** y sigue la arquitectura moderna de plugins con clases PSR-4, Controllers Symfony/GLPI y plantillas Twig.
 
 ## Características principales
 
@@ -418,22 +421,26 @@ El plugin utiliza la misma base de código para **GLPI 11.x y GLPI 12.x** y sigu
 - 📝 Instrucciones compactas para **rayones, golpes/abolladuras, desgaste/uso y piezas faltantes/otros**.
 - 👤 Los formatos manuales prellenan la identificación real del activo y del usuario asignado desde GLPI.
 - 👷 La firma del formato manual utiliza al **técnico asignado al activo**; si no existe, utiliza al usuario de GLPI que genera el documento.
+- 🪪 La etiqueta debajo de cada firma utiliza el **título de usuario** configurado en GLPI; si no tiene título, muestra **Técnico** o **Usuario** como valor predeterminado.
 - 🔢 Los formatos manuales de teléfono incluyen la información de línea e identificación utilizada por la responsiva normal.
+- 💬 Los formatos de inspección y devolución de teléfono incluyen el campo **Comentarios** en la tabla, igual que Computadora e Impresora.
 - 🧩 Cada tipo de activo tiene controles independientes para activar/desactivar **Inspección visual** y **Devolución**.
 - 👁️ Las vistas previas de configuración están disponibles para la responsiva normal y para cada formato manual habilitado.
 - 🖊️ Cada formato manual tiene su propio **título, Instrucciones y cuatro campos de pie de página** editables.
+- 🌐 Las pestañas PDF de inspección y devolución usan rutas localizadas en español, francés, alemán e italiano; las rutas inglesas originales siguen funcionando.
 - 📬 Envío selectivo de documentos por correo.
 - 💾 Exportación/importación validada de la configuración y del logo institucional.
 - 🖼️ Soporte de logo JPG/PNG, incluida la conservación de transparencia en PNG.
 - 🔐 Protección mediante permisos de GLPI y CSRF.
 - 🌍 Idiomas: Español (México), Francés, Alemán e Italiano.
 
+
 ## Requisitos
 
 | Componente | Mínimo |
 |-----------|--------|
-| GLPI | 11.0.0 / 12.x |
-| PHP | 8.2 |
+| GLPI | 11.x / 12.x |
+| PHP | 8.2+ en GLPI 11; 8.3+ en GLPI 12 |
 | TCPDF | Incluido con GLPI |
 | Extensiones PHP | `fileinfo`, `gd`, `intl`, `json` |
 
@@ -478,7 +485,7 @@ Al generar el formato manual para un activo específico, el PDF prellena la info
 - Propiedades de hardware de la computadora conforme a su responsiva.
 - Los formatos manuales de computadora incluyen los monitores y periféricos asociados al equipo, usando las mismas reglas de visibilidad que la responsiva normal. La tabla de dispositivos asociados utiliza un diseño compacto y adaptativo para mantener el formato en una sola hoja tamaño Carta.
 - Propiedades de la impresora conforme a su responsiva.
-- Datos del teléfono como almacenamiento, RAM, IMEI y línea.
+- Datos del teléfono como almacenamiento, RAM, IMEI y línea, seguidos de una fila de Comentarios en ambos formatos manuales.
 
 La inspección física se mantiene como un proceso en papel. El técnico registra a mano la condición física del equipo.
 
@@ -495,7 +502,7 @@ El documento contiene:
    - desgaste/uso;
    - piezas faltantes/otros.
 5. **Notas adicionales** — Área libre para observaciones a mano.
-6. **Firmas** — Técnico y usuario asignado.
+6. **Firmas** — Técnico y usuario asignado. La etiqueta debajo de cada nombre utiliza el título de usuario de GLPI cuando está configurado; en caso contrario, usa Técnico/Usuario.
 
 Los bordes de los cuadros de condición y de notas están reforzados para que sean claramente visibles al imprimir.
 
@@ -542,7 +549,7 @@ El técnico del formato manual se determina en este orden:
 1. Técnico asignado al activo, cuando existe.
 2. Usuario que genera el documento, cuando no existe técnico asignado.
 
-El usuario asignado al activo aparece como destinatario.
+El texto debajo de cada nombre utiliza el **título de usuario** configurado en GLPI. Si el título está vacío o no se puede obtener, la etiqueta vuelve a **Técnico** o **Usuario**, según corresponda. El usuario asignado al activo aparece como destinatario.
 
 Las anotaciones físicas realizadas a mano no están destinadas a modificar la asignación del activo en GLPI.
 
@@ -552,7 +559,7 @@ Las anotaciones físicas realizadas a mano no están destinadas a modificar la a
 
 Para obtener una mejor consistencia visual en los PDFs generados, se recomienda configurar **Helvetica** como fuente para PDF en GLPI.
 
-Para los campos de texto editables de Responsivas, se recomienda utilizar un tamaño de fuente de **9 pt o 10 pt**. Estos tamaños ofrecen un buen equilibrio entre legibilidad y espacio disponible, especialmente en los formatos manuales de inspección y devolución.
+Para los campos de texto editables de Responsivas, se recomienda utilizar un tamaño de fuente de **9 pt o 10 pt**. Estos tamaños ofrecen un buen equilibrio entre legibilidad y espacio disponible, especialmente en los formatos manuales de inspección y devolución. Los ajustes de tamaño de fuente de Computadora, Impresora y Teléfono aceptan números enteros o decimales en incrementos de **0.1 pt**, por ejemplo **8.5 pt**. Los valores enteros existentes se conservan sin cambios.
 
 Abre **Configuración → Complementos → Responsivas**.
 
