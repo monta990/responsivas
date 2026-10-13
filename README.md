@@ -6,8 +6,8 @@
   <strong>GLPI plugin — Automatically generates PDF responsibility documents and loan contracts for IT assets assigned to users</strong>
 </p>
 <p align="center">
-  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
   <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-12.0%2B-blue" alt="GLPI compatibility"></a>
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI compatibility"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
@@ -19,7 +19,7 @@
 
 **Responsivas** generates PDF responsibility documents and phone loan contracts for IT assets assigned to GLPI users. It also provides fixed, print-ready visual inspection and return forms for Computers, Printers and Phones.
 
-**Current version: 1.6.4.** The plugin is designed to use the same codebase on **GLPI 11.x and GLPI 12.x** and follows the modern plugin architecture with PSR-4 classes, Symfony/GLPI Controllers and Twig templates.
+The plugin is designed to use the same codebase on **GLPI 11.x and GLPI 12.x** and follows the modern plugin architecture with PSR-4 classes, Symfony/GLPI Controllers and Twig templates.
 
 Responsibility PDF generation from the User tab uses **POST requests protected by GLPI's CSRF protections** because successful PDF downloads are recorded in the target user's GLPI history. GLPI 11 uses its token-based mechanism; GLPI 12 validates browser origin headers. The standard GLPI asset URLs embedded in QR codes remain unchanged.
 
@@ -395,8 +395,8 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
   <strong>Plugin para GLPI — Genera automáticamente cartas responsivas y contratos de comodato en PDF para activos de TI asignados a usuarios</strong>
 </p>
 <p align="center">
-  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI 11 compatibility"></a>
-  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-12.0%2B-blue" alt="GLPI 12 compatibility"></a>
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-12.0%2B-blue" alt="GLPI 12 compatible"></a>  
+  <a href="https://github.com/glpi-project/glpi" target="_blank"><img src="https://img.shields.io/badge/GLPI-11.0%2B-blue" alt="GLPI 11 compatible"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-green" alt="License"></a>
   <a href="https://php.net/" target="_blank"><img src="https://img.shields.io/badge/PHP-%3E%3D8.2-purple" alt="PHP"></a>
   <a href="https://github.com/monta990/responsivas/releases" target="_blank"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/monta990/responsivas/total"></a>
@@ -408,7 +408,7 @@ Report bugs or request features on the [issue tracker](https://github.com/monta9
 
 **Responsivas** genera cartas responsivas y contratos de comodato en PDF para activos de TI asignados a usuarios de GLPI. También proporciona **formatos fijos de inspección visual y devolución** para Computadoras, Impresoras y Teléfonos.
 
-**Versión actual: 1.6.4.** El plugin utiliza la misma base de código para **GLPI 11.x y GLPI 12.x** y sigue la arquitectura moderna de plugins con clases PSR-4, Controllers Symfony/GLPI y plantillas Twig.
+El plugin utiliza la misma base de código para **GLPI 11.x y GLPI 12.x** y sigue la arquitectura moderna de plugins con clases PSR-4, Controllers Symfony/GLPI y plantillas Twig.
 
 ## Características principales
 
