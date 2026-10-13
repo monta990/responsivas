@@ -77,6 +77,35 @@ class PdfBuilder
    }
 
    /**
+    * Identify the application and plugin versions that generated the document.
+    * Use the versions exposed by GLPI and setup.php instead of hard-coded values.
+    */
+   private static function getApplicationCreator(): string
+   {
+      $glpiVersion = defined('GLPI_VERSION') ? (string) GLPI_VERSION : '';
+      // Keep the major GLPI version in the visible metadata (e.g. "GLPI 12").
+      $glpiMajorVersion = $glpiVersion !== '' ? explode('.', $glpiVersion)[0] : '';
+
+      $pluginVersion = defined('PLUGIN_RESPONSIVAS_VERSION')
+         ? (string) PLUGIN_RESPONSIVAS_VERSION
+         : '';
+      if ($pluginVersion === '' && function_exists('plugin_version_responsivas')) {
+         $pluginInfo = plugin_version_responsivas();
+         $pluginVersion = (string) ($pluginInfo['version'] ?? '');
+      }
+
+      $parts = [];
+      if ($glpiMajorVersion !== '') {
+         $parts[] = 'GLPI ' . $glpiMajorVersion;
+      }
+      if ($pluginVersion !== '') {
+         $parts[] = 'Responsivas ' . $pluginVersion;
+      }
+
+      return $parts !== [] ? implode(' - ', $parts) : 'GLPI';
+   }
+
+   /**
     * Obtiene la ubicación de la entidad activa exactamente con el mismo origen
     * para documentos reales y previews: ciudad, estado y país configurados
     * en la entidad de GLPI.
@@ -750,6 +779,12 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
             $assignedUser = $candidate;
          }
       }
+      if ($assignedUser !== null) {
+         // In Edge's document properties this Subject value appears in the
+         // field currently labelled "Firmante". It identifies the intended
+         // signer; it is metadata, not a cryptographic PDF signature.
+         $pdf->SetSubject($assignedUser->getFriendlyName());
+      }
 
       $assets = $assignedUser ? self::getManualAssets($itemtype, $userId) : [];
       if ($assets === [] || $preview) {
@@ -1277,7 +1312,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
 
       $pdf = self::makePdf('pc',
          __('Computer Responsibility - ', 'responsivas') . $full_name,
-         'Responsiva de computadora',
+         $full_name,
          'responsiva, computadora, activos, TI',
          $location,
          Utils::dateToText($_SESSION['glpi_currenttime'], $config['timezone']),
@@ -1555,7 +1590,7 @@ Cuando se goce de periodo vacacional",
 
       $pdf = self::makePdf('pri',
          __('Printer Responsibility - ', 'responsivas') . $full_name,
-         'Responsiva de impresora',
+         $full_name,
          'responsiva, impresora, activos, TI',
          $location,
          Utils::dateToText($_SESSION['glpi_currenttime'], $config['timezone']),
@@ -1728,7 +1763,7 @@ $i++;
 
       $pdf = self::makePdf('pho',
          __('Phone Loan - ', 'responsivas') . $full_name,
-         'Comodato de teléfono',
+         $full_name,
          'comodato, teléfono, activos, TI',
          $location,
          $fecha_texto,
@@ -1925,12 +1960,6 @@ $i++;
       $wm_text                = trim($config['watermark_text'] ?? '');
       $pdf->watermark_text    = $wm_text !== '' ? $wm_text : __('PREVIEW', 'responsivas');
       $pdf->watermark_opacity = max(5, min(100, (int)($config['watermark_opacity'] ?? 25)));
-      $pdf->SetCreator('GLPI');
-      $pdf->SetAuthor($creator);
-      $pdf->SetTitle($title);
-      $pdf->SetPDFVersion('1.4');
-      $pdf->SetSubject($subject);
-      $pdf->SetKeywords($keywords);
       $pdf->SetMargins(15, 25, 15);
       $pdf->SetAutoPageBreak(true, $page_break);
       $pdf->SetPrintHeader(true);
@@ -1938,9 +1967,22 @@ $i++;
       $pdf->setCompression((bool)($config['pdf_compression'] ?? 1));
       $pdf->setFontSubsetting(true);
       if ((int)($config['pdf_protection'] ?? 1) === 1) {
+         // TCPDF 7 (GLPI 12) recreates its internal tc-lib-pdf engine when
+         // protection is enabled. Document metadata and PDF version set before
+         // this call are lost, leaving the defaults (TCPDF) in the output.
+         // Set these values after protection for TCPDF 6 and 7 compatibility.
          $pdf->SetProtection(['copy', 'modify'], '', null);
       }
       $pdf->SetFont(\Config::getConfigurationValue('core', 'pdffont'), '', (float)($config[$font_key] ?? 10));
+
+      // Set document properties after SetProtection(): TCPDF 7 rebuilds the
+      // underlying engine during encryption setup, which resets these values.
+      $pdf->SetCreator(self::getApplicationCreator());
+      $pdf->SetAuthor($creator);
+      $pdf->SetTitle($title);
+      $pdf->SetPDFVersion('1.4');
+      $pdf->SetSubject($subject);
+      $pdf->SetKeywords($keywords);
       return $pdf;
    }
 

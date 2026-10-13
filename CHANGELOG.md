@@ -4,6 +4,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.5] — 2026-10-13
+
+### Fixed
+
+- **PDF metadata preservation with TCPDF 7 / GLPI 12** — Reapply the configured Creator, Author, Title, Subject, Keywords and PDF version after `SetProtection()`, because TCPDF 7 recreates its internal engine when PDF protection is enabled. This restores the configured document properties while retaining compatibility with TCPDF 6 on GLPI 11.
+- **PDF signer and application metadata** — The PDF Subject value shown by Edge in the property field labelled “Firmante” now contains the target user's friendly name for standard responsibility and manual forms. The Creator metadata is generated dynamically from the installed GLPI major version and `PLUGIN_RESPONSIVAS_VERSION` (for example, `GLPI 12 - Responsivas 1.6.5`) instead of a hard-coded value. This metadata identifies the intended signer but does not create a cryptographic PDF signature.
+
+---
+
 ## [1.6.4] — 2026-10-09
 
 ### Changed
@@ -13,6 +22,10 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - **Localized manual PDF tab titles** — The Visual inspection and Return buttons use language-specific route slugs for English, Spanish (Mexico), French, German and Italian, so PDF tabs no longer display the generic English `inspection` / `return` path on localized GLPI sessions. The original English routes remain available for existing bookmarks and external links.
+
+### Fixed
+
+- **PDF metadata with TCPDF 7 / GLPI 12** — Reapplied Creator, Author, Title, Subject, Keywords and PDF version after `SetProtection()`. TCPDF 7 recreates its internal engine when protection is enabled, which otherwise discarded the configured document properties and left default `TCPDF` metadata. Ordering remains compatible with TCPDF 6 on GLPI 11.
 - **Manual form layout** — Added a safe separation between Printer/Phone property tables and the delivery/return condition row to prevent overlap with the table border, while preserving the Computer layout.
 - **Phone comments** — Added the Comments section to the Phone property table in both visual-inspection and return forms, matching the Computer and Printer forms.
 - **Printer identification localization** — Added the missing `Printer identification` translation entry to the POT and Spanish (Mexico), French, German and Italian catalogs.
