@@ -48,6 +48,20 @@ class PdfBuilder
       return $item;
    }
 
+   /**
+    * Escape an entity address for insertion into TCPDF HTML text.
+    *
+    * A numeric HTML entity for the number sign was rendered as a question
+    * mark by the GLPI 12 / TCPDF 7 path. Escape the complete address first,
+    * then isolate each literal number sign in its own trusted inline element.
+    * This keeps the exact address text (including every digit) unchanged and
+    * avoids passing a raw "#57" sequence through the same HTML text node.
+    */
+   private static function escapePdfAddress(string $address): string
+   {
+      return str_replace('#', '<span>#</span>', Utils::escape($address));
+   }
+
    private static function filterViewableRows(string $itemClass, array $rows): array
    {
       $allowed = [];
@@ -1688,7 +1702,7 @@ $i++;
          throw new \RuntimeException(__('Could not retrieve the entity.', 'responsivas'));
       }
 
-      $address  = Utils::escape($entity->fields['address']  ?? '');
+      $address  = self::escapePdfAddress((string) ($entity->fields['address'] ?? ''));
       $postcode = Utils::escape($entity->fields['postcode'] ?? '');
       $location = self::getActiveEntityLocation();
 
@@ -2215,7 +2229,7 @@ HTML;
       if (!$entity->getFromDB(\Session::getActiveEntity())) {
          throw new \RuntimeException(__('Could not retrieve the active entity.', 'responsivas'));
       }
-      $address  = Utils::escape($entity->fields['address']  ?? '');
+      $address  = self::escapePdfAddress((string) ($entity->fields['address'] ?? ''));
       $postcode = Utils::escape($entity->fields['postcode'] ?? '');
 
       // Testigos / representante reales si están configurados, si no → demo

@@ -9,7 +9,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - **PDF metadata preservation with TCPDF 7 / GLPI 12** — Reapply the configured Creator, Author, Title, Subject, Keywords and PDF version after `SetProtection()`, because TCPDF 7 recreates its internal engine when PDF protection is enabled. This restores the configured document properties while retaining compatibility with TCPDF 6 on GLPI 11.
-- **PDF signer and application metadata** — The PDF Subject value shown by Edge in the property field labelled “Firmante” now contains the target user's friendly name for standard responsibility and manual forms. The Creator metadata is generated dynamically from the installed GLPI major version and `PLUGIN_RESPONSIVAS_VERSION` (for example, `GLPI 12 - Responsivas 1.6.5`) instead of a hard-coded value. This metadata identifies the intended signer but does not create a cryptographic PDF signature.
+- **PDF signer and application metadata** — The PDF Subject value shown by Edge in the property field labelled “Firmante” contains the target user's friendly name for standard responsibility and manual forms. The Creator metadata is generated dynamically from the installed GLPI major version and `PLUGIN_RESPONSIVAS_VERSION` (for example, `GLPI 12 - Responsivas 1.6.5`) instead of a hard-coded value. This metadata identifies the intended signer but does not create a cryptographic PDF signature.
+- **Phone contract address number sign in TCPDF 7 / GLPI 12** — Preserve literal `#` characters in entity addresses by safely escaping address text and isolating the number sign in an inline span before PDF rendering. This prevents extra trailing zeroes or a replacement `?` without changing any address characters or digits. Applies to generated phone loan contracts and configuration previews; compatible with TCPDF 6 / GLPI 11.
 
 ---
 
