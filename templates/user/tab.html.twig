@@ -9,7 +9,7 @@
 </style>
 
 {# ── Asset button macro ──────────────────────────────────── #}
-{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty, user_id, csrf_token, text_class='') %}
+{% macro asset_button(count, url, icon, label, btn_class, tooltip_empty, user_id, csrf_token, csrf_enabled, text_class='') %}
     {% set tooltip = count
         ? 'Generate responsibility documents'|trans
         : (tooltip_empty ?: 'No equipment assigned'|trans) %}
@@ -17,7 +17,9 @@
         {% if count %}
             <form method="post" action="{{ url }}" target="_blank" style="display:inline" data-resp-pdf-form="1">
                 <input type="hidden" name="users_id" value="{{ user_id }}">
-                <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+                {% if csrf_enabled %}
+                    <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+                {% endif %}
                 <button type="submit" class="{{ btn_class }} {{ text_class }}"{% if text_class == 'text-dark' %} style="color:#212529!important;"{% endif %} data-resp-pdf-btn="1">
                     <i class="ti {{ icon }} me-2"></i>{{ label }}
                     <span class="badge badge-secondary ms-1">{{ count }}</span>
@@ -77,6 +79,7 @@
                         trans('No equipment assigned'),
                         user_id,
                         group.key == 'computers' ? computer_csrf_token : (group.key == 'printers' ? printer_csrf_token : phone_csrf_token),
+                        csrf_tokens_enabled,
                         asset_main_text
                     ) }}
                     <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
@@ -139,7 +142,9 @@
             <form id="{{ form_id }}" method="post"
                   action="{{ mail_url }}" style="display:none;">
                 <input type="hidden" name="users_id" value="{{ user_id }}">
-                <input type="hidden" name="_glpi_csrf_token" value="{{ mail_csrf_token }}">
+                {% if csrf_tokens_enabled %}
+                    <input type="hidden" name="_glpi_csrf_token" value="{{ mail_csrf_token }}">
+                {% endif %}
                 <input type="hidden" name="send_computers" value="" id="hidden_comp_{{ user_id }}">
                 <input type="hidden" name="send_printers"  value="" id="hidden_print_{{ user_id }}">
                 <input type="hidden" name="send_phones"    value="" id="hidden_phone_{{ user_id }}">
@@ -270,13 +275,9 @@
     });
 
     // Keep the PDF request as a native form POST so the browser receives the
-    // server Content-Disposition filename. A Blob URL would replace that
-    // filename with a browser-generated UUID.
-    //
-    // GLPI 11 consumes a standalone CSRF token after a successful normal POST.
-    // The PDF form opens in a new tab, so refresh this source User tab shortly
-    // after the submission. The refreshed tab generates fresh dedicated tokens
-    // for the next click while the PDF response keeps its original filename.
+    // server Content-Disposition filename. GLPI 11 consumes a one-time CSRF
+    // token after POST, so only that branch refreshes this source tab.
+    {% if csrf_tokens_enabled %}
     document.querySelectorAll('form[data-resp-pdf-form="1"]').forEach(function (form) {
         form.addEventListener('submit', function () {
             if (form.dataset.respSubmitting === '1') {
@@ -289,12 +290,11 @@
                 button.disabled = true;
             }
 
-            // target="_blank" sends the PDF to a new browsing context; reloading
-            // this tab therefore does not navigate away from the generated PDF.
             window.setTimeout(function () {
                 window.location.reload();
             }, 500);
         });
     });
+    {% endif %}
 })();
 </script>

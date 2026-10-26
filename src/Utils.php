@@ -10,6 +10,66 @@ final class Utils
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
 
+    /**
+     * GLPI 11 uses token-based CSRF protection. GLPI 12 (including release
+     * candidates) validates browser-origin headers and deprecates CSRF tokens.
+     */
+    public static function usesLegacyCsrfTokens(): bool
+    {
+        if (!defined('GLPI_VERSION')) {
+            return true;
+        }
+
+        if (preg_match('/^\s*(\d+)/', (string)GLPI_VERSION, $matches) !== 1) {
+            return true;
+        }
+
+        return (int)$matches[1] < 12;
+    }
+
+    /** Return the active GLPI locale as a valid HTML lang value for email markup. */
+    public static function htmlLang(): string
+    {
+        global $CFG_GLPI;
+        $locale = (string)($_SESSION['glpilanguage'] ?? ($CFG_GLPI['language'] ?? 'en_GB'));
+        $locale = str_replace('-', '_', trim($locale));
+        if (preg_match('/^[a-z]{2}_[A-Z]{2}$/D', $locale) !== 1) {
+            return 'en-GB';
+        }
+        [$language, $region] = explode('_', $locale, 2);
+        return strtolower($language) . '-' . strtoupper($region);
+    }
+
+    /**
+     * Fields historically stored with htmlspecialchars() before they were
+     * rendered by Twig/PDF. This list is used only for a one-time migration and
+     * legacy configuration imports; new values are stored as plain text.
+     *
+     * @return list<string>
+     */
+    public static function legacyEscapedConfigKeys(): array
+    {
+        $keys = [
+            'timezone', 'watermark_text', 'company_name', 'currency',
+            'pc_titulo', 'pri_titulo', 'pho_titulo', 'email_subject',
+            'pc_inspection_title', 'pc_return_title',
+            'pri_inspection_title', 'pri_return_title',
+            'pho_inspection_title', 'pho_return_title',
+        ];
+        foreach (['pc', 'pri', 'pho'] as $type) {
+            foreach (['left_1', 'right_1', 'left_2', 'right_2'] as $position) {
+                $keys[] = $type . '_footer_' . $position;
+            }
+        }
+        return $keys;
+    }
+
+    /** Decode one layer created by the old HTML-escaping-on-save behaviour. */
+    public static function decodeLegacyEscapedText(string $value): string
+    {
+        return html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
     public static function dateToText($fecha, ?string $timezone = null): string
     {
         if (empty($fecha) || $fecha === '0000-00-00') {

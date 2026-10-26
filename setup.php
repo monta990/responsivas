@@ -2,6 +2,7 @@
 
 use Glpi\Plugin\Hooks;
 use GlpiPlugin\Responsivas\UserTab;
+use GlpiPlugin\Responsivas\Utils;
 
 if (!defined('GLPI_ROOT')) {
    die('Direct access not allowed');
@@ -14,7 +15,7 @@ if (!defined('GLPI_ROOT')) {
  * from src/ by GLPI's plugin autoloader; HTTP entry points are Symfony
  * Controllers under src/Controller/.
  */
-define('PLUGIN_RESPONSIVAS_VERSION', '1.6.5');
+define('PLUGIN_RESPONSIVAS_VERSION', '1.6.6');
 define('PLUGIN_RESPONSIVAS_MIN_GLPI', '11.0');
 define('PLUGIN_RESPONSIVAS_MAX_GLPI', '12.99');
 
@@ -26,7 +27,7 @@ function plugin_init_responsivas(): void
    global $PLUGIN_HOOKS;
 
    // GLPI 11 exposes this legacy hook; GLPI 12 removed it.
-   if (version_compare(GLPI_VERSION, '12.0.0', '<')) {
+   if (Utils::usesLegacyCsrfTokens()) {
       $PLUGIN_HOOKS['csrf_compliant']['responsivas'] = true;
    }
 

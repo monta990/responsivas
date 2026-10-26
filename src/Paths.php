@@ -71,6 +71,22 @@ final class Paths
         return GLPI_ROOT . '/files/_plugins/responsivas';
     }
 
+    /**
+     * Private, non-cacheable headers for PDFs that may contain personal data.
+     * Keep every PDF controller on the same conservative cache policy.
+     *
+     * @return array<string, string>
+     */
+    public static function privatePdfHeaders(): array
+    {
+        return [
+            'Cache-Control' => 'private, no-store, max-age=0, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+            'X-Content-Type-Options' => 'nosniff',
+        ];
+    }
+
     public static function logoPath(): string
     {
         return self::filesDir() . '/logo.png';

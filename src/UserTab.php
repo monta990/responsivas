@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace GlpiPlugin\Responsivas;
 
+use GlpiPlugin\Responsivas\Pdf\PdfBuilder;
+
 class UserTab extends \CommonGLPI {
 
    /** Cache por request */
@@ -16,48 +18,11 @@ class UserTab extends \CommonGLPI {
     * ÚNICO punto de acceso a los conteos (UNA VEZ)
     * ===================================================== */
     private static function getCounts(int $user_id): array {
-      global $DB;
-
       if (isset(self::$cache[$user_id])) {
          return self::$cache[$user_id];
       }
 
-      $config            = \Config::getConfigurationValues('plugin_responsivas');
-      $cellphone_type_id = (int)($config['cellphone_type_id'] ?? 0);
-
-      $computers = (int)($DB->request([
-         'COUNT' => 'total',
-         'FROM'  => 'glpi_computers',
-         'WHERE' => ['users_id' => $user_id, 'is_deleted' => 0],
-      ])->current()['total'] ?? 0);
-
-      $printers = (int)($DB->request([
-         'COUNT' => 'total',
-         'FROM'  => 'glpi_printers',
-         'WHERE' => ['users_id' => $user_id, 'is_deleted' => 0],
-      ])->current()['total'] ?? 0);
-
-      $phones = 0;
-      if ($cellphone_type_id > 0) {
-         $phones = (int)($DB->request([
-            'COUNT' => 'total',
-            'FROM'  => 'glpi_phones',
-            'WHERE' => [
-               'users_id'      => $user_id,
-               'is_deleted'    => 0,
-               'phonetypes_id' => $cellphone_type_id,
-            ],
-         ])->current()['total'] ?? 0);
-      }
-
-      $data = [
-         'computers' => $computers,
-         'printers'  => $printers,
-         'phones'    => $phones,
-      ];
-      $data['total'] = array_sum($data);
-
-      return self::$cache[$user_id] = $data;
+      return self::$cache[$user_id] = PdfBuilder::getVisibleAssetCountsForUser($user_id);
    }
 
    /* =====================================================
@@ -152,13 +117,13 @@ class UserTab extends \CommonGLPI {
          'user_email'     => $user_email,
          'email_disabled' => $email_disabled,
          'email_tooltip'      => $email_tooltip,
-         // GLPI 11 consumes a normal CSRF token after each successful POST.
-         // Use a dedicated one-time token per form so the user can generate
-         // Computer, Printer, Phone and Email documents from the same tab.
-         'computer_csrf_token' => \Session::getNewCSRFToken(true),
-         'printer_csrf_token'  => \Session::getNewCSRFToken(true),
-         'phone_csrf_token'    => \Session::getNewCSRFToken(true),
-         'mail_csrf_token'     => \Session::getNewCSRFToken(true),
+         // GLPI 11 uses one-time form tokens; GLPI 12 uses browser-origin
+         // validation and deprecates these APIs, so do not call them there.
+         'csrf_tokens_enabled' => \GlpiPlugin\Responsivas\Utils::usesLegacyCsrfTokens(),
+         'computer_csrf_token' => \GlpiPlugin\Responsivas\Utils::usesLegacyCsrfTokens() ? \Session::getNewCSRFToken(true) : '',
+         'printer_csrf_token'  => \GlpiPlugin\Responsivas\Utils::usesLegacyCsrfTokens() ? \Session::getNewCSRFToken(true) : '',
+         'phone_csrf_token'    => \GlpiPlugin\Responsivas\Utils::usesLegacyCsrfTokens() ? \Session::getNewCSRFToken(true) : '',
+         'mail_csrf_token'     => \GlpiPlugin\Responsivas\Utils::usesLegacyCsrfTokens() ? \Session::getNewCSRFToken(true) : '',
          'last_updated'        => $dt->format('d/m/Y H:i'),
       ]);
    }

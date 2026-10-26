@@ -1,8 +1,33 @@
+
 All notable changes to this project are documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
+
+## [1.6.6] — 2026-10-25
+
+### Fixed
+
+- **Friendly PDF link expiry/reuse handling** — Requests for an already-consumed or expired PDF ticket, or a ticket whose managed temporary file is no longer available, now return a translated HTTP 410 page with instructions to generate the PDF again instead of exposing the expected Symfony access-denied exception. Authentication and permission checks remain unchanged; the POT and Spanish (Mexico), French, German and Italian PO/MO catalogs include the new strings.
+- **PDF download response compatibility** — Set the inline `Content-Disposition` header through Symfony's `ResponseHeaderBag` instead of calling `setContentDisposition()` on a custom `Response` subclass. This fixes the undefined-method error in GLPI 12 for both normal and `HEAD` PDF requests.
+- **Temporary PDF lifecycle** — PDF files are created with exclusive, collision-resistant filenames and restrictive permissions. Their single-use session tickets are consumed by the actual GET, the uniquely named temporary file is removed immediately after its contents are read into the response, expired files are swept globally by a registered GLPI automatic action and opportunistically during PDF requests, and stale files from the previous temporary-file naming scheme are cleaned after a safety grace period.
+- **Configuration HTML escaping** — Configuration text is now stored as plain text and escaped only when rendered into HTML/PDF/email output. An idempotent storage-format migration normalizes legacy fields without resetting customized templates, and imports from older plugin exports are normalized while current exports remain compatible with the existing JSON format.
+- **GLPI 12 CSRF compatibility** — Token generation and `_glpi_csrf_token` fields are now emitted only on GLPI 11 and earlier. GLPI 12 uses its native same-origin protection without deprecated token API calls; GLPI 11 retains separate one-time tokens and its post-download tab refresh.
+- **Entity-aware asset counts** — Computer, Printer and Phone counters on the User tab now use the same visible-asset and entity-scope filtering used by PDF generation, preventing counts and buttons from advertising assets outside the current session's access.
+- **Consistent PDF cache controls** — Standard downloads, manual inspection/return forms and configuration previews now use the same private `no-store` cache policy and `Pragma: no-cache` headers.
+- **Localized email language metadata** — Test and real email HTML now use the active GLPI locale in the `lang` attribute instead of hard-coding Spanish.
+- **Download history timing** — The PDF download history entry is now written after Symfony sends and flushes the response body without a detected client disconnect, not during the POST that creates it. If the browser never follows the delivery redirect, no download entry is recorded; the single-use ticket prevents repeated GETs from generating duplicate history entries.
+
+### Changed
+
+- **Shared delivery implementation** — Added `PdfDeliveryService` to create temporary files and redirect tickets for both PDF-generation entry points.
+- **Unified browser PDF delivery** — Responsibility documents and manual visual-inspection/return forms now use one shared session-bound temporary PDF delivery flow. Their existing `PdfBuilder` methods, generated PDF bytes, filenames, metadata, layouts, legal text, signatures, watermark/configuration behavior and other document properties remain unchanged.
+- **Safe PDF reloads** — A valid PDF ticket can be requested repeatedly during its five-minute lifetime, so browser refresh/reopen works for responsivas as it already did for manual forms. Login, the global User read right and the target user's existing kind-specific authorization are checked on every request. Tickets and files are removed when expired; no-store/private cache headers remain in place.
+- **Once-only responsibility history** — A responsibility PDF adds its history entry only after the first successful response flush. Reloads and HEAD probes do not add duplicate entries. Manual form logging behavior remains unchanged.
+- **Friendly unavailable-PDF page** — Missing, expired, malformed or corrupted temporary PDF tickets continue to return the translated HTTP 410 recovery page rather than a Symfony stack trace. The page retains its localized instructions.
+
+---
 
 ## [1.6.5] — 2026-10-13
 

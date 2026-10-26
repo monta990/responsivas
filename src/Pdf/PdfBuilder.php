@@ -76,6 +76,51 @@ class PdfBuilder
       return $allowed;
    }
 
+   /**
+    * Return counts using the same assigned-item and entity-visibility filter
+    * as PDF generation. The User tab must never advertise assets which the
+    * current session cannot actually include in a generated document.
+    *
+    * @return array{computers:int,printers:int,phones:int,total:int}
+    */
+   public static function getVisibleAssetCountsForUser(int $userId): array
+   {
+      $counts = ['computers' => 0, 'printers' => 0, 'phones' => 0, 'total' => 0];
+      if ($userId <= 0) {
+         return $counts;
+      }
+
+      $user = new \User();
+      if (!$user->getFromDB($userId) || !$user->canView()) {
+         return $counts;
+      }
+
+      $counts['computers'] = count(self::filterViewableRows(
+         \Computer::class,
+         (new \Computer())->find(['users_id' => $userId, 'is_deleted' => 0])
+      ));
+      $counts['printers'] = count(self::filterViewableRows(
+         \Printer::class,
+         (new \Printer())->find(['users_id' => $userId, 'is_deleted' => 0])
+      ));
+
+      $config = \Config::getConfigurationValues('plugin_responsivas');
+      $phoneTypeId = (int)($config['cellphone_type_id'] ?? 0);
+      if ($phoneTypeId > 0) {
+         $counts['phones'] = count(self::filterViewableRows(
+            \Phone::class,
+            (new \Phone())->find([
+               'users_id' => $userId,
+               'is_deleted' => 0,
+               'phonetypes_id' => $phoneTypeId,
+            ])
+         ));
+      }
+
+      $counts['total'] = $counts['computers'] + $counts['printers'] + $counts['phones'];
+      return $counts;
+   }
+
    /* =====================================================
     * HELPER: user creator
     * ===================================================== */
@@ -842,7 +887,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
          // Center the configured title as plain text. renderTemplate() returns
          // HTML intended for writeHTML(), so it must never be passed to Cell().
          $pdf->SetFont($font, 'B', $fontSize + 1);
-         $titleText = trim(strip_tags(Utils::applyTemplate($title, [])));
+         $titleText = trim(html_entity_decode(strip_tags(Utils::applyTemplate($title, [])), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
          $pdf->SetX(15);
          $pdf->Cell(186, 7.5, $titleText, 0, 1, 'C');
          $pdf->Ln(0.5);
@@ -1125,7 +1170,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
          $pdf->SetFont($font, 'B', max(8, $fontSize - 1));
          $pdf->Cell(0, 5, __('Instructions', 'responsivas'), 0, 1, 'L');
 
-         $instructionText = trim(strip_tags(Utils::applyTemplate($instructions, [
+         $instructionText = trim(html_entity_decode(strip_tags(Utils::applyTemplate($instructions, [
             '{nombre}' => $data['user'] ?? '',
             '{activo}' => $data['asset'] ?? '',
             '{marca}'  => $data['brand'] ?? '',
@@ -1133,7 +1178,7 @@ public static function buildManualFormPdf(string $itemtype, string $movement, in
             '{serie}'  => $data['serial'] ?? '',
             '{estado}' => $data['state'] ?? '',
             '{fecha}'  => $dateText,
-         ])));
+         ])), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
          if ($instructionText !== '') {
             $pdf->SetFont($font, '', max(6.5, $fontSize - 2));

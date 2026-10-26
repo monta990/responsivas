@@ -91,7 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <form id="responsivas-config-form" method="post" action="{{ self }}" enctype="multipart/form-data">
-<input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+{% if csrf_tokens_enabled %}
+    <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+{% endif %}
 
 <div class="card mt-2 shadow-sm">
 
@@ -189,6 +191,8 @@ document.addEventListener('DOMContentLoaded', function () {
 </form>
 
 <form id="test-mail-form" method="post" action="{{ test_action }}" style="display:none;">
-    <input type="hidden" name="_glpi_csrf_token" value="{{ test_csrf_token }}">
+    {% if csrf_tokens_enabled %}
+        <input type="hidden" name="_glpi_csrf_token" value="{{ test_csrf_token }}">
+    {% endif %}
     <input type="hidden" name="mode" value="test">
 </form>

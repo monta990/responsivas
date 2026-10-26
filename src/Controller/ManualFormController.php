@@ -5,6 +5,7 @@ namespace GlpiPlugin\Responsivas\Controller;
 
 use Glpi\Controller\AbstractController;
 use GlpiPlugin\Responsivas\Pdf\PdfBuilder;
+use GlpiPlugin\Responsivas\Service\PdfDeliveryService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -89,12 +90,16 @@ abstract class ManualFormController extends AbstractController
             throw new \RuntimeException(__('Could not generate the manual PDF.', 'responsivas'));
         }
 
-        return new Response($content, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $filename . '"',
-            'Cache-Control' => 'private, no-store, max-age=0, must-revalidate',
-            'Pragma' => 'no-cache',
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
+        // Manual forms and responsibility documents share the same protected
+        // PDF delivery route. The builder output and all document properties
+        // remain untouched; only delivery is centralized.
+        return PdfDeliveryService::issue(
+            $content,
+            $filename,
+            $userId,
+            strtolower($itemtype),
+            'manual',
+            $movement === 'return' ? 'return' : 'inspection'
+        );
     }
 }

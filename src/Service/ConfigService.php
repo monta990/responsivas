@@ -156,6 +156,9 @@ final class ConfigService
         $allowed = array_flip(self::exportableKeys());
         $values = [];
         $skipped = [];
+        $exportedPluginVersion = (string)($data['plugin_version'] ?? '0.0.0');
+        $isLegacyEscapedExport = !preg_match('/^\d+\.\d+\.\d+$/D', $exportedPluginVersion)
+            || version_compare($exportedPluginVersion, '1.6.6', '<');
 
         foreach ($data['configuration'] as $key => $value) {
             if (!isset($allowed[$key])) continue;
@@ -174,6 +177,9 @@ final class ConfigService
                 $values[$key] = (int)$value;
             } else {
                 $values[$key] = is_scalar($value) ? (string)$value : '';
+                if ($isLegacyEscapedExport && in_array($key, Utils::legacyEscapedConfigKeys(), true)) {
+                    $values[$key] = Utils::decodeLegacyEscapedText($values[$key]);
+                }
             }
         }
 
@@ -376,24 +382,24 @@ if (isset($_POST['update'])) {
 
     $values = [
         'timezone'             => (function () {
-            $tz = Utils::escape($_POST['timezone'] ?? '');
+            $tz = trim((string)($_POST['timezone'] ?? ''));
             return in_array($tz, \DateTimeZone::listIdentifiers(), true) ? $tz : 'America/Hermosillo';
         })(),
         'show_employee_number' => isset($_POST['show_employee_number']),
         'show_qr'              => isset($_POST['show_qr']),
         'pdf_compression'      => isset($_POST['pdf_compression'])      ? 1 : 0,
         'pdf_protection'       => isset($_POST['pdf_protection'])       ? 1 : 0,
-        'watermark_text'       => mb_substr(Utils::escape(trim($_POST['watermark_text'] ?? '')), 0, 40),
+        'watermark_text'       => mb_substr(trim((string)($_POST['watermark_text'] ?? '')), 0, 40),
         'watermark_opacity'    => max(5, min(100, (int)($_POST['watermark_opacity'] ?? 25))),
-        'company_name'         => Utils::escape(trim($_POST['company_name'] ?? '')),
-        'currency'             => Utils::escape(trim($_POST['currency']      ?? '$')),
+        'company_name'         => trim((string)($_POST['company_name'] ?? '')) ,
+        'currency'             => trim((string)($_POST['currency'] ?? '$')) ,
         'testigo_1'            => (int)($_POST['testigo_1']       ?? 0),
         'testigo_2'            => (int)($_POST['testigo_2']       ?? 0),
         'representante'        => (int)($_POST['representante']   ?? 0),
         'cellphone_type_id'    => (int)($_POST['cellphone_type_id'] ?? 0),
 
         'pc_font_size'          => self::normalizeFontSize($_POST['pc_font_size'] ?? ($config['pc_font_size'] ?? 10), $config['pc_font_size'] ?? 10),
-        'pc_titulo'             => Utils::escape(trim($_POST['pc_titulo']  ?? '')),
+        'pc_titulo'             => trim((string)($_POST['pc_titulo']  ?? '')),
         'pc_intro'              => trim($_POST['pc_intro']   ?? ''),
         'pc_cuerpo'             => trim($_POST['pc_cuerpo']  ?? ''),
         'pc_vida_util_factura'  => trim($_POST['pc_vida_util_factura'] ?? ''),
@@ -401,13 +407,13 @@ if (isset($_POST['update'])) {
         'pc_show_comodato_sigs' => isset($_POST['pc_show_comodato_sigs']) ? 1 : 0,
 
         'pri_font_size'          => self::normalizeFontSize($_POST['pri_font_size'] ?? ($config['pri_font_size'] ?? 10), $config['pri_font_size'] ?? 10),
-        'pri_titulo'             => Utils::escape(trim($_POST['pri_titulo']  ?? '')),
+        'pri_titulo'             => trim((string)($_POST['pri_titulo']  ?? '')),
         'pri_intro'              => trim($_POST['pri_intro']   ?? ''),
         'pri_cuerpo'             => trim($_POST['pri_cuerpo']  ?? ''),
         'pri_show_comodato_sigs' => isset($_POST['pri_show_comodato_sigs']) ? 1 : 0,
 
         'pho_font_size'           => self::normalizeFontSize($_POST['pho_font_size'] ?? ($config['pho_font_size'] ?? 9), $config['pho_font_size'] ?? 9),
-        'pho_titulo'              => Utils::escape(trim($_POST['pho_titulo']           ?? '')),
+        'pho_titulo'              => trim((string)($_POST['pho_titulo'] ?? '')),
         'pho_apertura'            => trim($_POST['pho_apertura']          ?? ''),
         'pho_clausulas'           => trim($_POST['pho_clausulas']         ?? ''),
         'pho_testigos'            => trim($_POST['pho_testigos']          ?? ''),
@@ -419,17 +425,17 @@ if (isset($_POST['update'])) {
         'pri_enable_return_form'       => isset($_POST['pri_enable_return_form']) ? 1 : 0,
         'pho_enable_visual_inspection' => isset($_POST['pho_enable_visual_inspection']) ? 1 : 0,
         'pho_enable_return_form'       => isset($_POST['pho_enable_return_form']) ? 1 : 0,
-        'pc_inspection_title'        => Utils::escape(trim($_POST['pc_inspection_title'] ?? '')),
+        'pc_inspection_title'        => trim((string)($_POST['pc_inspection_title'] ?? '')),
         'pc_inspection_instructions' => trim($_POST['pc_inspection_instructions'] ?? ''),
-        'pc_return_title'            => Utils::escape(trim($_POST['pc_return_title'] ?? '')),
+        'pc_return_title'            => trim((string)($_POST['pc_return_title'] ?? '')),
         'pc_return_instructions'     => trim($_POST['pc_return_instructions'] ?? ''),
-        'pri_inspection_title'        => Utils::escape(trim($_POST['pri_inspection_title'] ?? '')),
+        'pri_inspection_title'        => trim((string)($_POST['pri_inspection_title'] ?? '')),
         'pri_inspection_instructions' => trim($_POST['pri_inspection_instructions'] ?? ''),
-        'pri_return_title'            => Utils::escape(trim($_POST['pri_return_title'] ?? '')),
+        'pri_return_title'            => trim((string)($_POST['pri_return_title'] ?? '')),
         'pri_return_instructions'     => trim($_POST['pri_return_instructions'] ?? ''),
-        'pho_inspection_title'        => Utils::escape(trim($_POST['pho_inspection_title'] ?? '')),
+        'pho_inspection_title'        => trim((string)($_POST['pho_inspection_title'] ?? '')),
         'pho_inspection_instructions' => trim($_POST['pho_inspection_instructions'] ?? ''),
-        'pho_return_title'            => Utils::escape(trim($_POST['pho_return_title'] ?? '')),
+        'pho_return_title'            => trim((string)($_POST['pho_return_title'] ?? '')),
         'pho_return_instructions'     => trim($_POST['pho_return_instructions'] ?? ''),
         'pc_inspection_footer_left_1' => trim($_POST['pc_inspection_footer_left_1'] ?? ''),
         'pc_inspection_footer_right_1' => trim($_POST['pc_inspection_footer_right_1'] ?? ''),
@@ -458,7 +464,7 @@ if (isset($_POST['update'])) {
 
 
 
-        'email_subject' => Utils::escape(trim($_POST['email_subject'] ?? '')),
+        'email_subject' => trim((string)($_POST['email_subject'] ?? '')) ,
         'email_body'    => trim($_POST['email_body']   ?? ''),
         'email_footer'  => trim($_POST['email_footer'] ?? ''),
     ];
@@ -466,7 +472,7 @@ if (isset($_POST['update'])) {
     foreach (['pc', 'pri', 'pho'] as $type) {
         foreach (['left_1', 'right_1', 'left_2', 'right_2'] as $pos) {
             $key = "{$type}_footer_{$pos}";
-            $values[$key] = Utils::escape($_POST[$key] ?? '');
+            $values[$key] = trim((string)($_POST[$key] ?? ''));
         }
     }
 
@@ -626,9 +632,10 @@ echo Twig::env()->render('config/page.html.twig', [
     'pdf_font'             => \Config::getConfigurationValue('core', 'pdffont'),
     'mail_ok'              => $mail_ok,
     'has_email_config'     => $has_email_config,
-    'csrf_token'           => \Session::getNewCSRFToken(),
+    'csrf_tokens_enabled'  => Utils::usesLegacyCsrfTokens(),
+    'csrf_token'           => Utils::usesLegacyCsrfTokens() ? \Session::getNewCSRFToken() : '',
     'test_action'          => Paths::routeUrl('mail'),
-    'test_csrf_token'      => \Session::getNewCSRFToken(),
+    'test_csrf_token'      => Utils::usesLegacyCsrfTokens() ? \Session::getNewCSRFToken() : '',
     'widget_testigo1'      => $widget_testigo1,
     'widget_testigo2'      => $widget_testigo2,
     'widget_representante' => $widget_representante,

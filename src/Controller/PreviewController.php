@@ -95,9 +95,6 @@ final class PreviewController extends AbstractController
         return new Response($content, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="' . $filename . '"',
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-            'Pragma' => 'public',
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
+        ] + Paths::privatePdfHeaders());
     }
 }

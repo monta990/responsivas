@@ -74,7 +74,7 @@ if (($_POST['mode'] ?? '') === 'test') {
    ];
 
    // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-   $email_subject = '[PRUEBA] ' . strip_tags(Utils::applyTemplate($email_subject_tpl, $vars));
+   $email_subject = '[PRUEBA] ' . html_entity_decode(strip_tags(Utils::applyTemplate($email_subject_tpl, $vars)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
    $body_safe     = nl2br(Utils::applyTemplate($email_body_tpl, $vars));
    $footer_raw    = Utils::applyTemplate($email_footer_tpl, $vars);
    $footer_safe   = !empty(trim($email_footer_tpl))
@@ -86,10 +86,11 @@ if (($_POST['mode'] ?? '') === 'test') {
       __('This is a test email generated from the Responsivas plugin configuration. No PDFs are attached.', 'responsivas'),
       ENT_QUOTES, 'UTF-8'
    );
+   $htmlLang = Utils::htmlLang();
 
    $body_html = <<<HTML
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{$htmlLang}">
 <head><meta charset="UTF-8"></head>
 <body style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;max-width:600px;margin:0 auto;padding:20px;">
   <p style="background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:10px;font-size:12px;color:#856404;">
@@ -207,7 +208,7 @@ $vars = [
 ];
 
 // responsivasApplyTemplate: ** * __ en orden correcto, luego sustituye variables
-$email_subject = strip_tags(Utils::applyTemplate($email_subject_tpl, $vars));
+$email_subject = html_entity_decode(strip_tags(Utils::applyTemplate($email_subject_tpl, $vars)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
 /* ============================
  * Generar PDFs
@@ -253,10 +254,11 @@ $attachment_note = sprintf(
    _n('%d responsibility PDF attached.', '%d responsibility PDFs attached.', $count, 'responsivas'),
    $count
 );
+$htmlLang = Utils::htmlLang();
 
 $body_html = <<<HTML
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{$htmlLang}">
 <head><meta charset="UTF-8"></head>
 <body style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;max-width:600px;margin:0 auto;padding:20px;">
   <p>{$body_safe}</p>
