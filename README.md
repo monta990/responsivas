@@ -189,7 +189,7 @@ Configure:
 | Timezone | Document date and time |
 | Employee number | Show or hide the employee number |
 | QR code | Show or hide the asset QR code |
-| PDF compression | Enable/disable PDF compression |
+| PDF compression | Enable/disable compression on GLPI 11. GLPI 12's tc-lib-pdf engine always compresses output. |
 | PDF protection | Enable/disable copy/edit restrictions |
 | Watermark text | Text used by PDF previews |
 | Watermark opacity | Preview watermark opacity |
@@ -573,7 +573,7 @@ Configura:
 | Zona horaria | Fecha y hora de los documentos |
 | Número de empleado | Mostrar/ocultar número de empleado |
 | Código QR | Mostrar/ocultar QR |
-| Compresión PDF | Activar/desactivar compresión |
+| Compresión PDF | Activar/desactivar en GLPI 11. El motor tc-lib-pdf de GLPI 12 siempre comprime la salida. |
 | Protección PDF | Activar/desactivar restricciones de copia/edición |
 | Texto de marca de agua | Texto de las vistas previas |
 | Opacidad | Opacidad de la marca de agua |

@@ -156,63 +156,80 @@ class PDF extends \TCPDF {
         return $text;
     }
 
-    public function Footer(): void {
-        $this->SetY(-20);
+    public function Footer(): void
+    {
+        // TCPDF 7.0.7 / tc-lib-pdf 8.68.5 defers Header/Footer rendering.
+        // Flowing HTML written below the automatic page-break margin can
+        // otherwise be moved to another page (or create an extra final page).
+        // Disable page breaks only while drawing this fixed footer, then
+        // restore the exact state and margin for the document/page.
+        $autoPageBreak = $this->getAutoPageBreak();
+        $breakMargin = $this->getBreakMargin();
+        $this->setAutoPageBreak(false, $breakMargin);
 
-        $cfg = \Config::getConfigurationValues('plugin_responsivas');
-        $p   = $this->footer_prefix;
-        $fs  = (float)($cfg[$this->font_size_key] ?? 10);
+        try {
+            $this->SetY(-20);
 
-        $this->SetFont(\Config::getConfigurationValue('core', 'pdffont'), '', $fs);
+            $cfg = \Config::getConfigurationValues('plugin_responsivas');
+            $p   = $this->footer_prefix;
+            $fs  = (float)($cfg[$this->font_size_key] ?? 10);
 
-        $pageW = $this->getPageWidth() - $this->getMargins()['left'] - $this->getMargins()['right'];
-        $half  = $pageW / 2;
-        $h     = 5;
-        $x     = $this->getMargins()['left'];
+            $this->SetFont(\Config::getConfigurationValue('core', 'pdffont'), '', $fs);
 
-        // Fila 1: capturar Y antes de escribir para que ambas celdas queden en la misma línea
-        $y1 = $this->GetY();
-        $this->writeHTMLCell($half, $h, $x,           $y1, self::fmtCell($cfg["{$p}_footer_left_1"]  ?? ''), 0, 0, false, true, 'L');
-        $this->writeHTMLCell($half, $h, $x + $half,   $y1, self::fmtCell($cfg["{$p}_footer_right_1"] ?? ''), 0, 1, false, true, 'R');
+            $pageW = $this->getPageWidth() - $this->getMargins()['left'] - $this->getMargins()['right'];
+            $half  = $pageW / 2;
+            $h     = 5;
+            $x     = $this->getMargins()['left'];
 
-        // Fila 2: inferior izquierda | inferior derecha
-        $y2 = $this->GetY();
-        $this->writeHTMLCell($half, $h, $x,           $y2, self::fmtCell($cfg["{$p}_footer_left_2"]  ?? ''), 0, 0, false, true, 'L');
-        $this->writeHTMLCell($half, $h, $x + $half,   $y2, self::fmtCell($cfg["{$p}_footer_right_2"] ?? ''), 0, 0, false, true, 'R');
+            // Fila 1: capturar Y antes de escribir para que ambas celdas queden en la misma línea.
+            $y1 = $this->GetY();
+            $this->writeHTMLCell($half, $h, $x,         $y1, self::fmtCell($cfg["{$p}_footer_left_1"]  ?? ''), 0, 0, false, true, 'L');
+            $this->writeHTMLCell($half, $h, $x + $half, $y1, self::fmtCell($cfg["{$p}_footer_right_1"] ?? ''), 0, 1, false, true, 'R');
 
-        $page = $this->getPage();
-        if (
-            $page > 0
-            && ((int)($cfg['show_qr'] ?? 0) === 1)
-            && isset($this->qr_per_page[$page])
-        ) {
-            $qr_size = 18;
-            $x = ($this->getPageWidth() - $qr_size) / 2;
-            $y = $this->getPageHeight() - 25;
+            // Fila 2: inferior izquierda | inferior derecha.
+            $y2 = $this->GetY();
+            $this->writeHTMLCell($half, $h, $x,         $y2, self::fmtCell($cfg["{$p}_footer_left_2"]  ?? ''), 0, 0, false, true, 'L');
+            $this->writeHTMLCell($half, $h, $x + $half, $y2, self::fmtCell($cfg["{$p}_footer_right_2"] ?? ''), 0, 0, false, true, 'R');
 
-            $this->write2DBarcode(
-                $this->qr_per_page[$page],
-                'QRCODE,M',
-                $x, $y,
-                $qr_size, $qr_size,
-                ['border' => 0, 'padding' => 1, 'fgcolor' => [0, 0, 0], 'bgcolor' => false],
-                'N'
-            );
+            $page = $this->getPage();
+            if (
+                $page > 0
+                && ((int)($cfg['show_qr'] ?? 0) === 1)
+                && isset($this->qr_per_page[$page])
+            ) {
+                $qr_size = 18;
+                $x = ($this->getPageWidth() - $qr_size) / 2;
+                $y = $this->getPageHeight() - 25;
 
-            $this->Link(
-                $x, $y,
-                $qr_size, $qr_size,
-                $this->qr_per_page[$page],
-                0,
-                __('Open asset record in GLPI', 'responsivas')
-            );
-        }
+                $this->write2DBarcode(
+                    $this->qr_per_page[$page],
+                    'QRCODE,M',
+                    $x, $y,
+                    $qr_size, $qr_size,
+                    ['border' => 0, 'padding' => 1, 'fgcolor' => [0, 0, 0], 'bgcolor' => false],
+                    'N'
+                );
 
-        // Standard responsibility previews keep the watermark in the footer
-        // layer. Manual previews place it explicitly over their visual map.
-        if (!str_ends_with($this->footer_prefix, '_inspection')
-            && !str_ends_with($this->footer_prefix, '_return')) {
-            $this->drawWatermark();
+                // Both TCPDF 6.11.3 and 7.0.7 accept six arguments.
+                // The previous seventh tooltip argument was silently ignored.
+                $this->Link(
+                    $x, $y,
+                    $qr_size, $qr_size,
+                    $this->qr_per_page[$page],
+                    0
+                );
+            }
+
+            // Standard responsibility previews keep the watermark in the footer
+            // layer. Manual previews place it explicitly over their visual map.
+            if (
+                !str_ends_with($this->footer_prefix, '_inspection')
+                && !str_ends_with($this->footer_prefix, '_return')
+            ) {
+                $this->drawWatermark();
+            }
+        } finally {
+            $this->setAutoPageBreak($autoPageBreak, $breakMargin);
         }
     }
 }

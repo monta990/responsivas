@@ -92,9 +92,15 @@
                 {% set switches = [
                     {name: 'show_employee_number', icon: 'ti-id-badge',   label: trans('Show employee number'),  body: trans('Show employee number in the responsibility document')},
                     {name: 'show_qr',              icon: 'ti-qrcode',     label: trans('Show QR'),               body: trans('Show QR with asset URL in responsibility document')},
-                    {name: 'pdf_compression',      icon: 'ti-file-zip',   label: trans('Compress PDF'),          body: trans('Compress the generated PDF file')},
                     {name: 'pdf_protection',       icon: 'ti-lock',       label: trans('Protect PDF'),           body: trans('Restrict PDF copying and editing')}
                 ] %}
+                {% if pdf_compression_supported %}
+                    {% set switches = switches|merge([
+                        {name: 'pdf_compression', icon: 'ti-file-zip', label: trans('Compress PDF'), body: trans('Compress the generated PDF file')}
+                    ]) %}
+                {% else %}
+                    <input type="hidden" name="pdf_compression" value="1">
+                {% endif %}
                 {% for sw in switches %}
                 <div class="col-md-6">
                     <div class="form-label fw-bold d-flex align-items-center">
