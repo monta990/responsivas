@@ -623,6 +623,9 @@ echo Twig::env()->render('config/page.html.twig', [
     'logo_height'          => $logoHeight,
     'logo_size_kb'         => $logoSizeKB,
     'timezone_list'        => \DateTimeZone::listIdentifiers(),
+    // TCPDF 6.x in GLPI 11 exposes a compression toggle; tc-lib-pdf in GLPI 12
+    // compresses internally and does not support disabling it.
+    'pdf_compression_supported' => version_compare((string) GLPI_VERSION, '12.0.0', '<'),
     'pdf_font'             => \Config::getConfigurationValue('core', 'pdffont'),
     'mail_ok'              => $mail_ok,
     'has_email_config'     => $has_email_config,

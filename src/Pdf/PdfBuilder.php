@@ -1978,7 +1978,13 @@ $i++;
       $pdf->SetAutoPageBreak(true, $page_break);
       $pdf->SetPrintHeader(true);
       $pdf->SetPrintFooter(true);
-      $pdf->setCompression((bool)($config['pdf_compression'] ?? 1));
+      // TCPDF 6.x (GLPI 11) supports enabling/disabling compression.
+      // TCPDF 7 / tc-lib-pdf (GLPI 12) configures compression inside the
+      // engine and intentionally ignores setCompression(); its output is
+      // always compressed, so do not expose a no-op setting there.
+      if (!defined('GLPI_VERSION') || version_compare((string) GLPI_VERSION, '12.0.0', '<')) {
+         $pdf->setCompression((bool)($config['pdf_compression'] ?? 1));
+      }
       $pdf->setFontSubsetting(true);
       if ((int)($config['pdf_protection'] ?? 1) === 1) {
          // TCPDF 7 (GLPI 12) recreates its internal tc-lib-pdf engine when
