@@ -1,0 +1,190 @@
+name: Responsivas Security Analysis
+
+on:
+  push:
+    branches:
+      - main
+      - "security/**"
+    tags:
+      - "1.*"
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: responsivas-security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  glpi-static-analysis:
+    name: GLPI-aware PHP and Twig analysis — GLPI ${{ matrix.glpi }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - glpi: "11.0"
+            glpi_ref: "11.0/bugfixes"
+            php: "8.2"
+          - glpi: "12.0"
+            glpi_ref: "12.0/bugfixes"
+            php: "8.3"
+
+    steps:
+      # PR source is checked in an unprivileged job: no repository secrets,
+      # no persisted checkout credentials, and no plugin-defined script execution.
+      - name: Checkout plugin source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # GLPI core comes from fixed trusted refs, never a PR-controlled ref.
+      - name: Checkout GLPI ${{ matrix.glpi }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: glpi-project/glpi
+          ref: ${{ matrix.glpi_ref }}
+          path: glpi
+          persist-credentials: false
+
+      - name: Set up PHP and Composer
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bcmath, curl, dom, gd, intl, ldap, mbstring, mysqli, sodium, xml, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Install GLPI development analysis tools
+        working-directory: glpi
+        run: |
+          composer install \
+            --no-interaction \
+            --prefer-dist \
+            --no-progress \
+            --ignore-platform-req=php+ \
+            --no-scripts
+
+      - name: Prepare plugin analysis workspace
+        run: |
+          mkdir -p glpi/plugins/responsivas
+          cp -a setup.php hook.php src templates locales assets glpi/plugins/responsivas/
+          cp .github/phpstan-responsivas.neon glpi/phpstan-responsivas.neon
+
+      - name: PHP lint with deprecated syntax detection
+        working-directory: glpi
+        run: |
+          vendor/bin/parallel-lint \
+            --show-deprecated \
+            --colors \
+            plugins/responsivas/setup.php \
+            plugins/responsivas/hook.php \
+            plugins/responsivas/src
+
+      - name: Twig lint using GLPI rules
+        working-directory: glpi
+        run: |
+          vendor/bin/twigcs \
+            --ansi \
+            --no-interaction \
+            --ruleset='Glpi\Tools\GlpiTwigRuleset' \
+            plugins/responsivas/templates
+
+      - name: PHPStan with GLPI extensions
+        # Initial baseline is diagnostic-only; do not report a clean analysis until findings are reviewed.
+        continue-on-error: true
+        working-directory: glpi
+        run: |
+          vendor/bin/phpstan analyse \
+            --configuration=phpstan-responsivas.neon \
+            --no-progress \
+            --error-format=github \
+            --memory-limit=1G
+
+      - name: Psalm security and taint analysis
+        # Initial baseline is diagnostic-only; do not report a clean analysis until findings are reviewed.
+        continue-on-error: true
+        working-directory: glpi
+        run: |
+          vendor/bin/psalm \
+            --config="$GITHUB_WORKSPACE/.github/psalm-responsivas.xml" \
+            --long-progress \
+            --output-format=github
+
+  codeql:
+    name: CodeQL — ${{ matrix.language }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - actions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          queries: security-extended
+
+      - name: Analyze with CodeQL
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  gitleaks:
+    name: Detect exposed secrets
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan repository history
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: "false"
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
+
+  workflow-audit:
+    name: Audit GitHub Actions workflows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Audit workflows with zizmor
+        uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b # v0.8.0
+        with:
+          inputs: .github/workflows
+          advanced-security: false
+          annotations: true
+          persona: regular
+          min-severity: medium
+          min-confidence: medium
