@@ -71,8 +71,8 @@ $expect(
 );
 $expect(
     str_contains($readme, 'GLPI 11.x / 12.x')
-        && str_contains($readme, 'PHP 8.2+ on GLPI 11')
-        && str_contains($readme, 'PHP 8.3+ on GLPI 12'),
+        && str_contains($readme, '8.2+ on GLPI 11')
+        && str_contains($readme, '8.3+ on GLPI 12'),
     'README requirements must match the plugin metadata.'
 );
 $expect(
