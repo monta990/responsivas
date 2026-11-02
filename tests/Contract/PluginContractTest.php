@@ -75,12 +75,9 @@ final class PluginContractTest extends TestCase
         self::assertStringContainsString("PLUGIN_RESPONSIVAS_MIN_GLPI', '11.0'", $setup);
         self::assertStringContainsString("PLUGIN_RESPONSIVAS_MAX_GLPI', '12.99'", $setup);
 
-        $compatibility = array_map(
-            'strval',
-            iterator_to_array($xml->versions->version[0]->compatibility)
-        );
-        self::assertContains('~11.0', $compatibility);
-        self::assertContains('~12.0', $compatibility);
+        $xmlSource = (string)file_get_contents($this->root . '/plugin.xml');
+        self::assertStringContainsString('<compatibility>~11.0</compatibility>', $xmlSource);
+        self::assertStringContainsString('<compatibility>~12.0</compatibility>', $xmlSource);
     }
 
     public function testOriginalEnglishAndLocalizedInspectionAndReturnRoutesRemainAvailable(): void
