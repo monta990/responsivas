@@ -1,10 +1,13 @@
-name: CLI tests
+name: Responsivas CI
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-  push:
+      - "ci/**"
+      - "test/**"
+      - "feature/**"
+  pull_request:
     branches:
       - main
   workflow_dispatch:
@@ -12,52 +15,118 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: responsivas-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  phpunit:
-    name: PHP ${{ matrix.php }} CLI suite
+  validation:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.experimental }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         include:
-          - php: '8.2'
+          - php: "8.2"
             experimental: false
-          - php: '8.3'
+          - php: "8.3"
             experimental: false
-          - php: '8.4'
+          - php: "8.4"
             experimental: false
-          - php: '8.5'
+          - php: "8.5"
             experimental: false
-          - php: '8.6'
+          - php: "8.6"
             experimental: true
-          - php: '8.7'
+          - php: "8.7"
             experimental: true
+    continue-on-error: ${{ matrix.experimental }}
+    name: PHP ${{ matrix.php }} full CLI validation
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Set up PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: fileinfo, gd, intl, json, mbstring, dom, simplexml, xml, xmlwriter
           tools: phpunit:11.5
           coverage: none
 
-      - name: Show PHP and PHPUnit versions
+      - name: Install release validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext zip unzip
+
+      - name: Show runtime
         run: |
           php --version
           phpunit --version
+          msgfmt --version | head -n 1
 
-      - name: Verify required runtime extensions
+      - name: Validate required PHP extensions
         run: |
-          php -r '$required = ["fileinfo", "gd", "intl", "json"]; foreach ($required as $extension) { if (!extension_loaded($extension)) { fwrite(STDERR, "Missing extension: {$extension}\n"); exit(1); } }'
+          php -r '$required = ["fileinfo", "gd", "intl", "json"]; foreach ($required as $extension) { if (!extension_loaded($extension)) { fwrite(STDERR, "Missing required PHP extension: {$extension}\n"); exit(1); } }'
 
-      - name: Check PHP syntax
+      - name: PHP syntax and deprecated source scan
         run: |
-          find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+          find setup.php hook.php src tests scripts -type f -name '*.php' -print0 \
+            | sort -z \
+            | xargs -0 -r -n1 php -l
 
-      - name: Run PHPUnit CLI tests
+      - name: Run feature-specific CLI tests
+        run: php tests/run.php
+
+      - name: Test install, update and data preservation
+        run: php tests/test-upgrade-preservation.php
+
+      - name: Validate release metadata, security contracts and runtime resources
+        run: php tests/validate-release.php
+
+      - name: Validate translation catalogs and placeholders
+        run: |
+          set -euo pipefail
+          for po in locales/*.po; do
+            msgfmt --check --check-format -o "$RUNNER_TEMP/$(basename "$po" .po).mo" "$po"
+          done
+          for mo in locales/*.mo; do
+            msgunfmt -o /dev/null "$mo"
+          done
+
+      - name: Run PHPUnit unit and contract suite
         run: phpunit --configuration phpunit.xml
+
+      - name: Build and validate the actual installation ZIP
+        run: |
+          set -euo pipefail
+          bash scripts/package.sh "$RUNNER_TEMP/responsivas-dist"
+          archive="$(find "$RUNNER_TEMP/responsivas-dist" -maxdepth 1 -type f -name 'responsivas-*.zip' -print -quit)"
+          test -n "$archive"
+          unzip -t "$archive"
+          if unzip -Z1 "$archive" | grep -Evq '^responsivas(/|$)'; then
+            echo "Archive contains a path outside the responsivas/ installation root." >&2
+            exit 1
+          fi
+          if unzip -Z1 "$archive" | grep -Eq '^responsivas/(tests|scripts|[.]github|vendor)(/|$)|^responsivas/(phpunit[.]xml|TESTING[.]md|composer[.](json|lock))$'; then
+            echo "Development-only files leaked into the installation archive." >&2
+            exit 1
+          fi
+          unzip -Z1 "$archive" | grep -qx 'responsivas/setup.php'
+          unzip -Z1 "$archive" | grep -qx 'responsivas/hook.php'
+          unzip -Z1 "$archive" | grep -qx 'responsivas/plugin.xml'
+          unzip -Z1 "$archive" | grep -qx 'responsivas/src/Pdf/PdfBuilder.php'
+          unzip -Z1 "$archive" | grep -qx 'responsivas/templates/user/tab.html.twig'
+          unzip -Z1 "$archive" | grep -qx 'responsivas/locales/es_MX.mo'
+          unzip -Z1 "$archive" | grep -qx 'responsivas/assets/schematics/computer_general.png'
+
+      - name: Upload validated installation ZIP
+        if: matrix.php == '8.3' && !matrix.experimental
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: responsivas-${{ github.sha }}-validated-zip
+          path: ${{ runner.temp }}/responsivas-dist/responsivas-*.zip
+          if-no-files-found: error
+          retention-days: 14

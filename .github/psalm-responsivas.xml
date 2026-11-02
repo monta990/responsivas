@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="4"
+    runTaintAnalysis="true"
+    resolveFromConfigFile="false"
+    findUnusedCode="false"
+>
+    <projectFiles>
+        <directory name="plugins/responsivas/src" />
+        <file name="plugins/responsivas/setup.php" />
+        <file name="plugins/responsivas/hook.php" />
+    </projectFiles>
+</psalm>

@@ -1,0 +1,15 @@
+includes:
+    - vendor/glpi-project/phpstan-glpi/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: 6
+    scanDirectories:
+        - inc
+        - src
+    paths:
+        - plugins/responsivas/setup.php
+        - plugins/responsivas/hook.php
+        - plugins/responsivas/src
+    tmpDir: /tmp/phpstan-responsivas
+    treatPhpDocTypesAsCertain: false

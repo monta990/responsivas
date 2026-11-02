@@ -1,36 +1,51 @@
-# Responsivas CLI tests
+# Responsivas CLI and release tests
 
-The test suite is development-only. It does not add runtime dependencies to the
-plugin and is not included in the plugin installation package.
+All tests in this directory are development-only. They are not loaded by GLPI
+and are excluded from the installation ZIP.
 
-## Requirements
+## Local execution
 
-- PHP 8.2 or newer.
-- The PHP extensions required by the plugin: fileinfo, gd, intl and json.
-- PHPUnit 11.5 available as a CLI executable.
+Requirements: PHP 8.2+, the plugin's required PHP extensions
+(fileinfo, gd, intl and json), PHPUnit 11.5, GNU gettext, zip and unzip.
 
-No Composer manifest, Composer autoloader or production dependency is required.
+Run the feature-specific CLI suite and lifecycle/release checks:
 
-## Run the tests
+    php tests/run.php
+    php tests/test-upgrade-preservation.php
+    php tests/validate-release.php
 
-From the repository root:
+Run the PHPUnit unit/contract suite:
 
     phpunit --configuration phpunit.xml
 
-Run PHP syntax validation for the complete repository:
+Validate every translation catalog:
 
-    find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+    for po in locales/*.po; do
+        msgfmt --check --check-format -o /tmp/catalog.mo "$po"
+    done
 
-The PHPUnit bootstrap provides only the small GLPI globals required by isolated
-utility tests. It does not mock controllers, database behavior, permissions,
-TCPDF or Symfony. Those runtime paths require an integration environment with
-a real GLPI installation and are intentionally not reported as covered by
-this unit/contract suite.
+Build and inspect the actual installation archive:
 
-## CI PHP policy
+    bash scripts/package.sh dist
+    unzip -t dist/responsivas-1.6.6.zip
+    unzip -Z1 dist/responsivas-1.6.6.zip
 
-The GitHub Actions workflow tests every PHP minor version from the plugin's
-declared minimum through the latest stable version available in the matrix.
-Pre-release/nightly builds are included as experimental jobs and are marked
-non-blocking so that upstream PHP or extension regressions remain visible
-without hiding failures on supported stable PHP versions.
+## Covered Responsivas behavior
+
+- PDF filename safety, address escaping, entity location validation,
+  asset-level authorization and GLPI entity-scope filtering.
+- Configured PDF font-size normalization and explicit configuration-import
+  allow-list enforcement, including invalid JSON, oversize uploads, unknown
+  keys, clamped values and rejected logo MIME types.
+- Configuration schema migration, administrator setting preservation,
+  manual-form switch preservation, institutional logo persistence and scoped
+  Twig-cache invalidation.
+- Published manual inspection/return URL slugs and six PDF preview variants.
+- User/config permission and CSRF contracts, PDF ticket expiry, POST-only
+  mail action, protected logo resource and TCPDF footer-state restoration.
+- PO/MO validity, language headers, placeholder formats and bundled PNG assets.
+- Release metadata, source layout and exclusion of development tooling from
+  the plugin installation archive.
+
+The tests use small GLPI test doubles only for isolated logic and lifecycle
+behavior. They do not pretend to be full live-GLPI HTTP/database tests.
