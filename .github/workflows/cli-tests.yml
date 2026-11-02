@@ -1,0 +1,63 @@
+name: CLI tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    name: PHP ${{ matrix.php }} CLI suite
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.2'
+            experimental: false
+          - php: '8.3'
+            experimental: false
+          - php: '8.4'
+            experimental: false
+          - php: '8.5'
+            experimental: false
+          - php: '8.6'
+            experimental: true
+          - php: '8.7'
+            experimental: true
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: fileinfo, gd, intl, json, mbstring, dom, simplexml, xml, xmlwriter
+          tools: phpunit:11.5
+          coverage: none
+
+      - name: Show PHP and PHPUnit versions
+        run: |
+          php --version
+          phpunit --version
+
+      - name: Verify required runtime extensions
+        run: |
+          php -r '$required = ["fileinfo", "gd", "intl", "json"]; foreach ($required as $extension) { if (!extension_loaded($extension)) { fwrite(STDERR, "Missing extension: {$extension}\n"); exit(1); } }'
+
+      - name: Check PHP syntax
+        run: |
+          find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Run PHPUnit CLI tests
+        run: phpunit --configuration phpunit.xml
