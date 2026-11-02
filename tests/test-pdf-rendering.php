@@ -84,7 +84,18 @@ if (!class_exists('TCPDF')) {
 require_once $pluginRoot . '/src/Paths.php';
 require_once $pluginRoot . '/src/Pdf/PDF.php';
 
-$pdf = new \GlpiPlugin\Responsivas\Pdf\PDF('P', 'mm', 'LETTER');
+$pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
+    public int $footerCalls = 0;
+    public ?bool $footerPageBreakStateRestored = null;
+
+    public function Footer(): void
+    {
+        $before = $this->getAutoPageBreak();
+        parent::Footer();
+        $this->footerPageBreakStateRestored = $this->getAutoPageBreak() === $before;
+        $this->footerCalls++;
+    }
+};
 $pdf->setDocumentType('pc_font_size', 'pc');
 $pdf->fecha_header = '2026-11-02';
 $pdf->location = 'Hermosillo, Sonora';
@@ -92,7 +103,6 @@ $pdf->AddPage();
 $pdf->SetFont('helvetica', '', 10);
 $pdf->Write(6, 'Responsivas TCPDF integration smoke test');
 
-$autoPageBreakBeforeOutput = $pdf->getAutoPageBreak();
 $content = $pdf->Output('responsivas-smoke.pdf', 'S');
 
 if (!is_string($content) || !str_starts_with($content, '%PDF-') || strlen($content) < 500) {
@@ -104,8 +114,8 @@ if ($pageObjectCount !== 1) {
         sprintf('Expected one PDF page object, found %s.', var_export($pageObjectCount, true))
     );
 }
-if ($pdf->getAutoPageBreak() !== $autoPageBreakBeforeOutput) {
-    throw new RuntimeException('Responsivas PDF footer did not restore TCPDF page-break state.');
+if ($pdf->footerCalls < 1 || $pdf->footerPageBreakStateRestored !== true) {
+    throw new RuntimeException('Responsivas PDF footer did not restore TCPDF page-break state while rendering.');
 }
 
 $parentClass = get_parent_class(\GlpiPlugin\Responsivas\Pdf\PDF::class);
