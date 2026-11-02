@@ -44,7 +44,7 @@ final class UtilsTest extends TestCase
 
     public function testApplyTemplateRemovesInputHtmlBeforeRendering(): void
     {
-        $result = Utils::applyTemplate('<script>alert("x")</script>');
+        $result = Utils::applyTemplate('<script>alert("x")</script>', []);
 
         self::assertStringNotContainsString('<script', $result);
         self::assertStringContainsString('alert(&quot;x&quot;)', $result);
