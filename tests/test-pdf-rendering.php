@@ -98,8 +98,11 @@ $content = $pdf->Output('responsivas-smoke.pdf', 'S');
 if (!is_string($content) || !str_starts_with($content, '%PDF-') || strlen($content) < 500) {
     throw new RuntimeException('TCPDF did not return a valid non-empty PDF byte string.');
 }
-if ($pdf->getNumPages() !== 1) {
-    throw new RuntimeException('The one-page smoke document unexpectedly changed its page count.');
+$pageObjectCount = preg_match_all('#/Type\\s*/Page\\b#', $content);
+if ($pageObjectCount !== 1) {
+    throw new RuntimeException(
+        sprintf('Expected one PDF page object, found %s.', var_export($pageObjectCount, true))
+    );
 }
 if ($pdf->getAutoPageBreak() !== $autoPageBreakBeforeOutput) {
     throw new RuntimeException('Responsivas PDF footer did not restore TCPDF page-break state.');
@@ -127,7 +130,7 @@ fwrite(
     sprintf(
         "TCPDF PDF smoke test passed: %d bytes, %d page(s), TCPDF class %s.\n",
         strlen($content),
-        $pdf->getNumPages(),
+        $pageObjectCount,
         get_parent_class(\GlpiPlugin\Responsivas\Pdf\PDF::class) ?: 'unknown'
     )
 );
