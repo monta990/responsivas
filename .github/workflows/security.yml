@@ -109,7 +109,7 @@ jobs:
           set -e
           cat "$RUNNER_TEMP/twigcs-responsivas.log"
 
-          violations="$(awk '/violation/ && /found/ { print $1; exit }' "$RUNNER_TEMP/twigcs-responsivas.log" | tr -cd '0-9')"
+          violations="$(grep -oE '[0-9]+ violation\\(s\\) found' "$RUNNER_TEMP/twigcs-responsivas.log" | grep -oE '^[0-9]+' | tail -n 1)"
           if [[ -z "$violations" ]]; then
             if [[ "$twigcs_status" -eq 0 ]]; then
               violations=0
