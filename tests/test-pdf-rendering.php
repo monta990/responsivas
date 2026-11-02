@@ -85,15 +85,23 @@ require_once $pluginRoot . '/src/Paths.php';
 require_once $pluginRoot . '/src/Pdf/PDF.php';
 
 $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
-    public int $footerCalls = 0;
-    public ?bool $footerPageBreakStateRestored = null;
+    public array $autoPageBreakHistory = [];
+    public array $footerPageBreakTransitions = [];
+
+    public function setAutoPageBreak($auto, $margin = 0)
+    {
+        $this->autoPageBreakHistory[] = [(bool)$auto, $margin];
+        parent::setAutoPageBreak($auto, $margin);
+    }
 
     public function Footer(): void
     {
-        $before = $this->getAutoPageBreak();
+        $historyStart = count($this->autoPageBreakHistory);
         parent::Footer();
-        $this->footerPageBreakStateRestored = $this->getAutoPageBreak() === $before;
-        $this->footerCalls++;
+        $this->footerPageBreakTransitions = array_slice(
+            $this->autoPageBreakHistory,
+            $historyStart
+        );
     }
 };
 $pdf->setDocumentType('pc_font_size', 'pc');
@@ -114,8 +122,16 @@ if ($pageObjectCount !== 1) {
         sprintf('Expected one PDF page object, found %s.', var_export($pageObjectCount, true))
     );
 }
-if ($pdf->footerCalls < 1 || $pdf->footerPageBreakStateRestored !== true) {
-    throw new RuntimeException('Responsivas PDF footer did not restore TCPDF page-break state while rendering.');
+$footerTransitions = $pdf->footerPageBreakTransitions;
+if (
+    count($footerTransitions) < 2
+    || $footerTransitions[0][0] !== false
+    || $footerTransitions[1][0] !== true
+    || $footerTransitions[0][1] !== $footerTransitions[1][1]
+) {
+    throw new RuntimeException(
+        'Responsivas PDF footer did not restore the original TCPDF page-break state and margin.'
+    );
 }
 
 $parentClass = get_parent_class(\GlpiPlugin\Responsivas\Pdf\PDF::class);
