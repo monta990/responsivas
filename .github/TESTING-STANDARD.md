@@ -63,10 +63,13 @@ Every plugin CI must include the applicable layers below:
   compatibility results. Clearly distinguish upstream toolchain failures from
   plugin defects.
 - Static-analysis diagnostics may be temporarily non-blocking only when a
-  documented baseline is being established. They must not be represented as
-  clean, and new findings should be reviewed and reduced. If repository-level
-  CodeQL default setup is already enabled, rely on it instead of creating a
-  duplicate advanced CodeQL upload workflow.
+  committed baseline records, per supported GLPI branch, the tool/version,
+  finding counts, affected files/symbols or line ranges, diagnostic families,
+  and remediation status. They must not be represented as clean. New findings
+  must not silently increase the baseline; review and reduce existing findings
+  in separate, behavior-focused changes. If repository-level CodeQL default
+  setup is already enabled, rely on it instead of creating a duplicate
+  advanced CodeQL upload workflow.
 - Never merge or publish a release ZIP that has not passed the package
   validation for the exact source commit being released.
 
