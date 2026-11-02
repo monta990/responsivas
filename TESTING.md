@@ -48,6 +48,9 @@ Build and inspect the exact installation archive:
   PHPStan/Psalm diagnostics and GLPI's TwigCS ruleset. The current 1.6.6
   template baseline is 127 formatting findings; CI reports them and rejects
   any increase until the templates are cleaned in a separate behavior-neutral change.
+  PHPStan and Psalm findings are recorded per GLPI branch in
+  .github/PHP-STATIC-ANALYSIS-BASELINE.md and remain diagnostic-only until
+  triaged; they are not a clean analysis result.
 - Security automation: secret scanning, workflow auditing and CodeQL analysis
   of GitHub Actions definitions.
 

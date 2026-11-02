@@ -140,7 +140,7 @@ jobs:
           vendor/bin/phpstan analyse \
             --configuration=phpstan-responsivas.neon \
             --no-progress \
-            --error-format=github \
+            --error-format=table \
             --memory-limit=1G
 
       - name: Psalm security and taint analysis
