@@ -73,6 +73,7 @@ jobs:
             --no-scripts
 
       - name: Generate GLPI TCPDF font assets (required by GLPI 12)
+        if: matrix.glpi == '12.0'
         working-directory: glpi
         run: bash tools/build_fonts.sh
 
