@@ -29,6 +29,8 @@ Every plugin CI must include the applicable layers below:
 - Feature-specific CLI tests: real plugin methods and meaningful boundary,
   invalid-input, permission, failure and security cases. Use lightweight GLPI
   test doubles only for isolated logic; do not label mocks as full integration.
+  For PDF plugins, render a real in-memory PDF against the TCPDF versions
+  shipped by each supported GLPI branch when practical.
 - Lifecycle and preservation tests: install, update, schema/config migration,
   retained administrator settings, external files and cache scope where used.
 - UI and presentation checks: Twig lint with GLPI rules, route contracts,

@@ -78,6 +78,12 @@ jobs:
           cp -a setup.php hook.php src templates locales assets glpi/plugins/responsivas/
           cp .github/phpstan-responsivas.neon glpi/phpstan-responsivas.neon
 
+      - name: Generate a real PDF with the GLPI TCPDF version
+        run: |
+          php "$GITHUB_WORKSPACE/tests/test-pdf-rendering.php" \
+            "$GITHUB_WORKSPACE/glpi" \
+            "$GITHUB_WORKSPACE/glpi/plugins/responsivas"
+
       - name: PHP lint with deprecated syntax detection
         working-directory: glpi
         run: |

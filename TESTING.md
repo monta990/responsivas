@@ -30,6 +30,9 @@ Build and inspect the exact installation archive:
 - Business logic: safe PDF filenames, address escaping, entity location rules,
   asset visibility and entity scope, template formatting, date handling,
   configuration font-size normalization and configuration export allow-list.
+- PDF runtime: a real in-memory PDF generation smoke test against the TCPDF
+  version bundled in each supported GLPI branch, including footer page-break
+  restoration and the GLPI 12 local-file allowlist.
 - Upgrade lifecycle: schema keep/reset rules, missing-default initialization,
   preservation of the administrator's logo, and scoped Twig-cache cleanup.
 - HTTP/security contracts: user/config permissions, entity authorization,
