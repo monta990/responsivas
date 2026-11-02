@@ -111,7 +111,7 @@ $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
             : $transitions[count($transitions) - 1];
 
         $GLOBALS['responsivas_pdf_footer_restoration'][] = [
-            'initial_auto' => (bool)$initialAutoPageBreak,
+            'initial_auto' => $initialAutoPageBreak,
             'initial_margin' => $initialBreakMargin,
             'transitions' => $transitions,
             'restored_auto' => $restored[0] ?? null,
@@ -145,6 +145,7 @@ foreach ($footerRestorations as $restoration) {
     $transitions = $restoration['transitions'];
     if (
         count($transitions) < 2
+        || !is_bool($restoration['initial_auto'])
         || $transitions[0][0] !== false
         || $restoration['restored_auto'] !== $restoration['initial_auto']
         || $restoration['restored_margin'] !== $restoration['initial_margin']
