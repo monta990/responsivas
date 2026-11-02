@@ -20,15 +20,13 @@ if ($pluginRoot === false || !is_file($pluginRoot . '/src/Pdf/PDF.php')) {
     exit(2);
 }
 
-define('GLPI_ROOT', $glpiRoot);
-define('GLPI_PLUGINS_DIRECTORIES', [dirname($pluginRoot)]);
-define('GLPI_PLUGIN_DOC_DIR', sys_get_temp_dir() . '/responsivas-pdf-smoke-docs');
+$pluginDocs = sys_get_temp_dir() . '/responsivas-pdf-smoke-docs';
+if (!is_dir($pluginDocs . '/responsivas')) {
+    mkdir($pluginDocs . '/responsivas', 0750, true);
+}
+
 $GLOBALS['CFG_GLPI'] = ['root_doc' => '/glpi'];
 $_SESSION = [];
-
-if (!is_dir(GLPI_PLUGIN_DOC_DIR . '/responsivas')) {
-    mkdir(GLPI_PLUGIN_DOC_DIR . '/responsivas', 0750, true);
-}
 
 
 if (!class_exists('Config', false)) {
@@ -58,6 +56,18 @@ if (!class_exists('Config', false)) {
 }
 
 require_once $glpiRoot . '/vendor/autoload.php';
+
+// GLPI's vendor bootstrap may define GLPI_ROOT itself. Only provide isolated
+// test constants that were not created by the core bootstrap.
+if (!defined('GLPI_ROOT')) {
+    define('GLPI_ROOT', $glpiRoot);
+}
+if (!defined('GLPI_PLUGINS_DIRECTORIES')) {
+    define('GLPI_PLUGINS_DIRECTORIES', [dirname($pluginRoot)]);
+}
+if (!defined('GLPI_PLUGIN_DOC_DIR')) {
+    define('GLPI_PLUGIN_DOC_DIR', $pluginDocs);
+}
 
 if (!class_exists('TCPDF')) {
     $legacyTcpdf = $glpiRoot . '/vendor/tecnickcom/tcpdf/tcpdf.php';
