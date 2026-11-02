@@ -91,17 +91,36 @@ jobs:
             'GlpiPlugin\Responsivas' \
             "$GITHUB_WORKSPACE/glpi/vendor/autoload.php"
 
-      - name: Audit PHP code style with the GLPI PHP-CS-Fixer rules
-        # Report historical formatting findings; pin a measured baseline before
-        # converting the full-repository audit into a blocking gate.
-        continue-on-error: true
+      - name: PHP-CS-Fixer baseline — GLPI @PER-CS3x0
         env:
-          PLUGIN_SOURCE_ROOT: ${{ github.workspace }}
+          PLUGIN_SOURCE_ROOT: \${{ github.workspace }}
         run: |
+          set +e
           glpi/vendor/bin/php-cs-fixer check \
             --config=.github/php-cs-fixer-plugin.php \
             --using-cache=no \
-            --diff
+            --diff \
+            > "$RUNNER_TEMP/php-cs-fixer.log" 2>&1
+          fixer_status=$?
+          set -e
+          cat "$RUNNER_TEMP/php-cs-fixer.log"
+
+          findings="$(sed -nE 's/^.*Found ([0-9]+) of [0-9]+ files that can be fixed.*$/\\1/p' "$RUNNER_TEMP/php-cs-fixer.log" | tail -n 1)"
+          if [[ -z "$findings" ]]; then
+            if [[ "$fixer_status" -eq 0 ]]; then
+              findings=0
+            else
+              echo "PHP-CS-Fixer failed before reporting a count." >&2
+              exit "$fixer_status"
+            fi
+          fi
+
+          baseline=32
+          if (( findings > baseline )); then
+            echo "PHP style findings increased: $findings files need fixing (baseline: $baseline)." >&2
+            exit 1
+          fi
+          echo "PHP-CS-Fixer baseline: $findings/$baseline files need formatting; no increase detected."
 
       - name: Enforce GLPI PHP style on changed runtime files
         if: github.event_name == 'pull_request'
