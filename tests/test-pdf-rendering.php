@@ -56,12 +56,14 @@ if (!class_exists('Config', false)) {
 }
 
 require_once $glpiRoot . '/vendor/autoload.php';
+require_once $glpiRoot . '/src/autoload/constants.php';
 
-// GLPI's vendor bootstrap may define GLPI_ROOT itself. Only provide isolated
-// test constants that were not created by the core bootstrap.
-if (!defined('GLPI_ROOT')) {
-    define('GLPI_ROOT', $glpiRoot);
+if (!defined('GLPI_ROOT') || realpath(GLPI_ROOT) !== $glpiRoot) {
+    throw new RuntimeException('GLPI core constants did not resolve to the selected GLPI checkout.');
 }
+
+// Define only plugin-specific paths used by Responsivas and not populated by
+// the core bootstrap in this isolated smoke-test context.
 if (!defined('GLPI_PLUGINS_DIRECTORIES')) {
     define('GLPI_PLUGINS_DIRECTORIES', [dirname($pluginRoot)]);
 }

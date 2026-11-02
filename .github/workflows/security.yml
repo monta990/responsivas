@@ -72,6 +72,10 @@ jobs:
             --ignore-platform-req=php+ \
             --no-scripts
 
+      - name: Generate GLPI TCPDF font assets (required by GLPI 12)
+        working-directory: glpi
+        run: bash tools/build_fonts.sh
+
       - name: Prepare plugin analysis workspace
         run: |
           mkdir -p glpi/plugins/responsivas
