@@ -1,83 +1,81 @@
-# Universal plugin testing standard
+# Universal GLPI plugin testing and code-quality standard
 
-This standard applies to every GLPI plugin maintained in this account. Test
-coverage must be adapted to each plugin's actual features; a PHP syntax-only
-workflow or a generic smoke test is not sufficient.
+This policy applies to every GLPI plugin maintained in this account. Validation
+is adapted to each plugin's features, supported GLPI branches, declared PHP
+minimum, and owned frontend assets.
 
-## Runtime and compatibility matrix
+## Compatibility matrix
 
 1. Every stable PHP minor version from the plugin's declared minimum through
-   the newest stable PHP release must run the blocking test suite. Do not skip
-   intermediate minor versions.
-2. Include every available newer PHP development channel that can be installed
-   in CI: Alpha, Beta, RC, nightly and development snapshots. These jobs are
-   visible, non-blocking compatibility signals until the relevant PHP version
-   becomes stable.
-3. When a prerelease becomes stable, move it into the blocking stable matrix.
-   Remove obsolete snapshots and add the next available development version.
-4. Validate all GLPI major/minor versions the plugin declares as supported,
-   using real matching GLPI core branches for GLPI-aware linting and static
-   analysis. Use valid PHP/GLPI combinations; do not imply a combination the
-   upstream GLPI release does not support.
+   the newest stable release is a blocking CI target. Do not skip stable
+   intermediate minors.
+2. Newer available PHP development builds (alpha, beta, RC, nightly or
+   development snapshots) are visible, non-blocking compatibility signals
+   until they become stable.
+3. Every GLPI version declared by the plugin is tested against its matching
+   upstream branch and a PHP version supported by that GLPI branch.
+4. Update the matrix and release metadata together when compatibility changes.
+   Never claim an untested runtime combination.
 
-## Required test layers
+## Required validation layers
 
-Every plugin CI must include the applicable layers below:
+- **PHP syntax:** lint all first-party PHP files, including tests and CI helper
+  scripts. Run deprecated-syntax reporting where GLPI tooling supports it.
+- **PHP style:** use PHP-CS-Fixer with GLPI's @PER-CS3x0 rules and the
+  additional rules in .github/php-cs-fixer-plugin.php. The PR gate checks
+  changed runtime PHP files. A whole-repository audit also reports historical
+  formatting debt; it remains diagnostic-only until a measured baseline is
+  committed, then becomes a non-increasing gate and is reduced to zero.
+- **PSR-4:** class-like files under src/ must match their case-sensitive
+  directory namespace and filename. Validate resolution with Composer's
+  ClassLoader using GLPI's namespace-to-src mapping. This is a loader-contract
+  check; it does not claim that a full database-backed GLPI installation was
+  booted.
+- **Twig:** lint all owned Twig templates with GLPI's TwigCS rules. Do not
+  silently exclude templates. Any temporary legacy baseline must be explicit,
+  visible in CI, non-increasing, and reduced in follow-up work.
+- **JavaScript:** run node --check over first-party JavaScript. Exclude
+  third-party/minified bundles from first-party style checks. Add ESLint when
+  the plugin owns substantial JavaScript logic.
+- **CSS/SCSS:** run Stylelint with a committed configuration when the plugin
+  owns CSS/SCSS source. Do not add a meaningless CSS lint job when there are
+  no CSS/SCSS source files.
+- **Static analysis:** run GLPI-aware PHPStan and security/taint analysis where
+  available. Non-blocking diagnostics require a committed, quantified
+  baseline and must never be described as clean.
+- **Functional/lifecycle:** run feature-specific business tests, invalid-input
+  and permission cases, install/update/preservation tests, UI/route contracts,
+  and real integrations (such as PDF rendering) where applicable.
+- **Translations:** validate every PO catalog and placeholders; verify compiled
+  MO files when the repository distributes them.
+- **Release/package:** validate version and compatibility metadata, build the
+  actual installation ZIP from an explicit allow-list, verify archive
+  integrity/layout, and prevent tests, tooling, caches or development files
+  from entering the plugin package.
+- **Workflow security:** pin third-party actions to reviewed commit SHAs, keep
+  permissions minimal, do not run untrusted PR code with secrets, and audit
+  workflows with zizmor. Use existing CodeQL default setup rather than
+  duplicating it.
 
-- Syntax and runtime prerequisites: all plugin PHP files, declared extensions,
-  deprecated PHP syntax, and required CLI tools.
-- Feature-specific CLI tests: real plugin methods and meaningful boundary,
-  invalid-input, permission, failure and security cases. Use lightweight GLPI
-  test doubles only for isolated logic; do not label mocks as full integration.
-  For PDF plugins, render a real in-memory PDF against the TCPDF versions
-  shipped by each supported GLPI branch when practical.
-- Lifecycle and preservation tests: install, update, schema/config migration,
-  retained administrator settings, external files and cache scope where used.
-- UI and presentation checks: Twig lint with GLPI rules, route contracts,
-  form/CSRF behavior, localized labels, static resources and relevant frontend
-  or artwork checks. Use browser/UI automation when the plugin has meaningful
-  interactive UI and the repository can run it reliably. A pre-existing
-  TwigCS baseline may be temporarily non-blocking only when its current count
-  and source of findings are documented and CI forbids any increase. Reduce
-  the baseline to zero and make TwigCS fully blocking as a follow-up.
-- Localization checks: every PO catalog, placeholders/format strings, language
-  metadata, POT consistency where applicable and compiled MO files.
-- Release validation: setup/plugin manifest/changelog version agreement,
-  compatibility declarations, required production files and expected
-  installation archive layout.
-- Package verification: build the real install ZIP from an explicit allow-list,
-  test archive integrity, confirm the single expected plugin root directory,
-  and reject tests, scripts, CI files, caches, private vendor directories and
-  other development-only content.
-- GLPI-aware static analysis: PHPStan/Psalm or equivalent, parallel PHP lint
-  and TwigCS using the relevant GLPI core version.
-- Security checks: secret scanning, GitHub Actions workflow auditing, and
-  CodeQL or an equivalent supported static security analyzer.
+## Blocking and baseline policy
 
-## Blocking policy
+- Stable PHP syntax, changed-runtime PHP style, PSR-4 mapping, deterministic
+  tests, lifecycle checks, release metadata, translations and package
+  validation are blocking.
+- PHP prerelease failures are informational.
+- Existing whole-repository style or static-analysis debt may be diagnostic
+  only while a baseline is being measured and documented. It must not be
+  silently ignored, hidden by excluding files, or called a clean result.
+- Baselines must contain the tool, version/runtime, exact per-GLPI finding
+  counts and affected scope. CI must fail if a baseline count grows; reduce
+  findings deliberately until the check is fully blocking.
+- A diagnostic baseline is not permission to add new findings. Changed
+  runtime PHP files are checked by a blocking PHP-CS-Fixer gate.
 
-- Stable PHP jobs, deterministic feature tests, lifecycle tests, release
-  validation, translation checks, package checks, and blocking GLPI/Twig
-  validation must pass before merge or release.
-- PHP prerelease/nightly failures remain visible but do not block stable
-  compatibility results. Clearly distinguish upstream toolchain failures from
-  plugin defects.
-- Static-analysis diagnostics may be temporarily non-blocking only when a
-  committed baseline records, per supported GLPI branch, the tool/version,
-  finding counts, affected files/symbols or line ranges, diagnostic families,
-  and remediation status. They must not be represented as clean. New findings
-  must not silently increase the baseline; review and reduce existing findings
-  in separate, behavior-focused changes. If repository-level CodeQL default
-  setup is already enabled, rely on it instead of creating a duplicate
-  advanced CodeQL upload workflow.
-- Never merge or publish a release ZIP that has not passed the package
-  validation for the exact source commit being released.
+## Production compatibility boundaries
 
-## Production compatibility guardrails
-
-Test infrastructure is development-only. It must not require a Composer
-manifest, private vendor directory, extra runtime dependency, new entry point,
-or changed plugin installation path unless the plugin owner explicitly
-approves that production change. Existing published routes, folder names,
-file names, namespaces, data and upgrade behavior are treated as compatibility
-contracts and must be tested rather than casually changed.
+CI tooling belongs only in development files and GitHub Actions. Do not add
+Composer manifests, private vendor directories, extra production dependencies,
+new entry points or autoloaders to installation ZIPs. Keep published plugin
+versions, folder names, routes, namespaces, stored data, upgrade behavior and
+installation paths unchanged unless explicitly approved.
