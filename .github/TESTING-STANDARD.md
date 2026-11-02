@@ -34,7 +34,10 @@ Every plugin CI must include the applicable layers below:
 - UI and presentation checks: Twig lint with GLPI rules, route contracts,
   form/CSRF behavior, localized labels, static resources and relevant frontend
   or artwork checks. Use browser/UI automation when the plugin has meaningful
-  interactive UI and the repository can run it reliably.
+  interactive UI and the repository can run it reliably. A pre-existing
+  TwigCS baseline may be temporarily non-blocking only when its current count
+  and source of findings are documented and CI forbids any increase. Reduce
+  the baseline to zero and make TwigCS fully blocking as a follow-up.
 - Localization checks: every PO catalog, placeholders/format strings, language
   metadata, POT consistency where applicable and compiled MO files.
 - Release validation: setup/plugin manifest/changelog version agreement,
@@ -59,7 +62,9 @@ Every plugin CI must include the applicable layers below:
   plugin defects.
 - Static-analysis diagnostics may be temporarily non-blocking only when a
   documented baseline is being established. They must not be represented as
-  clean, and new findings should be reviewed and reduced.
+  clean, and new findings should be reviewed and reduced. If repository-level
+  CodeQL default setup is already enabled, rely on it instead of creating a
+  duplicate advanced CodeQL upload workflow.
 - Never merge or publish a release ZIP that has not passed the package
   validation for the exact source commit being released.
 

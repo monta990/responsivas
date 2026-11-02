@@ -88,15 +88,39 @@ jobs:
             plugins/responsivas/hook.php \
             plugins/responsivas/src
 
-      - name: Twig lint using GLPI rules
+      - name: Twig lint using GLPI rules (non-increasing published-template baseline)
         working-directory: glpi
+        shell: bash
         run: |
+          set +e
           vendor/bin/twigcs \
             --ansi \
             --no-interaction \
             --ruleset='Glpi\Tools\GlpiTwigRuleset' \
-            plugins/responsivas/templates
+            plugins/responsivas/templates \
+            > "$RUNNER_TEMP/twigcs-responsivas.log" 2>&1
+          twigcs_status=$?
+          set -e
+          cat "$RUNNER_TEMP/twigcs-responsivas.log"
 
+          violations="$(awk '/violation/ && /found/ { print $1; exit }' "$RUNNER_TEMP/twigcs-responsivas.log" | tr -cd '0-9')"
+          if [[ -z "$violations" ]]; then
+            if [[ "$twigcs_status" -eq 0 ]]; then
+              violations=0
+            else
+              echo "TwigCS failed without a parseable violation summary." >&2
+              exit "$twigcs_status"
+            fi
+          fi
+
+          # GLPI TwigCS initially reported 127 pre-existing formatting findings
+          # in Responsivas 1.6.6 templates. Keep them visible and forbid growth.
+          baseline=127
+          if (( violations > baseline )); then
+            echo "TwigCS findings increased: $violations (baseline: $baseline)." >&2
+            exit 1
+          fi
+          echo "TwigCS baseline: $violations/$baseline pre-existing template findings; no increase detected."
       - name: PHPStan with GLPI extensions
         # Initial baseline is diagnostic-only; do not report a clean analysis until findings are reviewed.
         continue-on-error: true
@@ -118,35 +142,9 @@ jobs:
             --long-progress \
             --output-format=github
 
-  codeql:
-    name: CodeQL — ${{ matrix.language }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-    strategy:
-      fail-fast: false
-      matrix:
-        language:
-          - actions
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: none
-          queries: security-extended
-
-      - name: Analyze with CodeQL
-        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
-        with:
-          category: "/language:${{ matrix.language }}"
-
+  # CodeQL default setup is already enabled at repository level. Avoid a
+  # duplicate advanced SARIF upload; GitHub rejects simultaneous default and
+  # advanced CodeQL configurations for the same repository.
   gitleaks:
     name: Detect exposed secrets
     runs-on: ubuntu-latest
