@@ -83,6 +83,47 @@ jobs:
           cp -a setup.php hook.php src templates locales assets glpi/plugins/responsivas/
           cp .github/phpstan-responsivas.neon glpi/phpstan-responsivas.neon
 
+      - name: Verify installed GLPI PSR-4 namespace and class-to-file mapping
+        run: |
+          php "$GITHUB_WORKSPACE/.github/scripts/check-psr4.php" \
+            "$GITHUB_WORKSPACE/glpi/plugins/responsivas/src" \
+            'GlpiPlugin\Responsivas' \
+            "$GITHUB_WORKSPACE/glpi/vendor/autoload.php"
+
+      - name: Audit PHP code style with the GLPI PHP-CS-Fixer rules
+        # Report historical formatting findings; pin a measured baseline before
+        # converting the full-repository audit into a blocking gate.
+        continue-on-error: true
+        env:
+          PLUGIN_SOURCE_ROOT: ${{ github.workspace }}
+        run: |
+          glpi/vendor/bin/php-cs-fixer check \
+            --config=.github/php-cs-fixer-plugin.php \
+            --using-cache=no \
+            --diff
+
+      - name: Enforce GLPI PHP style on changed runtime files
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PLUGIN_SOURCE_ROOT: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          mapfile -t changed_php < <(
+            git -C "$GITHUB_WORKSPACE" diff --name-only --diff-filter=ACMR "$BASE_SHA" "$GITHUB_SHA" \
+              | grep -E '^(setup\.php|hook\.php|src/.+\.php)$' || true
+          )
+          if [[ \${#changed_php[@]} -eq 0 ]]; then
+            echo "No changed runtime PHP files; style gate is not applicable."
+            exit 0
+          fi
+          glpi/vendor/bin/php-cs-fixer check \
+            --config=.github/php-cs-fixer-plugin.php \
+            --path-mode=intersection \
+            --using-cache=no \
+            --diff \
+            "\${changed_php[@]}"
+
       - name: Generate a real PDF with the GLPI TCPDF version
         run: |
           php "$GITHUB_WORKSPACE/tests/test-pdf-rendering.php" \

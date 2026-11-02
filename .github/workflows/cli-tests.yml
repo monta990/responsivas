@@ -73,7 +73,7 @@ jobs:
 
       - name: PHP syntax and deprecated source scan
         run: |
-          find setup.php hook.php src tests scripts -type f -name '*.php' -print0 \
+          find setup.php hook.php src tests scripts .github -type f -name '*.php' -print0 \
             | sort -z \
             | xargs -0 -r -n1 php -l
 
