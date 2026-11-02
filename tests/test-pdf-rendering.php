@@ -84,22 +84,22 @@ if (!class_exists('TCPDF')) {
 require_once $pluginRoot . '/src/Paths.php';
 require_once $pluginRoot . '/src/Pdf/PDF.php';
 
-$pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
-    public array $autoPageBreakHistory = [];
-    public array $footerPageBreakTransitions = [];
+$GLOBALS['responsivas_pdf_auto_page_break_history'] = [];
+$GLOBALS['responsivas_pdf_footer_page_break_transitions'] = [];
 
+$pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
     public function setAutoPageBreak($auto, $margin = 0)
     {
-        $this->autoPageBreakHistory[] = [(bool)$auto, $margin];
+        $GLOBALS['responsivas_pdf_auto_page_break_history'][] = [(bool)$auto, $margin];
         parent::setAutoPageBreak($auto, $margin);
     }
 
     public function Footer(): void
     {
-        $historyStart = count($this->autoPageBreakHistory);
+        $historyStart = count($GLOBALS['responsivas_pdf_auto_page_break_history']);
         parent::Footer();
-        $this->footerPageBreakTransitions = array_slice(
-            $this->autoPageBreakHistory,
+        $GLOBALS['responsivas_pdf_footer_page_break_transitions'] = array_slice(
+            $GLOBALS['responsivas_pdf_auto_page_break_history'],
             $historyStart
         );
     }
@@ -122,7 +122,7 @@ if ($pageObjectCount !== 1) {
         sprintf('Expected one PDF page object, found %s.', var_export($pageObjectCount, true))
     );
 }
-$footerTransitions = $pdf->footerPageBreakTransitions;
+$footerTransitions = $GLOBALS['responsivas_pdf_footer_page_break_transitions'];
 if (
     count($footerTransitions) < 2
     || $footerTransitions[0][0] !== false
