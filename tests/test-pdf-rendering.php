@@ -95,6 +95,8 @@ $GLOBALS['responsivas_pdf_auto_page_break_history'] = [];
 $GLOBALS['responsivas_pdf_footer_restoration'] = [];
 
 $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
+    public array $qrUrlsAtFooter = [];
+
     public function setAutoPageBreak($auto, $margin = 0)
     {
         $GLOBALS['responsivas_pdf_auto_page_break_history'][] = [(bool)$auto, $margin];
@@ -103,6 +105,9 @@ $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
 
     public function Footer(): void
     {
+        $page = $this->getPage();
+        $this->qrUrlsAtFooter[$page] = $this->getQrUrlForPage($page);
+
         $initialAutoPageBreak = $this->getAutoPageBreak();
         $initialBreakMargin = $this->getBreakMargin();
         $historyStart = count($GLOBALS['responsivas_pdf_auto_page_break_history']);
@@ -133,6 +138,7 @@ $pdf->SetMargins(15, 25, 15);
 $pdf->SetAutoPageBreak(true, 25.0);
 $pdf->SetPrintHeader(true);
 $pdf->SetPrintFooter(true);
+$pdf->setQrForAllPages('https://glpi.example/front/phone.form.php?id=42');
 $pdf->AddPage();
 $pdf->SetFont('helvetica', '', 8.2);
 $pdf->setQrForPage($pdf->getPage(), 'https://glpi.example/front/phone.form.php?id=42');
@@ -166,16 +172,58 @@ if ($pdf->getPage() !== 2) {
     throw new RuntimeException('Phone signature block did not move together when the remaining printable area was insufficient.');
 }
 
+// Exercise long flowing HTML on three or more pages. TCPDF 6.x invokes the
+// outgoing page footer while writeHTML() is creating the next page, before
+// callers can register per-page URLs after rendering has finished.
+$continuationQrUrl = 'https://glpi.example/front/phone.form.php?id=84';
+$pdf->setQrForAllPages($continuationQrUrl);
+$pdf->AddPage();
+$flowStartPage = $pdf->getPage();
+$pdf->SetFont('helvetica', '', 8.2);
+$pdf->SetY(30);
+$longPhoneProse = str_repeat(
+    '<p style="line-height:1.2;">Phone contract QR continuation regression test. This editable clause intentionally flows across multiple pages so each automatic page break exercises the footer QR lookup before the final page map is available.</p>',
+    140
+);
+$pdf->writeHTML($longPhoneProse, true, false, true, false, '');
+$lastFlowPage = $pdf->getPage();
+if (($lastFlowPage - $flowStartPage) < 2) {
+    throw new RuntimeException('The long phone-contract fixture did not generate at least three flowing pages.');
+}
+
+// Keep explicit mappings as the real builder does. The assertions below use
+// the URL captured when each footer ran, not only this final per-page map.
+for ($flowPage = $flowStartPage; $flowPage <= $lastFlowPage; $flowPage++) {
+    $pdf->setQrForPage($flowPage, $continuationQrUrl);
+}
+
 $content = $pdf->Output('responsivas-smoke.pdf', 'S');
 
 if (!is_string($content) || !str_starts_with($content, '%PDF-') || strlen($content) < 500) {
     throw new RuntimeException('TCPDF did not return a valid non-empty PDF byte string.');
 }
 $pageObjectCount = preg_match_all('#/Type\\s*/Page\\b#', $content);
-if ($pageObjectCount !== 2) {
+if ($pageObjectCount < 4 || $pageObjectCount !== $pdf->getPage()) {
     throw new RuntimeException(
-        sprintf('Expected two PDF page objects after the signature placement scenarios, found %s.', var_export($pageObjectCount, true))
+        sprintf('Expected at least four PDF page objects after the signature and flowing-clause scenarios, found %s.', var_export($pageObjectCount, true))
     );
+}
+
+$qrUrlsAtFooter = $pdf->qrUrlsAtFooter;
+for ($pageNumber = 1; $pageNumber <= $pageObjectCount; $pageNumber++) {
+    $expectedQrUrl = $pageNumber >= $flowStartPage
+        ? $continuationQrUrl
+        : 'https://glpi.example/front/phone.form.php?id=42';
+    if (($qrUrlsAtFooter[$pageNumber] ?? null) !== $expectedQrUrl) {
+        throw new RuntimeException(
+            sprintf(
+                'Page %d footer did not receive its QR URL before rendering (expected %s, received %s).',
+                $pageNumber,
+                $expectedQrUrl,
+                var_export($qrUrlsAtFooter[$pageNumber] ?? null, true)
+            )
+        );
+    }
 }
 $footerRestorations = $GLOBALS['responsivas_pdf_footer_restoration'];
 if ($footerRestorations === []) {
