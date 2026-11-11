@@ -1927,6 +1927,11 @@ $i++;
          );
          $pho_testigos  = Utils::applyTemplate($config['pho_testigos']  ?? '', $pho_vars);
 
+         // Register the asset URL before writeHTML(): TCPDF 6.x can render
+         // each outgoing page footer during automatic page breaks.
+         // Explicit per-page mappings below retain the right URL on each loan.
+         $pdf->setQrForAllPages($asset_url);
+
          // Render only the contract prose through TCPDF HTML. The signature
          // grid is drawn with fixed PDF coordinates below, avoiding TCPDF's
          // tendency to move an entire multi-row nobr table to the next page
@@ -2620,6 +2625,9 @@ return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DE
          false
       );
       $pho_testigos  = Utils::applyTemplate($config['pho_testigos']  ?? '', $pho_vars);
+
+      // The preview uses the same early QR registration as generated contracts.
+      $pdf->setQrForAllPages($CFG_GLPI['url_base']);
 
       $pdf->writeHTML(self::renderPhoPage(
          $pho_titulo,
