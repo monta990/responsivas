@@ -191,7 +191,7 @@ $tests = [
         $assertTrue(str_contains($html, 'Final paragraph'), 'The final paragraph must remain in the document.');
     },
 
-        'Template rendering can opt out of keeping prose paragraphs together' => static function () use ($assertTrue, $assertFalse): void {
+    'Template rendering can opt out of keeping prose paragraphs together' => static function () use ($assertTrue, $assertFalse): void {
         $template = "Opening paragraph with editable text.\n\n1. First clause\n2. Second clause\n\nFinal witness paragraph";
         $legacyHtml = Utils::renderTemplate($template);
         $flowingHtml = Utils::renderTemplate($template, false);
@@ -217,7 +217,7 @@ $tests = [
         $assertFalse(str_contains($html, 'BORROWER'), 'The HTML prose renderer must not own the signature grid.');
     },
 
-'Template formatting escapes markup before adding supported emphasis' => static function () use ($assertTrue, $assertFalse): void {
+    'Template formatting escapes markup before adding supported emphasis' => static function () use ($assertTrue, $assertFalse): void {
         $html = Utils::applyTemplate('<script>alert(1)</script> **Bold**', []);
         $assertFalse(str_contains($html, '<script>'), 'User template markup must not inject a script element.');
         $assertTrue(str_contains($html, 'alert(1)'), 'Text between unsafe tags must remain readable after tags are stripped.');
