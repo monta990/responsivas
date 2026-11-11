@@ -35,24 +35,60 @@ $run = static function (array $arguments): array {
     return [$status, implode("\n", $output)];
 };
 
-/** @return array<int, array{old_start:int, old_count:int, new_start:int, new_count:int}> */
+/** @return array<int, array{old_start:int, old_count:int, new_start:int, new_count:int, indentation_only:bool}> */
 $readHunks = static function (string $diff): array {
-    preg_match_all(
-        '/^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/m',
-        $diff,
-        $matches,
-        PREG_SET_ORDER
-    );
-
     $hunks = [];
-    foreach ($matches as $match) {
-        $hunks[] = [
-            'old_start' => (int) $match[1],
-            'old_count' => isset($match[2]) && $match[2] !== '' ? (int) $match[2] : 1,
-            'new_start' => (int) $match[3],
-            'new_count' => isset($match[4]) && $match[4] !== '' ? (int) $match[4] : 1,
-        ];
+    $current = null;
+
+    $finishHunk = static function () use (&$hunks, &$current): void {
+        if ($current === null) {
+            return;
+        }
+
+        $indentationOnly = count($current['old_lines']) > 0
+            && count($current['old_lines']) === count($current['new_lines']);
+
+        if ($indentationOnly) {
+            foreach ($current['old_lines'] as $index => $oldLine) {
+                if (ltrim($oldLine) !== ltrim($current['new_lines'][$index])) {
+                    $indentationOnly = false;
+                    break;
+                }
+            }
+        }
+
+        unset($current['old_lines'], $current['new_lines']);
+        $current['indentation_only'] = $indentationOnly;
+        $hunks[] = $current;
+        $current = null;
+    };
+
+    foreach (preg_split('/\r?\n/', $diff) ?: [] as $line) {
+        if (preg_match('/^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/', $line, $match) === 1) {
+            $finishHunk();
+            $current = [
+                'old_start' => (int) $match[1],
+                'old_count' => isset($match[2]) && $match[2] !== '' ? (int) $match[2] : 1,
+                'new_start' => (int) $match[3],
+                'new_count' => isset($match[4]) && $match[4] !== '' ? (int) $match[4] : 1,
+                'old_lines' => [],
+                'new_lines' => [],
+            ];
+            continue;
+        }
+
+        if ($current === null || $line === '\ No newline at end of file') {
+            continue;
+        }
+
+        if (str_starts_with($line, '-') && !str_starts_with($line, '---')) {
+            $current['old_lines'][] = substr($line, 1);
+        } elseif (str_starts_with($line, '+') && !str_starts_with($line, '+++')) {
+            $current['new_lines'][] = substr($line, 1);
+        }
     }
+
+    $finishHunk();
 
     return $hunks;
 };
@@ -117,6 +153,10 @@ foreach ($paths as $path) {
 
     $fileHasNewViolation = false;
     foreach ($readHunks($styleDiff) as $hunk) {
+        if ($hunk['indentation_only']) {
+            continue;
+        }
+
         foreach ($changedRanges as $range) {
             if ($hunk['old_count'] > 0) {
                 $styleEnd = $hunk['old_start'] + $hunk['old_count'] - 1;
