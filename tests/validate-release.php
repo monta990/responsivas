@@ -224,9 +224,10 @@ $expect(
 );
 $pdfBuilder = $read('src/Pdf/PdfBuilder.php');
 $utilsSource = $read('src/Utils.php');
+$expectedPhoneFlow = "Utils::renderTemplate(\n            Utils::applyTemplate(\$config['pho_clausulas'] ?? '', \$pho_vars),\n            false\n         )";
 $expect(
     str_contains($utilsSource, 'bool $keepParagraphsTogether = true')
-        && str_contains($pdfBuilder, "'pho_clausulas' ?? '', \$pho_vars),\n            false"),
+        && str_contains($pdfBuilder, $expectedPhoneFlow),
     'Phone-only flowing clause rendering must be opt-in and leave the default template behavior intact.'
 );
 $expect(
