@@ -63,6 +63,7 @@ class PDF extends \TCPDF {
     public static $global_watermark_text = 'PREVIEW';
 
     protected array  $qr_per_page   = [];
+    protected ?string $qr_default_url = null;
     protected string $font_size_key = 'pc_font_size';
     protected string $footer_prefix = 'pc';
 
@@ -77,6 +78,23 @@ class PDF extends \TCPDF {
 
     public function setQrForPage(int $page, string $url): void {
         $this->qr_per_page[$page] = $url;
+    }
+
+    /**
+     * Set the QR URL used as a fallback while TCPDF automatically creates pages.
+     * Explicit per-page URLs take precedence over this document-wide default.
+     */
+    public function setQrForAllPages(string $url): void
+    {
+        $this->qr_default_url = $url;
+    }
+
+    /**
+     * Resolve the QR URL before a page footer is rendered.
+     */
+    protected function getQrUrlForPage(int $page): ?string
+    {
+        return $this->qr_per_page[$page] ?? $this->qr_default_url;
     }
 
 
@@ -192,17 +210,18 @@ class PDF extends \TCPDF {
             $this->writeHTMLCell($half, $h, $x + $half, $y2, self::fmtCell($cfg["{$p}_footer_right_2"] ?? ''), 0, 0, false, true, 'R');
 
             $page = $this->getPage();
+            $qrUrl = $this->getQrUrlForPage($page);
             if (
                 $page > 0
                 && ((int)($cfg['show_qr'] ?? 0) === 1)
-                && isset($this->qr_per_page[$page])
+                && $qrUrl !== null
             ) {
                 $qr_size = 18;
                 $x = ($this->getPageWidth() - $qr_size) / 2;
                 $y = $this->getPageHeight() - 25;
 
                 $this->write2DBarcode(
-                    $this->qr_per_page[$page],
+                    $qrUrl,
                     'QRCODE,M',
                     $x, $y,
                     $qr_size, $qr_size,
@@ -215,7 +234,7 @@ class PDF extends \TCPDF {
                 $this->Link(
                     $x, $y,
                     $qr_size, $qr_size,
-                    $this->qr_per_page[$page],
+                    $qrUrl,
                     0
                 );
             }
