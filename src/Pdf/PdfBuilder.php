@@ -2162,11 +2162,11 @@ HTML;
       $labels = self::lbl();
       $config = \Config::getConfigurationValues('plugin_responsivas');
       $font = \Config::getConfigurationValue('core', 'pdffont');
-      $fontSize = (float)($config['pho_font_size'] ?? 9.0);
+      $fontSize = (float) ($config['pho_font_size'] ?? 9.0);
 
       $margins = $pdf->getMargins();
-      $left = (float)$margins['left'];
-      $right = (float)$margins['right'];
+      $left = (float) $margins['left'];
+      $right = (float) $margins['right'];
       $columnWidth = ($pdf->getPageWidth() - $left - $right) / 2;
       $rightX = $left + $columnWidth;
 
@@ -2188,7 +2188,7 @@ HTML;
       $blockHeight = $row1Height + $rowGap + $row2Height;
 
       $startY = $pdf->GetY() + $topGap;
-      $breakMargin = (float)$pdf->getBreakMargin();
+      $breakMargin = (float) $pdf->getBreakMargin();
       $usableBottom = $pdf->getPageHeight() - $breakMargin - 1.0;
 
       // Make the page decision using the real flowing-text cursor, not a
@@ -2197,7 +2197,7 @@ HTML;
       if ($startY + $blockHeight > $usableBottom) {
          $pdf->AddPage();
          $pdf->setQrForPage($pdf->getPage(), $qrUrl);
-         $startY = max((float)$pdf->GetY(), (float)$margins['top']) + $topGap;
+         $startY = max((float) $pdf->GetY(), (float) $margins['top']) + $topGap;
       }
 
       $autoPageBreak = $pdf->getAutoPageBreak();
