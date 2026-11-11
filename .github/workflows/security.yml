@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - "security/**"
+      - "feature/**"
     tags:
       - "1.*"
   pull_request:
@@ -123,11 +124,14 @@ jobs:
           echo "PHP-CS-Fixer baseline: $findings/$baseline files need formatting; no increase detected."
 
       - name: Enforce GLPI PHP style on changed runtime lines
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
         run: |
           set -euo pipefail
+          if [[ -z "$BASE_SHA" ]]; then
+            BASE_SHA="$(git -C "$GITHUB_WORKSPACE" merge-base origin/main "$GITHUB_SHA")"
+          fi
           mapfile -t changed_php < <(
             git -C "$GITHUB_WORKSPACE" diff --name-only --diff-filter=ACMR "$BASE_SHA" "$GITHUB_SHA" \
               | grep -E '^(setup\.php|hook\.php|src/.+\.php)' || true
