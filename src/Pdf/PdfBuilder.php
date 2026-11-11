@@ -1918,14 +1918,42 @@ $i++;
          ];
          $pho_titulo    = Utils::applyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
          $pho_apertura  = Utils::applyTemplate($config['pho_apertura']  ?? '', $pho_vars);
-         $pho_clausulas = Utils::renderTemplate(Utils::applyTemplate($config['pho_clausulas'] ?? '', $pho_vars));
+         // Phone contract clauses are editable and can become substantially longer
+         // than the defaults. Unlike computer/printer responsibility paragraphs,
+         // they must be allowed to flow naturally across a page boundary.
+         $pho_clausulas = Utils::renderTemplate(
+            Utils::applyTemplate($config['pho_clausulas'] ?? '', $pho_vars),
+            false
+         );
          $pho_testigos  = Utils::applyTemplate($config['pho_testigos']  ?? '', $pho_vars);
 
+         // Render only the contract prose through TCPDF HTML. The signature
+         // grid is drawn with fixed PDF coordinates below, avoiding TCPDF's
+         // tendency to move an entire multi-row nobr table to the next page
+         // even when the visible remaining area appears sufficient.
          $pdf->writeHTML(self::renderPhoPage(
-            $pho_titulo, $pho_apertura, $pho_clausulas, $pho_testigos,
-            $representante_nombre, $full_name_safe, $employee_line,
-            $testigo1_nombre, $testigo2_nombre
+            $pho_titulo,
+            $pho_apertura,
+            $pho_clausulas,
+            $pho_testigos
          ), true, false, true, false, '');
+
+         // Long clauses may create continuation pages automatically. Keep the
+         // asset QR available in the footer of every page containing this loan.
+         $lastContentPage = $pdf->getPage();
+         for ($contentPage = $page; $contentPage <= $lastContentPage; $contentPage++) {
+            $pdf->setQrForPage($contentPage, $asset_url);
+         }
+
+         self::renderPhoneSignatureBlock(
+            $pdf,
+            $representante_nombre,
+            $full_name_safe,
+            $employee_line,
+            $testigo1_nombre,
+            $testigo2_nombre,
+            $asset_url
+         );
       }
 
       return [
@@ -2098,31 +2126,217 @@ HTML;
    }
 
    private static function renderPhoPage(
-      string $titulo, string $apertura, string $clausulas, string $testigos,
-      string $representante, string $full_name_safe, string $employee_line,
-      string $testigo1, string $testigo2
+      string $titulo,
+      string $apertura,
+      string $clausulas,
+      string $testigos
    ): string {
-      $l       = self::lbl();
-      $emp_tag = $employee_line !== '' ? '<br>' . $employee_line : '';
+      $l = self::lbl();
+
       return <<<HTML
 <p style="text-align:center;"><strong>{$titulo}</strong></p>
-<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.15;">{$apertura}</td></tr></table>
+<p style="text-align:justify;line-height:1.15;margin-top:0;margin-bottom:3pt;">{$apertura}</p>
 <p style="text-align:center;"><strong>{$l['clauses']}</strong></p>
 {$clausulas}
-<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.15;">{$testigos}</td></tr></table>
-<table nobr="true" width="100%" style="text-align:center;margin-top:10pt;">
-<tr>
-  <td width="50%"><strong>{$l['lender']}</strong><br><br>_______________________________<br>{$representante}</td>
-  <td width="50%"><strong>{$l['borrower']}</strong><br><br>_______________________________<br>{$full_name_safe}{$emp_tag}</td>
-</tr>
-</table>
-<table nobr="true" width="100%" style="text-align:center;margin-top:10pt;">
-<tr>
-  <td width="50%"><strong>{$l['witness']}</strong><br><br>_______________________________<br>{$testigo1}</td>
-  <td width="50%"><strong>{$l['witness']}</strong><br><br>_______________________________<br>{$testigo2}</td>
-</tr>
-</table>
+<p style="text-align:justify;line-height:1.15;margin-top:0;margin-bottom:3pt;">{$testigos}</p>
 HTML;
+   }
+
+   /**
+    * Draw the phone-loan signatures in a compact two-column grid.
+    *
+    * Unlike a multi-row HTML table with nobr=true, the fixed-coordinate layout
+    * can use the actual remaining page height and only starts a new page when
+    * the complete signature area truly cannot fit above the QR/footer zone.
+    * Both signature rows are always placed together on the same page.
+    */
+   private static function renderPhoneSignatureBlock(
+      PDF $pdf,
+      string $representante,
+      string $comodatario,
+      string $employeeLine,
+      string $testigo1,
+      string $testigo2,
+      string $qrUrl
+   ): void {
+      $labels = self::lbl();
+      $config = \Config::getConfigurationValues('plugin_responsivas');
+      $font = \Config::getConfigurationValue('core', 'pdffont');
+      $fontSize = (float)($config['pho_font_size'] ?? 9.0);
+
+      $margins = $pdf->getMargins();
+      $left = (float)$margins['left'];
+      $right = (float)$margins['right'];
+      $columnWidth = ($pdf->getPageWidth() - $left - $right) / 2;
+      $rightX = $left + $columnWidth;
+
+      // Fixed vertical coordinates keep both rows compact and predictable.
+      // The employee number, when enabled, receives its own line under the
+      // borrower name without changing the alignment of either signature.
+      $topGap = 4.0;
+      $labelHeight = 4.0;
+      $lineOffset = 8.0;
+      $nameOffset = 8.5;
+      $nameHeight = 4.0;
+      $employeeOffset = 12.5;
+      $employeeHeight = 3.5;
+      $row1Height = $employeeLine !== ''
+         ? $employeeOffset + $employeeHeight
+         : $nameOffset + $nameHeight;
+      $rowGap = 5.5;
+      $row2Height = $nameOffset + $nameHeight;
+      $blockHeight = $row1Height + $rowGap + $row2Height;
+
+      $startY = $pdf->GetY() + $topGap;
+      $breakMargin = (float)$pdf->getBreakMargin();
+      $usableBottom = $pdf->getPageHeight() - $breakMargin - 1.0;
+
+      // Make the page decision using the real flowing-text cursor, not a
+      // guessed hard-coded Y coordinate. A fresh page has ample room for the
+      // compact block, while the current page is kept whenever it can fit.
+      if ($startY + $blockHeight > $usableBottom) {
+         $pdf->AddPage();
+         $pdf->setQrForPage($pdf->getPage(), $qrUrl);
+         $startY = max((float)$pdf->GetY(), (float)$margins['top']) + $topGap;
+      }
+
+      $autoPageBreak = $pdf->getAutoPageBreak();
+      $pdf->setAutoPageBreak(false, $breakMargin);
+
+      try {
+         $pdf->SetLineWidth(0.2);
+
+         // First row: legal representative and assigned borrower.
+         $pdf->SetFont($font, 'B', $fontSize);
+         $pdf->SetXY($left, $startY);
+         $pdf->Cell($columnWidth, $labelHeight, $labels['lender'], 0, 0, 'C');
+         $pdf->SetXY($rightX, $startY);
+         $pdf->Cell($columnWidth, $labelHeight, $labels['borrower'], 0, 0, 'C');
+
+         $lineY = $startY + $lineOffset;
+         $lineInset = $columnWidth * 0.23;
+         $pdf->Line($left + $lineInset, $lineY, $left + $columnWidth - $lineInset, $lineY);
+         $pdf->Line($rightX + $lineInset, $lineY, $rightX + $columnWidth - $lineInset, $lineY);
+
+         $pdf->SetFont($font, '', $fontSize);
+         $pdf->SetXY($left, $startY + $nameOffset);
+         $pdf->MultiCell(
+            $columnWidth,
+            $nameHeight,
+            html_entity_decode($representante, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            0,
+            'C',
+            false,
+            0,
+            $left,
+            $startY + $nameOffset,
+            true,
+            0,
+            false,
+            true,
+            $nameHeight,
+            'M',
+            true
+         );
+         $pdf->SetXY($rightX, $startY + $nameOffset);
+         $pdf->MultiCell(
+            $columnWidth,
+            $nameHeight,
+            html_entity_decode($comodatario, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            0,
+            'C',
+            false,
+            0,
+            $rightX,
+            $startY + $nameOffset,
+            true,
+            0,
+            false,
+            true,
+            $nameHeight,
+            'M',
+            true
+         );
+
+         if ($employeeLine !== '') {
+            $pdf->SetFont($font, '', max(6.5, $fontSize - 0.5));
+            $pdf->SetXY($rightX, $startY + $employeeOffset);
+            $pdf->MultiCell(
+               $columnWidth,
+               $employeeHeight,
+               html_entity_decode($employeeLine, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+               0,
+               'C',
+               false,
+               0,
+               $rightX,
+               $startY + $employeeOffset,
+               true,
+               0,
+               false,
+               true,
+               $employeeHeight,
+               'M',
+               true
+            );
+         }
+
+         // Second row: both witnesses, kept visually aligned with the first.
+         $witnessY = $startY + $row1Height + $rowGap;
+         $pdf->SetFont($font, 'B', $fontSize);
+         $pdf->SetXY($left, $witnessY);
+         $pdf->Cell($columnWidth, $labelHeight, $labels['witness'], 0, 0, 'C');
+         $pdf->SetXY($rightX, $witnessY);
+         $pdf->Cell($columnWidth, $labelHeight, $labels['witness'], 0, 0, 'C');
+
+         $witnessLineY = $witnessY + $lineOffset;
+         $pdf->Line($left + $lineInset, $witnessLineY, $left + $columnWidth - $lineInset, $witnessLineY);
+         $pdf->Line($rightX + $lineInset, $witnessLineY, $rightX + $columnWidth - $lineInset, $witnessLineY);
+
+         $pdf->SetFont($font, '', $fontSize);
+         $pdf->SetXY($left, $witnessY + $nameOffset);
+         $pdf->MultiCell(
+            $columnWidth,
+            $nameHeight,
+            html_entity_decode($testigo1, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            0,
+            'C',
+            false,
+            0,
+            $left,
+            $witnessY + $nameOffset,
+            true,
+            0,
+            false,
+            true,
+            $nameHeight,
+            'M',
+            true
+         );
+         $pdf->SetXY($rightX, $witnessY + $nameOffset);
+         $pdf->MultiCell(
+            $columnWidth,
+            $nameHeight,
+            html_entity_decode($testigo2, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            0,
+            'C',
+            false,
+            0,
+            $rightX,
+            $witnessY + $nameOffset,
+            true,
+            0,
+            false,
+            true,
+            $nameHeight,
+            'M',
+            true
+         );
+
+         $pdf->SetY($witnessY + $row2Height);
+      } finally {
+         $pdf->setAutoPageBreak($autoPageBreak, $breakMargin);
+      }
    }
 
    public static function buildPreview(string $type, int $user_id, array $config): array
@@ -2375,7 +2589,8 @@ return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DE
          $location, $fecha_header, $config, 25.0, true
       );
       $pdf->AddPage();
-      $pdf->setQrForPage($pdf->getPage(), $CFG_GLPI['url_base']);
+      $phoneFirstPage = $pdf->getPage();
+      $pdf->setQrForPage($phoneFirstPage, $CFG_GLPI['url_base']);
 
       $currency      = !empty($config['currency']) ? $config['currency'] : '$';
       $employee_line = ($show_employee && $demo_emp) ? (__("Employee No.: ", "responsivas") . $demo_emp) : '';
@@ -2399,14 +2614,34 @@ return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DE
       ];
       $pho_titulo    = Utils::applyTemplate($config['pho_titulo'] ?? 'CONTRATO DE COMODATO', $pho_vars);
       $pho_apertura  = Utils::applyTemplate($config['pho_apertura']  ?? '', $pho_vars);
-      $pho_clausulas = Utils::renderTemplate(Utils::applyTemplate($config['pho_clausulas'] ?? '', $pho_vars));
+      // Preview clauses use the same flowing layout as real phone loan contracts.
+      $pho_clausulas = Utils::renderTemplate(
+         Utils::applyTemplate($config['pho_clausulas'] ?? '', $pho_vars),
+         false
+      );
       $pho_testigos  = Utils::applyTemplate($config['pho_testigos']  ?? '', $pho_vars);
 
       $pdf->writeHTML(self::renderPhoPage(
-         $pho_titulo, $pho_apertura, $pho_clausulas, $pho_testigos,
-         Utils::escape($rep), $full_name_safe, $employee_line,
-         Utils::escape($testigo1), Utils::escape($testigo2)
+         $pho_titulo,
+         $pho_apertura,
+         $pho_clausulas,
+         $pho_testigos
       ), true, false, true, false, '');
+
+      $lastPreviewPage = $pdf->getPage();
+      for ($previewPage = $phoneFirstPage; $previewPage <= $lastPreviewPage; $previewPage++) {
+         $pdf->setQrForPage($previewPage, $CFG_GLPI['url_base']);
+      }
+
+      self::renderPhoneSignatureBlock(
+         $pdf,
+         Utils::escape($rep),
+         $full_name_safe,
+         $employee_line,
+         Utils::escape($testigo1),
+         Utils::escape($testigo2),
+         $CFG_GLPI['url_base']
+      );
 return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
    }
 

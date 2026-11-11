@@ -37,11 +37,16 @@ if (!class_exists('Config', false)) {
             if ($context === 'plugin_responsivas') {
                 return [
                     'pc_font_size' => 10,
-                    'show_qr' => 0,
+                    'pho_font_size' => 8.2,
+                    'show_qr' => 1,
                     'pc_footer_left_1' => 'CLI PDF smoke test',
                     'pc_footer_right_1' => '',
                     'pc_footer_left_2' => '',
                     'pc_footer_right_2' => '',
+                    'pho_footer_left_1' => 'Original: Company',
+                    'pho_footer_right_1' => 'Copy: Employee',
+                    'pho_footer_left_2' => 'SIS-RESP-002',
+                    'pho_footer_right_2' => 'Rev 1.6.7',
                 ];
             }
 
@@ -83,6 +88,8 @@ if (!class_exists('TCPDF')) {
 
 require_once $pluginRoot . '/src/Paths.php';
 require_once $pluginRoot . '/src/Pdf/PDF.php';
+require_once $pluginRoot . '/src/Utils.php';
+require_once $pluginRoot . '/src/Pdf/PdfBuilder.php';
 
 $GLOBALS['responsivas_pdf_auto_page_break_history'] = [];
 $GLOBALS['responsivas_pdf_footer_restoration'] = [];
@@ -119,12 +126,45 @@ $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
         ];
     }
 };
-$pdf->setDocumentType('pc_font_size', 'pc');
-$pdf->fecha_header = '2026-11-02';
+$pdf->setDocumentType('pho_font_size', 'pho');
+$pdf->fecha_header = '2026-11-11';
 $pdf->location = 'Hermosillo, Sonora';
+$pdf->SetMargins(15, 25, 15);
+$pdf->SetAutoPageBreak(true, 25.0);
+$pdf->SetPrintHeader(true);
+$pdf->SetPrintFooter(true);
 $pdf->AddPage();
-$pdf->SetFont('helvetica', '', 10);
-$pdf->Write(6, 'Responsivas TCPDF integration smoke test');
+$pdf->SetFont('helvetica', '', 8.2);
+$pdf->setQrForPage($pdf->getPage(), 'https://glpi.example/front/phone.form.php?id=42');
+
+// Exercise the real GLPI TCPDF engine. With a sufficiently high cursor there is
+// room for the complete signature grid, so it must stay on the current page.
+$pdf->SetY(180);
+$signatureRenderer = new ReflectionMethod(
+    \GlpiPlugin\Responsivas\Pdf\PdfBuilder::class,
+    'renderPhoneSignatureBlock'
+);
+$signatureRenderer->setAccessible(true);
+$signatureArguments = [
+    $pdf,
+    'Legal Representative',
+    'Assigned Borrower',
+    'Employee No.: 0934',
+    'Witness One',
+    'Witness Two',
+    'https://glpi.example/front/phone.form.php?id=42',
+];
+$signatureRenderer->invokeArgs(null, $signatureArguments);
+if ($pdf->getPage() !== 1) {
+    throw new RuntimeException('Phone signature block moved to a new page despite sufficient printable space.');
+}
+
+// Near the footer-safe boundary, the same block must move together to a new page.
+$pdf->SetY(225);
+$signatureRenderer->invokeArgs(null, $signatureArguments);
+if ($pdf->getPage() !== 2) {
+    throw new RuntimeException('Phone signature block did not move together when the remaining printable area was insufficient.');
+}
 
 $content = $pdf->Output('responsivas-smoke.pdf', 'S');
 
@@ -132,9 +172,9 @@ if (!is_string($content) || !str_starts_with($content, '%PDF-') || strlen($conte
     throw new RuntimeException('TCPDF did not return a valid non-empty PDF byte string.');
 }
 $pageObjectCount = preg_match_all('#/Type\\s*/Page\\b#', $content);
-if ($pageObjectCount !== 1) {
+if ($pageObjectCount !== 2) {
     throw new RuntimeException(
-        sprintf('Expected one PDF page object, found %s.', var_export($pageObjectCount, true))
+        sprintf('Expected two PDF page objects after the signature placement scenarios, found %s.', var_export($pageObjectCount, true))
     );
 }
 $footerRestorations = $GLOBALS['responsivas_pdf_footer_restoration'];
@@ -177,7 +217,7 @@ if ($parentClass !== false && method_exists($parentClass, 'fileAllowedPaths')) {
 fwrite(
     STDOUT,
     sprintf(
-        "TCPDF PDF smoke test passed: %d bytes, %d page(s), TCPDF class %s.\n",
+        "TCPDF phone-signature integration test passed: %d bytes, %d page(s), TCPDF class %s.\n",
         strlen($content),
         $pageObjectCount,
         get_parent_class(\GlpiPlugin\Responsivas\Pdf\PDF::class) ?: 'unknown'

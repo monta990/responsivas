@@ -4,6 +4,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.7] — 2026-11-11
+
+### Fixed
+
+- **Phone contract pagination** — Long editable clauses, the opening paragraph, and the witnesses paragraph now flow naturally across page boundaries. This behavior is opt-in for phone loan contracts; computer and printer responsibility documents retain their existing paragraph pagination. The configuration preview uses the same phone renderer as generated contracts.
+- **Phone-loan signature placement** — The lender, borrower, and both witnesses are drawn as a compact two-column signature grid using the actual TCPDF text cursor and the footer-safe printable boundary. All four signatures remain together on the current page whenever they fit; a continuation page is used only when the available area is genuinely insufficient. QR codes remain available on every page of a multi-page phone contract.
+- **Configuration form Enter key** — Added an explicit default Save submitter so pressing Enter in a configuration field saves settings instead of triggering the Import Configuration action without a selected file.
+- **PDF font-size preservation** — Existing integer and fractional font sizes remain unchanged when saving settings, including values such as 8.2 pt; the Enter-key correction ensures the configuration save handler is actually reached.
+
+---
+
 ## [1.6.6] — 2026-11-01
 
 ### Fixed

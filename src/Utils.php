@@ -63,7 +63,7 @@ final class Utils
         return $name !== '' ? self::escape($name) : null;
     }
 
-    public static function renderTemplate(string $escapedText): string
+    public static function renderTemplate(string $escapedText, bool $keepParagraphsTogether = true): string
     {
         $escapedText = str_replace('\\n', "\n", $escapedText);
         $lines = explode("\n", str_replace("\r\n", "\n", $escapedText));
@@ -71,15 +71,28 @@ final class Utils
         $inList = false;
         $paragraph = [];
 
-        $flush = static function () use (&$html, &$paragraph, &$inList): void {
+        $flush = static function () use (&$html, &$paragraph, &$inList, $keepParagraphsTogether): void {
             if ($inList) {
                 $html .= '</ol>';
                 $inList = false;
             }
             if ($paragraph !== []) {
-                $html .= '<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.2;padding-bottom:3pt;">'
-                    . implode('<br>', $paragraph)
-                    . '</td></tr></table>';
+                $content = implode('<br>', $paragraph);
+                if ($keepParagraphsTogether) {
+                    // Preserve the historical layout for computer and printer
+                    // responsibilities: each prose paragraph stays on one page.
+                    $html .= '<table nobr="true" width="100%"><tr><td style="text-align:justify;line-height:1.2;padding-bottom:3pt;">'
+                        . $content
+                        . '</td></tr></table>';
+                } else {
+                    // Phone loan clauses may contain longer editable text. Let
+                    // TCPDF flow these paragraphs naturally instead of moving
+                    // an entire paragraph to the next page and leaving a large
+                    // unused band above the footer.
+                    $html .= '<p style="text-align:justify;line-height:1.2;margin-top:0;margin-bottom:3pt;">'
+                        . $content
+                        . '</p>';
+                }
                 $paragraph = [];
             }
         };

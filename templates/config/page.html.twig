@@ -92,6 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <form id="responsivas-config-form" method="post" action="{{ self }}" enctype="multipart/form-data">
 <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token }}">
+{# Enter in a configuration field must save, not trigger the earlier import button. #}
+<button type="submit" name="update" value="1" class="visually-hidden" tabindex="-1" aria-hidden="true">{{ trans('Save') }}</button>
 
 <div class="card mt-2 shadow-sm">
 
