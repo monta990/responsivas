@@ -224,7 +224,12 @@ $expect(
 );
 $pdfBuilder = $read('src/Pdf/PdfBuilder.php');
 $utilsSource = $read('src/Utils.php');
-$expectedPhoneFlow = "Utils::renderTemplate(\n            Utils::applyTemplate(\$config['pho_clausulas'] ?? '', \$pho_vars),\n            false\n         )";
+$expectedPhoneFlow = <<<'PHONE_FLOW'
+Utils::renderTemplate(
+            Utils::applyTemplate($config['pho_clausulas'] ?? '', $pho_vars),
+            false
+         )
+PHONE_FLOW;
 $expect(
     str_contains($utilsSource, 'bool $keepParagraphsTogether = true')
         && str_contains($pdfBuilder, $expectedPhoneFlow),
