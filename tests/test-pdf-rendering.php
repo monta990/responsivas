@@ -93,10 +93,9 @@ require_once $pluginRoot . '/src/Pdf/PdfBuilder.php';
 
 $GLOBALS['responsivas_pdf_auto_page_break_history'] = [];
 $GLOBALS['responsivas_pdf_footer_restoration'] = [];
+$GLOBALS['responsivas_pdf_qr_urls_at_footer'] = [];
 
 $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
-    public array $qrUrlsAtFooter = [];
-
     public function setAutoPageBreak($auto, $margin = 0)
     {
         $GLOBALS['responsivas_pdf_auto_page_break_history'][] = [(bool)$auto, $margin];
@@ -106,7 +105,7 @@ $pdf = new class('P', 'mm', 'LETTER') extends \GlpiPlugin\Responsivas\Pdf\PDF {
     public function Footer(): void
     {
         $page = $this->getPage();
-        $this->qrUrlsAtFooter[$page] = $this->getQrUrlForPage($page);
+        $GLOBALS['responsivas_pdf_qr_urls_at_footer'][$page] = $this->getQrUrlForPage($page);
 
         $initialAutoPageBreak = $this->getAutoPageBreak();
         $initialBreakMargin = $this->getBreakMargin();
@@ -217,7 +216,7 @@ if ($pageObjectCount < 4 || $pageObjectCount !== $expectedPageCount) {
     );
 }
 
-$qrUrlsAtFooter = $pdf->qrUrlsAtFooter;
+$qrUrlsAtFooter = $GLOBALS['responsivas_pdf_qr_urls_at_footer'];
 for ($pageNumber = 1; $pageNumber <= $pageObjectCount; $pageNumber++) {
     $expectedQrUrl = $pageNumber >= $flowStartPage
         ? $continuationQrUrl
