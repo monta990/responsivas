@@ -2642,7 +2642,7 @@ return ['pdf' => $pdf, 'filename' => self::makeFilename('Responsiva_Impresora_DE
          Utils::escape($testigo2),
          $CFG_GLPI['url_base']
       );
-return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
+      return ['pdf' => $pdf, 'filename' => self::makeFilename('Comodato_Telefono_DEMO', $full_name)];
    }
 
 
