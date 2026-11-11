@@ -130,7 +130,7 @@ jobs:
           set -euo pipefail
           mapfile -t changed_php < <(
             git -C "$GITHUB_WORKSPACE" diff --name-only --diff-filter=ACMR "$BASE_SHA" "$GITHUB_SHA" \
-              | grep -E '^(setup\.php|hook\.php|src/.+\.php)
+              | grep -E '^(setup\.php|hook\.php|src/.+\.php)' || true
           )
           if [[ ${#changed_php[@]} -eq 0 ]]; then
             echo "No changed runtime PHP files; style gate is not applicable."
