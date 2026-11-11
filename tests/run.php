@@ -191,7 +191,33 @@ $tests = [
         $assertTrue(str_contains($html, 'Final paragraph'), 'The final paragraph must remain in the document.');
     },
 
-    'Template formatting escapes markup before adding supported emphasis' => static function () use ($assertTrue, $assertFalse): void {
+        'Template rendering can opt out of keeping prose paragraphs together' => static function () use ($assertTrue, $assertFalse): void {
+        $template = "Opening paragraph with editable text.\n\n1. First clause\n2. Second clause\n\nFinal witness paragraph";
+        $legacyHtml = Utils::renderTemplate($template);
+        $flowingHtml = Utils::renderTemplate($template, false);
+
+        $assertTrue(str_contains($legacyHtml, '<table nobr="true"'), 'The default renderer must preserve the historical indivisible paragraph layout.');
+        $assertFalse(str_contains($flowingHtml, '<table nobr="true"'), 'Flowing mode must not wrap prose paragraphs in indivisible tables.');
+        $assertTrue(str_contains($flowingHtml, '<p style="text-align:justify;line-height:1.2;'), 'Flowing mode must render prose as normal paragraphs.');
+        $assertTrue(str_contains($flowingHtml, '<li>First clause</li>'), 'Flowing mode must preserve ordered clauses.');
+        $assertTrue(str_contains($flowingHtml, '<li>Second clause</li>'), 'Flowing mode must preserve all ordered clauses.');
+    },
+
+    'Phone contract prose renderer does not bundle signatures into an HTML no-break table' => static function () use ($assertTrue, $assertFalse, $private): void {
+        $html = $private(
+            PdfBuilder::class,
+            'renderPhoPage',
+            ['CONTRATO DE COMODATO', 'Opening paragraph', '<ol><li>Clause</li></ol>', 'Witness paragraph']
+        );
+
+        $assertTrue(str_contains($html, 'Opening paragraph'), 'Phone contract opening paragraph must be rendered.');
+        $assertTrue(str_contains($html, '<li>Clause</li>'), 'Phone contract clauses must be rendered.');
+        $assertTrue(str_contains($html, 'Witness paragraph'), 'Phone contract witness paragraph must be rendered.');
+        $assertFalse(str_contains($html, 'nobr="true"'), 'Phone contract prose must be allowed to flow naturally.');
+        $assertFalse(str_contains($html, 'BORROWER'), 'The HTML prose renderer must not own the signature grid.');
+    },
+
+'Template formatting escapes markup before adding supported emphasis' => static function () use ($assertTrue, $assertFalse): void {
         $html = Utils::applyTemplate('<script>alert(1)</script> **Bold**', []);
         $assertFalse(str_contains($html, '<script>'), 'User template markup must not inject a script element.');
         $assertTrue(str_contains($html, 'alert(1)'), 'Text between unsafe tags must remain readable after tags are stripped.');

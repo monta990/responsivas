@@ -216,6 +216,31 @@ $pageTemplate = $read('templates/config/page.html.twig');
 $userTemplate = $read('templates/user/tab.html.twig');
 $expect(str_contains($pageTemplate, 'name="_glpi_csrf_token"'), 'Configuration form must include the GLPI CSRF token.');
 $expect(str_contains($pageTemplate, 'responsivasTabs'), 'Configuration page must preserve the published tab navigation.');
+$firstSubmitterAt = strpos($pageTemplate, '<button type="submit"');
+$defaultSaveAt = strpos($pageTemplate, '<button type="submit" name="update" value="1"');
+$expect(
+    $defaultSaveAt !== false && $defaultSaveAt === $firstSubmitterAt,
+    'Configuration form must make Save the default submitter when Enter is pressed.'
+);
+$pdfBuilder = $read('src/Pdf/PdfBuilder.php');
+$utilsSource = $read('src/Utils.php');
+$expect(
+    str_contains($utilsSource, 'bool $keepParagraphsTogether = true')
+        && str_contains($pdfBuilder, "'pho_clausulas' ?? '', $pho_vars),\n            false"),
+    'Phone-only flowing clause rendering must be opt-in and leave the default template behavior intact.'
+);
+$expect(
+    str_contains($pdfBuilder, 'private static function renderPhoneSignatureBlock(')
+        && str_contains($pdfBuilder, '$pdf->getBreakMargin()')
+        && str_contains($pdfBuilder, '$pdf->GetY() + $topGap'),
+    'Phone contract signatures must use the current PDF cursor and footer-safe page boundary.'
+);
+$expect(
+    str_contains($pdfBuilder, 'setQrForPage($contentPage, $asset_url)')
+        && str_contains($pdfBuilder, 'setQrForPage($previewPage, $CFG_GLPI'),
+    'Every real and preview continuation page must retain its QR code.'
+);
+
 foreach (['tab_email', 'tab_general', 'tab_pc', 'tab_pri', 'tab_pho'] as $template) {
     $expect(is_file($root . '/templates/config/' . $template . '.html.twig'), 'Configuration tab template is missing: ' . $template);
 }
