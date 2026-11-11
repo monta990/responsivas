@@ -197,15 +197,23 @@ for ($flowPage = $flowStartPage; $flowPage <= $lastFlowPage; $flowPage++) {
     $pdf->setQrForPage($flowPage, $continuationQrUrl);
 }
 
+// TCPDF 6 clears its current-page state while Output() closes the document.
+// Capture the expected count while the document is still open; do not call
+// getPage() after Output(), when the internal page property is no longer set.
+$expectedPageCount = $pdf->getPage();
 $content = $pdf->Output('responsivas-smoke.pdf', 'S');
 
 if (!is_string($content) || !str_starts_with($content, '%PDF-') || strlen($content) < 500) {
     throw new RuntimeException('TCPDF did not return a valid non-empty PDF byte string.');
 }
 $pageObjectCount = preg_match_all('#/Type\\s*/Page\\b#', $content);
-if ($pageObjectCount < 4 || $pageObjectCount !== $pdf->getPage()) {
+if ($pageObjectCount < 4 || $pageObjectCount !== $expectedPageCount) {
     throw new RuntimeException(
-        sprintf('Expected at least four PDF page objects after the signature and flowing-clause scenarios, found %s.', var_export($pageObjectCount, true))
+        sprintf(
+            'Expected %d PDF page objects (at least four) after the signature and flowing-clause scenarios, found %s.',
+            $expectedPageCount,
+            var_export($pageObjectCount, true)
+        )
     );
 }
 
