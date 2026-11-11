@@ -226,7 +226,7 @@ $pdfBuilder = $read('src/Pdf/PdfBuilder.php');
 $utilsSource = $read('src/Utils.php');
 $expect(
     str_contains($utilsSource, 'bool $keepParagraphsTogether = true')
-        && str_contains($pdfBuilder, "'pho_clausulas' ?? '', $pho_vars),\n            false"),
+        && str_contains($pdfBuilder, "'pho_clausulas' ?? '', \$pho_vars),\n            false"),
     'Phone-only flowing clause rendering must be opt-in and leave the default template behavior intact.'
 );
 $expect(
